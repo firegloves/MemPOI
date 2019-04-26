@@ -19,9 +19,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ArticleTest extends FunctionalBaseTest {
 
     @Test
-    public void testWithAnimals() {
+    public void test_with_animals() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "testWithAnimals.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_animals.xlsx");
 
         try {
 

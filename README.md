@@ -1,8 +1,6 @@
 # MemPOI
 A library to simplify export from database to Excel files using Apache POI
 
-It exposes a simplified interface to Apache POI.
-
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
 
 Java 8+ required
@@ -11,12 +9,16 @@ Java 8+ required
 
 All you need is to instantiate a MemPOI and to pass it the List of your exporting queries. MemPOI will do all the stuff for you generating a .xlsx file containing resulting data.
 You need to pass your export queries as a List of `MempoiSheet` (`PreparedStatement` + sheet name).
-You can use `MempoiBuilder` to correctly populate your MemPOI instance, like follows
+You can use `MempoiBuilder` to correctly populate your MemPOI instance, like follows:
 
-<pre>MemPOI memPOI = new MempoiBuilder()
+<pre>
+MemPOI memPOI = new MempoiBuilder()
                         .setDebug(true)
                         .addMempoiSheet(new MempoiSheet(prepStmt, "Sheet name"))
-                        .build();</pre>
+                        .build();
+                        
+CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
+</pre>
 
 You can find more examples in the functional tests package.
 
@@ -28,6 +30,34 @@ By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s des
 **Multiple sheets supported** - Each `MempoiSheet` will add a sheet to the generated report
 
 ---
+
+### File VS byte array
+
+You can choose to write directly to a file or to obtain the byte array of the generated report (for example to pass it back to a waiting client)
+
+File:
+
+<pre>
+File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file.xlsx");
+MemPOI memPOI = new MempoiBuilder()
+                    .setFile(fileDest)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .build();
+
+CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+</pre>
+
+Byte array:
+
+<pre>
+// With byte array
+MemPOI memPOI = new MempoiBuilder()
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .build();
+
+CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
+</pre>
+
 
 ### Supported SQL data types
 
@@ -57,15 +87,43 @@ By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s des
 
 ### Column headers
 
-Column headers are generated taking export query column names. If you want to choose column headers you need to speficy them with `AS` clause. For example
+Column headers are generated taking export query column names. If you want to choose column headers you need to speficy them with `AS` clause. For example:
 
 `SELECT id, name AS first_name FROM Foo`
+
+will result in a sheet with 2 columns: id and first_name (containing db's name column data)
+
+---
+
+### Multiple sheets
+
+Multiple sheets in the same document are supported: `MempoiBuilder` accept a list of `MempoiSheet`.
+Look at this example and the result above:
+
+<pre>
+MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
+MempoiSheet catsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS CAT_NAME, pet_race AS CAT_RACE FROM pets WHERE pet_type = 'cat'"), "Cats sheet");
+MempoiSheet birdsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS BIRD_NAME, pet_race AS BIRD_RACE FROM pets WHERE pet_type = 'bird'"), "Birds sheet");
+
+MemPOI memPOI = new MempoiBuilder()
+                    .setDebug(true)
+                    .setFile(fileDest)
+                    .setAdjustColumnWidth(true)
+                    .addMempoiSheet(dogsSheet)
+                    .addMempoiSheet(catsSheet)
+                    .addMempoiSheet(birdsSheet)
+                    .build();
+
+CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+</pre>
+
+![](img/multiple-sheets.jpg)
 
 ---
 
 ### Adjust columns width
 
-MemPOI can adjust columnd width to fit the longest content by setting to `true` the property `MempoiBuilder.adjustColumnWidth` as follows:
+MemPOI can adjust columns width to fit the longest content by setting to `true` the property `MempoiBuilder.adjustColumnWidth` as follows:
 
 <pre>
 MemPOI memPOI = new MempoiBuilder()
@@ -118,7 +176,7 @@ MemPOI memPOI = new MempoiBuilder()
 MemPOI comes with a set of templates ready to use. You can use them as follows:
 
 <pre>
- MemPOI memPOI = new MempoiBuilder()
+MemPOI memPOI = new MempoiBuilder()
                     .setWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new ForestStyleTemplate())
