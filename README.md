@@ -1,0 +1,208 @@
+# MemPOI
+An utility library to simplify export from database to Excel files
+
+It exposes a simplified interface to Apache POI.
+
+MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
+
+Java 8+ required
+
+### Basic usage
+
+All you need is to instantiate a MemPOI and to pass it the List of your exporting queries. MemPOI will do all the stuff for you generating a .xlsx file containing resulting data.
+You need to pass your export queries as a List of `MempoiSheet` (`PreparedStatement` + sheet name).
+You can use `MempoiBuilder` to correctly populate your MemPOI instance, like follows
+
+<pre>MemPOI memPOI = new MempoiBuilder()
+                        .setDebug(true)
+                        .addMempoiSheet(new MempoiSheet(prepStmt, "Sheet name"))
+                        .build();</pre>
+
+You can find more examples in the functional tests package.
+
+By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s descendant:
+- `SXSSFWorkbook`
+- `XSSFWorkbook`
+- `HSSFWorkbook`
+
+**Multiple sheets supported** - Each `MempoiSheet` will add a sheet to the generated report
+
+---
+
+### Supported SQL data types
+
+- BIGINT
+- DOUBLE
+- DECIMAL
+- FLOAT
+- NUMERIC
+- REAL
+- INTEGER
+- SMALLINT
+- TINYINT
+- CHAR
+- VARCHAR
+- NVARCHAR
+- TIMESTAMP
+- DATE
+- TIME
+- BIT
+- BOOLEAN
+          
+---            
+
+**You have to take care to manage your database connection, meanwhile `PreparedStatement` and `ResultSet` are managed and closed internally by MemPOI**
+
+---
+
+### Column headers
+
+Column headers are generated taking export query column names. If you want to choose column headers you need to speficy them with `AS` clause. For example
+
+`SELECT id, name AS first_name FROM Foo`
+
+---
+
+### Adjust columns width
+
+MemPOI can adjust columnd width to fit the longest content by setting to `true` the property `MempoiBuilder.adjustColumnWidth` as follows:
+
+<pre>
+MemPOI memPOI = new MempoiBuilder()
+                    .setAdjustColumnWidth(true)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .build();
+</pre>
+
+**Adjusting columns width for huge dataset could dramatically slow down the generation process**
+
+---
+
+### Styles
+
+MemPOI comes with a preset of default data formatting style for
+
+- header cells
+- number data types cells
+- date data types cells
+- datetime data types cells
+
+The default styles are applied by default. You can inspect them looking at the end of `MempoiReportStyler` class 
+If you want to reset the default styles you need to use an empty `CellStyle` when you use `MempoiBuilder`, for example:
+
+<pre>
+MemPOI memPOI = new MempoiBuilder()
+                    .setWorkbook(workbook)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .setNumberCellStyle(workbook.createCellStyle())     // no default style for number fields
+                    .build();
+</pre>
+
+Keep in mind that when you use custom styles you need to pass the workbook from outside, otherwise you could encounter problems. This is an example:
+
+<pre>
+CellStyle headerCellStyle = workbook.createCellStyle();
+headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
+headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+MemPOI memPOI = new MempoiBuilder()
+                    .setDebug(true)
+                    .setWorkbook(workbook)
+                    .setFile(fileDest)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .setHeaderCellStyle(headerCellStyle)
+                    .build();
+</pre>                    
+
+
+MemPOI comes with a set of templates ready to use. You can use them as follows:
+
+<pre>
+ MemPOI memPOI = new MempoiBuilder()
+                    .setWorkbook(workbook)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .setStyleTemplate(new ForestStyleTemplate())
+                    .build();
+</pre>
+
+List of available templates:
+
+- AquaStyleTemplate
+- ForestStyleTemplate
+- PanegiriconStyleTemplate
+- PurpleStyleTemplate
+- RoseStyleTemplate
+- StandardStyleTemplate
+- StoneStyleTemplate
+- SummerStyleTemplate
+
+---
+
+### Footers and subfooters
+
+MemPOI supports standard .xlsx footers and sub footers.
+Whereas footers are a simple wrapper of the Excel ones, subfooters are a MemPOI extension that let you add some nice functionalities to your report.
+For example, you could choose to add the `NumberSumSubFooter` to your MemPOI report. It will results in an additional line at the end of the sheet containing the sum of the numeric columns.This is an example:
+
+<pre>
+MemPOI memPOI = new MempoiBuilder()
+                    .setDebug(true)
+                    .setWorkbook(workbook)
+                    .setFile(fileDest)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .build();
+</pre>
+
+List of available subfooters:
+
+- **NumberSumSubFooter**: place a cell containing the sum of the column (works only on numeric comlumns)
+- **NumberMaxSubFooter**: place a cell containing the maximum value of the column (works only on numeric comlumns)
+- **NumberMinSubFooter**: place a cell containing the minimum value of the column (works only on numeric comlumns)
+- **NumberAverageSubFooter**: place a cell containing the average value of the column (works only on numeric comlumns)
+
+By default no footer and no subfooter are appended to the report.
+
+Subfooters are already supported by the MemPOI bundled templates.
+
+**IMPORTANT**: If you want to use a custom subfooter with cell formulas it needs to extend `FormulaSubFooter`
+
+**Accordingly with MS docs: "Headers and footers are not displayed on the worksheet in Normal view — they are displayed only in Page Layout view and on the printed pages"**
+
+---
+
+### Cell formulas
+
+You can specify subfooter's cell formulas by applying a bundled subfooter or creating a custom one.
+By default MemPOI tries to postpone formulas evaluation forcing Excel to evaluate them when it will open your report file.
+This approach could fail if you use LibreOffice or something similar to open your report file (it could not evaluate formulas opening the document). So by setting `MempoiBuilder.evaluateCellFormulas` to `true` you can avoid this behaviour forcing MemPOI to evaluate cell formulas by itself.
+
+But depending on which type of `Workbook` you are using you could encounter problems by following this way.
+For example if you use an `SXSSFWorkbook` and your report is huge, some of your data rows maybe serialized and when MemPOI will try to evaluate cell formulas it will fail.
+For this reason MemPOI tries to firstly save the report to a temporary file, then reopening it without using `SXSSFWorkbook`, applying cell formulas and continuing with the normal process.
+
+Also this approach may fail because of that not using a `SXSSFWorkbook` will create a lot of memory problems if the dataset is huger than the memory heap can support.
+To solve this issue you could extend your JVM heap memory with the option `-Xmx2048m`
+
+So actully the best solution for huge dataset is to force Excel to evaluate cell formulas when the report is open.
+
+---
+
+### Performance
+
+Because you could have to face foolish requests like to export hundreds of thousands of rows in a few seconds I have added some speed test.
+There are 2 options that may dramatically slow down generation process on huge datasets:
+
+- `adjustColumnWidth
+- `evaluateCellFormulas``
+
+Both available into `MempoiBuilder` they could block your export or even bring it to fail.
+Keep in mind that if you can't use them for performance problems you could ask in exchange for speed that columns resizing and cell formula evaluations will be hand made by the final user.
+
+---
+
+#### Special thanks
+
+Special thanks to [Colle der Fomento](http://www.collederfomento.net/) that inspired MemPOI name with their new, fantastic, yearned LP, in particular with their song [Mempo](https://youtu.be/xy05iaknmcY).
+
+Don't you know what I'm talking about? Discover what a [mempo](https://en.wikipedia.org/wiki/Men-yoroi) is!
