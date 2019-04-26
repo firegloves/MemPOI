@@ -27,6 +27,34 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class HueStyleTemplateTest extends FunctionalBaseTest {
 
     @Test
+    public void test_with_file_and_standard_template() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_standard_template.xlsx");
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+
+        try {
+
+            MemPOI memPOI = new MempoiBuilder()
+                    .setDebug(true)
+                    .setWorkbook(workbook)
+                    .setFile(fileDest)
+                    .setAdjustColumnWidth(true)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .setStyleTemplate(new StandardStyleTemplate())
+                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
     public void test_with_file_and_summer_template() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_summer_template.xlsx");
@@ -42,6 +70,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new SummerStyleTemplate())
                     .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -68,6 +97,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new AquaStyleTemplate())
                     .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -94,6 +124,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setMempoiSubFooter(new NumberSumSubFooter())
                     .setStyleTemplate(new ForestStyleTemplate())
+                    .setEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -125,6 +156,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .setStyleTemplate(new ForestStyleTemplate())
                     .setHeaderCellStyle(headerCellStyle)
                     .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -152,6 +184,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new StoneStyleTemplate())
                     .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -178,6 +211,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new RoseStyleTemplate())
                     .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -205,6 +239,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new PurpleStyleTemplate())
                     .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -232,6 +267,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new PanegiriconStyleTemplate())
                     .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

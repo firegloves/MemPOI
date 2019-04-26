@@ -25,8 +25,9 @@ public class FunctionalBaseTest {
     public void init() {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
-            this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
-                    "FROM mempoi.export_test");
+            this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS `WONDERFUL DATE`, dateTime, timeStamp, name, valid, usefulChar, decimalOne FROM mempoi.export_test LIMIT 0, 10");
+//            this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS `WONDERFUL DATE`, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
+//                    "FROM mempoi.export_test");
 
 
             if (! this.outReportFolder.exists() && ! this.outReportFolder.mkdirs()) {
