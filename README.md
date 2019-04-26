@@ -127,24 +127,16 @@ MemPOI comes with a set of templates ready to use. You can use them as follows:
 
 List of available templates:
 
-| Name                      |      Image       |
+| Name                      |      Image            |
 |---------------------------|-----------------------|
-| AquaStyleTemplate         |![](img/template/aqua.jpg)          |
-|---------------------------|-----------------------|
-| ForestStyleTemplate       |![](img/template/forest.jpg)          |
-|---------------------------|-----------------------|
-| PanegiriconStyleTemplate  |![](img/template/panegiricon.jpg)          |
-|---------------------------|-----------------------|
-| PurpleStyleTemplate       |![](img/template/purple.jpg)          |
-|---------------------------|-----------------------|
-| RoseStyleTemplate         |![](img/template/rose.jpg)          |
-|---------------------------|-----------------------|
-| StandardStyleTemplate        |![](img/template/standard.jpg)          |
-|---------------------------|-----------------------|
-| StoneStyleTemplate     |![](img/template/stone.jpg)          |
-|---------------------------|-----------------------|
-| SummerStyleTemplate        |![](img/template/summer.jpg)          |
-|---------------------------|-----------------------|
+| AquaStyleTemplate         |![](img/template/aqua.jpg)
+| ForestStyleTemplate       |![](img/template/forest.jpg)
+| PanegiriconStyleTemplate  |![](img/template/panegiricon.jpg)
+| PurpleStyleTemplate       |![](img/template/purple.jpg)
+| RoseStyleTemplate         |![](img/template/rose.jpg)
+| StandardStyleTemplate     |![](img/template/standard.jpg)
+| StoneStyleTemplate        |![](img/template/stone.jpg)
+| SummerStyleTemplate       |![](img/template/summer.jpg)
 
 ---
 
