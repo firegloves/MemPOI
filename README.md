@@ -195,8 +195,8 @@ So actully the best solution for huge dataset is to force Excel to evaluate cell
 Because you could have to face foolish requests like to export hundreds of thousands of rows in a few seconds I have added some speed test.
 There are 2 options that may dramatically slow down generation process on huge datasets:
 
-- `adjustColumnWidth
-- `evaluateCellFormulas``
+- `adjustColumnWidth`
+- `evaluateCellFormulas`
 
 Both available into `MempoiBuilder` they could block your export or even bring it to fail.
 Keep in mind that if you can't use them for performance problems you could ask in exchange for speed that columns resizing and cell formula evaluations will be hand made by the final user.
