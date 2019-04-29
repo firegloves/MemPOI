@@ -71,8 +71,10 @@ CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
 - SMALLINT
 - TINYINT
 - CHAR
+- NCHAR
 - VARCHAR
 - NVARCHAR
+- LONGVARCHAR
 - TIMESTAMP
 - DATE
 - TIME

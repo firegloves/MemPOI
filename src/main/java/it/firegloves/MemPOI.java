@@ -9,7 +9,6 @@ import it.firegloves.domain.footer.MempoiSubFooter;
 import it.firegloves.exception.MempoiException;
 import it.firegloves.styles.MempoiReportStyler;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import java.io.File;
 import java.util.List;

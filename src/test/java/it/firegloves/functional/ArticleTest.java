@@ -4,16 +4,12 @@ import it.firegloves.MemPOI;
 import it.firegloves.builder.MempoiBuilder;
 import it.firegloves.domain.MempoiSheet;
 import it.firegloves.exception.MempoiException;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ArticleTest extends FunctionalBaseTest {

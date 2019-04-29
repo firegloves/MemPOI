@@ -4,24 +4,17 @@ import it.firegloves.MemPOI;
 import it.firegloves.builder.MempoiBuilder;
 import it.firegloves.domain.MempoiSheet;
 import it.firegloves.domain.footer.NumberSumSubFooter;
-import it.firegloves.exception.MempoiException;
 import it.firegloves.styles.template.*;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HueStyleTemplateTest extends FunctionalBaseTest {

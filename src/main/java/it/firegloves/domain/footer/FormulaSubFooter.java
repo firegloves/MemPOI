@@ -6,10 +6,7 @@ package it.firegloves.domain.footer;
 
 import it.firegloves.domain.EExportDataType;
 import it.firegloves.domain.MempoiColumn;
-import it.firegloves.styles.template.StyleTemplate;
-import org.apache.poi.POIReadOnlyDocument;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 

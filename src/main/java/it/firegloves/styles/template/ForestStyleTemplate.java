@@ -1,6 +1,6 @@
 package it.firegloves.styles.template;
 
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 public class ForestStyleTemplate extends HueStyleTemplate {
 

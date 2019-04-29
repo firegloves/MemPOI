@@ -114,8 +114,10 @@ public class MempoiColumn {
             case Types.TINYINT:
                 return EExportDataType.INT;
             case Types.CHAR:
+            case Types.NCHAR:
             case Types.VARCHAR:
             case Types.NVARCHAR:
+            case Types.LONGVARCHAR:
                 return EExportDataType.TEXT;
             case Types.TIMESTAMP:
                 return EExportDataType.TIMESTAMP;
