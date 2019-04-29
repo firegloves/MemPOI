@@ -119,7 +119,7 @@ MemPOI memPOI = new MempoiBuilder()
 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 </pre>
 
-![](img/multiple-sheets.gif)
+![](img/multiple_sheets.gif)
 
 ---
 
