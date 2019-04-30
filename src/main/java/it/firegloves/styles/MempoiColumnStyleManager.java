@@ -29,7 +29,7 @@ public class MempoiColumnStyleManager {
     private void initCellStyleMap() {
         this.cellStylerMap = new HashMap<>();
         this.cellStylerMap.put(EExportDataType.DATE_STYLER_TYPES, this.reportStyler.getDateCellStyle());
-        this.cellStylerMap.put(EExportDataType.DATETIME_STYLER_FTYPES, this.reportStyler.getDatetimeCellStyle());
+        this.cellStylerMap.put(EExportDataType.DATETIME_STYLER_TYPES, this.reportStyler.getDatetimeCellStyle());
         this.cellStylerMap.put(EExportDataType.NUMBER_STYLER_TYPES, this.reportStyler.getNumberCellStyle());
     }
 

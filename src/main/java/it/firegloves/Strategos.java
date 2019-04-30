@@ -19,10 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -377,9 +374,6 @@ public class Strategos {
     private void createSubFooterRow(Sheet sheet) {
 
         if (null != this.mempoiSubFooter) {
-
-            // create the evaluator for formula cells
-            FormulaEvaluator evaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
 
             // create the sub footer cells
             this.mempoiSubFooter.setColumnSubFooter(this.workbook, this.columnList, this.reportStyler.getSubFooterCellStyle(), this.firstDataRowIndex, this.lastDataRowIndex);
