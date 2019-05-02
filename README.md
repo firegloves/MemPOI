@@ -267,4 +267,4 @@ Keep in mind that if you can't use them for performance problems you could ask i
 
 Special thanks to [Colle der Fomento](http://www.collederfomento.net/) that inspired MemPOI name with their new, fantastic, yearned LP, in particular with their song [Mempo](https://youtu.be/xy05iaknmcY).
 
-Don't you know what I'm talking about? Discover what a [mempo](https://en.wikipedia.org/wiki/Men-yoroi) is!
+Don't you know what I'm talking about? Discover what a [mempo](https://en.wikipedia.org/wiki/Men-yoroi) is! 
