@@ -163,6 +163,7 @@ MemPOI memPOI = new MempoiBuilder()
                     .build();
 
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
+
 </pre>
 
 
@@ -224,6 +225,7 @@ MemPOI memPOI = new MempoiBuilder()
                     .build();
 
 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+
 </pre>
 
 ![](img/multiple_sheets.gif)
