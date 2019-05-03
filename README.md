@@ -1,5 +1,5 @@
 # MemPOI
-A library to simplify export from database to Excel files using Apache POI
+A library to simplify data export from database to Excel files using Apache POI
 
 ---
 
