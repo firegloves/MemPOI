@@ -1,5 +1,5 @@
 .title {
-  position: fixed;
+  position: absolute;
   color: white;
   text-align: center;
   line-height: 430px;
@@ -349,7 +349,7 @@
 
 .plain-apache-poi {
   animation: fadeOut 0.5s ease-out 12.5s forwards;
-  font-size: 12px;
+  font-size: 11px;
 }
 .plain-apache-poi .title {
   animation: plainPoi 3s forwards;
