@@ -1,6 +1,609 @@
 # MemPOI
 A library to simplify export from database to Excel files using Apache POI
 
+---
+
+<style>
+
+.title {
+  position: absolute;
+  color: #FA05FF;
+  text-align: center;
+  line-height: 400px;
+  font-weight: bold;
+  font-size: 24pt;
+}
+
+.orange {
+  color: #FF9300;
+}
+
+.rose {
+  color: #EF5FA7;
+}
+
+.green {
+  color: #61D836;
+}
+
+.blue {
+  color: #00A2FF;
+}
+
+.ml {
+  margin-left: 30px;
+}
+
+.ml2 {
+  margin-left: 50px;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.flex-33 {
+  flex: 0 0 33%;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  background-image: linear-gradient(to right, #EF5FA7, #FF9300);
+}
+.container .block-one div:nth-child(1) {
+  animation-delay: 3.15s;
+}
+.container .block-one div:nth-child(2) {
+  animation-delay: 3.3s;
+}
+.container .block-one div:nth-child(3) {
+  animation-delay: 3.45s;
+}
+.container .block-one div:nth-child(4) {
+  animation-delay: 3.6s;
+}
+.container .block-one div:nth-child(5) {
+  animation-delay: 3.75s;
+}
+.container .block-one div:nth-child(6) {
+  animation-delay: 3.9s;
+}
+.container .block-one div:nth-child(7) {
+  animation-delay: 4.05s;
+}
+.container .block-one div:nth-child(8) {
+  animation-delay: 4.2s;
+}
+.container .block-one div:nth-child(9) {
+  animation-delay: 4.35s;
+}
+.container .block-one div:nth-child(10) {
+  animation-delay: 4.5s;
+}
+.container .block-one div:nth-child(11) {
+  animation-delay: 4.65s;
+}
+.container .block-one div:nth-child(12) {
+  animation-delay: 4.8s;
+}
+.container .block-one div:nth-child(13) {
+  animation-delay: 4.95s;
+}
+.container .block-one div:nth-child(14) {
+  animation-delay: 5.1s;
+}
+.container .block-one div:nth-child(15) {
+  animation-delay: 5.25s;
+}
+.container .block-one div:nth-child(16) {
+  animation-delay: 5.4s;
+}
+.container .block-one div:nth-child(17) {
+  animation-delay: 5.55s;
+}
+.container .block-one div:nth-child(18) {
+  animation-delay: 5.7s;
+}
+.container .block-one div:nth-child(19) {
+  animation-delay: 5.85s;
+}
+.container .block-one div:nth-child(20) {
+  animation-delay: 6s;
+}
+.container .block-one div:nth-child(21) {
+  animation-delay: 6.15s;
+}
+.container .block-one div:nth-child(22) {
+  animation-delay: 6.3s;
+}
+.container .block-one div:nth-child(23) {
+  animation-delay: 6.45s;
+}
+.container .block-one div:nth-child(24) {
+  animation-delay: 6.6s;
+}
+.container .block-one div:nth-child(25) {
+  animation-delay: 6.75s;
+}
+.container .block-one div:nth-child(26) {
+  animation-delay: 6.9s;
+}
+.container .block-one div:nth-child(27) {
+  animation-delay: 7.05s;
+}
+.container .block-one div:nth-child(28) {
+  animation-delay: 7.2s;
+}
+.container .block-one div:nth-child(29) {
+  animation-delay: 7.35s;
+}
+.container .block-two div:nth-child(1) {
+  animation-delay: 6.15s;
+}
+.container .block-two div:nth-child(2) {
+  animation-delay: 6.3s;
+}
+.container .block-two div:nth-child(3) {
+  animation-delay: 6.45s;
+}
+.container .block-two div:nth-child(4) {
+  animation-delay: 6.6s;
+}
+.container .block-two div:nth-child(5) {
+  animation-delay: 6.75s;
+}
+.container .block-two div:nth-child(6) {
+  animation-delay: 6.9s;
+}
+.container .block-two div:nth-child(7) {
+  animation-delay: 7.05s;
+}
+.container .block-two div:nth-child(8) {
+  animation-delay: 7.2s;
+}
+.container .block-two div:nth-child(9) {
+  animation-delay: 7.35s;
+}
+.container .block-two div:nth-child(10) {
+  animation-delay: 7.5s;
+}
+.container .block-two div:nth-child(11) {
+  animation-delay: 7.65s;
+}
+.container .block-two div:nth-child(12) {
+  animation-delay: 7.8s;
+}
+.container .block-two div:nth-child(13) {
+  animation-delay: 7.95s;
+}
+.container .block-two div:nth-child(14) {
+  animation-delay: 8.1s;
+}
+.container .block-two div:nth-child(15) {
+  animation-delay: 8.25s;
+}
+.container .block-two div:nth-child(16) {
+  animation-delay: 8.4s;
+}
+.container .block-two div:nth-child(17) {
+  animation-delay: 8.55s;
+}
+.container .block-two div:nth-child(18) {
+  animation-delay: 8.7s;
+}
+.container .block-two div:nth-child(19) {
+  animation-delay: 8.85s;
+}
+.container .block-two div:nth-child(20) {
+  animation-delay: 9s;
+}
+.container .block-two div:nth-child(21) {
+  animation-delay: 9.15s;
+}
+.container .block-two div:nth-child(22) {
+  animation-delay: 9.3s;
+}
+.container .block-two div:nth-child(23) {
+  animation-delay: 9.45s;
+}
+.container .block-two div:nth-child(24) {
+  animation-delay: 9.6s;
+}
+.container .block-two div:nth-child(25) {
+  animation-delay: 9.75s;
+}
+.container .block-two div:nth-child(26) {
+  animation-delay: 9.9s;
+}
+.container .block-two div:nth-child(27) {
+  animation-delay: 10.05s;
+}
+.container .block-two div:nth-child(28) {
+  animation-delay: 10.2s;
+}
+.container .block-two div:nth-child(29) {
+  animation-delay: 10.35s;
+}
+.container .block-three div:nth-child(1) {
+  animation-delay: 9.15s;
+}
+.container .block-three div:nth-child(2) {
+  animation-delay: 9.3s;
+}
+.container .block-three div:nth-child(3) {
+  animation-delay: 9.45s;
+}
+.container .block-three div:nth-child(4) {
+  animation-delay: 9.6s;
+}
+.container .block-three div:nth-child(5) {
+  animation-delay: 9.75s;
+}
+.container .block-three div:nth-child(6) {
+  animation-delay: 9.9s;
+}
+.container .block-three div:nth-child(7) {
+  animation-delay: 10.05s;
+}
+.container .block-three div:nth-child(8) {
+  animation-delay: 10.2s;
+}
+.container .block-three div:nth-child(9) {
+  animation-delay: 10.35s;
+}
+.container .block-three div:nth-child(10) {
+  animation-delay: 10.5s;
+}
+.container .block-three div:nth-child(11) {
+  animation-delay: 10.65s;
+}
+.container .block-three div:nth-child(12) {
+  animation-delay: 10.8s;
+}
+.container .block-three div:nth-child(13) {
+  animation-delay: 10.95s;
+}
+.container .block-three div:nth-child(14) {
+  animation-delay: 11.1s;
+}
+.container .block-three div:nth-child(15) {
+  animation-delay: 11.25s;
+}
+.container .block-three div:nth-child(16) {
+  animation-delay: 11.4s;
+}
+.container .block-three div:nth-child(17) {
+  animation-delay: 11.55s;
+}
+.container .block-three div:nth-child(18) {
+  animation-delay: 11.7s;
+}
+.container .block-three div:nth-child(19) {
+  animation-delay: 11.85s;
+}
+.container .block-three div:nth-child(20) {
+  animation-delay: 12s;
+}
+.container .block-three div:nth-child(21) {
+  animation-delay: 12.15s;
+}
+.container .block-three div:nth-child(22) {
+  animation-delay: 12.3s;
+}
+.container .block-three div:nth-child(23) {
+  animation-delay: 12.45s;
+}
+.container .block-three div:nth-child(24) {
+  animation-delay: 12.6s;
+}
+.container .block-three div:nth-child(25) {
+  animation-delay: 12.75s;
+}
+.container .block-three div:nth-child(26) {
+  animation-delay: 12.9s;
+}
+.container .block-three div:nth-child(27) {
+  animation-delay: 13.05s;
+}
+.container .block-three div:nth-child(28) {
+  animation-delay: 13.2s;
+}
+.container .block-three div:nth-child(29) {
+  animation-delay: 13.35s;
+}
+.container:before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: #222;
+  border-radius: 100%;
+  transition: all 500ms cubic-bezier(1, 0.885, 0.32, 1);
+  left: calc(50% - 200px);
+  animation: scaleSphere 14s linear 2s 1 forwards;
+}
+
+.div-33 {
+  width: 33%;
+  display: inline-block;
+}
+
+.poi-block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.plain-apache-poi {
+  animation: fadeOut 0.5s ease-out 12.5s forwards;
+}
+.plain-apache-poi .title {
+  animation: plainPoi 3s forwards;
+}
+
+.mempoi {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  animation: fadeIn 0.1s linear 12s forwards;
+}
+.mempoi .title {
+  position: relative;
+  opacity: 0;
+  animation: mempoiPowered 2s ease-out 13s forwards;
+  white-space: nowrap;
+  flex: 0 0 100%;
+}
+.mempoi .mempoi-code {
+  font-size: 24px;
+  opacity: 0;
+  animation: fadeIn 1s ease-out 15.5s forwards;
+  flex: 0 0 100%;
+  position: absolute;
+}
+
+@-webkit-keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translatex(-10px);
+    -moz-transform: translatex(-10px);
+    -o-transform: translatex(-10px);
+    transform: translatex(-10px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translatex(0);
+    -moz-transform: translatex(0);
+    -o-transform: translatex(0);
+    transform: translatex(0);
+  }
+}
+@-moz-keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translatex(-10px);
+    -moz-transform: translatex(-10px);
+    -o-transform: translatex(-10px);
+    transform: translatex(-10px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translatex(0);
+    -moz-transform: translatex(0);
+    -o-transform: translatex(0);
+    transform: translatex(0);
+  }
+}
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translatex(-100px);
+    -moz-transform: translatex(-100px);
+    -o-transform: translatex(-100px);
+    transform: translatex(-100px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translatex(0);
+    -moz-transform: translatex(0);
+    -o-transform: translatex(0);
+    transform: translatex(0);
+  }
+}
+.in-left {
+  -webkit-animation-name: fadeInLeft;
+  -moz-animation-name: fadeInLeft;
+  -o-animation-name: fadeInLeft;
+  animation-name: fadeInLeft;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  -o-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 0.2s;
+  -moz-animation-duration: 0.2s;
+  -o-animation-duration: 0.2s;
+  animation-duration: 0.2s;
+  -webkit-animation-delay: 0.2s;
+  -moz-animation-delay: 0.2s;
+  -o-animation-duration: 0.2s;
+  animation-delay: 0.2s;
+  color: white;
+}
+
+@keyframes plainPoi {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: scaleY(2.4);
+  }
+  75% {
+    transform: scaleY(0.9);
+  }
+  80% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes scaleSphere {
+  5% {
+    -webkit-transform: scale(4);
+    transform: scale(4);
+  }
+  75% {
+    -webkit-transform: scale(4);
+    transform: scale(4);
+  }
+  80% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  95% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(4);
+    transform: scale(4);
+  }
+}
+@keyframes mempoiPowered {
+  0% {
+    opacity: 0;
+    font-size: 500pt;
+  }
+  30% {
+    opacity: 1;
+    font-size: 26pt;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+</style>
+
+<div class="container">
+  <div class="plain-apache-poi poi-block">
+    <div class="title">Plain Apache POI</div>
+    <div class="div-33 block-one">
+      <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span> = <span
+        class="orange">new</span> SXSSFWorkbook();
+      </div>
+      <div class="in-left">SXSSFSheet sheet = <span class="rose">workbook</span>.createSheet(<span
+        class="green">"Dogs"</span>);
+      </div>
+      <div class="in-left">CellStyle headerStyle = <span class="rose">workbook</span>.createCellStyle();</div>
+      <div class="in-left">headerStyle.setFillForegroundColor(</div>
+      <div class="in-left ml">IndexedColors.<span class="rose">GREEN</span>.getIndex());</div>
+      <div class="in-left">headerStyle.setFillPattern(</div>
+      <div class="in-left ml">FillPatternType.<span class="rose">SOLID_FOREGROUND</span>);</div>
+      <div class="in-left">Row row = sheet.createRow(<span class="blue">0</span>);</div>
+      <div class="in-left">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
+      <div class="in-left">cell1.setCellValue(<span class="green">"Dog name"</span>);</div>
+      <div class="in-left">cell1.setCellStyle(headerStyle);</div>
+      <div class="in-left">Cell cell2 = row.createCell(<span class="blue">1</span>);</div>
+      <div class="in-left">cell2.setCellValue(<span class="green">"Dog race"</span>);</div>
+      <div class="in-left">cell2.setCellStyle(headerStyle);</div>
+      <div class="in-left">Cell cell3 = row.createCell(<span class="blue">2</span>);</div>
+      <div class="in-left">cell3.setCellValue(<span class="green">"Dog age"</span>);</div>
+      <div class="in-left">cell3.setCellStyle(headerStyle);</div>
+      <div class="in-left">Cell cell4 = row.createCell(<span class="blue">2</span>);</div>
+      <div class="in-left">cell4.setCellValue(<span class="green">"Dog owner"</span>);</div>
+      <div class="in-left">cell4.setCellStyle(headerStyle);</div>
+    </div>
+    <div class="div-33 block-two">
+      <div class="in-left">ResultSet rs = preparedStatement.executeQuery();</div>
+      <div class="in-left">int rowNumber = <span class="blue">1</span>;</div>
+      <div class="in-left"><span class="orange">while</span>(rs.next()) {</div>
+      <div class="in-left ml">Row row = sheet.createRow(<span class="orange">this</span>.<span
+        class="rose">rowNumber++</span>);
+      </div>
+      <div class="in-left ml">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
+      <div class="in-left ml">cell1.setCellValue(rs.getString(<span class="green">"dog_name"</span>));</div>
+      <div class="in-left ml">cell1.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
+      <div class="in-left ml">cell1.getStyle().setVerticalAlignment(valign);</div>
+      <div class="in-left ml">Cell cell2 = row.createCell(<span class="blue">0</span>);</div>
+      <div class="in-left ml">cell2.setCellValue(rs.getString(<span class="green">"dog_race"</span>));</div>
+      <div class="in-left ml">cell2.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
+      <div class="in-left ml">Cell cell3 = row.createCell(<span class="blue">1</span>);</div>
+      <div class="in-left ml">cell3.setCellValue(rs.getInt(<span class="green">"dog_age"</span>));</div>
+      <div class="in-left ml">cell3.setStyle(<span class="orange">this</span>.createNumericStyle());</div>
+      <div class="in-left ml">cell4.getStyle().setVerticalAlignment(valign);</div>
+      <div class="in-left ml">Cell cell4 = row.createCell(<span class="blue">2</span>);</div>
+      <div class="in-left ml">cell4.setCellValue(rs.getInt(<span class="green">"dog_owner"</span>));</div>
+      <div class="in-left ml">cell4.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
+      <div class="in-left ml">cell4.getStyle().setVerticalAlignment(valign);</div>
+      <div class="in-left">}</div>
+    </div>
+    <div class="div-33 block-three">
+      <div class="in-left">Row row = sheet.createRow(rowNumber);</div>
+      <div class="in-left">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
+      <div class="in-left">cell1.setCellValue(<span class="green">""</span>);</div>
+      <div class="in-left">cell1.setCellStyle(headerStyle);</div>
+      <div class="in-left">Cell cell2 = row.createCell(<span class="blue">1</span>);</div>
+      <div class="in-left">cell2.setCellValue(<span class="green">""</span>);</div>
+      <div class="in-left">cell2.setCellStyle(headerStyle);</div>
+      <div class="in-left">Cell cell3 = row.createCell(<span class="blue">2</span>);</div>
+      <div class="in-left">cell3.setCellValue(<span class="green">""</span>);</div>
+      <div class="in-left">cell3.setCellStyle(headerStyle);</div>
+      <div class="in-left">cell3.setCellFormula(<span class="green">"SUM(D2:D50)"</span>);</div>
+      <div class="in-left">Cell cell4 = row.createCell(<span class="blue">3</span>);</div>
+      <div class="in-left">cell4.setCellValue(<span class="green">"Dog owner"</span>);</div>
+      <div class="in-left">cell4.setCellStyle(headerStyle);</div>
+      <div class="in-left"><span class="orange">try</span> (ByteArrayOutputStream bos =</div>
+      <div class="in-left ml2"><span class="orange">new</span> ByteArrayOutputStream()) {</div>
+      <div class="in-left ml"><span class="orange">this</span>.<span class="rose">workbook</span>.write(bos);</div>
+      <div class="in-left ml"><span class="orange">return</span> bos.toByteArray();</div>
+      <div class="in-left">}</div>
+      <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span>.close();</div>
+    </div>
+  </div>
+  <div class="mempoi poi-block">
+    <div class="title">MemPOI Powered</div>
+    <div class="mempoi-code">
+      <div><span class="orange">new</span> MempoiBuilder()</div>
+      <div class="ml">.addMempoiSheet(<span class="orange">new</span> MempoiSheet(prepStmt, <span class="green">"Dogs"</span>))</div>
+      <div class="ml">.build()</div>
+      <div class="ml">.prepareMempoiReportToByteArray();</div>
+    </div>
+  </div>
+</div>
+
+---
+
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
 
 Java 8+ required
