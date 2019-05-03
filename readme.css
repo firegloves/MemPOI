@@ -1,6 +1,6 @@
 .title {
   position: absolute;
-  color: #FF9300;
+  color: white;
   text-align: center;
   line-height: 430px;
   font-weight: bold;
@@ -56,7 +56,7 @@
   width: 100%;
   height: 430px;
   position: relative;
-  background-image: linear-gradient(to right, #EF5FA7, #FF9300);
+  background-image: linear-gradient(to right, #155799, #159957);
 }
 .container .block-one div:nth-child(1) {
   animation-delay: 3.15s;

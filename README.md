@@ -43,7 +43,7 @@ A library to simplify export from database to Excel files using Apache POI
       <div class="in-left">int rowNumber = <span class="blue">1</span>;</div>
       <div class="in-left"><span class="orange">while</span>(rs.next()) {</div>
       <div class="in-left ml">Row row = sheet.createRow(<span class="orange">this</span>.<span
-        class="rose">rowNumber++</span>);
+        class="rose">rowNumber</span>++);
       </div>
       <div class="in-left ml">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
       <div class="in-left ml">cell1.setCellValue(rs.getString(<span class="green">"dog_name"</span>));</div>
