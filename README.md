@@ -84,6 +84,7 @@ A library to simplify export from database to Excel files using Apache POI
       <div class="in-left">}</div>
       <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span>.dispose();</div>
       <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span>.close();</div>
+      <div class="in-left">rs.close();</div>
     </div>
   </div>
 

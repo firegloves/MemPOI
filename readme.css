@@ -45,6 +45,7 @@
 .outside {
   position: relative;
   height: 430px;
+  width: 832px;
   overflow: hidden;
   border-radius: 5px;
   background-color: #333;
@@ -348,6 +349,7 @@
 
 .plain-apache-poi {
   animation: fadeOut 0.5s ease-out 12.5s forwards;
+  font-size: 12px;
 }
 .plain-apache-poi .title {
   animation: plainPoi 3s forwards;
@@ -379,13 +381,13 @@
   opacity: 0;
   position: absolute;
   top: 300px;
-  right: 400px;
+  right: 100px;
   font-size: 16px;
-  color: #FF9300;
+  color: white;
   animation: fadeIn 2s ease-out 17s forwards;
-  /* border-top: 2px solid #FF9300; */
-  padding: 4px 0;
-  border-bottom: 2px solid #FF9300;
+  padding: 4px;
+  border-radius: 3px;
+  background-image: linear-gradient(to right, #155799, #159957);
 }
 
 @-webkit-keyframes fadeInLeft {
