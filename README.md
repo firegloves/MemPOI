@@ -1,4 +1,4 @@
-# MemPOI <a href="https://en.wikipedia.org/wiki/Men-yoroi" target="_blank">:japanese_goblin:</a>
+# :japanese_goblin: MemPOI :japanese_goblin:
 A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
