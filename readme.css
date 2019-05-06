@@ -343,9 +343,9 @@
   .div-33 {
     margin: auto;
     position: absolute;
-    padding-left: 0;
+    padding-left: 0 !important;
     text-align: left;
-    width: 60%;
+    width: 70%;
   }
 }
 
