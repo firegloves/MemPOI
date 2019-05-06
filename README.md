@@ -114,9 +114,7 @@ A library to simplify export from database to Excel files using Apache POI :japa
 
     setInterval(function () {
       var anim = document.getElementById('anim');
-      console.log('replacing');
       anim.parentNode.replaceChild(anim, anim);
-      console.log('replaced');
     }, 23000);
 
   </script>
