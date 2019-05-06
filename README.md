@@ -11,14 +11,14 @@ All you need is to instantiate a MemPOI and to pass it the List of your exportin
 You need to pass your export queries as a List of `MempoiSheet` (`PreparedStatement` + sheet name).
 You can use `MempoiBuilder` to correctly populate your MemPOI instance, like follows:
 
-<pre>
+```
 MemPOI memPOI = new MempoiBuilder()
                         .setDebug(true)
                         .addMempoiSheet(new MempoiSheet(prepStmt, "Sheet name"))
                         .build();
                         
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
-</pre>
+```
 
 You can find more examples in the functional tests package.
 
@@ -37,7 +37,7 @@ You can choose to write directly to a file or to obtain the byte array of the ge
 
 File:
 
-<pre>
+```
 File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file.xlsx");
 MemPOI memPOI = new MempoiBuilder()
                     .setFile(fileDest)
@@ -45,18 +45,18 @@ MemPOI memPOI = new MempoiBuilder()
                     .build();
 
 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-</pre>
+```
 
 Byte array:
 
-<pre>
+```
 // With byte array
 MemPOI memPOI = new MempoiBuilder()
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
-</pre>
+```
 
 
 ### Supported SQL data types
@@ -102,7 +102,7 @@ will result in a sheet with 2 columns: id and first_name (containing db's name c
 Multiple sheets in the same document are supported: `MempoiBuilder` accept a list of `MempoiSheet`.
 Look at this example and the result above:
 
-<pre>
+```
 MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
 MempoiSheet catsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS CAT_NAME, pet_race AS CAT_RACE FROM pets WHERE pet_type = 'cat'"), "Cats sheet");
 MempoiSheet birdsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS BIRD_NAME, pet_race AS BIRD_RACE FROM pets WHERE pet_type = 'bird'"), "Birds sheet");
@@ -117,7 +117,7 @@ MemPOI memPOI = new MempoiBuilder()
                     .build();
 
 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-</pre>
+```
 
 ![](img/multiple_sheets.gif)
 
@@ -127,12 +127,12 @@ CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 
 MemPOI can adjust columns width to fit the longest content by setting to `true` the property `MempoiBuilder.adjustColumnWidth` as follows:
 
-<pre>
+```
 MemPOI memPOI = new MempoiBuilder()
                     .setAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
-</pre>
+```
 
 **Adjusting columns width for huge dataset could dramatically slow down the generation process**
 
@@ -150,17 +150,17 @@ MemPOI comes with a preset of default data formatting style for
 The default styles are applied by default. You can inspect them looking at the end of `MempoiReportStyler` class 
 If you want to reset the default styles you need to use an empty `CellStyle` when you use `MempoiBuilder`, for example:
 
-<pre>
+```
 MemPOI memPOI = new MempoiBuilder()
                     .setWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setNumberCellStyle(workbook.createCellStyle())     // no default style for number fields
                     .build();
-</pre>
+```
 
 Keep in mind that when you use custom styles you need to pass the workbook from outside, otherwise you could encounter problems. This is an example:
 
-<pre>
+```
 CellStyle headerCellStyle = workbook.createCellStyle();
 headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
 headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -172,18 +172,18 @@ MemPOI memPOI = new MempoiBuilder()
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setHeaderCellStyle(headerCellStyle)
                     .build();
-</pre>                    
+```                    
 
 
 MemPOI comes with a set of templates ready to use. You can use them as follows:
 
-<pre>
+```
 MemPOI memPOI = new MempoiBuilder()
                     .setWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new ForestStyleTemplate())
                     .build();
-</pre>
+```
 
 List of available templates:
 
@@ -206,7 +206,7 @@ MemPOI supports standard .xlsx footers and sub footers.
 Whereas footers are a simple wrapper of the Excel ones, subfooters are a MemPOI extension that let you add some nice functionalities to your report.
 For example, you could choose to add the `NumberSumSubFooter` to your MemPOI report. It will results in an additional line at the end of the sheet containing the sum of the numeric columns.This is an example:
 
-<pre>
+```
 MemPOI memPOI = new MempoiBuilder()
                     .setDebug(true)
                     .setWorkbook(workbook)
@@ -214,7 +214,7 @@ MemPOI memPOI = new MempoiBuilder()
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setMempoiSubFooter(new NumberSumSubFooter())
                     .build();
-</pre>
+```
 
 List of available subfooters:
 
