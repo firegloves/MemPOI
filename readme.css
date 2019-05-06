@@ -2,7 +2,7 @@
   position: absolute;
   color: white;
   text-align: center;
-  line-height: 340px;
+  line-height: 380px;
   font-weight: bold;
   font-size: 24pt;
 }
@@ -43,7 +43,7 @@
 }
 
 .anim-bg {
-  height: 340px;
+  height: 380px;
   width: 100%;
   border-radius: 5px;
   background-color: #333;
@@ -51,7 +51,7 @@
 
 .outside {
   position: relative;
-  height: 340px;
+  height: 380px;
   width: 100%;
   overflow: hidden;
   border-radius: 5px;
@@ -62,7 +62,7 @@
 
 .container {
   width: 100%;
-  height: 340px;
+  height: 380px;
   position: relative;
   background-image: linear-gradient(to right, #155799, #159957);
 }
@@ -331,13 +331,13 @@
   content: "";
   position: absolute;
   top: 5px;
-  width: 330px;
-  height: 330px;
+  width: 370px;
+  height: 370px;
   background: #222;
   border-radius: 100%;
   transition: all 500ms cubic-bezier(1, 0.885, 0.32, 1);
   transform: scale(4);
-  left: calc(50% - (340px / 2));
+  left: calc(50% - (380px / 2));
   animation: scaleSphere 16s linear 0s 1 forwards;
 }
 
@@ -349,7 +349,7 @@
 .poi-block {
   width: 100%;
   display: flex;
-  height: 340px;
+  height: 380px;
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -509,5 +509,3 @@
     opacity: 0;
   }
 }
-
-/*# sourceMappingURL=intro.css.map */
