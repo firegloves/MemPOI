@@ -2,7 +2,7 @@
   position: absolute;
   color: white;
   text-align: center;
-  line-height: 430px;
+  line-height: 340px;
   font-weight: bold;
   font-size: 24pt;
 }
@@ -42,10 +42,17 @@
   flex: 0 0 33%;
 }
 
+.anim-bg {
+  height: 340px;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #333;
+}
+
 .outside {
   position: relative;
-  height: 430px;
-  width: 832px;
+  height: 340px;
+  width: 100%;
   overflow: hidden;
   border-radius: 5px;
   background-color: #333;
@@ -55,7 +62,7 @@
 
 .container {
   width: 100%;
-  height: 430px;
+  height: 340px;
   position: relative;
   background-image: linear-gradient(to right, #155799, #159957);
 }
@@ -324,13 +331,14 @@
   content: "";
   position: absolute;
   top: 5px;
-  width: 420px;
-  height: 420px;
+  width: 330px;
+  height: 330px;
   background: #222;
   border-radius: 100%;
   transition: all 500ms cubic-bezier(1, 0.885, 0.32, 1);
-  left: calc(50% - 200px);
-  animation: scaleSphere 14s linear 2s 1 forwards;
+  transform: scale(4);
+  left: calc(50% - (340px / 2));
+  animation: scaleSphere 16s linear 0s 1 forwards;
 }
 
 .div-33 {
@@ -341,7 +349,7 @@
 .poi-block {
   width: 100%;
   display: flex;
-  height: 430px;
+  height: 340px;
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -360,7 +368,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  animation: fadeIn 0.1s linear 12s forwards;
+  animation: mempoiFadeIn 10s linear 12s forwards;
 }
 .mempoi .title {
   position: relative;
@@ -380,7 +388,7 @@
 .final-mempoi-powered {
   opacity: 0;
   position: absolute;
-  top: 325px;
+  top: 260px;
   right: 100px;
   font-size: 16px;
   color: white;
@@ -390,70 +398,20 @@
   background-image: linear-gradient(to right, #155799, #159957);
 }
 
-@-webkit-keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    -webkit-transform: translatex(-10px);
-    -moz-transform: translatex(-10px);
-    -o-transform: translatex(-10px);
-    transform: translatex(-10px);
-  }
-  to {
-    opacity: 1;
-    -webkit-transform: translatex(0);
-    -moz-transform: translatex(0);
-    -o-transform: translatex(0);
-    transform: translatex(0);
-  }
-}
-@-moz-keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    -webkit-transform: translatex(-10px);
-    -moz-transform: translatex(-10px);
-    -o-transform: translatex(-10px);
-    transform: translatex(-10px);
-  }
-  to {
-    opacity: 1;
-    -webkit-transform: translatex(0);
-    -moz-transform: translatex(0);
-    -o-transform: translatex(0);
-    transform: translatex(0);
-  }
-}
 @keyframes fadeInLeft {
   from {
     opacity: 0;
-    -webkit-transform: translatex(-100px);
-    -moz-transform: translatex(-100px);
-    -o-transform: translatex(-100px);
     transform: translatex(-100px);
   }
   to {
     opacity: 1;
-    -webkit-transform: translatex(0);
-    -moz-transform: translatex(0);
-    -o-transform: translatex(0);
     transform: translatex(0);
   }
 }
 .in-left {
-  -webkit-animation-name: fadeInLeft;
-  -moz-animation-name: fadeInLeft;
-  -o-animation-name: fadeInLeft;
   animation-name: fadeInLeft;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
-  -o-animation-fill-mode: both;
   animation-fill-mode: both;
-  -webkit-animation-duration: 0.2s;
-  -moz-animation-duration: 0.2s;
-  -o-animation-duration: 0.2s;
   animation-duration: 0.2s;
-  -webkit-animation-delay: 0.2s;
-  -moz-animation-delay: 0.2s;
-  -o-animation-duration: 0.2s;
   animation-delay: 0.2s;
   color: white;
 }
@@ -496,24 +454,28 @@
   }
 }
 @keyframes scaleSphere {
-  5% {
-    -webkit-transform: scale(4);
+  0% {
     transform: scale(4);
   }
-  75% {
-    -webkit-transform: scale(4);
+  4% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1);
+  }
+  17% {
     transform: scale(4);
   }
   80% {
-    -webkit-transform: scale(1);
+    transform: scale(4);
+  }
+  83% {
     transform: scale(1);
   }
-  95% {
-    -webkit-transform: scale(1);
+  92% {
     transform: scale(1);
   }
   100% {
-    -webkit-transform: scale(4);
     transform: scale(4);
   }
 }
@@ -533,3 +495,19 @@
     opacity: 0;
   }
 }
+@keyframes mempoiFadeIn {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/*# sourceMappingURL=intro.css.map */

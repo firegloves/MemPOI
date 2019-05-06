@@ -5,106 +5,110 @@ A library to simplify data export from database to Excel files using Apache POI
 
 <link type="text/css" rel="stylesheet" href="readme.css" />
 
-<div class="outside">
+<div class="anim-bg">
+    <div class="outside" id="anim">
 
-<div class="container">
+      <div class="container">
 
-  <div class="plain-apache-poi poi-block">
-    <div class="title">Plain Apache POI</div>
+        <div class="plain-apache-poi poi-block">
+          <div class="title">Plain Apache POI</div>
 
-    <div class="div-33 block-one">
-      <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span> = <span
-        class="orange">new</span> SXSSFWorkbook();
+          <div class="div-33 block-one">
+            <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span> = <span
+              class="orange">new</span> SXSSFWorkbook();
+            </div>
+            <div class="in-left">SXSSFSheet sheet = <span class="rose">workbook</span>.createSheet(<span
+              class="green">"Dogs"</span>);
+            </div>
+            <div class="in-left">CellStyle headerStyle = <span class="rose">workbook</span>.createCellStyle();</div>
+            <div class="in-left">headerStyle.setFillForegroundColor(</div>
+            <div class="in-left ml">IndexedColors.<span class="rose">GREEN</span>.getIndex());</div>
+            <div class="in-left">headerStyle.setFillPattern(</div>
+            <div class="in-left ml">FillPatternType.<span class="rose">SOLID_FOREGROUND</span>);</div>
+            <div class="in-left">Row row = sheet.createRow(<span class="blue">0</span>);</div>
+            <div class="in-left">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
+            <div class="in-left">cell1.setCellValue(<span class="green">"Dog name"</span>);</div>
+            <div class="in-left">cell1.setCellStyle(headerStyle);</div>
+            <div class="in-left">Cell cell2 = row.createCell(<span class="blue">1</span>);</div>
+            <div class="in-left">cell2.setCellValue(<span class="green">"Dog race"</span>);</div>
+            <div class="in-left">cell2.setCellStyle(headerStyle);</div>
+            <div class="in-left">Cell cell3 = row.createCell(<span class="blue">2</span>);</div>
+            <div class="in-left">cell3.setCellValue(<span class="green">"Dog age"</span>);</div>
+            <div class="in-left">cell3.setCellStyle(headerStyle);</div>
+            <div class="in-left">Cell cell4 = row.createCell(<span class="blue">2</span>);</div>
+            <div class="in-left">cell4.setCellValue(<span class="green">"Dog owner"</span>);</div>
+            <div class="in-left">cell4.setCellStyle(headerStyle);</div>
+          </div>
+          <div class="div-33 block-two">
+            <div class="in-left">ResultSet rs = preparedStatement.executeQuery();</div>
+            <div class="in-left">int rowNumber = <span class="blue">1</span>;</div>
+            <div class="in-left"><span class="orange">while</span>(rs.next()) {</div>
+            <div class="in-left ml">Row row = sheet.createRow(<span class="orange">this</span>.<span
+              class="rose">rowNumber</span>++);
+            </div>
+            <div class="in-left ml">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
+            <div class="in-left ml">cell1.setCellValue(rs.getString(<span class="green">"dog_name"</span>));</div>
+            <div class="in-left ml">cell1.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
+            <div class="in-left ml">cell1.getStyle().setVerticalAlignment(valign);</div>
+            <div class="in-left ml">Cell cell2 = row.createCell(<span class="blue">0</span>);</div>
+            <div class="in-left ml">cell2.setCellValue(rs.getString(<span class="green">"dog_race"</span>));</div>
+            <div class="in-left ml">cell2.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
+            <div class="in-left ml">Cell cell3 = row.createCell(<span class="blue">1</span>);</div>
+            <div class="in-left ml">cell3.setCellValue(rs.getInt(<span class="green">"dog_age"</span>));</div>
+            <div class="in-left ml">cell3.setStyle(<span class="orange">this</span>.createNumericStyle());</div>
+            <div class="in-left ml">cell4.getStyle().setVerticalAlignment(valign);</div>
+            <div class="in-left ml">Cell cell4 = row.createCell(<span class="blue">2</span>);</div>
+            <div class="in-left ml">cell4.setCellValue(rs.getInt(<span class="green">"dog_owner"</span>));</div>
+            <div class="in-left ml">cell4.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
+            <div class="in-left ml">cell4.getStyle().setVerticalAlignment(valign);</div>
+            <div class="in-left">}</div>
+          </div>
+          <div class="div-33 block-three">
+            <div class="in-left">Row row = sheet.createRow(rowNumber);</div>
+            <div class="in-left">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
+            <div class="in-left">cell1.setCellValue(<span class="green">""</span>);</div>
+            <div class="in-left">cell1.setCellStyle(headerStyle);</div>
+            <div class="in-left">Cell cell2 = row.createCell(<span class="blue">1</span>);</div>
+            <div class="in-left">cell2.setCellValue(<span class="green">""</span>);</div>
+            <div class="in-left">cell2.setCellStyle(headerStyle);</div>
+            <div class="in-left">Cell cell3 = row.createCell(<span class="blue">2</span>);</div>
+            <div class="in-left">cell3.setCellValue(<span class="green">""</span>);</div>
+            <div class="in-left">cell3.setCellStyle(headerStyle);</div>
+            <div class="in-left">cell3.setCellFormula(<span class="green">"SUM(D2:D50)"</span>);</div>
+            <div class="in-left">Cell cell4 = row.createCell(<span class="blue">3</span>);</div>
+            <div class="in-left">cell4.setCellValue(<span class="green">"Dog owner"</span>);</div>
+            <div class="in-left">cell4.setCellStyle(headerStyle);</div>
+            <div class="in-left"><span class="orange">try</span> (ByteArrayOutputStream bos =</div>
+            <div class="in-left ml2"><span class="orange">new</span> ByteArrayOutputStream()) {</div>
+            <div class="in-left ml"><span class="orange">this</span>.<span class="rose">workbook</span>.write(bos);
+            </div>
+            <div class="in-left ml"><span class="orange">return</span> bos.toByteArray();</div>
+            <div class="in-left">}</div>
+            <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span>.dispose();</div>
+            <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span>.close();</div>
+            <div class="in-left">rs.close();</div>
+          </div>
+        </div>
+
+        <div class="mempoi poi-block">
+
+          <div class="title">MemPOI Powered</div>
+
+          <div class="mempoi-code">
+            <div><span class="orange">new</span> MempoiBuilder()</div>
+            <div class="ml">.addMempoiSheet(<span class="orange">new</span> MempoiSheet(prepStmt, <span class="green">"Dogs"</span>))
+            </div>
+            <div class="ml">.build()</div>
+            <div class="ml">.prepareMempoiReportToByteArray();</div>
+          </div>
+
+          <div class="final-mempoi-powered">MemPOI Powered</div>
+          <div class="mempo"></div>
+        </div>
+
       </div>
-      <div class="in-left">SXSSFSheet sheet = <span class="rose">workbook</span>.createSheet(<span
-        class="green">"Dogs"</span>);
-      </div>
-      <div class="in-left">CellStyle headerStyle = <span class="rose">workbook</span>.createCellStyle();</div>
-      <div class="in-left">headerStyle.setFillForegroundColor(</div>
-      <div class="in-left ml">IndexedColors.<span class="rose">GREEN</span>.getIndex());</div>
-      <div class="in-left">headerStyle.setFillPattern(</div>
-      <div class="in-left ml">FillPatternType.<span class="rose">SOLID_FOREGROUND</span>);</div>
-      <div class="in-left">Row row = sheet.createRow(<span class="blue">0</span>);</div>
-      <div class="in-left">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
-      <div class="in-left">cell1.setCellValue(<span class="green">"Dog name"</span>);</div>
-      <div class="in-left">cell1.setCellStyle(headerStyle);</div>
-      <div class="in-left">Cell cell2 = row.createCell(<span class="blue">1</span>);</div>
-      <div class="in-left">cell2.setCellValue(<span class="green">"Dog race"</span>);</div>
-      <div class="in-left">cell2.setCellStyle(headerStyle);</div>
-      <div class="in-left">Cell cell3 = row.createCell(<span class="blue">2</span>);</div>
-      <div class="in-left">cell3.setCellValue(<span class="green">"Dog age"</span>);</div>
-      <div class="in-left">cell3.setCellStyle(headerStyle);</div>
-      <div class="in-left">Cell cell4 = row.createCell(<span class="blue">2</span>);</div>
-      <div class="in-left">cell4.setCellValue(<span class="green">"Dog owner"</span>);</div>
-      <div class="in-left">cell4.setCellStyle(headerStyle);</div>
-    </div>
-    <div class="div-33 block-two">
-      <div class="in-left">ResultSet rs = preparedStatement.executeQuery();</div>
-      <div class="in-left">int rowNumber = <span class="blue">1</span>;</div>
-      <div class="in-left"><span class="orange">while</span>(rs.next()) {</div>
-      <div class="in-left ml">Row row = sheet.createRow(<span class="orange">this</span>.<span
-        class="rose">rowNumber</span>++);
-      </div>
-      <div class="in-left ml">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
-      <div class="in-left ml">cell1.setCellValue(rs.getString(<span class="green">"dog_name"</span>));</div>
-      <div class="in-left ml">cell1.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
-      <div class="in-left ml">cell1.getStyle().setVerticalAlignment(valign);</div>
-      <div class="in-left ml">Cell cell2 = row.createCell(<span class="blue">0</span>);</div>
-      <div class="in-left ml">cell2.setCellValue(rs.getString(<span class="green">"dog_race"</span>));</div>
-      <div class="in-left ml">cell2.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
-      <div class="in-left ml">Cell cell3 = row.createCell(<span class="blue">1</span>);</div>
-      <div class="in-left ml">cell3.setCellValue(rs.getInt(<span class="green">"dog_age"</span>));</div>
-      <div class="in-left ml">cell3.setStyle(<span class="orange">this</span>.createNumericStyle());</div>
-      <div class="in-left ml">cell4.getStyle().setVerticalAlignment(valign);</div>
-      <div class="in-left ml">Cell cell4 = row.createCell(<span class="blue">2</span>);</div>
-      <div class="in-left ml">cell4.setCellValue(rs.getInt(<span class="green">"dog_owner"</span>));</div>
-      <div class="in-left ml">cell4.setStyle(<span class="orange">this</span>.createNormalStyle());</div>
-      <div class="in-left ml">cell4.getStyle().setVerticalAlignment(valign);</div>
-      <div class="in-left">}</div>
-    </div>
-    <div class="div-33 block-three">
-      <div class="in-left">Row row = sheet.createRow(rowNumber);</div>
-      <div class="in-left">Cell cell1 = row.createCell(<span class="blue">0</span>);</div>
-      <div class="in-left">cell1.setCellValue(<span class="green">""</span>);</div>
-      <div class="in-left">cell1.setCellStyle(headerStyle);</div>
-      <div class="in-left">Cell cell2 = row.createCell(<span class="blue">1</span>);</div>
-      <div class="in-left">cell2.setCellValue(<span class="green">""</span>);</div>
-      <div class="in-left">cell2.setCellStyle(headerStyle);</div>
-      <div class="in-left">Cell cell3 = row.createCell(<span class="blue">2</span>);</div>
-      <div class="in-left">cell3.setCellValue(<span class="green">""</span>);</div>
-      <div class="in-left">cell3.setCellStyle(headerStyle);</div>
-      <div class="in-left">cell3.setCellFormula(<span class="green">"SUM(D2:D50)"</span>);</div>
-      <div class="in-left">Cell cell4 = row.createCell(<span class="blue">3</span>);</div>
-      <div class="in-left">cell4.setCellValue(<span class="green">"Dog owner"</span>);</div>
-      <div class="in-left">cell4.setCellStyle(headerStyle);</div>
-      <div class="in-left"><span class="orange">try</span> (ByteArrayOutputStream bos =</div>
-      <div class="in-left ml2"><span class="orange">new</span> ByteArrayOutputStream()) {</div>
-      <div class="in-left ml"><span class="orange">this</span>.<span class="rose">workbook</span>.write(bos);</div>
-      <div class="in-left ml"><span class="orange">return</span> bos.toByteArray();</div>
-      <div class="in-left">}</div>
-      <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span>.dispose();</div>
-      <div class="in-left"><span class="orange">this</span>.<span class="rose">workbook</span>.close();</div>
-      <div class="in-left">rs.close();</div>
     </div>
   </div>
-
-  <div class="mempoi poi-block">
-
-    <div class="title">MemPOI Powered</div>
-
-    <div class="mempoi-code">
-      <div><span class="orange">new</span> MempoiBuilder()</div>
-      <div class="ml">.addMempoiSheet(<span class="orange">new</span> MempoiSheet(prepStmt, <span class="green">"Dogs"</span>))</div>
-      <div class="ml">.build()</div>
-      <div class="ml">.prepareMempoiReportToByteArray();</div>
-    </div>
-
-    <div class="final-mempoi-powered">MemPOI Powered</div>
-    <div class="mempo"></div>
-  </div>
-
-</div>
-</div>
 
 ---
 
