@@ -31,17 +31,6 @@
   margin-left: 50px;
 }
 
-.flex {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.flex-33 {
-  flex: 0 0 33%;
-}
-
 .anim-bg {
   height: 380px;
   width: 100%;
@@ -327,6 +316,11 @@
 .container .block-three div:nth-child(29) {
   animation-delay: 13.35s;
 }
+@media only screen and (max-width: 964px) {
+  .container {
+    text-align: center;
+  }
+}
 .container:before {
   content: "";
   position: absolute;
@@ -342,8 +336,17 @@
 }
 
 .div-33 {
-  width: 30%;
+  width: 31%;
   display: inline-block;
+}
+@media only screen and (max-width: 964px) {
+  .div-33 {
+    margin: auto;
+    position: absolute;
+    padding-left: 0;
+    text-align: left;
+    width: 60%;
+  }
 }
 
 .block-one {
@@ -364,8 +367,8 @@
 }
 
 .plain-apache-poi {
-  animation: fadeOut 0.5s ease-out 12.5s forwards;
   font-size: 11px;
+  animation: fadeOut 0.5s ease-out 12.5s forwards;
 }
 .plain-apache-poi .title {
   animation: plainPoi 3s forwards;
@@ -381,16 +384,23 @@
 .mempoi .title {
   position: relative;
   opacity: 0;
-  animation: mempoiPowered 2s ease-out 13s forwards;
   white-space: nowrap;
   flex: 0 0 100%;
+  animation: mempoiPowered 2s ease-out 13s forwards;
 }
 .mempoi .mempoi-code {
   font-size: 24px;
   opacity: 0;
-  animation: fadeIn 1s ease-out 15.5s forwards;
   flex: 0 0 100%;
   position: absolute;
+  animation: fadeIn 1s ease-out 15.5s forwards;
+}
+@media only screen and (max-width: 964px) {
+  .mempoi .mempoi-code {
+    font-size: 18px;
+    text-align: left;
+    padding: 0 20px;
+  }
 }
 
 .final-mempoi-powered {
@@ -400,12 +410,43 @@
   right: 100px;
   font-size: 16px;
   color: white;
-  animation: fadeIn 2s ease-out 17s forwards;
   padding: 4px;
   border-radius: 3px;
   background-image: linear-gradient(to right, #155799, #159957);
+  animation: fadeIn 2s ease-out 17s forwards;
+}
+@media only screen and (max-width: 964px) {
+  .final-mempoi-powered {
+    position: relative;
+    margin: auto;
+    top: -100px;
+    right: 0;
+  }
 }
 
+.in-left {
+  color: white;
+}
+
+/*************************
+ *  LARGE SCREEN
+ ************************/
+@media only screen and (min-width: 965px) {
+  .in-left {
+    animation: fadeInLeft 0.2s both 0.2s;
+  }
+}
+/*************************
+ *  SMALL SCREEN
+ ************************/
+@media only screen and (max-width: 964px) {
+  .in-left {
+    animation: fadeInLeftAndFadeOut 2s both 0.2s;
+  }
+}
+/*************************
+ *  ANIMATIONS
+ ************************/
 @keyframes fadeInLeft {
   from {
     opacity: 0;
@@ -416,14 +457,24 @@
     transform: translatex(0);
   }
 }
-.in-left {
-  animation-name: fadeInLeft;
-  animation-fill-mode: both;
-  animation-duration: 0.2s;
-  animation-delay: 0.2s;
-  color: white;
+@keyframes fadeInLeftAndFadeOut {
+  0% {
+    opacity: 0;
+    transform: translatex(-100px);
+  }
+  10% {
+    opacity: 1;
+    transform: translatex(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translatex(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translatex(-100px);
+  }
 }
-
 @keyframes plainPoi {
   0% {
     opacity: 0;
