@@ -1,4 +1,4 @@
-# MemPOI [:japanese_goblin:](https://en.wikipedia.org/wiki/Men-yoroi){:target="_blank"}
+# MemPOI <a href="https://en.wikipedia.org/wiki/Men-yoroi" target="_blank">:japanese_goblin:</a>
 A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
@@ -265,6 +265,6 @@ Keep in mind that if you can't use them for performance problems you could ask i
 
 #### Special thanks
 
-Special thanks to [Colle der Fomento](http://www.collederfomento.net/){:target="_blank"} that inspired MemPOI name with their new, fantastic, yearned LP, in particular with their song [Mempo](https://youtu.be/xy05iaknmcY){:target="_blank"}.
+Special thanks to <a href="http://www.collederfomento.net/" target="_blank">Colle der Fomento</a> that inspired MemPOI name with their new, fantastic, yearned LP, in particular with their song <a href="https://youtu.be/xy05iaknmcY" target="_blank">Mempo</a>.
 
-Don't you know what I'm talking about? Discover what a [mempo](https://en.wikipedia.org/wiki/Men-yoroi){:target="_blank"} is!
+Don't you know what I'm talking about? Discover what a <a href="https://en.wikipedia.org/wiki/Men-yoroi" target="_blank">mempo</a> is!
