@@ -1,16 +1,16 @@
 package it.firegloves.mempoi;
 
+import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.domain.footer.FormulaSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
-import it.firegloves.mempoi.styles.MempoiReportStyler;
+import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -28,77 +28,15 @@ public class Strategos {
 
     private static final Logger logger = LoggerFactory.getLogger(DBMempoiDAO.class);
 
-    /**
-     * the sub footer to apply to the report. if null => no sub footer is appended to the report
-     */
-    private MempoiSubFooter mempoiSubFooter;
 
     /**
-     * the footer to apply to the report. if null => no footer is appended to the report
+     * contains the workbook configurations
      */
-    private MempoiFooter mempoiFooter;
-
-    /**
-     * the report styler containing desired output styles
-     */
-    private MempoiReportStyler reportStyler;
-
-    /**
-     * the workbook to create the report
-     */
-    private Workbook workbook;
-
-    /**
-     * if true mempoi tries to adjust all columns width accordingly with column data cells length
-     */
-    private boolean adjustColSize;
-
-    /**
-     * true if come cell formulas have to be evaluated
-     * this true condition implies that:
-     *  - if the workbook is a SXSSFWorkbook
-     *    - the workbook is written on a temp file
-     *    - the file is reopenened
-     *    - the cell formulas are evaluated
-     *    - the workbook is saved again on the final file
-     * otherwise the workbook is written normally
-     */
-    private boolean hasFormulasToEvaluate;
-
-    /**
-     * by default MemPOI forces Excel to evaluate cell formulas when it opens the report
-     * but if this var is true MemPOI tries to evaluate cell formulas at runtime instead
-     */
-    private boolean evaluateCellFormulas;
+    private WorkbookConfig workbookConfig;
 
 
-    public Strategos(Workbook workbook, MempoiReportStyler reportStyler, boolean adjustColSize, MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter) {
-        this.workbook = workbook;
-        this.reportStyler = reportStyler;
-        this.adjustColSize = adjustColSize;
-        this.mempoiSubFooter = mempoiSubFooter;
-        this.mempoiFooter = mempoiFooter;
-        this.evaluateCellFormulas = false;
-
-        this.setHasFormulasToEvaluate();
-    }
-
-    public Strategos(Workbook workbook, MempoiReportStyler reportStyler, boolean adjustColSize, MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, boolean evaluateCellFormulas) {
-        this.workbook = workbook;
-        this.reportStyler = reportStyler;
-        this.adjustColSize = adjustColSize;
-        this.mempoiSubFooter = mempoiSubFooter;
-        this.mempoiFooter = mempoiFooter;
-        this.evaluateCellFormulas = evaluateCellFormulas;
-
-        this.setHasFormulasToEvaluate();
-    }
-
-    /**
-     * define if the current workbook has to process some cell formulas
-     */
-    private void setHasFormulasToEvaluate() {
-        this.hasFormulasToEvaluate = null != this.mempoiSubFooter && this.mempoiSubFooter instanceof FormulaSubFooter;
+    public Strategos(WorkbookConfig workbookConfig) {
+       this.workbookConfig = workbookConfig;
     }
 
 
@@ -108,14 +46,14 @@ public class Strategos {
      *
      * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
      * @param fileToExport    the destination file (with path) where write exported data
+     *
+     * @throws MempoiException
+     *
      * @return the filename with path of the report generated file
      */
-    public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) {
+    public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) throws MempoiException {
 
-        this.generateReport(mempoiSheetList);
-
-        this.manageFormulaToEvaluate(this.evaluateCellFormulas, this.hasFormulasToEvaluate);
-
+        this.generateMempoiReport(mempoiSheetList);
         return this.writeFile(fileToExport);
     }
 
@@ -124,15 +62,26 @@ public class Strategos {
      * starting from export PreparedStatement prepares the MempoiReport for battle!
      *
      * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
+     *
+     * @throws MempoiException
+     *
      * @return the filename with path of the report generated file
      */
-    public byte[] generateMempoiReportToByteArray(List<MempoiSheet> mempoiSheetList) {
+    public byte[] generateMempoiReportToByteArray(List<MempoiSheet> mempoiSheetList) throws MempoiException {
+
+        this.generateMempoiReport(mempoiSheetList);
+        return this.writeToByteArray();
+    }
+
+
+    /**
+     * generate the report into the WorkbookConfig.workbook variable
+     * @param mempoiSheetList
+     */
+    private void generateMempoiReport(List<MempoiSheet> mempoiSheetList) {
 
         this.generateReport(mempoiSheetList);
-
-        this.manageFormulaToEvaluate(this.evaluateCellFormulas, this.hasFormulasToEvaluate);
-
-        return this.writeToByteArray();
+        this.manageFormulaToEvaluate(this.workbookConfig.isEvaluateCellFormulas(), this.workbookConfig.isHasFormulasToEvaluate());
     }
 
 
@@ -185,10 +134,12 @@ public class Strategos {
         int rowCounter = 0;
 
         // create sheet
-        Sheet sheet = null != mempoiSheet.getSheetName() && !mempoiSheet.getSheetName().isEmpty() ? workbook.createSheet(mempoiSheet.getSheetName()) : workbook.createSheet();
+        Sheet sheet = null != mempoiSheet.getSheetName() && !mempoiSheet.getSheetName().isEmpty() ?
+                this.workbookConfig.getWorkbook().createSheet(mempoiSheet.getSheetName()) :
+                this.workbookConfig.getWorkbook().createSheet();
 
         // track columns for autosizing
-        if (this.adjustColSize && sheet instanceof SXSSFSheet) {
+        if (this.workbookConfig.isAdjustColSize() && sheet instanceof SXSSFSheet) {
             ((SXSSFSheet)sheet).trackAllColumnsForAutoSizing();
         }
 
@@ -199,10 +150,11 @@ public class Strategos {
         List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
 
         // associate cell stylers
-        new MempoiColumnStyleManager(this.reportStyler).setMempoiColumnListStyler(columnList);
+        MempoiStyler sheetReportStyler = mempoiSheet.getReportStyler().orElseGet(() -> this.workbookConfig.getReportStyler());
+        new MempoiColumnStyleManager(sheetReportStyler).setMempoiColumnListStyler(columnList);
 
         // create header
-        rowCounter = this.createHeaderRow(sheet, columnList, rowCounter);
+        rowCounter = this.createHeaderRow(sheet, columnList, rowCounter, sheetReportStyler);
 
         // keep track of the first data row index (no header and subheaders)
         int firstDataRowIndex = rowCounter + 1;
@@ -216,10 +168,10 @@ public class Strategos {
 //            this.lastDataRowIndex = this.rowCounter;
 
             // add optional sub footer
-            this.createSubFooterRow(sheet, columnList, this.mempoiSubFooter, firstDataRowIndex, rowCounter);
+            this.createSubFooterRow(sheet, columnList, mempoiSheet.getMempoiSubFooter().orElseGet(() -> this.workbookConfig.getMempoiSubFooter()), firstDataRowIndex, rowCounter, sheetReportStyler);
 
             // add optional footer
-            this.createFooterRow(sheet);
+            this.createFooterRow(sheet, mempoiSheet.getMempoiFooter().orElseGet(() -> this.workbookConfig.getMempoiFooter()));
 
             // adjust col size
             this.adjustColSize(sheet, columnList.size());
@@ -237,7 +189,7 @@ public class Strategos {
      * @param sheet
      * @return the row couter updated
      */
-    private int createHeaderRow(Sheet sheet, List<MempoiColumn> columnList, int rowCounter) {
+    private int createHeaderRow(Sheet sheet, List<MempoiColumn> columnList, int rowCounter, MempoiStyler sheetReportStyler) {
 
         Row row = sheet.createRow(rowCounter++);
 
@@ -254,17 +206,17 @@ public class Strategos {
                 ((XSSFSheet)sheet).getColumnHelper().setColDefaultStyle(i, cm.getCellStyle());
             }
 
-            cell.setCellStyle(this.reportStyler.getHeaderCellStyle());
+            cell.setCellStyle(sheetReportStyler.getHeaderCellStyle());
             cell.setCellValue(cm.getColumnName());
 
             logger.debug("SETTING HEADER FOR COLUMN " + columnList.get(i).getColumnName());
         }
 
         // adjust row height
-        if (this.reportStyler.getHeaderCellStyle() instanceof XSSFCellStyle) {
-            row.setHeightInPoints(((XSSFCellStyle)this.reportStyler.getHeaderCellStyle()).getFont().getFontHeightInPoints() + 5);
+        if (sheetReportStyler.getHeaderCellStyle() instanceof XSSFCellStyle) {
+            row.setHeightInPoints(((XSSFCellStyle)sheetReportStyler.getHeaderCellStyle()).getFont().getFontHeightInPoints() + 5);
         } else {
-            row.setHeightInPoints(((HSSFCellStyle)this.reportStyler.getHeaderCellStyle()).getFont(workbook).getFontHeightInPoints() + 5);
+            row.setHeightInPoints(((HSSFCellStyle)sheetReportStyler.getHeaderCellStyle()).getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + 5);
         }
 
         return rowCounter;
@@ -319,7 +271,7 @@ public class Strategos {
         try {
             // writes data to file
             try (FileOutputStream outputStream = new FileOutputStream(tmpFile)) {
-                workbook.write(outputStream);
+                this.workbookConfig.getWorkbook().write(outputStream);
                 logger.info("MemPOI temp file created: " + tmpFile.getAbsolutePath());
             }
         } catch (Exception e) {
@@ -340,9 +292,9 @@ public class Strategos {
 
         try {
             logger.info("reading temp file");
-            this.workbook = WorkbookFactory.create(tmpFile);
+            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
             logger.info("readed temp file");
-            this.workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
+            this.workbookConfig.getWorkbook().getCreationHelper().createFormulaEvaluator().evaluateAll();
             logger.info("evaluated formulas");
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -368,7 +320,7 @@ public class Strategos {
             // writes data to file
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
                 logger.info("writing final file");
-                workbook.write(outputStream);
+                this.workbookConfig.getWorkbook().write(outputStream);
                 logger.info("written final file");
             }
 
@@ -387,14 +339,14 @@ public class Strategos {
      *
      * @param sheet the sheet to which append sub footer row
      */
-    private void createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter) {
+    private void createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
 
         if (null != mempoiSubFooter) {
 
             int colListLen = columnList.size();
 
             // create the sub footer cells
-            mempoiSubFooter.setColumnSubFooter(this.workbook, columnList, this.reportStyler.getSubFooterCellStyle(), firstDataRowIndex, rowCounter);
+            mempoiSubFooter.setColumnSubFooter(this.workbookConfig.getWorkbook(), columnList, reportStyler.getSubFooterCellStyle(), firstDataRowIndex, rowCounter);
 
             Row row = sheet.createRow(rowCounter++);
 
@@ -418,7 +370,7 @@ public class Strategos {
             }
 
             // set excel to recalculate the formula result when open the document
-            if (! this.evaluateCellFormulas) {
+            if (! this.workbookConfig.isEvaluateCellFormulas()) {
                 sheet.setForceFormulaRecalculation(true);
             }
         }
@@ -430,14 +382,14 @@ public class Strategos {
      *
      * @param sheet the sheet to which append sub footer row
      */
-    private void createFooterRow(Sheet sheet) {
+    private void createFooterRow(Sheet sheet, MempoiFooter mempoiFooter) {
 
-        if (null != this.mempoiFooter) {
+        if (null != mempoiFooter) {
 
             Footer footer = sheet.getFooter();
-            footer.setLeft(this.mempoiFooter.getLeftText());
-            footer.setCenter(this.mempoiFooter.getCenterText());
-            footer.setRight(this.mempoiFooter.getRightText());
+            footer.setLeft(mempoiFooter.getLeftText());
+            footer.setCenter(mempoiFooter.getCenterText());
+            footer.setRight(mempoiFooter.getRightText());
         }
     }
 
@@ -454,7 +406,7 @@ public class Strategos {
 
             // writes data to file
             try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-                workbook.write(bos);
+                this.workbookConfig.getWorkbook().write(bos);
                 return bos.toByteArray();
             }
 
@@ -473,7 +425,7 @@ public class Strategos {
      */
     private void adjustColSize(Sheet sheet, int colListLen) {
 
-        if (this.adjustColSize) {
+        if (this.workbookConfig.isAdjustColSize()) {
             for (int i = 0; i < colListLen; i++) {
                 logger.debug("autosizing col num " + i);
                 sheet.autoSizeColumn(i);
@@ -488,13 +440,13 @@ public class Strategos {
     private void closeWorkbook() {
 
         // deletes temp poi file
-        if (workbook instanceof SXSSFWorkbook) {
-            ((SXSSFWorkbook)workbook).dispose();
+        if (this.workbookConfig.getWorkbook() instanceof SXSSFWorkbook) {
+            ((SXSSFWorkbook)this.workbookConfig.getWorkbook()).dispose();
         }
 
         // closes the workbook
         try {
-            workbook.close();
+            this.workbookConfig.getWorkbook().close();
         } catch (Exception e) {
             throw new MempoiException(e);
         }

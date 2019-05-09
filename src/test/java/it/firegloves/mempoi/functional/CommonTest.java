@@ -2,7 +2,9 @@ package it.firegloves.mempoi.functional;
 
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
+import it.firegloves.mempoi.builder.MempoiStylerBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -50,11 +52,15 @@ public class CommonTest extends FunctionalBaseTest {
             CellStyle numberCellStyle = workbook.createCellStyle();
             numberCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("#.##0,00"));
 
+            MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
+                                            .setNumberCellStyle(numberCellStyle)
+                                            .build();
+
             MemPOI memPOI = new MempoiBuilder()
                     .setDebug(true)
                     .setWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setNumberCellStyle(numberCellStyle)
+                    .setReportMempoiStyler(reportStyler)
                     .build();
 
             CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
@@ -140,22 +146,21 @@ public class CommonTest extends FunctionalBaseTest {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
+            MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
+                    .setHeaderCellStyle(headerCellStyle)
+                    .setNumberCellStyle(workbook.createCellStyle())
+                    .setDateCellStyle(dateCellStyle)
+                    .setDatetimeCellStyle(datetimeCellStyle)
+                    .setCommonDataCellStyle(commonDataCellStyle)
+                    .build();
+
             MemPOI memPOI = new MempoiBuilder()
                     .setDebug(true)
                     .setWorkbook(workbook)
                     .setFile(fileDest)
                     .setAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    // custom header cell style
-                    .setHeaderCellStyle(headerCellStyle)
-                    // no style for number fields
-                    .setNumberCellStyle(workbook.createCellStyle())
-                    // custom date cell style
-                    .setDateCellStyle(dateCellStyle)
-                    // custom datetime cell style
-                    .setDatetimeCellStyle(datetimeCellStyle)
-                    // custom common data cell style
-                    .setCommonDataCellStyle(commonDataCellStyle)
+                    .setReportMempoiStyler(reportStyler)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

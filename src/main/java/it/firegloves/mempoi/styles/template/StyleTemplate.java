@@ -1,6 +1,6 @@
 package it.firegloves.mempoi.styles.template;
 
-import it.firegloves.mempoi.styles.MempoiReportStyler;
+import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.poi.ss.usermodel.*;
 
 public interface StyleTemplate {
@@ -71,12 +71,12 @@ public interface StyleTemplate {
     }
 
     /**
-     * creates a MempoiReportStyler starting from current StyleTemplate's CellStyle list
-     * @return the MempoiReportStyler resulting from current StyleTemplate's CellStyle list
+     * creates a MempoiStyler starting from current StyleTemplate's CellStyle list
+     * @return the MempoiStyler resulting from current StyleTemplate's CellStyle list
      */
-    default MempoiReportStyler toMempoiReportStyler(Workbook workbook) {
+    default MempoiStyler toMempoiReportStyler(Workbook workbook) {
 
-        return new MempoiReportStyler(
+        return new MempoiStyler(
                 this.getHeaderCellStyle(workbook),
                 this.getCommonDataCellStyle(workbook),
                 this.getDateCellStyle(workbook),

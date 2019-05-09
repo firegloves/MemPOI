@@ -2,7 +2,7 @@ package it.firegloves.mempoi.unit;
 
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
-import it.firegloves.mempoi.styles.MempoiReportStyler;
+import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -21,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class MempoiColumnStyleManagerTest {
 
    @Mock
-   private MempoiReportStyler reportStyler;
+   private MempoiStyler reportStyler;
    @Mock
    private CellStyle commonDataCellStyle;
    @Mock

@@ -2,7 +2,7 @@ package it.firegloves.mempoi.styles;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 
-public class MempoiReportStyler {
+public class MempoiStyler {
 
     // header
     private CellStyle headerCellStyle;
@@ -22,10 +22,10 @@ public class MempoiReportStyler {
     // sub footer
     private CellStyle subFooterCellStyle;
 
-    public MempoiReportStyler() {
+    public MempoiStyler() {
     }
 
-    public MempoiReportStyler(CellStyle headerCellStyle, CellStyle commonDataCellStyle, CellStyle dateCellStyle, CellStyle datetimeCellStyle, CellStyle numberCellStyle, CellStyle subFooterCellStyle) {
+    public MempoiStyler(CellStyle headerCellStyle, CellStyle commonDataCellStyle, CellStyle dateCellStyle, CellStyle datetimeCellStyle, CellStyle numberCellStyle, CellStyle subFooterCellStyle) {
         this.headerCellStyle = headerCellStyle;
         this.commonDataCellStyle = commonDataCellStyle;
         this.dateCellStyle = dateCellStyle;

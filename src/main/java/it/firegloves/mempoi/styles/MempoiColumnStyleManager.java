@@ -16,9 +16,9 @@ public class MempoiColumnStyleManager {
 
     private HashMap<EnumSet<EExportDataType>, CellStyle> cellStylerMap;
 
-    private MempoiReportStyler reportStyler;
+    private MempoiStyler reportStyler;
 
-    public MempoiColumnStyleManager(MempoiReportStyler reportStyler) {
+    public MempoiColumnStyleManager(MempoiStyler reportStyler) {
         this.reportStyler = reportStyler;
         this.initCellStyleMap();
     }
