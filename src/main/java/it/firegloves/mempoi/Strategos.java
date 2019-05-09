@@ -126,7 +126,7 @@ public class Strategos {
 
         this.generateReport(mempoiSheetList);
 
-        this.manageFormulaToEvaluate();
+        this.manageFormulaToEvaluate(this.evaluateCellFormulas, this.hasFormulasToEvaluate);
 
         return this.writeFile(fileToExport);
     }
@@ -142,14 +142,19 @@ public class Strategos {
 
         this.generateReport(mempoiSheetList);
 
-        this.manageFormulaToEvaluate();
+        this.manageFormulaToEvaluate(this.evaluateCellFormulas, this.hasFormulasToEvaluate);
 
         return this.writeToByteArray();
     }
 
 
-    private void manageFormulaToEvaluate() {
-        if (this.evaluateCellFormulas && this.hasFormulasToEvaluate) {
+    /**
+     * manages eventual cell formulas to evaluate
+     * @param evaluateCellFormulas
+     * @param hasFormulasToEvaluate
+     */
+    private void manageFormulaToEvaluate(boolean evaluateCellFormulas, boolean hasFormulasToEvaluate) {
+        if (evaluateCellFormulas && hasFormulasToEvaluate) {
             logger.info("we have formulas to evaluate");
             File tmpFile = this.writeTempFile();
             this.openTempFileAndEvaluateCellFormulas(tmpFile);
@@ -285,7 +290,7 @@ public class Strategos {
                     MempoiColumn col = this.columnList.get(i);
                     Cell cell = row.createCell(i);
 
-                    if (! (sheet instanceof XSSFSheet)) {
+                     if (! (sheet instanceof XSSFSheet)) {
                         cell.setCellStyle(col.getCellStyle());
                     }
 

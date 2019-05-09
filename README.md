@@ -261,6 +261,8 @@ There are 2 options that may dramatically slow down generation process on huge d
 Both available into `MempoiBuilder` they could block your export or even bring it to fail.
 Keep in mind that if you can't use them for performance problems you could ask in exchange for speed that columns resizing and cell formula evaluations will be hand made by the final user.
 
+The best performace choice between the available `Workbook` descendants is the `SXSSFWorkbook`.
+
 ---
 
 #### Special thanks

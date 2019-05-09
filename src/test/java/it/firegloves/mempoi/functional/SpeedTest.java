@@ -9,7 +9,9 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +46,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void speed_test_1() {
+    public void speed_test_SXSSFWorkbook_1() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_1.xlsx");
 
@@ -65,7 +67,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void speed_test_2() {
+    public void speed_test_SXSSFWorkbook_2() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_2.xlsx");
 
@@ -86,7 +88,7 @@ public class SpeedTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void speed_test_3() {
+    public void speed_test_SXSSFWorkbook_3() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_3.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -110,7 +112,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void speed_test_4() {
+    public void speed_test_SXSSFWorkbook_4() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_4.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -135,7 +137,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void speed_test_5() {
+    public void speed_test_SXSSFWorkbook_5() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_5.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -149,6 +151,65 @@ public class SpeedTest extends FunctionalBaseTest {
                     .setStyleTemplate(new StoneStyleTemplate())
                     .setMempoiSubFooter(new NumberSumSubFooter())
                     .setMempoiFooter(new StandardMempoiFooter(workbook, "MemPOI attack!"))
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void test_with_HSSFWorkbook_1() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook_1.xlsx");
+
+        try {
+            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
+            this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
+                    "FROM mempoi.speed_test LIMIT 0, 65500");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            MemPOI memPOI = new MempoiBuilder()
+                    .setFile(fileDest)
+                    .setWorkbook(new HSSFWorkbook())
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test_with_XSSFWorkbook_1() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook_1.xlsx");
+
+        try {
+            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
+            this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
+                    "FROM mempoi.speed_test LIMIT 0, 65500");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            MemPOI memPOI = new MempoiBuilder()
+                    .setFile(fileDest)
+                    .setWorkbook(new XSSFWorkbook())
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
