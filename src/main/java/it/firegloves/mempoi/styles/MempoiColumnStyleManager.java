@@ -61,8 +61,6 @@ public class MempoiColumnStyleManager {
      */
     public void setMempoiColumnListStyler(List<MempoiColumn> mempoiColumnList) {
 
-        // TODO test speed with simple for loop
-
         mempoiColumnList.stream().forEach(mc -> {
 
             // if column name == 'id' => no style
