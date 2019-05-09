@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -244,11 +245,17 @@ public class Strategos {
 
         // crea l'header
         for (int i = 0; i < this.colListLen; i++) {
+            MempoiColumn cm = this.columnList.get(i);
             Cell cell = row.createCell(i);
             // TODO come back to this approach to admit a per cell style ?
 //            cell.setCellStyle(this.columnList.get(i).getCellStyle());
+
+            if (sheet instanceof XSSFSheet) {
+                ((XSSFSheet)sheet).getColumnHelper().setColDefaultStyle(i, cm.getCellStyle());
+            }
+
             cell.setCellStyle(this.reportStyler.getHeaderCellStyle());
-            cell.setCellValue(this.columnList.get(i).getColumnName());
+            cell.setCellValue(cm.getColumnName());
 
             logger.debug("SETTING HEADER FOR COLUMN " + this.columnList.get(i).getColumnName());
         }
@@ -277,7 +284,10 @@ public class Strategos {
                 for (int i = 0; i < this.colListLen; i++) {
                     MempoiColumn col = this.columnList.get(i);
                     Cell cell = row.createCell(i);
-                    cell.setCellStyle(col.getCellStyle());
+
+                    if (! (sheet instanceof XSSFSheet)) {
+                        cell.setCellStyle(col.getCellStyle());
+                    }
 
                     logger.debug("SETTING CELL FOR COLUMN " + col.getColumnName());
 
