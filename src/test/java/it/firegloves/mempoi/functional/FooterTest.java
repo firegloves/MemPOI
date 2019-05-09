@@ -58,6 +58,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .setAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
                     .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 

@@ -28,13 +28,6 @@ public class Strategos {
 
     private static final Logger logger = LoggerFactory.getLogger(DBMempoiDAO.class);
 
-    private int colListLen;
-
-    /**
-     * the mempoi column list reflecting the report columns
-     */
-    private List<MempoiColumn> columnList;
-
     /**
      * the sub footer to apply to the report. if null => no sub footer is appended to the report
      */
@@ -77,11 +70,6 @@ public class Strategos {
      * but if this var is true MemPOI tries to evaluate cell formulas at runtime instead
      */
     private boolean evaluateCellFormulas;
-
-
-    private int rowCounter = 0;
-    private int firstDataRowIndex = 0;
-    private int lastDataRowIndex = 0;
 
 
     public Strategos(Workbook workbook, MempoiReportStyler reportStyler, boolean adjustColSize, MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter) {
@@ -167,13 +155,13 @@ public class Strategos {
      *
      * @param columnList
      */
-    private void setColumnList(List<MempoiColumn> columnList) {
-        this.columnList = columnList;
-        this.colListLen = columnList.size();
-
-        // associate cell stylers
-        new MempoiColumnStyleManager(this.reportStyler).setMempoiColumnListStyler(this.columnList);
-    }
+//    private void setColumnList(List<MempoiColumn> columnList) {
+//        this.columnList = columnList;
+//        this.colListLen = columnList.size();
+//
+//        // associate cell stylers
+//        new MempoiColumnStyleManager(this.reportStyler).setMempoiColumnListStyler(this.columnList);
+//    }
 
 
     /**
@@ -194,7 +182,7 @@ public class Strategos {
      */
     private void generateSheet(MempoiSheet mempoiSheet) {
 
-        this.rowCounter = 0;
+        int rowCounter = 0;
 
         // create sheet
         Sheet sheet = null != mempoiSheet.getSheetName() && !mempoiSheet.getSheetName().isEmpty() ? workbook.createSheet(mempoiSheet.getSheetName()) : workbook.createSheet();
@@ -208,30 +196,33 @@ public class Strategos {
         ResultSet rs = DBMempoiDAO.getInstance().executeExportQuery(mempoiSheet.getPrepStmt());
 
         // populates MempoiColumn list with export metadata list
-        this.setColumnList(DBMempoiDAO.getInstance().readMetadata(rs));
+        List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
+
+        // associate cell stylers
+        new MempoiColumnStyleManager(this.reportStyler).setMempoiColumnListStyler(columnList);
 
         // create header
-        this.createHeaderRow(sheet);
+        rowCounter = this.createHeaderRow(sheet, columnList, rowCounter);
 
         // keep track of the first data row index (no header and subheaders)
-        this.firstDataRowIndex = this.rowCounter + 1;
+        int firstDataRowIndex = rowCounter + 1;
 
         try {
 
             // create rows
-            this.createDataRows(sheet, rs);
+            rowCounter = this.createDataRows(sheet, rs, columnList, rowCounter);
 
             // keep track of the last data row index (no header and subheaders)
-            this.lastDataRowIndex = this.rowCounter;
+//            this.lastDataRowIndex = this.rowCounter;
 
             // add optional sub footer
-            this.createSubFooterRow(sheet);
+            this.createSubFooterRow(sheet, columnList, this.mempoiSubFooter, firstDataRowIndex, rowCounter);
 
             // add optional footer
             this.createFooterRow(sheet);
 
             // adjust col size
-            this.adjustColSize(sheet);
+            this.adjustColSize(sheet, columnList.size());
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -242,15 +233,19 @@ public class Strategos {
 
 
     /**
+     * create the sheet header row
      * @param sheet
+     * @return the row couter updated
      */
-    private void createHeaderRow(Sheet sheet) {
+    private int createHeaderRow(Sheet sheet, List<MempoiColumn> columnList, int rowCounter) {
 
-        Row row = sheet.createRow(this.rowCounter++);
+        Row row = sheet.createRow(rowCounter++);
+
+        int colListLen = columnList.size();
 
         // crea l'header
-        for (int i = 0; i < this.colListLen; i++) {
-            MempoiColumn cm = this.columnList.get(i);
+        for (int i = 0; i < colListLen; i++) {
+            MempoiColumn cm = columnList.get(i);
             Cell cell = row.createCell(i);
             // TODO come back to this approach to admit a per cell style ?
 //            cell.setCellStyle(this.columnList.get(i).getCellStyle());
@@ -262,7 +257,7 @@ public class Strategos {
             cell.setCellStyle(this.reportStyler.getHeaderCellStyle());
             cell.setCellValue(cm.getColumnName());
 
-            logger.debug("SETTING HEADER FOR COLUMN " + this.columnList.get(i).getColumnName());
+            logger.debug("SETTING HEADER FOR COLUMN " + columnList.get(i).getColumnName());
         }
 
         // adjust row height
@@ -272,22 +267,26 @@ public class Strategos {
             row.setHeightInPoints(((HSSFCellStyle)this.reportStyler.getHeaderCellStyle()).getFont(workbook).getFontHeightInPoints() + 5);
         }
 
+        return rowCounter;
     }
 
 
     /**
      * @param sheet
+     * @return the row couter updated
      */
-    private void createDataRows(Sheet sheet, ResultSet rs) {
+    private int createDataRows(Sheet sheet, ResultSet rs, List<MempoiColumn> columnList, int rowCounter) {
+
+        int colListLen = columnList.size();
 
         try {
             while (rs.next()) {
                 logger.debug("creating row");
 
-                Row row = sheet.createRow(this.rowCounter++);
+                Row row = sheet.createRow(rowCounter++);
 
-                for (int i = 0; i < this.colListLen; i++) {
-                    MempoiColumn col = this.columnList.get(i);
+                for (int i = 0; i < colListLen; i++) {
+                    MempoiColumn col = columnList.get(i);
                     Cell cell = row.createCell(i);
 
                      if (! (sheet instanceof XSSFSheet)) {
@@ -303,6 +302,8 @@ public class Strategos {
         } catch (Exception e) {
             throw new MempoiException(e);
         }
+
+        return rowCounter;
     }
 
 
@@ -386,22 +387,24 @@ public class Strategos {
      *
      * @param sheet the sheet to which append sub footer row
      */
-    private void createSubFooterRow(Sheet sheet) {
+    private void createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter) {
 
-        if (null != this.mempoiSubFooter) {
+        if (null != mempoiSubFooter) {
+
+            int colListLen = columnList.size();
 
             // create the sub footer cells
-            this.mempoiSubFooter.setColumnSubFooter(this.workbook, this.columnList, this.reportStyler.getSubFooterCellStyle(), this.firstDataRowIndex, this.lastDataRowIndex);
+            mempoiSubFooter.setColumnSubFooter(this.workbook, columnList, this.reportStyler.getSubFooterCellStyle(), firstDataRowIndex, rowCounter);
 
-            Row row = sheet.createRow(this.rowCounter++);
+            Row row = sheet.createRow(rowCounter++);
 
-            for (int i = 0; i < this.colListLen; i++) {
+            for (int i = 0; i < colListLen; i++) {
 
-                MempoiSubFooterCell subFooterCell = this.columnList.get(i).getSubFooterCell();
+                MempoiSubFooterCell subFooterCell = columnList.get(i).getSubFooterCell();
                 Cell cell = row.createCell(i);
                 cell.setCellStyle(subFooterCell.getStyle());
 
-                logger.debug("SETTING SUB FOOTER CELL FOR COLUMN " + this.columnList.get(i).getColumnName());
+                logger.debug("SETTING SUB FOOTER CELL FOR COLUMN " + columnList.get(i).getColumnName());
 
                 // sets formula or normal value
                 if (subFooterCell.isCellFormula()) {
@@ -468,10 +471,10 @@ public class Strategos {
      *
      * @param sheet
      */
-    private void adjustColSize(Sheet sheet) {
+    private void adjustColSize(Sheet sheet, int colListLen) {
 
         if (this.adjustColSize) {
-            for (int i = 0; i < this.colListLen; i++) {
+            for (int i = 0; i < colListLen; i++) {
                 logger.debug("autosizing col num " + i);
                 sheet.autoSizeColumn(i);
             }
