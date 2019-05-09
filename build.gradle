@@ -9,7 +9,8 @@ apply from: 'gradle.properties'
 group 'it.firegloves'
 version '1.0.0'
 
-sourceCompatibility = 1.8
+targetCompatibility = 11
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -44,8 +45,21 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
+
+    // https://mvnrepository.com/artifact/systems.manifold/manifold
+    compile group: 'systems.manifold', name: 'manifold', version: '0.65-alpha'
+
+    // Add manifold-all to -processorpath for javac
+    annotationProcessor group: 'systems.manifold', name: 'manifold-all', version: '0.65-alpha'
+
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.199'
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs += '-Xplugin:Manifold strings exceptions'
+    options.fork = true
+}
 
 task sourcesJar(type: Jar) {
     archiveClassifier = 'sources'
@@ -85,4 +99,3 @@ publishing {
 //signing {
 //    sign publishing.publications.myLibrary
 //}
-//
