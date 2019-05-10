@@ -7,7 +7,6 @@ import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
-import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -17,7 +16,6 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class MempoiBuilder {
 
@@ -35,9 +33,6 @@ public class MempoiBuilder {
 
     // optional mempoi footer
     private MempoiFooter mempoiFooter;
-
-    // style template
-//    private MempoiStyler reportMempoiStyler;
 
     // col size
     private boolean adjustColumnWidth;
@@ -157,22 +152,25 @@ public class MempoiBuilder {
             this.workbook = new SXSSFWorkbook();
         }
 
-        // builds report styler
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(this.styleTemplate)
-                .setCommonDataCellStyle(this.commonDataCellStyle)
-                .setDateCellStyle(this.dateCellStyle)
-                .setDatetimeCellStyle(this.datetimeCellStyle)
-                .setHeaderCellStyle(this.headerCellStyle)
-                .setNumberCellStyle(this.numberCellStyle)
-                .setSubFooterCellStyle(this.subFooterCellStyle)
-                .build();
+        if (null == this.styleTemplate) {
+            this.styleTemplate = new StandardStyleTemplate();
+        }
+
+        this.mempoiSheetList.stream()
+                .forEach(s -> s.setSheetStyler(new MempoiStylerBuilder(this.workbook)
+                                    .setStyleTemplate(null != s.getStyleTemplate() ? s.getStyleTemplate() : this.styleTemplate)
+                                    .setCommonDataCellStyle(null != s.getCommonDataCellStyle() ? s.getCommonDataCellStyle() : this.commonDataCellStyle)
+                                    .setDateCellStyle(null != s.getDateCellStyle() ? s.getDateCellStyle() : this.dateCellStyle)
+                                    .setDatetimeCellStyle(null != s.getDatetimeCellStyle() ? s.getDatetimeCellStyle() : this.datetimeCellStyle)
+                                    .setHeaderCellStyle(null != s.getHeaderCellStyle() ? s.getHeaderCellStyle() : this.headerCellStyle)
+                                    .setNumberCellStyle(null != s.getNumberCellStyle() ? s.getNumberCellStyle() : this.numberCellStyle)
+                                    .setSubFooterCellStyle(null != s.getSubFooterCellStyle() ? s.getSubFooterCellStyle() : this.subFooterCellStyle)
+                                    .build().get()));
 
         // builds WorkbookConfig
         WorkbookConfig workbookConfig = new WorkbookConfig(
                 this.mempoiSubFooter,
                 this.mempoiFooter,
-                reportStyler,
                 this.workbook,
                 this.adjustColumnWidth,
                 this.evaluateCellFormulas,
@@ -182,27 +180,4 @@ public class MempoiBuilder {
         return new MemPOI(workbookConfig);
     }
 
-
-//    /**
-//     * builds the MempoiStyler and returns it
-//     *
-//     * @return
-//     */
-//    private MempoiStyler buildMempoiReportStyler() {
-//
-//        new MempoiStylerBuilder(this.workbook).
-//
-//        MempoiStyler styler = new MempoiStyler();
-//
-//        // customize styles
-//        styler.setHeaderCellStyle(Optional.ofNullable(this.headerCellStyle).orElseGet(() -> this.styleTemplate.getHeaderCellStyle(this.workbook)));
-//        styler.setDateCellStyle(Optional.ofNullable(this.dateCellStyle).orElseGet(() -> this.styleTemplate.getDateCellStyle(this.workbook)));
-//        styler.setDatetimeCellStyle(Optional.ofNullable(this.datetimeCellStyle).orElseGet(() -> this.styleTemplate.getDatetimeCellStyle(this.workbook)));
-//        styler.setNumberCellStyle(Optional.ofNullable(this.numberCellStyle).orElseGet(() -> this.styleTemplate.getNumberCellStyle(this.workbook)));
-//        styler.setCommonDataCellStyle(Optional.ofNullable(this.commonDataCellStyle).orElseGet(() -> this.styleTemplate.getCommonDataCellStyle(this.workbook)));
-//        styler.setSubFooterCellStyle(Optional.ofNullable(this.subFooterCellStyle).orElseGet(() -> this.styleTemplate.getFooterCellStyle(this.workbook)));
-//
-//        return styler;
-//
-//    }
 }

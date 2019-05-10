@@ -20,7 +20,10 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -61,15 +64,13 @@ public class Strategos {
     /**
      * starting from export PreparedStatement prepares the MempoiReport for battle!
      *
-     * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
-     *
      * @throws MempoiException
      *
      * @return the filename with path of the report generated file
      */
-    public byte[] generateMempoiReportToByteArray(List<MempoiSheet> mempoiSheetList) throws MempoiException {
+    public byte[] generateMempoiReportToByteArray() throws MempoiException {
 
-        this.generateMempoiReport(mempoiSheetList);
+        this.generateMempoiReport(this.workbookConfig.getSheetList());
         return this.writeToByteArray();
     }
 
@@ -97,20 +98,6 @@ public class Strategos {
             this.openTempFileAndEvaluateCellFormulas(tmpFile);
         }
     }
-
-
-    /**
-     * imposta la lista delle MempoiColumn
-     *
-     * @param columnList
-     */
-//    private void setColumnList(List<MempoiColumn> columnList) {
-//        this.columnList = columnList;
-//        this.colListLen = columnList.size();
-//
-//        // associate cell stylers
-//        new MempoiColumnStyleManager(this.reportStyler).setMempoiColumnListStyler(this.columnList);
-//    }
 
 
     /**
@@ -150,7 +137,7 @@ public class Strategos {
         List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
 
         // associate cell stylers
-        MempoiStyler sheetReportStyler = mempoiSheet.getReportStyler().orElseGet(() -> this.workbookConfig.getReportStyler());
+        MempoiStyler sheetReportStyler = mempoiSheet.getSheetStyler();
         new MempoiColumnStyleManager(sheetReportStyler).setMempoiColumnListStyler(columnList);
 
         // create header
@@ -163,9 +150,6 @@ public class Strategos {
 
             // create rows
             rowCounter = this.createDataRows(sheet, rs, columnList, rowCounter);
-
-            // keep track of the last data row index (no header and subheaders)
-//            this.lastDataRowIndex = this.rowCounter;
 
             // add optional sub footer
             this.createSubFooterRow(sheet, columnList, mempoiSheet.getMempoiSubFooter().orElseGet(() -> this.workbookConfig.getMempoiSubFooter()), firstDataRowIndex, rowCounter, sheetReportStyler);
@@ -362,7 +346,7 @@ public class Strategos {
                 if (subFooterCell.isCellFormula()) {
                     cell.setCellFormula(subFooterCell.getValue());
 
-                    // not evaluating because using SXSSF will fail on larga dataset
+                    // not evaluating because using SXSSF will fail on large dataset
 //                    evaluator.evaluateFormulaCell(cell);
                 } else {
                     cell.setCellValue(subFooterCell.getValue());

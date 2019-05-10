@@ -91,7 +91,7 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     }
 
     @Override
-    public CellStyle getFooterCellStyle(Workbook workbook) {
+    public CellStyle getSubfooterCellStyle(Workbook workbook) {
 
         CellStyle cellStyle = this.setGenericCellStyle(workbook, this.subFooterCellBgColorIndex, this.subFooterFontColorIndex, true, this.borderColorIndex);
         return cellStyle;

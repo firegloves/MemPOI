@@ -32,7 +32,7 @@ public interface StyleTemplate {
      * create and returns the default sub footer's cell style
      * @param workbook
      */
-    CellStyle getFooterCellStyle(Workbook workbook);
+    CellStyle getSubfooterCellStyle(Workbook workbook);
 
 
     /**
@@ -82,7 +82,7 @@ public interface StyleTemplate {
                 this.getDateCellStyle(workbook),
                 this.getDatetimeCellStyle(workbook),
                 this.getNumberCellStyle(workbook),
-                this.getFooterCellStyle(workbook));
+                this.getSubfooterCellStyle(workbook));
     }
 
 

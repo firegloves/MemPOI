@@ -39,7 +39,6 @@ public class MempoiColumn {
         this.type = this.getFieldTypeName(sqlObjType);
         this.setResultSetAccessMethod();
         this.setCellSetValueMethod();
-//        this.setCellStyle();
     }
 
 
@@ -145,23 +144,6 @@ public class MempoiColumn {
     public void setCellSetValueMethod(Method cellSetValueMethod) {
         this.cellSetValueMethod = cellSetValueMethod;
     }
-
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (null == obj || ! obj.getClass().equals(MempoiColumn.class)) {
-//            return false;
-//        }
-//
-//        MempoiColumn col = (MempoiColumn)obj;
-//        if (this.id !=)
-//    }
-
-
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(type, cellStyle, columnName, rsAccessDataMethod, cellSetValueMethod, subFooterCell);
-//    }
 
     @Override
     public boolean equals(Object obj) {

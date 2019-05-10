@@ -14,6 +14,8 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -164,6 +166,45 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
 
     @Test
+    public void test_with_file_and_forest_template_overriden_on_sheetstyler() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_forest_template_overriden_on_sheetstyler.xlsx");
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
+        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        CellStyle numberCellStyle = workbook.createCellStyle();
+        numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        MempoiSheet sheet = new MempoiSheet(prepStmt);
+        sheet.setNumberCellStyle(numberCellStyle);
+
+        try {
+
+            MemPOI memPOI = new MempoiBuilder()
+                    .setDebug(true)
+                    .setWorkbook(workbook)
+                    .setFile(fileDest)
+                    .setAdjustColumnWidth(true)
+                    .addMempoiSheet(sheet)
+                    .setStyleTemplate(new ForestStyleTemplate())
+                    .setHeaderCellStyle(headerCellStyle)
+                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
     public void test_with_file_and_stone_template() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_stone_template.xlsx");
@@ -261,6 +302,45 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .setAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setStyleTemplate(new PanegiriconStyleTemplate())
+                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test_with_file_and_multiple_sheet_templates() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_templates.xlsx");
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+
+        MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Dogs");
+        dogsSheet.setStyleTemplate(new SummerStyleTemplate());
+
+        CellStyle numberCellStyle = workbook.createCellStyle();
+        numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        MempoiSheet catsheet = new MempoiSheet(prepStmt, "Cats");
+        catsheet.setStyleTemplate(new ForestStyleTemplate());
+        catsheet.setNumberCellStyle(numberCellStyle);
+
+        List<MempoiSheet> sheetList = Arrays.asList(dogsSheet, catsheet);
+
+        try {
+
+            MemPOI memPOI = new MempoiBuilder()
+                    .setDebug(true)
+                    .setWorkbook(workbook)
+                    .setFile(fileDest)
+                    .setAdjustColumnWidth(true)
+                    .setMempoiSheetList(sheetList)
+//                    .setStyleTemplate(new PanegiriconStyleTemplate())     <----- it has no effects because for each sheet a template is specified
                     .setMempoiSubFooter(new NumberSumSubFooter())
                     .setEvaluateCellFormulas(true)
                     .build();

@@ -74,6 +74,6 @@ public class StyleTemplateTest {
       assertThat("template " + template.getClass().getName() + " datetime cell style not null", template.getDatetimeCellStyle(workbook), notNullValue());
       assertThat("template " + template.getClass().getName() + " header cell style not null", template.getHeaderCellStyle(workbook), notNullValue());
       assertThat("template " + template.getClass().getName() + " number cell style not null", template.getNumberCellStyle(workbook), notNullValue());
-      assertThat("template " + template.getClass().getName() + " footer cell style not null", template.getFooterCellStyle(workbook), notNullValue());
+      assertThat("template " + template.getClass().getName() + " footer cell style not null", template.getSubfooterCellStyle(workbook), notNullValue());
    }
 }

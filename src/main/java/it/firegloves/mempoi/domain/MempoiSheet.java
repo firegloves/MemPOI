@@ -5,6 +5,7 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.PreparedStatement;
 import java.util.Optional;
@@ -21,12 +22,13 @@ public class MempoiSheet {
      */
     private String sheetName;
 
-//    /**
-//     * the report styler containing desired output styles for the current sheet
-//     */
-//    private MempoiStyler reportStyler;
+    /**
+     * the styler containing desired output styles for the current sheet
+     */
+    private MempoiStyler sheetStyler;
 
     // style variables
+    private Workbook workbook;
     private StyleTemplate styleTemplate;
     private CellStyle headerCellStyle;
     private CellStyle subFooterCellStyle;
@@ -57,9 +59,10 @@ public class MempoiSheet {
         this.sheetName = sheetName;
     }
 
-    public MempoiSheet(PreparedStatement prepStmt, String sheetName, StyleTemplate styleTemplate, CellStyle headerCellStyle, CellStyle subFooterCellStyle, CellStyle commonDataCellStyle, CellStyle dateCellStyle, CellStyle datetimeCellStyle, CellStyle numberCellStyle, MempoiFooter mempoiFooter, MempoiSubFooter mempoiSubFooter) {
+    public MempoiSheet(PreparedStatement prepStmt, String sheetName, Workbook workbook, StyleTemplate styleTemplate, CellStyle headerCellStyle, CellStyle subFooterCellStyle, CellStyle commonDataCellStyle, CellStyle dateCellStyle, CellStyle datetimeCellStyle, CellStyle numberCellStyle, MempoiFooter mempoiFooter, MempoiSubFooter mempoiSubFooter) {
         this.prepStmt = prepStmt;
         this.sheetName = sheetName;
+        this.workbook = workbook;
         this.styleTemplate = styleTemplate;
         this.headerCellStyle = headerCellStyle;
         this.subFooterCellStyle = subFooterCellStyle;
@@ -85,6 +88,14 @@ public class MempoiSheet {
 
     public void setSheetName(String sheetName) {
         this.sheetName = sheetName;
+    }
+
+    public Workbook getWorkbook() {
+        return workbook;
+    }
+
+    public void setWorkbook(Workbook workbook) {
+        this.workbook = workbook;
     }
 
     public StyleTemplate getStyleTemplate() {
@@ -158,4 +169,13 @@ public class MempoiSheet {
     public void setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
         this.mempoiSubFooter = mempoiSubFooter;
     }
+
+    public MempoiStyler getSheetStyler() {
+        return sheetStyler;
+    }
+
+    public void setSheetStyler(MempoiStyler sheetStyler) {
+        this.sheetStyler = sheetStyler;
+    }
+
 }

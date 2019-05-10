@@ -42,7 +42,7 @@ public class MemPOI {
             }
 
             Strategos strategos = new Strategos(this.workbookConfig);
-            return strategos.generateMempoiReportToFile(this.mempoiSheetList, this.file);
+            return strategos.generateMempoiReportToFile(this.workbookConfig.getSheetList(), this.workbookConfig.getFile());
         });
     }
 
@@ -56,8 +56,8 @@ public class MemPOI {
 
         return CompletableFuture.supplyAsync(() -> {
 
-            Strategos strategos = new Strategos(this.workbook, this.mempoiReportStyler, this.adjustColumnWidth, this.mempoiSubFooter, this.mempoiFooter, this.evaluateCellFormulas);
-            return strategos.generateMempoiReportToByteArray(this.mempoiSheetList);
+            Strategos strategos = new Strategos(this.workbookConfig);
+            return strategos.generateMempoiReportToByteArray();
         });
     }
 }

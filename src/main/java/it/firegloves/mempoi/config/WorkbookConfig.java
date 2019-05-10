@@ -4,8 +4,8 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.FormulaSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
-import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.poi.ss.usermodel.Workbook;
+
 import java.io.File;
 import java.util.List;
 
@@ -20,11 +20,6 @@ public class WorkbookConfig {
      * the footer fallback to apply to the report. if null => no footer is appended to the report.  you could also specify a particular MempoiFooter for the singles sheets
      */
     private MempoiFooter mempoiFooter;
-
-    /**
-     * the workbook fallback report styler containing desired output styles. you could also specify a particular reportStyler for the singles sheets
-     */
-    private MempoiStyler reportStyler;
 
     /**
      * the workbook to create the report
@@ -69,23 +64,21 @@ public class WorkbookConfig {
     public WorkbookConfig() {
     }
 
-    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, MempoiStyler reportStyler, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList) {
+    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList) {
         this.mempoiSubFooter = mempoiSubFooter;
         this.mempoiFooter = mempoiFooter;
-        this.reportStyler = reportStyler;
         this.workbook = workbook;
         this.adjustColSize = adjustColSize;
         this.evaluateCellFormulas = evaluateCellFormulas;
         this.sheetList = sheetList;
     }
 
-    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, MempoiStyler reportStyler, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList, File file) {
+    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList, File file) {
         this.mempoiSubFooter = mempoiSubFooter;
         this.mempoiFooter = mempoiFooter;
-        this.reportStyler = reportStyler;
         this.workbook = workbook;
         this.adjustColSize = adjustColSize;
-        this.evaluateCellFormulas = evaluateCellFormulas;
+        this.setEvaluateCellFormulas(evaluateCellFormulas);
         this.sheetList = sheetList;
         this.file = file;
     }
@@ -112,14 +105,6 @@ public class WorkbookConfig {
 
     public void setMempoiFooter(MempoiFooter mempoiFooter) {
         this.mempoiFooter = mempoiFooter;
-    }
-
-    public MempoiStyler getReportStyler() {
-        return reportStyler;
-    }
-
-    public void setReportStyler(MempoiStyler reportStyler) {
-        this.reportStyler = reportStyler;
     }
 
     public Workbook getWorkbook() {
