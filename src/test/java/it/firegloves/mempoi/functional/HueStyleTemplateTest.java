@@ -27,10 +27,6 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_standard_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new StandardStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()

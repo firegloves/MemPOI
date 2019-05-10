@@ -37,13 +37,22 @@ public class MempoiBuilder {
     private MempoiFooter mempoiFooter;
 
     // style template
-    private MempoiStyler reportMempoiStyler;
+//    private MempoiStyler reportMempoiStyler;
 
     // col size
     private boolean adjustColumnWidth;
 
     // export file with path
     private File file;
+
+    // style variables
+    private StyleTemplate styleTemplate;
+    private CellStyle headerCellStyle;
+    private CellStyle subFooterCellStyle;
+    private CellStyle commonDataCellStyle;
+    private CellStyle dateCellStyle;
+    private CellStyle datetimeCellStyle;
+    private CellStyle numberCellStyle;
 
     /**
      * by default MemPOI forces Excel to evaluate cell formulas when it opens the report
@@ -85,10 +94,10 @@ public class MempoiBuilder {
         return this;
     }
 
-    public MempoiBuilder setReportMempoiStyler(MempoiStyler reportMempoiStyler) {
-        this.reportMempoiStyler = reportMempoiStyler;
-        return this;
-    }
+//    public MempoiBuilder setReportMempoiStyler(MempoiStyler reportMempoiStyler) {
+//        this.reportMempoiStyler = reportMempoiStyler;
+//        return this;
+//    }
 
     public MempoiBuilder setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
         this.mempoiSubFooter = mempoiSubFooter;
@@ -105,6 +114,41 @@ public class MempoiBuilder {
         return this;
     }
 
+    public MempoiBuilder setStyleTemplate(StyleTemplate styleTemplate) {
+        this.styleTemplate = styleTemplate;
+        return this;
+    }
+
+    public MempoiBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
+        this.headerCellStyle = headerCellStyle;
+        return this;
+    }
+
+    public MempoiBuilder setSubFooterCellStyle(CellStyle subFooterCellStyle) {
+        this.subFooterCellStyle = subFooterCellStyle;
+        return this;
+    }
+
+    public MempoiBuilder setCommonDataCellStyle(CellStyle commonDataCellStyle) {
+        this.commonDataCellStyle = commonDataCellStyle;
+        return this;
+    }
+
+    public MempoiBuilder setDateCellStyle(CellStyle dateCellStyle) {
+        this.dateCellStyle = dateCellStyle;
+        return this;
+    }
+
+    public MempoiBuilder setDatetimeCellStyle(CellStyle datetimeCellStyle) {
+        this.datetimeCellStyle = datetimeCellStyle;
+        return this;
+    }
+
+    public MempoiBuilder setNumberCellStyle(CellStyle numberCellStyle) {
+        this.numberCellStyle = numberCellStyle;
+        return this;
+    }
+
     public MemPOI build() {
 
         MempoiConfig.getInstance().setDebug(debug);
@@ -113,10 +157,22 @@ public class MempoiBuilder {
             this.workbook = new SXSSFWorkbook();
         }
 
+        // builds report styler
+        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
+                .setStyleTemplate(this.styleTemplate)
+                .setCommonDataCellStyle(this.commonDataCellStyle)
+                .setDateCellStyle(this.dateCellStyle)
+                .setDatetimeCellStyle(this.datetimeCellStyle)
+                .setHeaderCellStyle(this.headerCellStyle)
+                .setNumberCellStyle(this.numberCellStyle)
+                .setSubFooterCellStyle(this.subFooterCellStyle)
+                .build();
+
+        // builds WorkbookConfig
         WorkbookConfig workbookConfig = new WorkbookConfig(
                 this.mempoiSubFooter,
                 this.mempoiFooter,
-                this.reportMempoiStyler,
+                reportStyler,
                 this.workbook,
                 this.adjustColumnWidth,
                 this.evaluateCellFormulas,

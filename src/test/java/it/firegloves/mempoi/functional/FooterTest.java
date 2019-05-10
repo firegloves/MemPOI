@@ -2,10 +2,8 @@ package it.firegloves.mempoi.functional;
 
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
-import it.firegloves.mempoi.builder.MempoiStylerBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.*;
-import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
@@ -26,10 +24,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_no_footer_no_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -38,7 +32,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .setFile(fileDest)
                     .setAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -55,10 +49,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_sum_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -69,7 +59,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setMempoiSubFooter(new NumberSumSubFooter())
                     .setEvaluateCellFormulas(true)
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -86,10 +76,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_max_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -100,7 +86,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setMempoiSubFooter(new NumberMaxSubFooter())
                     .setEvaluateCellFormulas(true)
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -119,10 +105,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_min_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -133,7 +115,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setMempoiSubFooter(new NumberMinSubFooter())
                     .setEvaluateCellFormulas(true)
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -152,10 +134,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_average_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -165,7 +143,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .setAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setMempoiSubFooter(new NumberAverageSubFooter())
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -183,10 +161,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_custom_min_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -202,7 +176,7 @@ public class FooterTest extends FunctionalBaseTest {
                         }
                     })
                     .setEvaluateCellFormulas(true)
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -221,10 +195,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_and_number_sum_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -235,7 +205,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
                     .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test LIMIT 0, 10"), "Cats sheet"))
                     .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -253,10 +223,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_standard_footer.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -266,7 +232,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .setAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -284,10 +250,6 @@ public class FooterTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_and_standard_footer.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiStyler reportStyler = new MempoiStylerBuilder(workbook)
-                .setStyleTemplate(new SummerStyleTemplate())
-                .build();
-
         try {
 
             MemPOI memPOI = new MempoiBuilder()
@@ -299,7 +261,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test LIMIT 0, 10"), "Cats sheet"))
                     .setMempoiSubFooter(new NumberSumSubFooter())
                     .setMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
-                    .setReportMempoiStyler(reportStyler)
+                    .setStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

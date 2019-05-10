@@ -3,6 +3,8 @@ package it.firegloves.mempoi.domain;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.styles.MempoiStyler;
+import it.firegloves.mempoi.styles.template.StyleTemplate;
+import org.apache.poi.ss.usermodel.CellStyle;
 
 import java.sql.PreparedStatement;
 import java.util.Optional;
@@ -19,10 +21,19 @@ public class MempoiSheet {
      */
     private String sheetName;
 
-    /**
-     * the report styler containing desired output styles for the current sheet
-     */
-    private MempoiStyler reportStyler;
+//    /**
+//     * the report styler containing desired output styles for the current sheet
+//     */
+//    private MempoiStyler reportStyler;
+
+    // style variables
+    private StyleTemplate styleTemplate;
+    private CellStyle headerCellStyle;
+    private CellStyle subFooterCellStyle;
+    private CellStyle commonDataCellStyle;
+    private CellStyle dateCellStyle;
+    private CellStyle datetimeCellStyle;
+    private CellStyle numberCellStyle;
 
     /**
      * the footer to apply to the sheet. if null => no footer is appended to the report
@@ -35,6 +46,8 @@ public class MempoiSheet {
     private MempoiSubFooter mempoiSubFooter;
 
 
+
+
     public MempoiSheet(PreparedStatement prepStmt) {
         this.prepStmt = prepStmt;
     }
@@ -44,10 +57,16 @@ public class MempoiSheet {
         this.sheetName = sheetName;
     }
 
-    public MempoiSheet(PreparedStatement prepStmt, String sheetName, MempoiStyler reportStyler, MempoiFooter mempoiFooter, MempoiSubFooter mempoiSubFooter) {
+    public MempoiSheet(PreparedStatement prepStmt, String sheetName, StyleTemplate styleTemplate, CellStyle headerCellStyle, CellStyle subFooterCellStyle, CellStyle commonDataCellStyle, CellStyle dateCellStyle, CellStyle datetimeCellStyle, CellStyle numberCellStyle, MempoiFooter mempoiFooter, MempoiSubFooter mempoiSubFooter) {
         this.prepStmt = prepStmt;
         this.sheetName = sheetName;
-        this.reportStyler = reportStyler;
+        this.styleTemplate = styleTemplate;
+        this.headerCellStyle = headerCellStyle;
+        this.subFooterCellStyle = subFooterCellStyle;
+        this.commonDataCellStyle = commonDataCellStyle;
+        this.dateCellStyle = dateCellStyle;
+        this.datetimeCellStyle = datetimeCellStyle;
+        this.numberCellStyle = numberCellStyle;
         this.mempoiFooter = mempoiFooter;
         this.mempoiSubFooter = mempoiSubFooter;
     }
@@ -68,12 +87,60 @@ public class MempoiSheet {
         this.sheetName = sheetName;
     }
 
-    public Optional<MempoiStyler> getReportStyler() {
-        return Optional.ofNullable(reportStyler);
+    public StyleTemplate getStyleTemplate() {
+        return styleTemplate;
     }
 
-    public void setReportStyler(MempoiStyler reportStyler) {
-        this.reportStyler = reportStyler;
+    public void setStyleTemplate(StyleTemplate styleTemplate) {
+        this.styleTemplate = styleTemplate;
+    }
+
+    public CellStyle getHeaderCellStyle() {
+        return headerCellStyle;
+    }
+
+    public void setHeaderCellStyle(CellStyle headerCellStyle) {
+        this.headerCellStyle = headerCellStyle;
+    }
+
+    public CellStyle getSubFooterCellStyle() {
+        return subFooterCellStyle;
+    }
+
+    public void setSubFooterCellStyle(CellStyle subFooterCellStyle) {
+        this.subFooterCellStyle = subFooterCellStyle;
+    }
+
+    public CellStyle getCommonDataCellStyle() {
+        return commonDataCellStyle;
+    }
+
+    public void setCommonDataCellStyle(CellStyle commonDataCellStyle) {
+        this.commonDataCellStyle = commonDataCellStyle;
+    }
+
+    public CellStyle getDateCellStyle() {
+        return dateCellStyle;
+    }
+
+    public void setDateCellStyle(CellStyle dateCellStyle) {
+        this.dateCellStyle = dateCellStyle;
+    }
+
+    public CellStyle getDatetimeCellStyle() {
+        return datetimeCellStyle;
+    }
+
+    public void setDatetimeCellStyle(CellStyle datetimeCellStyle) {
+        this.datetimeCellStyle = datetimeCellStyle;
+    }
+
+    public CellStyle getNumberCellStyle() {
+        return numberCellStyle;
+    }
+
+    public void setNumberCellStyle(CellStyle numberCellStyle) {
+        this.numberCellStyle = numberCellStyle;
     }
 
     public Optional<MempoiFooter> getMempoiFooter() {
