@@ -57,7 +57,7 @@ public class MempoiBuilderTest {
               .build();
 
       assertThat("MemPOIBuilder returns a not null MemPOI", memPOI, notNullValue());
-      assertThat("MemPOI workbookconfig not null", memPOI.getWorkbookConfig(), nullValue());
+      assertThat("MemPOI workbookconfig not null", memPOI.getWorkbookConfig(), notNullValue());
       assertThat("MemPOI file not null", memPOI.getWorkbookConfig().getFile(), notNullValue());
       assertEquals("MemPOI adjustColumnWidth true ", memPOI.getWorkbookConfig().isAdjustColSize(), true);
       assertThat("MemPOI workbook not null", memPOI.getWorkbookConfig().getWorkbook(), notNullValue());
@@ -89,7 +89,7 @@ public class MempoiBuilderTest {
               .build();
 
       assertThat("MemPOIBuilder returns a not null MemPOI", memPOI, notNullValue());
-      assertThat("MemPOI workbookconfig not null", memPOI.getWorkbookConfig(), nullValue());
+      assertThat("MemPOI workbookconfig not null", memPOI.getWorkbookConfig(), notNullValue());
       assertThat("MemPOI file null", memPOI.getWorkbookConfig().getFile(), nullValue());
       assertEquals("MemPOI adjustColumnWidth false", memPOI.getWorkbookConfig().isAdjustColSize(), false);
       assertThat("MemPOI workbook not null", memPOI.getWorkbookConfig().getWorkbook(), notNullValue());
@@ -142,30 +142,50 @@ public class MempoiBuilderTest {
       assertThat("sheetlist not null", memPOI.getWorkbookConfig().getSheetList(), notNullValue());
       assertEquals("sheetlist size 5", memPOI.getWorkbookConfig().getSheetList().size(), 5);
 
-      assertThat("sheet 1 not null prepstmt", memPOI.getWorkbookConfig().getSheetList().get(0).getPrepStmt(), notNullValue());
-      assertThat("sheet 1 not null title", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetName(), notNullValue());
-      assertNotEquals("sheet 1 not empty title", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetName(), "");
-      this.assertStyles(memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), "sheet 1 styler");
+      int i = 0;
+      String sheetName = "sheet 1";
+      assertThat(sheetName + " not null prepstmt", memPOI.getWorkbookConfig().getSheetList().get(i).getPrepStmt(), notNullValue());
+      assertThat(sheetName + " not null title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), notNullValue());
+      assertNotEquals(sheetName + " not empty title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), "");
+      this.assertStyles(memPOI.getWorkbookConfig().getSheetList().get(i).getSheetStyler(), sheetName + " styler");
+      assertTrue(sheetName + " null subfooter", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiSubFooter().isPresent());
+      assertTrue(sheetName + " null footer", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiFooter().isPresent());
 
-      assertThat("sheet 2 not null prepstmt", memPOI.getWorkbookConfig().getSheetList().get(1).getPrepStmt(), notNullValue());
-      assertThat("sheet 2 null title", memPOI.getWorkbookConfig().getSheetList().get(1).getSheetName(), nullValue());
-      assertThat("sheet 2 null styler", memPOI.getWorkbookConfig().getSheetList().get(1).getSheetStyler(), nullValue());
-      
-      assertThat("sheet 3 not null prepstmt", memPOI.getWorkbookConfig().getSheetList().get(2).getPrepStmt(), notNullValue());
-      assertThat("sheet 3 null title", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetName(), notNullValue());
-      assertNotEquals("sheet 3 not empty title", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetName(), "");
-      assertThat("sheet 3 not null styler", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetStyler(), nullValue());
-      assertThat("sheet 3  CommonDataCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetStyler().getCommonDataCellStyle(), nullValue());
-      assertThat("sheet 3  DateCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetStyler().getDateCellStyle(), notNullValue());
-      assertThat("sheet 3  DatetimeCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetStyler().getDatetimeCellStyle(), nullValue());
-      assertThat("sheet 3  HeaderCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetStyler().getHeaderCellStyle(), nullValue());
-      assertThat("sheet 3  NumberCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetStyler().getNumberCellStyle(), nullValue());
-      assertThat("sheet 3  SubFooterCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(2).getSheetStyler().getSubFooterCellStyle(), nullValue());
+      i = 1;
+      sheetName = "sheet 2";
+      assertThat(sheetName + " not null prepstmt", memPOI.getWorkbookConfig().getSheetList().get(i).getPrepStmt(), notNullValue());
+      assertThat(sheetName + " null title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), nullValue());
+      assertThat(sheetName + " not null styler", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetStyler(), notNullValue());
+      this.assertStyles(memPOI.getWorkbookConfig().getSheetList().get(i).getSheetStyler(), sheetName + " styler");
+      assertFalse(sheetName + " null subfooter", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiSubFooter().isPresent());
+      assertFalse(sheetName + " null footer", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiFooter().isPresent());
 
-//      this.assertStyles(memPOI.getWorkbookConfig().getReportStyler(), "sheet 2 styler");
-//      this.assertStyles(memPOI.getWorkbookConfig().getReportStyler(), "sheet 3 styler");
-//      this.assertStyles(memPOI.getWorkbookConfig().getReportStyler(), "sheet 4 styler");
-//      this.assertStyles(memPOI.getWorkbookConfig().getReportStyler(), "sheet 5 styler");
+      i = 2;
+      sheetName = "sheet 3";
+      assertThat(sheetName + " not null prepstmt", memPOI.getWorkbookConfig().getSheetList().get(i).getPrepStmt(), notNullValue());
+      assertThat(sheetName + " not null title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), notNullValue());
+      assertNotEquals(sheetName + " not empty title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), "");
+      this.assertStyles(memPOI.getWorkbookConfig().getSheetList().get(i).getSheetStyler(), sheetName + " styler");
+      assertFalse(sheetName + " null subfooter", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiSubFooter().isPresent());
+      assertFalse(sheetName + " null footer", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiFooter().isPresent());
+
+      i = 3;
+      sheetName = "sheet 4";
+      assertThat(sheetName + " not null prepstmt", memPOI.getWorkbookConfig().getSheetList().get(i).getPrepStmt(), notNullValue());
+      assertThat(sheetName + " not null title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), nullValue());
+      assertNotEquals(sheetName + " not empty title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), "");
+      this.assertStyles(memPOI.getWorkbookConfig().getSheetList().get(i).getSheetStyler(), sheetName + " styler");
+      assertTrue(sheetName + " not null subfooter", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiSubFooter().isPresent());
+      assertFalse(sheetName + " null footer", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiFooter().isPresent());
+
+      i = 4;
+      sheetName = "sheet 5";
+      assertThat(sheetName + " not null prepstmt", memPOI.getWorkbookConfig().getSheetList().get(i).getPrepStmt(), notNullValue());
+      assertThat(sheetName + " not null title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), nullValue());
+      assertNotEquals(sheetName + " not empty title", memPOI.getWorkbookConfig().getSheetList().get(i).getSheetName(), "");
+      this.assertStyles(memPOI.getWorkbookConfig().getSheetList().get(i).getSheetStyler(), sheetName + " styler");
+      assertFalse(sheetName + " null subfooter", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiSubFooter().isPresent());
+      assertTrue(sheetName + " not null footer", memPOI.getWorkbookConfig().getSheetList().get(i).getMempoiFooter().isPresent());
 
    }
 
