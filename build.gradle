@@ -4,7 +4,7 @@ plugins {
     id 'signing'
 }
 
-apply from: 'gradle.properties'
+//apply from: 'gradle.properties'
 
 group 'it.firegloves'
 version '1.0.0'
@@ -48,7 +48,7 @@ dependencies {
 
 
 
-archivesBaseName = 'mempoi'
+
 
 task sourcesJar(type: Jar) {
     archiveClassifier = 'sources'
@@ -63,17 +63,24 @@ task javadocJar(type: Jar) {
 publishing {
     publications {
         myLibrary(MavenPublication) {
+
+            groupId group
+            artifactId 'mempoi'
+            version version
+
             from components.java
 
+            artifact jar
             artifact sourcesJar
             artifact javadocJar
         }
     }
 
     repositories {
-        maven {
-            name = 'myRepo'
-            url = "file://${buildDir}/repo"
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+        credentials {
+            username SONATYPE_USERNAME
+            password SONATYPE_PASSWORD
         }
     }
 }
@@ -84,23 +91,26 @@ modifyPom {
         description 'A library to simplify export from database to Excel files using Apache POI'
         url 'https://bitbucket.org/objdict/objjson'
         inceptionYear '2018'
+
         scm {
-            url 'https://bitbucket.org/objdict/objjson'
-            connection 'scm:https://bitbucket.org/objdict/objjson.git'
-            developerConnection 'scm:git://bitbucket.org/objdict/objjson.git'
+            url 'https://github.com/firegloves/MemPOI.git'
+            connection 'scm:git:git://github.com/firegloves/MemPOI.git'
+            developerConnection 'cm:git:ssh://github.com/firegloves/MemPOI.git'
         }
+
         licenses {
             license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
+                name 'MIT License'
+                url 'http://www.opensource.org/licenses/mit-license.php'
+//                distribution 'repo'
             }
         }
+
         developers {
             developer {
-                id 'albertgao'
-                name 'Albert Gao'
-                email 'albert.gao@salect.co.nz'
+                id 'firegloves'
+                name 'Luca Corsetti'
+                email 'lucorset@gmail.com'
             }
         }
     }
@@ -112,7 +122,6 @@ modifyPom {
 //signing.secretKeyRingFile=/NOT_TO_PUBLISH/secret-keys.gpg
 //
 //
-//signing {
-//    sign publishing.publications.myLibrary
-//}
-//
+signing {
+    sign publishing.publications.myLibrary
+}
