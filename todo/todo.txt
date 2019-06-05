@@ -1,0 +1,53 @@
+per cell style
+
+V- eliminare estensione ACellStyler e usare composizione. alla fine basta la classe padre con dentro lo stile associato
+
+V- aggiungere date time support
+
+check che reflection per come è fatta non rallenti troppo
+
+fare dei test di velocità
+
+V- add a readme java 8 minimum
+
+V- fornire template di stili (header e possibili combinazioni di date style e number style etc)
+
+rendere generico SXSSFWorkbook => Workbook
+
+V- riumuovere classe DefaultFont e metterlo da qualche parte (1 classe per 3 righe?!)
+
+add support for different styles for different sheets
+
+V- ottimizzare i cicli sulla creazione di righe e celle se possibile riducendo il numero di invocazioni di funzioni
+
+V- add mempoiSubFooter (example total) -> lista di mempoiSubFooter (con logica incorporata)
+
+V- add mempoiFooter (example total) -> lista di mempoiFooter (con logica incorporata)
+
+fare template arcobaleno?
+
+- implementare group by (rowspan)
+
+- stile associato allo sheet
+
+- lista di header (con logica incorporata ? )
+
+- permettere di specificare da fuori la lista delle mempoicolumn che dvoranno poi essere fuse con i dati prelevati dal resultsetmetadata.
+    in questo modo l'utente può specificare solo le parti di stile da aggiungere a quello già disponibile. l'associazione avverrebbe per nome della column
+
+- set cell type
+
+-----------
+
+spinta:
+
+    articolo medium
+    stackoverflow
+    forum vari (reddit, hackcazzi e mazzi => vedere articolo su medium)
+    fare benissimo il read me
+    spingerlo tra gli amici e colleghi
+    gif e immagini
+    link a mempo wikipedia e a special thanks to colle der fomento in basso nel read me
+    metterlo su maven repo e su tutti gli altri possibili
+
+    fare tutto insieme per cercare di entrare nelle classifiche di github

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: it.firegloves.mempoi.unit.StrategosTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.517 sec
