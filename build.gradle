@@ -47,6 +47,9 @@ dependencies {
 }
 
 
+
+archivesBaseName = 'mempoi'
+
 task sourcesJar(type: Jar) {
     archiveClassifier = 'sources'
     from sourceSets.main.allJava
@@ -56,8 +59,6 @@ task javadocJar(type: Jar) {
     archiveClassifier = 'javadoc'
     from javadoc.destinationDir
 }
-
-
 
 publishing {
     publications {
@@ -76,6 +77,35 @@ publishing {
         }
     }
 }
+
+modifyPom {
+    project {
+        name 'MemPOI'
+        description 'A library to simplify export from database to Excel files using Apache POI'
+        url 'https://bitbucket.org/objdict/objjson'
+        inceptionYear '2018'
+        scm {
+            url 'https://bitbucket.org/objdict/objjson'
+            connection 'scm:https://bitbucket.org/objdict/objjson.git'
+            developerConnection 'scm:git://bitbucket.org/objdict/objjson.git'
+        }
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        developers {
+            developer {
+                id 'albertgao'
+                name 'Albert Gao'
+                email 'albert.gao@salect.co.nz'
+            }
+        }
+    }
+}
+
 
 //signing.keyId='MY_KEY'
 //signing.password='MY_SECRET'
