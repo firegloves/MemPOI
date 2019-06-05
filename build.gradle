@@ -4,13 +4,13 @@ plugins {
     id 'signing'
 }
 
-apply from: 'gradle.properties'
+//apply from: 'gradle.properties'
 
 group 'it.firegloves'
 version '1.0.0'
 
-targetCompatibility = 11
-sourceCompatibility = 11
+targetCompatibility = 8
+sourceCompatibility = 8
 
 repositories {
     mavenCentral()
@@ -94,8 +94,8 @@ publishing {
 //signing.keyId='MY_KEY'
 //signing.password='MY_SECRET'
 //signing.secretKeyRingFile=/NOT_TO_PUBLISH/secret-keys.gpg
-//
-//
-//signing {
-//    sign publishing.publications.myLibrary
-//}
+
+
+signing {
+    sign publishing.publications.myLibrary
+}
