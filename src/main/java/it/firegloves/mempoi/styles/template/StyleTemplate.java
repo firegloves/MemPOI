@@ -23,21 +23,27 @@ public interface StyleTemplate {
 
     /**
      * create and returns the default header's cell style
-     * @param workbook
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the HeaderCellStyle of the StyleTemplate
      */
     CellStyle getHeaderCellStyle(Workbook workbook);
 
 
     /**
      * create and returns the default sub footer's cell style
-     * @param workbook
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the FooterCellStyle of the StyleTemplate
      */
     CellStyle getFooterCellStyle(Workbook workbook);
 
 
     /**
      * create and returns the date data types' cell style
-     * @param workbook
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the DateCellStyle of the StyleTemplate
      */
     default CellStyle getDateCellStyle(Workbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
@@ -47,7 +53,9 @@ public interface StyleTemplate {
 
     /**
      * create and returns the datetime data types' cell style
-     * @param workbook
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the DatetimeCellStyle of the StyleTemplate
      */
     default CellStyle getDatetimeCellStyle(Workbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
@@ -57,7 +65,9 @@ public interface StyleTemplate {
 
     /**
      * screate and returns the number data types' cell style
-     * @param workbook
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the NumberCellStyle of the StyleTemplate
      */
     default CellStyle getNumberCellStyle(Workbook workbook) {
         return null;
@@ -65,6 +75,9 @@ public interface StyleTemplate {
 
     /**
      * set default common data cell Style
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the CommonDataCellStyle of the StyleTemplate
      */
     default CellStyle getCommonDataCellStyle(Workbook workbook) {
         return null;
@@ -72,6 +85,8 @@ public interface StyleTemplate {
 
     /**
      * creates a MempoiReportStyler starting from current StyleTemplate's CellStyle list
+     * @param workbook the workbook used to generate missing CellStyles
+     *
      * @return the MempoiReportStyler resulting from current StyleTemplate's CellStyle list
      */
     default MempoiReportStyler toMempoiReportStyler(Workbook workbook) {
@@ -88,8 +103,8 @@ public interface StyleTemplate {
 
     /**
      * add a the received color as background to the received cell
-     * @param cellStyle
-     * @param commonCellBgColorIndex
+     * @param cellStyle the CellStyle to which add bg cell color
+     * @param commonCellBgColorIndex the bg color to apply to the cellstyle
      */
     default void addBgCellColor(CellStyle cellStyle, short commonCellBgColorIndex) {
         cellStyle.setFillForegroundColor(commonCellBgColorIndex);
@@ -99,10 +114,10 @@ public interface StyleTemplate {
 
     /**
      * apply a font style. default implementations for white bold cells
-     * @param workbook
-     * @param cellStyle
-     * @param fontColor
-     * @param bold
+     * @param workbook the workbook used to create the font
+     * @param cellStyle the CellStyle to which set the font
+     * @param fontColor the color to set to the font
+     * @param bold true if the font needs to be bold
      */
     default void addFontStyle(Workbook workbook, CellStyle cellStyle, short fontColor, boolean bold) {
         Font font = workbook.createFont();
@@ -113,8 +128,8 @@ public interface StyleTemplate {
 
     /**
      * add style for borders of the received CellStyle
-     * @param cellStyle
-     * @param borderColor
+     * @param cellStyle the CellStyle to whichc add CellBorder
+     * @param borderColor the color of the border
      */
     default void addCellBorders(CellStyle cellStyle, short borderColor) {
 

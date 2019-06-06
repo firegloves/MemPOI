@@ -10,8 +10,8 @@ public class ConnectionManager {
 
     /**
      * closes connection resultset and preparedstatement
-     * @param resultSet
-     * @param pStmt
+     * @param resultSet the ResultSet to close
+     * @param pStmt the PreparedStatement to close
      */
     public static void closeResultSetAndPrepStmt(ResultSet resultSet, PreparedStatement pStmt) {
 

@@ -1,10 +1,19 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
+}
+
 plugins {
     id 'java-library'
-    id 'maven-publish'
+//    id 'maven-publish'
     id 'signing'
 }
 
-//apply from: 'gradle.properties'
+apply plugin: 'com.bmuschko.nexus'
 
 group 'it.firegloves'
 version '1.0.0'
@@ -46,51 +55,12 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
 }
 
-
-
-
-
-task sourcesJar(type: Jar) {
-    archiveClassifier = 'sources'
-    from sourceSets.main.allJava
-}
-
-task javadocJar(type: Jar) {
-    archiveClassifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-publishing {
-    publications {
-        myLibrary(MavenPublication) {
-
-            groupId group
-            artifactId 'mempoi'
-            version version
-
-            from components.java
-
-            artifact jar
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-
-    repositories {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-        credentials {
-            username SONATYPE_USERNAME
-            password SONATYPE_PASSWORD
-        }
-    }
-}
-
 modifyPom {
     project {
         name 'MemPOI'
         description 'A library to simplify export from database to Excel files using Apache POI'
-        url 'https://bitbucket.org/objdict/objjson'
-        inceptionYear '2018'
+        url 'https://github.com/firegloves/MemPOI'
+        inceptionYear '2019'
 
         scm {
             url 'https://github.com/firegloves/MemPOI.git'
@@ -115,13 +85,91 @@ modifyPom {
         }
     }
 }
-
-
-//signing.keyId='MY_KEY'
-//signing.password='MY_SECRET'
-//signing.secretKeyRingFile=/NOT_TO_PUBLISH/secret-keys.gpg
-//
-//
-signing {
-    sign publishing.publications.myLibrary
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
 }
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+}
+
+
+
+//task sourcesJar(type: Jar) {
+//    archiveClassifier = 'sources'
+//    from sourceSets.main.allJava
+//}
+//
+//task javadocJar(type: Jar) {
+//    archiveClassifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+//
+//publishing {
+//    publications {
+//        myLibrary(MavenPublication) {
+//
+//            groupId group
+//            artifactId 'mempoi'
+//            version version
+//
+//            from components.java
+//
+//            artifact jar
+//            artifact sourcesJar
+//            artifact javadocJar
+//        }
+//    }
+//
+//    repositories {
+//        url "https://oss.sonatype.org/content/repositories/snapshots"
+//        credentials {
+//            username SONATYPE_USERNAME
+//            password SONATYPE_PASSWORD
+//        }
+//    }
+//}
+//
+//modifyPom {
+//    project {
+//        name 'MemPOI'
+//        description 'A library to simplify export from database to Excel files using Apache POI'
+//        url 'https://bitbucket.org/objdict/objjson'
+//        inceptionYear '2018'
+//
+//        scm {
+//            url 'https://github.com/firegloves/MemPOI.git'
+//            connection 'scm:git:git://github.com/firegloves/MemPOI.git'
+//            developerConnection 'cm:git:ssh://github.com/firegloves/MemPOI.git'
+//        }
+//
+//        licenses {
+//            license {
+//                name 'MIT License'
+//                url 'http://www.opensource.org/licenses/mit-license.php'
+////                distribution 'repo'
+//            }
+//        }
+//
+//        developers {
+//            developer {
+//                id 'firegloves'
+//                name 'Luca Corsetti'
+//                email 'lucorset@gmail.com'
+//            }
+//        }
+//    }
+//}
+//
+//
+////signing.keyId='MY_KEY'
+////signing.password='MY_SECRET'
+////signing.secretKeyRingFile=/NOT_TO_PUBLISH/secret-keys.gpg
+////
+////
+//signing {
+//    sign publishing.publications.myLibrary
+//}

@@ -2,8 +2,9 @@
 /gradlew
 /gradlew.bat
 /gradle/
-/.idea/
 /.gradle/
+/.idea/
 /out/
 /NOT_TO_PUBLISH/
 *.gpg
+.gradle/gradle.properties

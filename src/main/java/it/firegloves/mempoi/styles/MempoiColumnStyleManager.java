@@ -57,11 +57,9 @@ public class MempoiColumnStyleManager {
     /**
      * populate the received MempoiColumn list with the corresponding CellStyle
      *
-     * @param mempoiColumnList
+     * @param mempoiColumnList MempoiColumn list to which apply CellStyle
      */
     public void setMempoiColumnListStyler(List<MempoiColumn> mempoiColumnList) {
-
-        // TODO test speed with simple for loop
 
         mempoiColumnList.stream().forEach(mc -> {
 
