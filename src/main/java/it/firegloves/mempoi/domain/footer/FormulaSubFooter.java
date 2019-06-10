@@ -48,8 +48,8 @@ public abstract class FormulaSubFooter implements MempoiSubFooter {
 
     /**
      * applies some customization to the SubFooter CellStyle
-     * @param workbook
-     * @param subFooterCellStyle
+     * @param workbook the Workbook used to customize SubFooterCellStyle
+     * @param subFooterCellStyle the SubFooterCellStyle to customize
      */
     protected abstract void customizeSubFooterCellStyle(Workbook workbook, CellStyle subFooterCellStyle);
 

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: it.firegloves.mempoi.functional.WorkbookTest
+-------------------------------------------------------------------------------
+Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.204 sec
