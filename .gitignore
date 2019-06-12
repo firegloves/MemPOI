@@ -8,3 +8,5 @@
 /NOT_TO_PUBLISH/
 *.gpg
 .gradle/gradle.properties
+/todo/
+/mempoi.iml
