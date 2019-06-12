@@ -66,7 +66,7 @@ public class MempoiStylerBuilder {
      *
      * used for WorkbookConfiguration
      *
-     * @return
+     * @return an Optional containing the resulting MempoiStyler
      */
     public Optional<MempoiStyler> build() {
 

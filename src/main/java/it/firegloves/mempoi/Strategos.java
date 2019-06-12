@@ -50,7 +50,7 @@ public class Strategos {
      * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
      * @param fileToExport    the destination file (with path) where write exported data
      *
-     * @throws MempoiException
+     * @throws MempoiException if something went wrong
      *
      * @return the filename with path of the report generated file
      */
@@ -64,7 +64,7 @@ public class Strategos {
     /**
      * starting from export PreparedStatement prepares the MempoiReport for battle!
      *
-     * @throws MempoiException
+     * @throws MempoiException if something went wrong
      *
      * @return the filename with path of the report generated file
      */
