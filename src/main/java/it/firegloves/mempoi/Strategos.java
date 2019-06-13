@@ -296,8 +296,8 @@ public class Strategos {
     private String writeFile(File file) {
         try {
             // checks path consistency
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
+            if (!file.getAbsoluteFile().getParentFile().exists()) {
+                file.getAbsoluteFile().getParentFile().mkdirs();
                 logger.debug("CREATED FILE TO EXPORT PARENT DIR: " + file.getParentFile().getAbsolutePath());
             }
 
