@@ -22,42 +22,42 @@ public class StyleTemplateTest {
    }
 
    @Test
-   public void standard_template_test() {
+   public void standardTemplateTest() {
       this.genericTemplateTest(new StandardStyleTemplate(), new SXSSFWorkbook());
    }
 
    @Test
-   public void aqua_template_test() {
+   public void aquaTemplateTest() {
       this.genericTemplateTest(new AquaStyleTemplate(), new SXSSFWorkbook());
    }
 
    @Test
-   public void panegiricon_template_test() {
+   public void panegiriconTemplateTest() {
       this.genericTemplateTest(new PanegiriconStyleTemplate(), new SXSSFWorkbook());
    }
 
    @Test
-   public void forest_template_test() {
+   public void forestTemplateTest() {
       this.genericTemplateTest(new ForestStyleTemplate(), new SXSSFWorkbook());
    }
 
    @Test
-   public void purple_template_test() {
+   public void purpleTemplateTest() {
       this.genericTemplateTest(new PurpleStyleTemplate(), new SXSSFWorkbook());
    }
 
    @Test
-   public void rose_template_test() {
+   public void roseTemplateTest() {
       this.genericTemplateTest(new RoseStyleTemplate(), new SXSSFWorkbook());
    }
 
    @Test
-   public void stone_template_test() {
+   public void stoneTemplateTest() {
       this.genericTemplateTest(new StoneStyleTemplate(), new SXSSFWorkbook());
    }
 
    @Test
-   public void summer_template_test() {
+   public void summerTemplateTest() {
       this.genericTemplateTest(new SummerStyleTemplate(), new SXSSFWorkbook());
    }
 

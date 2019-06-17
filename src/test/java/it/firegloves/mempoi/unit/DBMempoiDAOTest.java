@@ -35,7 +35,7 @@ public class DBMempoiDAOTest {
 
 
     @Test
-    public void given_a_prep_stmt_return_a_result_set() {
+    public void givenAPrepStmtReturnAResultSet() {
 
         try {
             when(prepStmt.executeQuery()).thenReturn(resultSet);
@@ -52,7 +52,7 @@ public class DBMempoiDAOTest {
 
 
     @Test
-    public void given_a_result_set_read_metadata() {
+    public void givenAResultSetReadMetadata() {
 
         MempoiColumn id = new MempoiColumn(Types.INTEGER, "id");
         MempoiColumn name = new MempoiColumn(Types.VARCHAR, "name");

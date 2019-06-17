@@ -74,7 +74,7 @@ public class MempoiColumnStyleManagerTest {
 
 
    @Test
-   public void test_mempoi_column_assigned_cell_style() {
+   public void testMempoiColumnAssignedCellStyle() {
       assertEquals("mc col id EExportDataType", columnList.get(0).getCellStyle(), commonDataCellStyle);
       assertEquals("mc col 1 EExportDataType", columnList.get(1).getCellStyle(), numericCellStyle);
       assertEquals("mc col 2 EExportDataType", columnList.get(2).getCellStyle(), numericCellStyle);

@@ -46,7 +46,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void speed_test_SXSSFWorkbook_1() {
+    public void speedTestSXSSFWorkbook_1() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_1.xlsx");
 
@@ -67,7 +67,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void speed_test_SXSSFWorkbook_2() {
+    public void speedTestSXSSFWorkbook_2() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_2.xlsx");
 
@@ -88,7 +88,7 @@ public class SpeedTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void speed_test_SXSSFWorkbook_3() {
+    public void speedTestSXSSFWorkbook_3() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_3.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -112,7 +112,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void speed_test_SXSSFWorkbook_4() {
+    public void speedTestSXSSFWorkbook_4() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_4.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -137,7 +137,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void speed_test_SXSSFWorkbook_5() {
+    public void speedTestSXSSFWorkbook_5() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_5.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -163,7 +163,7 @@ public class SpeedTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_HSSFWorkbook_1() {
+    public void speedTestHSSFWorkbook_1() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook_1.xlsx");
 
@@ -192,7 +192,7 @@ public class SpeedTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void test_with_XSSFWorkbook_1() {
+    public void speedTestXSSFWorkbook_1() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook_1.xlsx");
 

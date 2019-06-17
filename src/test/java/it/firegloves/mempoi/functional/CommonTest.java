@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CommonTest extends FunctionalBaseTest {
 
     @Test
-    public void test_without_styler() {
+    public void testWithoutStyler() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_con_file.xlsx");
 
@@ -41,7 +41,7 @@ public class CommonTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_byte_array_and_number_styler() {
+    public void testWithByteArrayAndNumberStyler() {
 
         try {
 
@@ -69,7 +69,7 @@ public class CommonTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_byte_array() {
+    public void testWithByteArray() {
 
         try {
 
@@ -91,7 +91,7 @@ public class CommonTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_multiple_sheets() {
+    public void testWithMultipleSheets() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_multiple_sheets.xlsx");
 
@@ -116,7 +116,7 @@ public class CommonTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_styles() {
+    public void testWithFileAndStyles() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_styles.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();

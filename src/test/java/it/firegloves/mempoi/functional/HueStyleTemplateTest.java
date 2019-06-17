@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class HueStyleTemplateTest extends FunctionalBaseTest {
 
     @Test
-    public void test_with_file_and_standard_template() {
+    public void testWithFileAndStandardTemplate() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_standard_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -51,7 +51,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_summer_template() {
+    public void testWithFileAndSummerTemplate() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_summer_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -78,7 +78,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void test_with_file_and_aqua_template() {
+    public void testWithFileAndAquaTemplate() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_aqua_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -105,7 +105,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void test_with_file_and_forest_template() {
+    public void testWithFileAndForestTemplate() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_forest_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -132,7 +132,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void test_with_file_and_forest_template_overriden() {
+    public void testWithFileAndForestTemplateOverriden() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_forest_template_overriden.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -165,7 +165,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_forest_template_overriden_on_sheetstyler() {
+    public void testWithFileAndForestTemplateOverridenOnSheetstyler() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_forest_template_overriden_on_sheetstyler.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -204,7 +204,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_stone_template() {
+    public void testWithFileAndStoneTemplate() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_stone_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -231,7 +231,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void test_with_file_and_rose_template() {
+    public void testWithFileAndRoseTemplate() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_rose_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -259,7 +259,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_purple_template() {
+    public void testWithFileAndPurpleTemplate() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_purple_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -287,7 +287,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_panegiricon_template() {
+    public void testWithFileAndPanegiriconTemplate() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_panegiricon_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -314,7 +314,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void test_with_file_and_multiple_sheet_templates() throws SQLException {
+    public void testWithFileAndMultipleSheetTemplates() throws SQLException {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_templates.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();

@@ -26,7 +26,7 @@ public class WorkbookTest extends FunctionalBaseTest {
      *********************************************************************************************/
 
     @Test
-    public void test_with_HSSFWorkbook() {
+    public void testWithHSSFWorkbook() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook.xlsx");
 
@@ -50,7 +50,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_HSSFWorkbook_and_styles_and_subfooter() {
+    public void testWithHSSFWorkbookAndStylesAndSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook_and_styles_and_subfooter.xlsx");
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -77,7 +77,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_HSSFWorkbook_and_styles_and_subfooter_and_evaluateformulas() {
+    public void testWithHSSFWorkbookAndStylesAndSubfooterAndEvaluateformulas() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook_and_styles_and_subfooter_and_evaluateformulas.xlsx");
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -106,7 +106,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_HSSFWorkbook_and_custom_styles() {
+    public void testWithHSSFWorkbookAndCustomStyles() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook_and_custom_styles.xlsx");
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -164,7 +164,7 @@ public class WorkbookTest extends FunctionalBaseTest {
      *********************************************************************************************/
 
     @Test
-    public void test_with_XSSFWorkbook() {
+    public void testWithXSSFWorkbook() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook.xlsx");
 
@@ -187,7 +187,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_XSSFWorkbook_and_styles_and_subfooter() {
+    public void testWithXSSFWorkbookAndStylesAndSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook_and_styles_and_subfooter.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -214,7 +214,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_XSSFWorkbook_and_styles_and_subfooter_and_evaluateformulas() {
+    public void ttestWithXSSFWorkbookAndStylesAndSubfooterAndEvaluateformulas() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook_and_styles_and_subfooter_and_evaluateformulas.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -243,7 +243,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_XSSFWorkbook_and_custom_styles() {
+    public void testWithXSSFWorkbookAndCustomStyles() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook_and_custom_styles.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -301,7 +301,7 @@ public class WorkbookTest extends FunctionalBaseTest {
      *********************************************************************************************/
 
     @Test
-    public void test_with_SXSSFWorkbook() {
+    public void testWithSXSSFWorkbook() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_SXSSFWorkbook.xlsx");
 
@@ -324,7 +324,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_SXSSFWorkbook_and_styles_and_subfooter() {
+    public void testWithSXSSFWorkbookAndStylesAndSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_SXSSFWorkbook_and_styles_and_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -351,7 +351,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_SXSSFWorkbook_and_styles_and_subfooter_and_evaluateformulas() {
+    public void testWithSXSSFWorkbookAndStylesAndSubfooterAndEvaluateformulas() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_SXSSFWorkbook_and_styles_and_subfooter_and_evaluateformulas.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -380,7 +380,7 @@ public class WorkbookTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_SXSSFWorkbook_and_custom_styles() {
+    public void testWithSXSSFWorkbookAndCustomStyles() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_SXSSFWorkbook_and_custom_styles.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();

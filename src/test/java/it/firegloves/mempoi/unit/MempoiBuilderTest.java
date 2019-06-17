@@ -36,7 +36,7 @@ public class MempoiBuilderTest {
    }
 
    @Test
-   public void mempoi_builder_full_populated() {
+   public void mempoiBuilderFullPopulated() {
 
       File fileDest = new File("file.xlsx");
       SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -82,7 +82,7 @@ public class MempoiBuilderTest {
 
 
    @Test
-   public void mempoi_builder_minimum_populated() {
+   public void mempoiBuilderMinimumPopulated() {
 
       MemPOI memPOI = new MempoiBuilder()
               .addMempoiSheet(new MempoiSheet(prepStmt))
@@ -106,7 +106,7 @@ public class MempoiBuilderTest {
 
 
    @Test
-   public void mempoi_builder_full_sheetlist_populated() {
+   public void mempoiBuilderFullSheetlistPopulated() {
 
       SXSSFWorkbook workbook = new SXSSFWorkbook();
 

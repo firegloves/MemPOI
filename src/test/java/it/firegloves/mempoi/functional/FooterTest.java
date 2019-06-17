@@ -19,7 +19,7 @@ public class FooterTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_no_footer_no_subfooter() {
+    public void testWithFileAndNoFooterNoSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_no_footer_no_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -44,7 +44,7 @@ public class FooterTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void test_with_file_and_number_sum_subfooter() {
+    public void testWithFileAndNumberSumSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_sum_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -71,7 +71,7 @@ public class FooterTest extends FunctionalBaseTest {
     }
 
     @Test
-    public void test_with_file_and_number_max_subfooter() {
+    public void testWithFileAndNumberMaxSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_max_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -100,7 +100,7 @@ public class FooterTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_number_min_subfooter() {
+    public void testWithFileAndNumberMinSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_min_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -129,7 +129,7 @@ public class FooterTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_number_average_subfooter() {
+    public void testWithFileAndNumberAverageSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_average_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -156,7 +156,7 @@ public class FooterTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_number_custom_min_subfooter() {
+    public void testWithFileAndNumberCustomMinSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_number_custom_min_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -190,7 +190,7 @@ public class FooterTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_multiple_sheet_and_number_sum_subfooter() {
+    public void testWithFileAndMultipleSheetAndNumberSumSubfooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_and_number_sum_subfooter.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -218,7 +218,7 @@ public class FooterTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_standard_footer() {
+    public void testWithFileAndStandardFooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_standard_footer.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -245,7 +245,7 @@ public class FooterTest extends FunctionalBaseTest {
 
 
     @Test
-    public void test_with_file_and_multiple_sheet_and_standard_footer() {
+    public void testWithFileAndMultipleSheetAndStandardFooter() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_and_standard_footer.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
