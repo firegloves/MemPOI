@@ -121,6 +121,9 @@ A library to simplify export from database to Excel files using Apache POI :japa
 
 ---
 
+# MemPOI :japanese_goblin:
+A library to simplify export from database to Excel files using Apache POI
+
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
 
 Java 8+ required
@@ -169,15 +172,14 @@ CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 
 Byte array:
 
-<pre>
+```
 // With byte array
 MemPOI memPOI = new MempoiBuilder()
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
-
-</pre>
+```
 
 
 ### Supported SQL data types
@@ -293,7 +295,7 @@ MemPOI memPOI = new MempoiBuilder()
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .setHeaderCellStyle(headerCellStyle)
                     .build();
-```                  
+```                    
 
 
 MemPOI comes with a set of templates ready to use. You can use them as follows:
@@ -305,6 +307,35 @@ MemPOI memPOI = new MempoiBuilder()
                     .setStyleTemplate(new ForestStyleTemplate())
                     .build();
 ```
+
+Actually you can provide differents styles for differents sheets:
+
+```
+MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Dogs");
+dogsSheet.setStyleTemplate(new SummerStyleTemplate());
+
+CellStyle numberCellStyle = workbook.createCellStyle();
+numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+MempoiSheet catsheet = new MempoiSheet(prepStmt, "Cats");
+catsheet.setStyleTemplate(new ForestStyleTemplate());
+catsheet.setNumberCellStyle(numberCellStyle);
+
+List<MempoiSheet> sheetList = Arrays.asList(dogsSheet, catsheet);
+
+MemPOI memPOI = new MempoiBuilder()
+                    .setDebug(true)
+                    .setWorkbook(workbook)
+                    .setFile(fileDest)
+                    .setAdjustColumnWidth(true)
+                    .setMempoiSheetList(sheetList)
+                    //    .setStyleTemplate(new PanegiriconStyleTemplate())     <----- it has no effects because for each sheet a template is specified
+                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
+                    .build();
+``` 
+
+
 
 List of available templates:
 
@@ -382,10 +413,27 @@ There are 2 options that may dramatically slow down generation process on huge d
 Both available into `MempoiBuilder` they could block your export or even bring it to fail.
 Keep in mind that if you can't use them for performance problems you could ask in exchange for speed that columns resizing and cell formula evaluations will be hand made by the final user.
 
+The best performace choice between the available `Workbook` descendants is the `SXSSFWorkbook`.
+
+---
+
+### Sync VS Async
+
+MemPOI returns always a CompletableFuture so you can use it synchronously or asynchronously, depending on the requirement.
+In the previous examples you can see how to block an async operation by calling the `get()` method, but using an appropriate environment (e.g. Spring Reactor, Akka or Vert.x) you can choose your favourite approach.
+
+---
+
+### Coming soon
+
+- Per column index style
+- `GROUP BY` clause support
+- R2DBC support
+
 ---
 
 #### Special thanks
 
-Special thanks to [Colle der Fomento](http://www.collederfomento.net/){:target="_blank"} that inspired MemPOI name with their new, fantastic, yearned LP, in particular with their song [Mempo](https://youtu.be/xy05iaknmcY){:target="_blank"}.
+Special thanks to <a href="http://www.collederfomento.net/" target="_blank">Colle der Fomento</a> that inspired MemPOI name with their new, fantastic, yearned LP, in particular with their song <a href="https://youtu.be/xy05iaknmcY" target="_blank">Mempo</a>.
 
-Don't you know what I'm talking about? Discover what a [mempo](https://en.wikipedia.org/wiki/Men-yoroi){:target="_blank"} is! 
+Don't you know what I'm talking about? Discover what a <a href="https://en.wikipedia.org/wiki/Men-yoroi" target="_blank">mempo</a> is!
