@@ -185,6 +185,35 @@ MemPOI memPOI = new MempoiBuilder()
                     .build();
 ```
 
+Actually you can provide differents styles for differents sheets:
+
+```
+MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Dogs");
+dogsSheet.setStyleTemplate(new SummerStyleTemplate());
+
+CellStyle numberCellStyle = workbook.createCellStyle();
+numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+MempoiSheet catsheet = new MempoiSheet(prepStmt, "Cats");
+catsheet.setStyleTemplate(new ForestStyleTemplate());
+catsheet.setNumberCellStyle(numberCellStyle);
+
+List<MempoiSheet> sheetList = Arrays.asList(dogsSheet, catsheet);
+
+MemPOI memPOI = new MempoiBuilder()
+                    .setDebug(true)
+                    .setWorkbook(workbook)
+                    .setFile(fileDest)
+                    .setAdjustColumnWidth(true)
+                    .setMempoiSheetList(sheetList)
+                    //    .setStyleTemplate(new PanegiriconStyleTemplate())     <----- it has no effects because for each sheet a template is specified
+                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .setEvaluateCellFormulas(true)
+                    .build();
+``` 
+
+
+
 List of available templates:
 
 | Name                      |      Image            |
@@ -262,6 +291,21 @@ Both available into `MempoiBuilder` they could block your export or even bring i
 Keep in mind that if you can't use them for performance problems you could ask in exchange for speed that columns resizing and cell formula evaluations will be hand made by the final user.
 
 The best performace choice between the available `Workbook` descendants is the `SXSSFWorkbook`.
+
+---
+
+### Sync VS Async
+
+MemPOI returns always a CompletableFuture so you can use it synchronously or asynchronously, depending on the requirement.
+In the previous examples you can see how to block an async operation by calling the `get()` method, but using an appropriate environment (e.g. Spring Reactor, Akka or Vert.x) you can choose your favourite approach.
+
+---
+
+### Coming soon
+
+- Per column index style
+- `GROUP BY` clause support
+- R2DBC support
 
 ---
 
