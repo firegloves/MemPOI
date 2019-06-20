@@ -121,7 +121,7 @@ A library to simplify export from database to Excel files using Apache POI :japa
 
 ---
 
-# MemPOI :japanese_goblin:
+# MemPOI
 A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
