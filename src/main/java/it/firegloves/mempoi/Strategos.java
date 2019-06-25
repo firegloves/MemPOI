@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class Strategos {
 
-    private static final Logger logger = LoggerFactory.getLogger(DBMempoiDAO.class);
+    private static final Logger logger = LoggerFactory.getLogger(Strategos.class);
 
 
     /**
@@ -93,7 +94,7 @@ public class Strategos {
      */
     private void manageFormulaToEvaluate(boolean evaluateCellFormulas, boolean hasFormulasToEvaluate) {
         if (evaluateCellFormulas && hasFormulasToEvaluate) {
-            logger.info("we have formulas to evaluate");
+            logger.debug("we have formulas to evaluate");
             File tmpFile = this.writeTempFile();
             this.openTempFileAndEvaluateCellFormulas(tmpFile);
         }
@@ -256,7 +257,7 @@ public class Strategos {
             // writes data to file
             try (FileOutputStream outputStream = new FileOutputStream(tmpFile)) {
                 this.workbookConfig.getWorkbook().write(outputStream);
-                logger.info("MemPOI temp file created: " + tmpFile.getAbsolutePath());
+                logger.debug("MemPOI temp file created: " + tmpFile.getAbsolutePath());
             }
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -275,11 +276,11 @@ public class Strategos {
     private void openTempFileAndEvaluateCellFormulas(File tmpFile) {
 
         try {
-            logger.info("reading temp file");
+            logger.debug("reading temp file");
             this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
-            logger.info("readed temp file");
+            logger.debug("readed temp file");
             this.workbookConfig.getWorkbook().getCreationHelper().createFormulaEvaluator().evaluateAll();
-            logger.info("evaluated formulas");
+            logger.debug("evaluated formulas");
         } catch (Exception e) {
             throw new MempoiException(e);
         }
@@ -303,9 +304,9 @@ public class Strategos {
 
             // writes data to file
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                logger.info("writing final file");
+                logger.debug("writing final file");
                 this.workbookConfig.getWorkbook().write(outputStream);
-                logger.info("written final file");
+                logger.debug("written final file");
             }
 
             return file.getAbsolutePath();

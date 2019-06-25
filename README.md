@@ -3,7 +3,28 @@ A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
 
-Java 8+ required
+### Support
+
+- Apache POI 4.0.0+
+- Java 8+
+
+### Import
+
+With Gradle
+```
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.1'
+```
+
+With Maven
+```
+<dependency>
+    <groupId>it.firegloves</groupId>
+    <artifactId>mempoi</artifactId>
+    <version>1.0.1</version>
+</dependency>
+
+```
+
 
 ### Basic usage
 
@@ -298,6 +319,43 @@ The best performace choice between the available `Workbook` descendants is the `
 
 MemPOI returns always a CompletableFuture so you can use it synchronously or asynchronously, depending on the requirement.
 In the previous examples you can see how to block an async operation by calling the `get()` method, but using an appropriate environment (e.g. Spring Reactor, Akka or Vert.x) you can choose your favourite approach.
+
+---
+
+### Apache POI version
+
+MemPOI comes with Apache POI 4.1.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+
+This is an example using Gradle:
+
+```
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.0.1') {
+   exclude group: 'org.apache.poi', module: 'poi-ooxml'
+}
+
+implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
+```
+
+This is an example using Maven:
+
+```
+<dependency>
+    <groupId>it.firegloves</groupId>
+    <artifactId>mempoi</artifactId>
+    <version>1.0.1</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.apache.poi</groupId> <!-- Exclude Project-D from Project-B -->
+            <artifactId>poi-ooxml</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>4.0.1</version>
+</dependency>
+```
 
 ---
 
