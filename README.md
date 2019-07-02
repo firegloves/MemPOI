@@ -1,5 +1,5 @@
 # MemPOI
-A library to simplify export from database to Excel files using Apache POI :japanese_goblin:
+A library to simplify export from database to Excel files using Apache POI
 
 ---
 
@@ -126,11 +126,32 @@ A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
 
-Java 8+ required
+### Support
+
+- Apache POI 4.0.0+
+- Java 8+
+
+### Import
+
+With Gradle
+```
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.1'
+```
+
+With Maven
+```
+<dependency>
+    <groupId>it.firegloves</groupId>
+    <artifactId>mempoi</artifactId>
+    <version>1.0.1</version>
+</dependency>
+
+```
+
 
 ### Basic usage
 
-All you need is to instantiate a MemPOI and to pass it the List of your exporting queries. MemPOI will do all the stuff for you generating a .xlsx file containing resulting data.
+All you need is to instantiate a MemPOI passing it the List of your exporting queries. MemPOI will do all the stuff for you generating a .xlsx file containing resulting data.
 You need to pass your export queries as a List of `MempoiSheet` (`PreparedStatement` + sheet name).
 You can use `MempoiBuilder` to correctly populate your MemPOI instance, like follows:
 
@@ -145,7 +166,7 @@ CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
 
 You can find more examples in the functional tests package.
 
-By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s descendant:
+By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s descendants:
 - `SXSSFWorkbook`
 - `XSSFWorkbook`
 - `HSSFWorkbook`
@@ -222,8 +243,8 @@ will result in a sheet with 2 columns: id and first_name (containing db's name c
 
 ### Multiple sheets
 
-Multiple sheets in the same document are supported: `MempoiBuilder` accept a list of `MempoiSheet`.
-Look at this example and the result above:
+Multiple sheets in the same document are supported: `MempoiBuilder` accepts a list of `MempoiSheet`.
+Look at this example and at the result above:
 
 ```
 MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
@@ -257,20 +278,20 @@ MemPOI memPOI = new MempoiBuilder()
                     .build();
 ```
 
-**Adjusting columns width for huge dataset could dramatically slow down the generation process**
+**Adjusting columns width for huge datasets could dramatically slow down the generation process**
 
 ---
 
 ### Styles
 
-MemPOI comes with a preset of default data formatting style for
+MemPOI comes with a preset of default data formatting styles for
 
 - header cells
 - number data types cells
 - date data types cells
 - datetime data types cells
 
-The default styles are applied by default. You can inspect them looking at the end of `MempoiReportStyler` class 
+The default styles are automatically applied. You can inspect them looking at the end of `MempoiReportStyler` class 
 If you want to reset the default styles you need to use an empty `CellStyle` when you use `MempoiBuilder`, for example:
 
 ```
@@ -308,7 +329,7 @@ MemPOI memPOI = new MempoiBuilder()
                     .build();
 ```
 
-Actually you can provide differents styles for differents sheets:
+Actually you can provide different styles for different sheets:
 
 ```
 MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Dogs");
@@ -355,8 +376,8 @@ List of available templates:
 ### Footers and subfooters
 
 MemPOI supports standard .xlsx footers and sub footers.
-Whereas footers are a simple wrapper of the Excel ones, subfooters are a MemPOI extension that let you add some nice functionalities to your report.
-For example, you could choose to add the `NumberSumSubFooter` to your MemPOI report. It will results in an additional line at the end of the sheet containing the sum of the numeric columns.This is an example:
+Whereas footers are a simple wrapper of the Excel ones, subfooters are a MemPOI extension that allows you add some nice features to your report.
+For example, you could choose to add the `NumberSumSubFooter` to your MemPOI report. It will result in an additional line at the end of the sheet containing the sum of the numeric columns. This is an example:
 
 ```
 MemPOI memPOI = new MempoiBuilder()
@@ -370,10 +391,10 @@ MemPOI memPOI = new MempoiBuilder()
 
 List of available subfooters:
 
-- **NumberSumSubFooter**: place a cell containing the sum of the column (works only on numeric comlumns)
-- **NumberMaxSubFooter**: place a cell containing the maximum value of the column (works only on numeric comlumns)
-- **NumberMinSubFooter**: place a cell containing the minimum value of the column (works only on numeric comlumns)
-- **NumberAverageSubFooter**: place a cell containing the average value of the column (works only on numeric comlumns)
+- **NumberSumSubFooter**: places a cell containing the sum of the column (works only on numeric comlumns)
+- **NumberMaxSubFooter**: places a cell containing the maximum value of the column (works only on numeric comlumns)
+- **NumberMinSubFooter**: places a cell containing the minimum value of the column (works only on numeric comlumns)
+- **NumberAverageSubFooter**: places a cell containing the average value of the column (works only on numeric comlumns)
 
 By default no footer and no subfooter are appended to the report.
 
@@ -388,32 +409,32 @@ Subfooters are already supported by the MemPOI bundled templates.
 ### Cell formulas
 
 You can specify subfooter's cell formulas by applying a bundled subfooter or creating a custom one.
-By default MemPOI tries to postpone formulas evaluation forcing Excel to evaluate them when it will open your report file.
+By default MemPOI attempts to postpone formulas evaluation by forcing Excel to evaluate them when it opens the report file.
 This approach could fail if you use LibreOffice or something similar to open your report file (it could not evaluate formulas opening the document). So by setting `MempoiBuilder.evaluateCellFormulas` to `true` you can avoid this behaviour forcing MemPOI to evaluate cell formulas by itself.
 
 But depending on which type of `Workbook` you are using you could encounter problems by following this way.
 For example if you use an `SXSSFWorkbook` and your report is huge, some of your data rows maybe serialized and when MemPOI will try to evaluate cell formulas it will fail.
 For this reason MemPOI tries to firstly save the report to a temporary file, then reopening it without using `SXSSFWorkbook`, applying cell formulas and continuing with the normal process.
 
-Also this approach may fail because of that not using a `SXSSFWorkbook` will create a lot of memory problems if the dataset is huger than the memory heap can support.
+Also this approach may fail because of that not using a `SXSSFWorkbook` will create a lot of memory problems if the dataset is huger than what the memory heap can support.
 To solve this issue you could extend your JVM heap memory with the option `-Xmx2048m`
 
-So actully the best solution for huge dataset is to force Excel to evaluate cell formulas when the report is open.
+So actually the best solution for huge dataset is to force Excel to evaluate cell formulas when the report is open.
 
 ---
 
 ### Performance
 
-Because you could have to face foolish requests like to export hundreds of thousands of rows in a few seconds I have added some speed test.
+Since you might have to face foolish requests like exporting hundreds of thousands of rows in a few seconds, I added some speed tests.
 There are 2 options that may dramatically slow down generation process on huge datasets:
 
 - `adjustColumnWidth`
 - `evaluateCellFormulas`
 
-Both available into `MempoiBuilder` they could block your export or even bring it to fail.
+Both available into `MempoiBuilder` they could block your export or even make it fail.
 Keep in mind that if you can't use them for performance problems you could ask in exchange for speed that columns resizing and cell formula evaluations will be hand made by the final user.
 
-The best performace choice between the available `Workbook` descendants is the `SXSSFWorkbook`.
+The best performance choice between the available `Workbook` descendants is the `SXSSFWorkbook`.
 
 ---
 
@@ -424,11 +445,50 @@ In the previous examples you can see how to block an async operation by calling 
 
 ---
 
+### Apache POI version
+
+MemPOI comes with Apache POI 4.1.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+
+This is an example using Gradle:
+
+```
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.0.1') {
+   exclude group: 'org.apache.poi', module: 'poi-ooxml'
+}
+
+implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
+```
+
+This is an example using Maven:
+
+```
+<dependency>
+    <groupId>it.firegloves</groupId>
+    <artifactId>mempoi</artifactId>
+    <version>1.0.1</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.apache.poi</groupId> <!-- Exclude Project-D from Project-B -->
+            <artifactId>poi-ooxml</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>4.0.1</version>
+</dependency>
+```
+
+---
+
 ### Coming soon
 
 - Per column index style
 - `GROUP BY` clause support
 - R2DBC support
+
+If you have any request, feel free to ask for new features.
 
 ---
 
