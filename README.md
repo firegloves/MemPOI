@@ -498,4 +498,4 @@ Special thanks to <a href="http://www.collederfomento.net/" target="_blank">Coll
 
 Don't you know what I'm talking about? Discover what a <a href="https://en.wikipedia.org/wiki/Men-yoroi" target="_blank">mempo</a> is!
 
-**If you like MemPOI please add a star to the project helping MemPOI to grow up. MemPOI in return will export for you allowing you to go sinning a good mojito on the beach**
+**If you like MemPOI please add a star to the project helping MemPOI to grow up. MemPOI in return will export for you allowing you to go sipping a good mojito on the beach**
