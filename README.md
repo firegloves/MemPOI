@@ -374,3 +374,5 @@ If you have any request, feel free to ask for new features.
 Special thanks to <a href="http://www.collederfomento.net/" target="_blank">Colle der Fomento</a> that inspired MemPOI name with their new, fantastic, yearned LP, in particular with their song <a href="https://youtu.be/xy05iaknmcY" target="_blank">Mempo</a>.
 
 Don't you know what I'm talking about? Discover what a <a href="https://en.wikipedia.org/wiki/Men-yoroi" target="_blank">mempo</a> is!
+
+** If you like MemPOI please add a star to the project helping MemPOI to grow up. MemPOI in return will export for you allowing you to go sinning a good mojito on the beach :tropical_drink: **
