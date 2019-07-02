@@ -10,12 +10,12 @@ MemPOI is not designed to be used with an ORM due to performance needs on massiv
 
 ### Import
 
-With Gradle
+###### With Gradle
 ```
 implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.1'
 ```
 
-With Maven
+###### With Maven
 ```
 <dependency>
     <groupId>it.firegloves</groupId>
@@ -56,7 +56,7 @@ By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s des
 
 You can choose to write directly to a file or to obtain the byte array of the generated report (for example to pass it back to a waiting client)
 
-File:
+###### File:
 
 ```
 File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file.xlsx");
@@ -68,7 +68,7 @@ MemPOI memPOI = new MempoiBuilder()
 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 ```
 
-Byte array:
+###### Byte array:
 
 ```
 // With byte array
@@ -322,11 +322,11 @@ In the previous examples you can see how to block an async operation by calling 
 
 ---
 
-### Apache POI version
+### Apache POI version
 
 MemPOI comes with Apache POI 4.1.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
-This is an example using Gradle:
+###### This is an example using Gradle:
 
 ```
 implementation (group: 'it.firegloves', name: 'mempoi', version: '1.0.1') {
@@ -336,7 +336,7 @@ implementation (group: 'it.firegloves', name: 'mempoi', version: '1.0.1') {
 implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 ```
 
-This is an example using Maven:
+###### This is an example using Maven:
 
 ```
 <dependency>
@@ -375,4 +375,4 @@ Special thanks to <a href="http://www.collederfomento.net/" target="_blank">Coll
 
 Don't you know what I'm talking about? Discover what a <a href="https://en.wikipedia.org/wiki/Men-yoroi" target="_blank">mempo</a> is!
 
-** If you like MemPOI please add a star to the project helping MemPOI to grow up. MemPOI in return will export for you allowing you to go sinning a good mojito on the beach :tropical_drink: **
+**If you like MemPOI please add a star to the project helping MemPOI to grow up. MemPOI in return will export for you allowing you to go sinning a good mojito on the beach :tropical_drink:**
