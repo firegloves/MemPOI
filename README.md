@@ -1,4 +1,4 @@
-# MemPOI :japanese_goblin:
+# MemPOI :green_book: :arrow_right: :japanese_goblin: :arrow_right: :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
@@ -365,7 +365,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 - `GROUP BY` clause support
 - R2DBC support
 
-If you have any request, feel free to ask for new features.
+:soon: If you have any request, feel free to ask for new features.
 
 ---
 
