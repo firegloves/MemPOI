@@ -1,12 +1,20 @@
 package it.firegloves.mempoi.manager;
 
-import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ConnectionManager {
+
+    /**
+     * private constructor to avoid class instantiation
+     */
+    private ConnectionManager() {
+        throw new IllegalStateException("Utility class");
+    }
+
 
     /**
      * closes connection resultset and preparedstatement
@@ -28,7 +36,7 @@ public class ConnectionManager {
             }
 
         } catch (SQLException e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 }

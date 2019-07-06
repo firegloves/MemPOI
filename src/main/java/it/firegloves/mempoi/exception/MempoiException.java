@@ -1,6 +1,8 @@
 package it.firegloves.mempoi.exception;
 
-public class MempoiException extends RuntimeException {
+import java.util.concurrent.CompletionException;
+
+public class MempoiException extends CompletionException {
 
     public MempoiException() {
     }
@@ -15,9 +17,5 @@ public class MempoiException extends RuntimeException {
 
     public MempoiException(Throwable cause) {
         super(cause);
-    }
-
-    public MempoiException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

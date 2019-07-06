@@ -1,6 +1,6 @@
 package it.firegloves.mempoi.functional;
 
-import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import org.junit.After;
 import org.junit.Before;
 
@@ -31,7 +31,7 @@ public class FunctionalBaseTest {
 
 
             if (! this.outReportFolder.exists() && ! this.outReportFolder.mkdirs()) {
-                throw new MempoiException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");
+                throw new MempoiRuntimeException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");
             }
 
         } catch (Exception e) {

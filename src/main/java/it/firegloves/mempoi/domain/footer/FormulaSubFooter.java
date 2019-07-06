@@ -4,8 +4,8 @@
 
 package it.firegloves.mempoi.domain.footer;
 
-import it.firegloves.mempoi.domain.EExportDataType;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
@@ -34,7 +34,7 @@ public abstract class FormulaSubFooter implements MempoiSubFooter {
 
             MempoiColumn mc = mempoiColumnList.get(i);
 
-            if (! mc.getColumnName().equalsIgnoreCase("id") && EExportDataType.NUMBER_STYLER_TYPES.contains(mc.getType())) {
+            if (! mc.getColumnName().equalsIgnoreCase("id") && MempoiColumnStyleManager.NUMBER_STYLER_TYPES.contains(mc.getType())) {
 
                 String colLetter = CellReference.convertNumToColString(i);
                 mempoiColumnList.get(i).setSubFooterCell(new MempoiSubFooterCell(this.getFormula(colLetter, firstDataRowIndex, lastDataRowIndex), true, subFooterCellStyle));

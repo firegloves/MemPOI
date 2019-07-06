@@ -87,7 +87,7 @@ public class WorkbookConfig {
      * defines if the current workbook has to process some cell formulas
      */
     private void setHasFormulasToEvaluate() {
-        this.hasFormulasToEvaluate = null != this.mempoiSubFooter && this.mempoiSubFooter instanceof FormulaSubFooter;
+        this.hasFormulasToEvaluate = this.mempoiSubFooter instanceof FormulaSubFooter;
     }
 
 

@@ -14,6 +14,10 @@ import java.util.List;
 
 public class MempoiColumnStyleManager {
 
+    public static final EnumSet<EExportDataType> DATE_STYLER_TYPES = EnumSet.of(EExportDataType.DATE);
+    public static final EnumSet<EExportDataType> DATETIME_STYLER_TYPES = EnumSet.of(EExportDataType.TIME, EExportDataType.TIMESTAMP);
+    public static final EnumSet<EExportDataType> NUMBER_STYLER_TYPES = EnumSet.of(EExportDataType.INT, EExportDataType.DOUBLE, EExportDataType.FLOAT);
+
     private HashMap<EnumSet<EExportDataType>, CellStyle> cellStylerMap;
 
     private MempoiStyler reportStyler;
@@ -28,9 +32,9 @@ public class MempoiColumnStyleManager {
      */
     private void initCellStyleMap() {
         this.cellStylerMap = new HashMap<>();
-        this.cellStylerMap.put(EExportDataType.DATE_STYLER_TYPES, this.reportStyler.getDateCellStyle());
-        this.cellStylerMap.put(EExportDataType.DATETIME_STYLER_TYPES, this.reportStyler.getDatetimeCellStyle());
-        this.cellStylerMap.put(EExportDataType.NUMBER_STYLER_TYPES, this.reportStyler.getNumberCellStyle());
+        this.cellStylerMap.put(DATE_STYLER_TYPES, this.reportStyler.getDateCellStyle());
+        this.cellStylerMap.put(DATETIME_STYLER_TYPES, this.reportStyler.getDatetimeCellStyle());
+        this.cellStylerMap.put(NUMBER_STYLER_TYPES, this.reportStyler.getNumberCellStyle());
     }
 
 
@@ -42,12 +46,12 @@ public class MempoiColumnStyleManager {
 
         // TODO refactor
 
-        if (EExportDataType.DATE_STYLER_TYPES.contains(type)) {
-            return EExportDataType.DATE_STYLER_TYPES;
-        } else if (EExportDataType.DATETIME_STYLER_TYPES.contains(type)) {
-            return EExportDataType.DATETIME_STYLER_TYPES;
-        } else if (EExportDataType.NUMBER_STYLER_TYPES.contains(type)) {
-            return EExportDataType.NUMBER_STYLER_TYPES;
+        if (DATE_STYLER_TYPES.contains(type)) {
+            return DATE_STYLER_TYPES;
+        } else if (DATETIME_STYLER_TYPES.contains(type)) {
+            return DATETIME_STYLER_TYPES;
+        } else if (NUMBER_STYLER_TYPES.contains(type)) {
+            return NUMBER_STYLER_TYPES;
         } else {
             return null;
         }

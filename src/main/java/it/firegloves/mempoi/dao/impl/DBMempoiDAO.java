@@ -2,9 +2,11 @@ package it.firegloves.mempoi.dao.impl;
 
 
 import it.firegloves.mempoi.domain.MempoiColumn;
-import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +18,7 @@ import java.util.List;
 public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(DBMempoiDAO.class);
+    Marker marker = MarkerFactory.getMarker("test");
 
     private static DBMempoiDAO instance = new DBMempoiDAO();
 
@@ -30,10 +33,10 @@ public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
     @Override
     public ResultSet executeExportQuery(PreparedStatement prepStmt) {
         try {
-            logger.debug("EXECUTING EXPORT QUERY: " + prepStmt.toString());
+            logger.debug(marker, "EXECUTING EXPORT QUERY: {}", prepStmt);
             return prepStmt.executeQuery();
         } catch (SQLException e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 
@@ -43,7 +46,7 @@ public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
     public List<MempoiColumn> readMetadata(ResultSet rs) {
 
         if (null == rs) {
-            throw new MempoiException("NULL ResultSet!");
+            throw new MempoiRuntimeException("NULL ResultSet!");
         }
 
         try {
@@ -58,7 +61,7 @@ public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
             return columnList;
 
         } catch (SQLException e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 

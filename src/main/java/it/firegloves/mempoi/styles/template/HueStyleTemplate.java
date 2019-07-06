@@ -93,8 +93,7 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     @Override
     public CellStyle getSubfooterCellStyle(Workbook workbook) {
 
-        CellStyle cellStyle = this.setGenericCellStyle(workbook, this.subFooterCellBgColorIndex, this.subFooterFontColorIndex, true, this.borderColorIndex);
-        return cellStyle;
+        return this.setGenericCellStyle(workbook, this.subFooterCellBgColorIndex, this.subFooterFontColorIndex, true, this.borderColorIndex);
     }
 
     @Override
@@ -125,8 +124,7 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     @Override
     public CellStyle getCommonDataCellStyle(Workbook workbook) {
 
-        CellStyle cellStyle = this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
-        return cellStyle;
+        return this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
     }
 
 

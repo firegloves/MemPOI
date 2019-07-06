@@ -1,6 +1,6 @@
 package it.firegloves.mempoi;
 
-import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
 
 import java.sql.*;
 import java.util.Random;
@@ -26,7 +26,7 @@ public class DBPopulator {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 
@@ -34,7 +34,7 @@ public class DBPopulator {
         try {
             this.conn.close();
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 
@@ -63,7 +63,7 @@ public class DBPopulator {
             PreparedStatement stmt = this.conn.prepareStatement(speedTestTbl);
             stmt.execute();
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 
@@ -99,12 +99,12 @@ public class DBPopulator {
             System.out.println("The number of rows inserted: "+ result.length);
             this.conn.commit();
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         } finally {
             try {
                 pstmt.close();
             } catch (SQLException e) {
-                throw new MempoiException(e);
+                throw new MempoiRuntimeException(e);
             }
         }
     }

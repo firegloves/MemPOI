@@ -7,6 +7,7 @@ import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -16,6 +17,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MempoiBuilder {
 
@@ -89,11 +91,6 @@ public class MempoiBuilder {
         return this;
     }
 
-//    public MempoiBuilder setReportMempoiStyler(MempoiStyler reportMempoiStyler) {
-//        this.reportMempoiStyler = reportMempoiStyler;
-//        return this;
-//    }
-
     public MempoiBuilder setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
         this.mempoiSubFooter = mempoiSubFooter;
         return this;
@@ -144,6 +141,10 @@ public class MempoiBuilder {
         return this;
     }
 
+    /**
+     * build the MemPOI with the desired preferences
+     * @return the generated MemPOI ready to use
+     */
     public MemPOI build() {
 
         MempoiConfig.getInstance().setDebug(debug);
@@ -156,16 +157,8 @@ public class MempoiBuilder {
             this.styleTemplate = new StandardStyleTemplate();
         }
 
-        this.mempoiSheetList.stream()
-                .forEach(s -> s.setSheetStyler(new MempoiStylerBuilder(this.workbook)
-                                    .setStyleTemplate(null != s.getStyleTemplate() ? s.getStyleTemplate() : this.styleTemplate)
-                                    .setCommonDataCellStyle(null != s.getCommonDataCellStyle() ? s.getCommonDataCellStyle() : this.commonDataCellStyle)
-                                    .setDateCellStyle(null != s.getDateCellStyle() ? s.getDateCellStyle() : this.dateCellStyle)
-                                    .setDatetimeCellStyle(null != s.getDatetimeCellStyle() ? s.getDatetimeCellStyle() : this.datetimeCellStyle)
-                                    .setHeaderCellStyle(null != s.getHeaderCellStyle() ? s.getHeaderCellStyle() : this.headerCellStyle)
-                                    .setNumberCellStyle(null != s.getNumberCellStyle() ? s.getNumberCellStyle() : this.numberCellStyle)
-                                    .setSubFooterCellStyle(null != s.getSubFooterCellStyle() ? s.getSubFooterCellStyle() : this.subFooterCellStyle)
-                                    .build().get()));
+        // configure MempoiSheet list
+        this.mempoiSheetList.stream().forEach(this::configureMempoiSheet);
 
         // builds WorkbookConfig
         WorkbookConfig workbookConfig = new WorkbookConfig(
@@ -178,6 +171,28 @@ public class MempoiBuilder {
                 this.file);
 
         return new MemPOI(workbookConfig);
+    }
+
+
+    /**
+     * configure the received MempoiSheet
+     * @param s the MempoiSheet to configure
+     */
+    private void configureMempoiSheet(MempoiSheet s) {
+
+        // create the Optional of the MempoiStyler
+        Optional<MempoiStyler> sheetStylerOpt = new MempoiStylerBuilder(this.workbook)
+                .setStyleTemplate(null != s.getStyleTemplate() ? s.getStyleTemplate() : this.styleTemplate)
+                .setCommonDataCellStyle(null != s.getCommonDataCellStyle() ? s.getCommonDataCellStyle() : this.commonDataCellStyle)
+                .setDateCellStyle(null != s.getDateCellStyle() ? s.getDateCellStyle() : this.dateCellStyle)
+                .setDatetimeCellStyle(null != s.getDatetimeCellStyle() ? s.getDatetimeCellStyle() : this.datetimeCellStyle)
+                .setHeaderCellStyle(null != s.getHeaderCellStyle() ? s.getHeaderCellStyle() : this.headerCellStyle)
+                .setNumberCellStyle(null != s.getNumberCellStyle() ? s.getNumberCellStyle() : this.numberCellStyle)
+                .setSubFooterCellStyle(null != s.getSubFooterCellStyle() ? s.getSubFooterCellStyle() : this.subFooterCellStyle)
+                .build();
+
+        // configure the MempoiSheet with the constructed MempoiStyler or with a blank one in case of errors
+        s.setSheetStyler(sheetStylerOpt.orElseGet(MempoiStyler::new));
     }
 
 }

@@ -33,7 +33,7 @@ public class MemPOI {
      *
      * @return a CompletableFuture containing the string of the file name (absolute path) of the generated file
      */
-    public CompletableFuture<String> prepareMempoiReportToFile() throws MempoiException {
+    public CompletableFuture<String> prepareMempoiReportToFile() {
 
         return CompletableFuture.supplyAsync(() -> {
 
@@ -41,8 +41,12 @@ public class MemPOI {
                 throw new MempoiException("Error: report to file requested but no file was specified in the config");
             }
 
-            Strategos strategos = new Strategos(this.workbookConfig);
-            return strategos.generateMempoiReportToFile(this.workbookConfig.getSheetList(), this.workbookConfig.getFile());
+            try {
+                Strategos strategos = new Strategos(this.workbookConfig);
+                return strategos.generateMempoiReportToFile(this.workbookConfig.getSheetList(), this.workbookConfig.getFile());
+            } catch (Exception e) {
+                throw new MempoiException(e);
+            }
         });
     }
 
@@ -52,12 +56,16 @@ public class MemPOI {
      *
      * @return a CompletableFuture containing the byte arrat of the exported data
      */
-    public CompletableFuture<byte[]> prepareMempoiReportToByteArray() throws MempoiException {
+    public CompletableFuture<byte[]> prepareMempoiReportToByteArray() {
 
         return CompletableFuture.supplyAsync(() -> {
 
-            Strategos strategos = new Strategos(this.workbookConfig);
-            return strategos.generateMempoiReportToByteArray();
+            try {
+                Strategos strategos = new Strategos(this.workbookConfig);
+                return strategos.generateMempoiReportToByteArray();
+            } catch (Exception e) {
+                throw new MempoiException(e);
+            }
         });
     }
 }

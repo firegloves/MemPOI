@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class StandardMempoiFooter extends MempoiFooter {
 
-    public final String MEMPOI_URL = "https://github.com/firegloves/MemPOI";
+    public static final String MEMPOI_URL = "https://github.com/firegloves/MemPOI";
 
     protected Hyperlink mempoiLink;
 

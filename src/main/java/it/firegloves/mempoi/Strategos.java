@@ -7,7 +7,7 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
-import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
@@ -19,7 +19,6 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,11 +50,11 @@ public class Strategos {
      * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
      * @param fileToExport    the destination file (with path) where write exported data
      *
-     * @throws MempoiException if something went wrong
+     * @throws MempoiRuntimeException if something went wrong
      *
      * @return the filename with path of the report generated file
      */
-    public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) throws MempoiException {
+    public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) throws MempoiRuntimeException {
 
         this.generateMempoiReport(mempoiSheetList);
         return this.writeFile(fileToExport);
@@ -65,11 +64,11 @@ public class Strategos {
     /**
      * starting from export PreparedStatement prepares the MempoiReport for battle!
      *
-     * @throws MempoiException if something went wrong
+     * @throws MempoiRuntimeException if something went wrong
      *
      * @return the filename with path of the report generated file
      */
-    public byte[] generateMempoiReportToByteArray() throws MempoiException {
+    public byte[] generateMempoiReportToByteArray() throws MempoiRuntimeException {
 
         this.generateMempoiReport(this.workbookConfig.getSheetList());
         return this.writeToByteArray();
@@ -162,7 +161,7 @@ public class Strategos {
             this.adjustColSize(sheet, columnList.size());
 
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         } finally {
             ConnectionManager.closeResultSetAndPrepStmt(rs, mempoiSheet.getPrepStmt());
         }
@@ -237,7 +236,7 @@ public class Strategos {
             }
 
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
 
         return rowCounter;
@@ -260,7 +259,7 @@ public class Strategos {
                 logger.debug("MemPOI temp file created: " + tmpFile.getAbsolutePath());
             }
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         } finally {
             this.closeWorkbook();
         }
@@ -282,7 +281,7 @@ public class Strategos {
             this.workbookConfig.getWorkbook().getCreationHelper().createFormulaEvaluator().evaluateAll();
             logger.debug("evaluated formulas");
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 
@@ -312,7 +311,7 @@ public class Strategos {
             return file.getAbsolutePath();
 
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         } finally {
             this.closeWorkbook();
         }
@@ -396,7 +395,7 @@ public class Strategos {
             }
 
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         } finally {
             this.closeWorkbook();
         }
@@ -433,7 +432,7 @@ public class Strategos {
         try {
             this.workbookConfig.getWorkbook().close();
         } catch (Exception e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 }

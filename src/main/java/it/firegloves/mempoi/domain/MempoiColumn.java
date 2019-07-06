@@ -1,7 +1,7 @@
 package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
-import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 
@@ -75,7 +75,7 @@ public class MempoiColumn {
         try {
             this.rsAccessDataMethod = ResultSet.class.getMethod(this.type.getRsAccessDataMethodName(), this.type.getRsAccessParamClass());
         } catch (NoSuchMethodException e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 
@@ -88,7 +88,7 @@ public class MempoiColumn {
         try {
             this.cellSetValueMethod = Cell.class.getMethod("setCellValue", this.type.getRsReturnClass());
         } catch (NoSuchMethodException e) {
-            throw new MempoiException(e);
+            throw new MempoiRuntimeException(e);
         }
     }
 
@@ -129,7 +129,7 @@ public class MempoiColumn {
             case Types.BOOLEAN:
                 return EExportDataType.BOOLEAN;
             default:
-                throw new MempoiException("SQL TYPE NOT RECOGNIZED: " + sqlObjType);
+                throw new MempoiRuntimeException("SQL TYPE NOT RECOGNIZED: " + sqlObjType);
         }
     }
 
@@ -160,5 +160,10 @@ public class MempoiColumn {
                 && Objects.equals(this.rsAccessDataMethod, other.rsAccessDataMethod)
                 && Objects.equals(this.cellSetValueMethod, other.cellSetValueMethod)
                 && Objects.equals(this.subFooterCell, other.subFooterCell);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, cellStyle, columnName, rsAccessDataMethod, cellSetValueMethod, subFooterCell);
     }
 }
