@@ -8,17 +8,15 @@ import it.firegloves.mempoi.domain.EExportDataType;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import org.apache.poi.ss.usermodel.CellStyle;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class MempoiColumnStyleManager {
 
-    public static final EnumSet<EExportDataType> DATE_STYLER_TYPES = EnumSet.of(EExportDataType.DATE);
-    public static final EnumSet<EExportDataType> DATETIME_STYLER_TYPES = EnumSet.of(EExportDataType.TIME, EExportDataType.TIMESTAMP);
-    public static final EnumSet<EExportDataType> NUMBER_STYLER_TYPES = EnumSet.of(EExportDataType.INT, EExportDataType.DOUBLE, EExportDataType.FLOAT);
+    private static final Set<EExportDataType> dateStylerTypes = EnumSet.of(EExportDataType.DATE);
+    private static final Set<EExportDataType> datetimeStylerTypes = EnumSet.of(EExportDataType.TIME, EExportDataType.TIMESTAMP);
+    private static final Set<EExportDataType> numberStylerTypes = EnumSet.of(EExportDataType.INT, EExportDataType.DOUBLE, EExportDataType.FLOAT);
 
-    private HashMap<EnumSet<EExportDataType>, CellStyle> cellStylerMap;
+    private HashMap<Set<EExportDataType>, CellStyle> cellStylerMap;
 
     private MempoiStyler reportStyler;
 
@@ -32,9 +30,9 @@ public class MempoiColumnStyleManager {
      */
     private void initCellStyleMap() {
         this.cellStylerMap = new HashMap<>();
-        this.cellStylerMap.put(DATE_STYLER_TYPES, this.reportStyler.getDateCellStyle());
-        this.cellStylerMap.put(DATETIME_STYLER_TYPES, this.reportStyler.getDatetimeCellStyle());
-        this.cellStylerMap.put(NUMBER_STYLER_TYPES, this.reportStyler.getNumberCellStyle());
+        this.cellStylerMap.put(dateStylerTypes, this.reportStyler.getDateCellStyle());
+        this.cellStylerMap.put(datetimeStylerTypes, this.reportStyler.getDatetimeCellStyle());
+        this.cellStylerMap.put(numberStylerTypes, this.reportStyler.getNumberCellStyle());
     }
 
 
@@ -42,18 +40,18 @@ public class MempoiColumnStyleManager {
      * @param type
      * @return the corresponding EnumSet<EExportDataType>
      */
-    private EnumSet<EExportDataType> getEExportDataTypeEnumSet(EExportDataType type) {
+    private Set<EExportDataType> getEExportDataTypeEnumSet(EExportDataType type) {
 
         // TODO refactor
 
-        if (DATE_STYLER_TYPES.contains(type)) {
-            return DATE_STYLER_TYPES;
-        } else if (DATETIME_STYLER_TYPES.contains(type)) {
-            return DATETIME_STYLER_TYPES;
-        } else if (NUMBER_STYLER_TYPES.contains(type)) {
-            return NUMBER_STYLER_TYPES;
+        if (dateStylerTypes.contains(type)) {
+            return dateStylerTypes;
+        } else if (datetimeStylerTypes.contains(type)) {
+            return datetimeStylerTypes;
+        } else if (numberStylerTypes.contains(type)) {
+            return numberStylerTypes;
         } else {
-            return null;
+            return Collections.emptySet();
         }
     }
 
@@ -77,4 +75,13 @@ public class MempoiColumnStyleManager {
         });
     }
 
+
+    /**
+     * check if the received EExportDataType belongs to the numeric list
+     * @param type the EExportDataType to check
+     * @return true if the received EExportDataType belongs to the numeric list, false otherwise
+     */
+    public static boolean isNumericType(EExportDataType type) {
+        return numberStylerTypes.contains(type);
+    }
 }

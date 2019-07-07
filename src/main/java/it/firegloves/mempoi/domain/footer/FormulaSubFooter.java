@@ -34,7 +34,7 @@ public abstract class FormulaSubFooter implements MempoiSubFooter {
 
             MempoiColumn mc = mempoiColumnList.get(i);
 
-            if (! mc.getColumnName().equalsIgnoreCase("id") && MempoiColumnStyleManager.NUMBER_STYLER_TYPES.contains(mc.getType())) {
+            if (! mc.getColumnName().equalsIgnoreCase("id") && MempoiColumnStyleManager.isNumericType(mc.getType())) {
 
                 String colLetter = CellReference.convertNumToColString(i);
                 mempoiColumnList.get(i).setSubFooterCell(new MempoiSubFooterCell(this.getFormula(colLetter, firstDataRowIndex, lastDataRowIndex), true, subFooterCellStyle));
