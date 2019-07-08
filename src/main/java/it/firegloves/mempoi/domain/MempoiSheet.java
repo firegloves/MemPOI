@@ -59,19 +59,10 @@ public class MempoiSheet {
         this.sheetName = sheetName;
     }
 
-    public MempoiSheet(PreparedStatement prepStmt, String sheetName, Workbook workbook, StyleTemplate styleTemplate, CellStyle headerCellStyle, CellStyle subFooterCellStyle, CellStyle commonDataCellStyle, CellStyle dateCellStyle, CellStyle datetimeCellStyle, CellStyle numberCellStyle, MempoiFooter mempoiFooter, MempoiSubFooter mempoiSubFooter) {
+    public MempoiSheet(PreparedStatement prepStmt, String sheetName, Workbook workbook) {
         this.prepStmt = prepStmt;
         this.sheetName = sheetName;
         this.workbook = workbook;
-        this.styleTemplate = styleTemplate;
-        this.headerCellStyle = headerCellStyle;
-        this.subFooterCellStyle = subFooterCellStyle;
-        this.commonDataCellStyle = commonDataCellStyle;
-        this.dateCellStyle = dateCellStyle;
-        this.datetimeCellStyle = datetimeCellStyle;
-        this.numberCellStyle = numberCellStyle;
-        this.mempoiFooter = mempoiFooter;
-        this.mempoiSubFooter = mempoiSubFooter;
     }
 
     public PreparedStatement getPrepStmt() {

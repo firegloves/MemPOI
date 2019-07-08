@@ -31,6 +31,7 @@ public class Strategos {
 
     private static final Logger logger = LoggerFactory.getLogger(Strategos.class);
 
+    private static final int ROW_HEIGHT_PLUS = 5;
 
     /**
      * contains the workbook configurations
@@ -54,7 +55,7 @@ public class Strategos {
      *
      * @return the filename with path of the report generated file
      */
-    public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) throws MempoiRuntimeException {
+    public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) {
 
         this.generateMempoiReport(mempoiSheetList);
         return this.writeFile(fileToExport);
@@ -68,7 +69,7 @@ public class Strategos {
      *
      * @return the filename with path of the report generated file
      */
-    public byte[] generateMempoiReportToByteArray() throws MempoiRuntimeException {
+    public byte[] generateMempoiReportToByteArray() {
 
         this.generateMempoiReport(this.workbookConfig.getSheetList());
         return this.writeToByteArray();
@@ -107,7 +108,7 @@ public class Strategos {
      */
     private void generateReport(List<MempoiSheet> mempoiSheetList) {
 
-        mempoiSheetList.stream().forEach(mempoiSheet -> this.generateSheet(mempoiSheet));
+        mempoiSheetList.stream().forEach(this::generateSheet);
     }
 
 
@@ -183,8 +184,6 @@ public class Strategos {
         for (int i = 0; i < colListLen; i++) {
             MempoiColumn cm = columnList.get(i);
             Cell cell = row.createCell(i);
-            // TODO come back to this approach to admit a per cell style ?
-//            cell.setCellStyle(this.columnList.get(i).getCellStyle());
 
             if (sheet instanceof XSSFSheet) {
                 ((XSSFSheet)sheet).getColumnHelper().setColDefaultStyle(i, cm.getCellStyle());
@@ -193,14 +192,14 @@ public class Strategos {
             cell.setCellStyle(sheetReportStyler.getHeaderCellStyle());
             cell.setCellValue(cm.getColumnName());
 
-            logger.debug("SETTING HEADER FOR COLUMN " + columnList.get(i).getColumnName());
+            logger.debug("SETTING HEADER FOR COLUMN {}", columnList.get(i).getColumnName());
         }
 
         // adjust row height
         if (sheetReportStyler.getHeaderCellStyle() instanceof XSSFCellStyle) {
-            row.setHeightInPoints(((XSSFCellStyle)sheetReportStyler.getHeaderCellStyle()).getFont().getFontHeightInPoints() + 5);
+            row.setHeightInPoints((float) ((XSSFCellStyle)sheetReportStyler.getHeaderCellStyle()).getFont().getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         } else {
-            row.setHeightInPoints(((HSSFCellStyle)sheetReportStyler.getHeaderCellStyle()).getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + 5);
+            row.setHeightInPoints((float) ((HSSFCellStyle)sheetReportStyler.getHeaderCellStyle()).getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         }
 
         return rowCounter;
@@ -229,7 +228,7 @@ public class Strategos {
                         cell.setCellStyle(col.getCellStyle());
                     }
 
-                    logger.debug("SETTING CELL FOR COLUMN " + col.getColumnName());
+                    logger.debug("SETTING CELL FOR COLUMN {}", col.getColumnName());
 
                     col.getCellSetValueMethod().invoke(cell, col.getRsAccessDataMethod().invoke(rs, col.getColumnName()));
                 }
@@ -256,7 +255,7 @@ public class Strategos {
             // writes data to file
             try (FileOutputStream outputStream = new FileOutputStream(tmpFile)) {
                 this.workbookConfig.getWorkbook().write(outputStream);
-                logger.debug("MemPOI temp file created: " + tmpFile.getAbsolutePath());
+                logger.debug("MemPOI temp file created: {}", tmpFile.getAbsolutePath());
             }
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
@@ -298,7 +297,7 @@ public class Strategos {
             // checks path consistency
             if (!file.getAbsoluteFile().getParentFile().exists()) {
                 file.getAbsoluteFile().getParentFile().mkdirs();
-                logger.debug("CREATED FILE TO EXPORT PARENT DIR: " + file.getParentFile().getAbsolutePath());
+                logger.debug("CREATED FILE TO EXPORT PARENT DIR: {}", file.getParentFile().getAbsolutePath());
             }
 
             // writes data to file
@@ -332,7 +331,7 @@ public class Strategos {
             // create the sub footer cells
             mempoiSubFooter.setColumnSubFooter(this.workbookConfig.getWorkbook(), columnList, reportStyler.getSubFooterCellStyle(), firstDataRowIndex, rowCounter);
 
-            Row row = sheet.createRow(rowCounter++);
+            Row row = sheet.createRow(rowCounter);
 
             for (int i = 0; i < colListLen; i++) {
 
@@ -340,14 +339,13 @@ public class Strategos {
                 Cell cell = row.createCell(i);
                 cell.setCellStyle(subFooterCell.getStyle());
 
-                logger.debug("SETTING SUB FOOTER CELL FOR COLUMN " + columnList.get(i).getColumnName());
+                logger.debug("SETTING SUB FOOTER CELL FOR COLUMN {}", columnList.get(i).getColumnName());
 
                 // sets formula or normal value
                 if (subFooterCell.isCellFormula()) {
                     cell.setCellFormula(subFooterCell.getValue());
 
                     // not evaluating because using SXSSF will fail on large dataset
-//                    evaluator.evaluateFormulaCell(cell);
                 } else {
                     cell.setCellValue(subFooterCell.getValue());
                 }
@@ -411,7 +409,7 @@ public class Strategos {
 
         if (this.workbookConfig.isAdjustColSize()) {
             for (int i = 0; i < colListLen; i++) {
-                logger.debug("autosizing col num " + i);
+                logger.debug("autosizing col num {}", i);
                 sheet.autoSizeColumn(i);
             }
         }

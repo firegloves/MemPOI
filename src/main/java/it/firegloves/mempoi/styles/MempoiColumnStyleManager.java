@@ -15,6 +15,7 @@ public class MempoiColumnStyleManager {
     private static final Set<EExportDataType> dateStylerTypes = EnumSet.of(EExportDataType.DATE);
     private static final Set<EExportDataType> datetimeStylerTypes = EnumSet.of(EExportDataType.TIME, EExportDataType.TIMESTAMP);
     private static final Set<EExportDataType> numberStylerTypes = EnumSet.of(EExportDataType.INT, EExportDataType.DOUBLE, EExportDataType.FLOAT);
+    private final List<Set<EExportDataType>> stylerTypesSet = Arrays.asList(dateStylerTypes, datetimeStylerTypes, numberStylerTypes);
 
     private HashMap<Set<EExportDataType>, CellStyle> cellStylerMap;
 
@@ -42,17 +43,7 @@ public class MempoiColumnStyleManager {
      */
     private Set<EExportDataType> getEExportDataTypeEnumSet(EExportDataType type) {
 
-        // TODO refactor
-
-        if (dateStylerTypes.contains(type)) {
-            return dateStylerTypes;
-        } else if (datetimeStylerTypes.contains(type)) {
-            return datetimeStylerTypes;
-        } else if (numberStylerTypes.contains(type)) {
-            return numberStylerTypes;
-        } else {
-            return Collections.emptySet();
-        }
+        return stylerTypesSet.stream().filter(e -> e.contains(type)).findFirst().orElseGet(Collections::emptySet);
     }
 
 

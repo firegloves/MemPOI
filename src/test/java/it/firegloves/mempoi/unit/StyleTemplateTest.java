@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class StyleTemplateTest {
@@ -69,11 +70,11 @@ public class StyleTemplateTest {
     */
    private void genericTemplateTest(StyleTemplate template, Workbook workbook) {
 
-      assertThat("template " + template.getClass().getName() + " common data cell style not null", template.getCommonDataCellStyle(workbook), notNullValue());
-      assertThat("template " + template.getClass().getName() + " date cell style not null", template.getDateCellStyle(workbook), notNullValue());
-      assertThat("template " + template.getClass().getName() + " datetime cell style not null", template.getDatetimeCellStyle(workbook), notNullValue());
-      assertThat("template " + template.getClass().getName() + " header cell style not null", template.getHeaderCellStyle(workbook), notNullValue());
-      assertThat("template " + template.getClass().getName() + " number cell style not null", template.getNumberCellStyle(workbook), notNullValue());
-      assertThat("template " + template.getClass().getName() + " footer cell style not null", template.getSubfooterCellStyle(workbook), notNullValue());
+      assertNotNull("template " + template.getClass().getName() + " common data cell style not null", template.getCommonDataCellStyle(workbook));
+      assertNotNull("template " + template.getClass().getName() + " date cell style not null", template.getDateCellStyle(workbook));
+      assertNotNull("template " + template.getClass().getName() + " datetime cell style not null", template.getDatetimeCellStyle(workbook));
+      assertNotNull("template " + template.getClass().getName() + " header cell style not null", template.getHeaderCellStyle(workbook));
+      assertNotNull("template " + template.getClass().getName() + " number cell style not null", template.getNumberCellStyle(workbook));
+      assertNotNull("template " + template.getClass().getName() + " footer cell style not null", template.getSubfooterCellStyle(workbook));
    }
 }

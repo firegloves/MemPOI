@@ -19,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class HueStyleTemplateTest extends FunctionalBaseTest {
 
@@ -42,7 +43,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,7 +71,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,7 +98,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +125,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +157,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -195,7 +196,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -223,7 +224,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -250,7 +251,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,7 +279,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,7 +307,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -345,7 +346,7 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();

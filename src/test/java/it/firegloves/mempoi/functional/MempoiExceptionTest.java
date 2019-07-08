@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -31,6 +32,23 @@ public class MempoiExceptionTest extends FunctionalBaseTest {
                 .build();
 
         memPOI.prepareMempoiReportToFile().get();
+    }
+
+
+    @Test(expected = CompletionException.class)
+    public void testGeneratingCompletionException() throws SQLException {
+
+        MempoiSheet dogsSheet;
+
+        dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
+
+        MemPOI memPOI = new MempoiBuilder()
+                .setDebug(true)
+                .setAdjustColumnWidth(true)
+                .addMempoiSheet(dogsSheet)
+                .build();
+
+        memPOI.prepareMempoiReportToFile().join();
     }
 
 

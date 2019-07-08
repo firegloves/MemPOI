@@ -1,25 +1,10 @@
 package it.firegloves.mempoi.styles.template;
 
 import it.firegloves.mempoi.styles.MempoiStyler;
+import it.firegloves.mempoi.styles.StandardDataFormat;
 import org.apache.poi.ss.usermodel.*;
 
 public interface StyleTemplate {
-
-    /**
-     * standard datye format
-     */
-    String STANDARD_DATE_FORMAT = "yyyy/mm/dd";
-
-    /**
-     * standard datetime format
-     */
-    String STANDARD_DATETIME_FORMAT = "yyyy/mm/dd h:mm";
-
-    /**
-     * standard number format
-     */
-    String STANDARD_NUMBER_FORMAT = "#,##0.00";
-
 
     /**
      * create and returns the default header's cell style
@@ -47,7 +32,7 @@ public interface StyleTemplate {
      */
     default CellStyle getDateCellStyle(Workbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(STANDARD_DATE_FORMAT));
+        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_DATE_FORMAT.getFormat()));
         return cellStyle;
     }
 
@@ -59,7 +44,7 @@ public interface StyleTemplate {
      */
     default CellStyle getDatetimeCellStyle(Workbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(STANDARD_DATETIME_FORMAT));
+        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_DATETIME_FORMAT.getFormat()));
         return cellStyle;
     }
 

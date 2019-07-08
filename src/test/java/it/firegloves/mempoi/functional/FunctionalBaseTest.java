@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class FunctionalBaseTest {
+public abstract class FunctionalBaseTest {
 
     protected File outReportFolder = new File("out/report-files/");
 

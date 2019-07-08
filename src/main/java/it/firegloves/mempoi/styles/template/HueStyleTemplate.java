@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.styles.template;
 
+import it.firegloves.mempoi.styles.StandardDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -100,7 +101,7 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     public CellStyle getDateCellStyle(Workbook workbook) {
 
         CellStyle cellStyle = this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
-        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(STANDARD_DATE_FORMAT));
+        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_DATE_FORMAT.getFormat()));
         return cellStyle;
     }
 
@@ -108,7 +109,7 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     public CellStyle getDatetimeCellStyle(Workbook workbook) {
 
         CellStyle cellStyle = this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
-        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(STANDARD_DATETIME_FORMAT));
+        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_DATETIME_FORMAT.getFormat()));
         return cellStyle;
     }
 
@@ -116,7 +117,7 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     public CellStyle getNumberCellStyle(Workbook workbook) {
 
         CellStyle cellStyle = this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
-        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(STANDARD_NUMBER_FORMAT));
+        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_NUMBER_FORMAT.getFormat()));
         return cellStyle;
     }
 

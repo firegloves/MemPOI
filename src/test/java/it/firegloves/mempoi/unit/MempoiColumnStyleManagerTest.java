@@ -75,25 +75,25 @@ public class MempoiColumnStyleManagerTest {
 
    @Test
    public void testMempoiColumnAssignedCellStyle() {
-      assertEquals("mc col id EExportDataType", columnList.get(0).getCellStyle(), commonDataCellStyle);
-      assertEquals("mc col 1 EExportDataType", columnList.get(1).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 2 EExportDataType", columnList.get(2).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 3 EExportDataType", columnList.get(3).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 4 EExportDataType", columnList.get(4).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 5 EExportDataType", columnList.get(5).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 6 EExportDataType", columnList.get(6).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 7 EExportDataType", columnList.get(7).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 8 EExportDataType", columnList.get(8).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 9 EExportDataType", columnList.get(9).getCellStyle(), numericCellStyle);
-      assertEquals("mc col 10 EExportDataType", columnList.get(10).getCellStyle(), commonDataCellStyle);
-      assertEquals("mc col 11 EExportDataType", columnList.get(11).getCellStyle(), commonDataCellStyle);
-      assertEquals("mc col 12 EExportDataType", columnList.get(12).getCellStyle(), commonDataCellStyle);
-      assertEquals("mc col 13 EExportDataType", columnList.get(13).getCellStyle(), commonDataCellStyle);
-      assertEquals("mc col 14 EExportDataType", columnList.get(14).getCellStyle(), datetimeCellStyle);
-      assertEquals("mc col 15 EExportDataType", columnList.get(15).getCellStyle(), dateCellStyle);
-      assertEquals("mc col 16 EExportDataType", columnList.get(16).getCellStyle(), datetimeCellStyle);
-      assertEquals("mc col 17 EExportDataType", columnList.get(17).getCellStyle(), commonDataCellStyle);
-      assertEquals("mc col 18 EExportDataType", columnList.get(18).getCellStyle(), commonDataCellStyle);
+      assertEquals("mc col id EExportDataType", commonDataCellStyle, columnList.get(0).getCellStyle());
+      assertEquals("mc col 1 EExportDataType", numericCellStyle, columnList.get(1).getCellStyle());
+      assertEquals("mc col 2 EExportDataType", numericCellStyle, columnList.get(2).getCellStyle());
+      assertEquals("mc col 3 EExportDataType", numericCellStyle, columnList.get(3).getCellStyle());
+      assertEquals("mc col 4 EExportDataType", numericCellStyle, columnList.get(4).getCellStyle());
+      assertEquals("mc col 5 EExportDataType", numericCellStyle, columnList.get(5).getCellStyle());
+      assertEquals("mc col 6 EExportDataType", numericCellStyle, columnList.get(6).getCellStyle());
+      assertEquals("mc col 7 EExportDataType", numericCellStyle, columnList.get(7).getCellStyle());
+      assertEquals("mc col 8 EExportDataType", numericCellStyle, columnList.get(8).getCellStyle());
+      assertEquals("mc col 9 EExportDataType", numericCellStyle, columnList.get(9).getCellStyle());
+      assertEquals("mc col 10 EExportDataType", commonDataCellStyle, columnList.get(10).getCellStyle());
+      assertEquals("mc col 11 EExportDataType", commonDataCellStyle, columnList.get(11).getCellStyle());
+      assertEquals("mc col 12 EExportDataType", commonDataCellStyle, columnList.get(12).getCellStyle());
+      assertEquals("mc col 13 EExportDataType", commonDataCellStyle, columnList.get(13).getCellStyle());
+      assertEquals("mc col 14 EExportDataType", datetimeCellStyle, columnList.get(14).getCellStyle());
+      assertEquals("mc col 15 EExportDataType", dateCellStyle, columnList.get(15).getCellStyle());
+      assertEquals("mc col 16 EExportDataType", datetimeCellStyle, columnList.get(16).getCellStyle());
+      assertEquals("mc col 17 EExportDataType", commonDataCellStyle, columnList.get(17).getCellStyle());
+      assertEquals("mc col 18 EExportDataType", commonDataCellStyle, columnList.get(18).getCellStyle());
    }
 
 }

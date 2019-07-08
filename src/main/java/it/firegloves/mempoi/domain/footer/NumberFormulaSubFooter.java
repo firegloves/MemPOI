@@ -4,7 +4,7 @@
 
 package it.firegloves.mempoi.domain.footer;
 
-import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.styles.StandardDataFormat;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -16,7 +16,7 @@ public abstract class NumberFormulaSubFooter extends FormulaSubFooter {
     protected void customizeSubFooterCellStyle(Workbook workbook, CellStyle subFooterCellStyle) {
 
         subFooterCellStyle.setAlignment(HorizontalAlignment.RIGHT);
-        subFooterCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StyleTemplate.STANDARD_NUMBER_FORMAT));
+        subFooterCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_NUMBER_FORMAT.getFormat()));
     }
 
 

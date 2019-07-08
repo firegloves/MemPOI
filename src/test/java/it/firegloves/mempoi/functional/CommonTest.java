@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
 
 public class CommonTest extends FunctionalBaseTest {
 
@@ -32,7 +33,7 @@ public class CommonTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,8 +60,8 @@ public class CommonTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
-            assertThat("not null byte array", fut.get(), notNullValue());
-            assertThat("not empty byte array", fut.get().length, is(not(0)));
+            assertNotNull("not null byte array", fut.get());
+            assertNotEquals("not empty byte array", 0, fut.get().length);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,8 +81,8 @@ public class CommonTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
-            assertThat("not null byte array", fut.get(), notNullValue());
-            assertThat("not empty byte array", fut.get().length, is(not(0)));
+            assertNotNull("not null byte array", fut.get());
+            assertNotEquals("not empty byte array", 0, fut.get().length);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +107,7 @@ public class CommonTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +156,7 @@ public class CommonTest extends FunctionalBaseTest {
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertThat("file name len === starting fileDest", fut.get(), equalTo(fileDest.getAbsolutePath()));
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
             e.printStackTrace();

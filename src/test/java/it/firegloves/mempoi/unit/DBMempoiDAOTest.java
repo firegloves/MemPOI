@@ -15,8 +15,7 @@ import java.sql.Types;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 public class DBMempoiDAOTest {
@@ -46,7 +45,7 @@ public class DBMempoiDAOTest {
 
         resultSet = DBMempoiDAO.getInstance().executeExportQuery(prepStmt);
 
-        assertThat("DBMempoiDAO executing prepstmt not null", resultSet, notNullValue());
+        assertNotNull("DBMempoiDAO executing prepstmt not null", resultSet);
         assertThat("DBMempoiDAO executing prepstmt instance of ResultSet", resultSet, new IsInstanceOf(ResultSet.class));
     }
 
@@ -70,9 +69,9 @@ public class DBMempoiDAOTest {
 
         List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(resultSet);
 
-        assertThat("DBMempoiDAO executing readMetadata list not null", columnList, notNullValue());
-        assertEquals("DBMempoiDAO executing readMetadata list size == 2", columnList.size(), 2);
-        assertEquals("DBMempoiDAO executing readMetadata column 1", columnList.get(0), id);
-        assertEquals("DBMempoiDAO executing readMetadata column 2", columnList.get(1), name);
+        assertNotNull("DBMempoiDAO executing readMetadata list not null", columnList);
+        assertEquals("DBMempoiDAO executing readMetadata list size == 2", 2, columnList.size() );
+        assertEquals("DBMempoiDAO executing readMetadata column 1", id, columnList.get(0));
+        assertEquals("DBMempoiDAO executing readMetadata column 2", name, columnList.get(1));
     }
 }

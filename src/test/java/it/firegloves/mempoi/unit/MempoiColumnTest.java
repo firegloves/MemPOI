@@ -11,6 +11,7 @@ import java.sql.Types;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class MempoiColumnTest {
 
@@ -125,11 +126,11 @@ public class MempoiColumnTest {
 
       MempoiColumn mc = new MempoiColumn(sqlObjType, colName);
 
-      assertEquals("mc " + colName + " EExportDataType", mc.getType(), eExportDataType);
-      assertEquals("mc " + colName + " column name", mc.getColumnName(), colName);
-      assertEquals("mc " + colName + " cellSetValueMethod", mc.getCellSetValueMethod(), Cell.class.getMethod("setCellValue", eExportDataType.getRsReturnClass()));
-      assertThat("mc " + colName + " cellStyle", mc.getCellStyle(), nullValue());
-      assertEquals("mc " + colName + " rsAccessDataMethod", mc.getRsAccessDataMethod(), ResultSet.class.getMethod(eExportDataType.getRsAccessDataMethodName(), eExportDataType.getRsAccessParamClass()));
+      assertEquals("mc " + colName + " EExportDataType", eExportDataType, mc.getType());
+      assertEquals("mc " + colName + " column name", colName, mc.getColumnName());
+      assertEquals("mc " + colName + " cellSetValueMethod", Cell.class.getMethod("setCellValue", eExportDataType.getRsReturnClass()), mc.getCellSetValueMethod());
+      assertNull("mc " + colName + " cellStyle", mc.getCellStyle());
+      assertEquals("mc " + colName + " rsAccessDataMethod", ResultSet.class.getMethod(eExportDataType.getRsAccessDataMethodName(), eExportDataType.getRsAccessParamClass()), mc.getRsAccessDataMethod());
    }
 
 }
