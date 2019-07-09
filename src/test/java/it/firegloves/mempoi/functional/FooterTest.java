@@ -27,13 +27,13 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -52,15 +52,15 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -79,15 +79,15 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setMempoiSubFooter(new NumberMaxSubFooter())
-                    .setEvaluateCellFormulas(true)
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiSubFooter(new NumberMaxSubFooter())
+                    .withEvaluateCellFormulas(true)
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -108,15 +108,15 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setMempoiSubFooter(new NumberMinSubFooter())
-                    .setEvaluateCellFormulas(true)
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiSubFooter(new NumberMinSubFooter())
+                    .withEvaluateCellFormulas(true)
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -137,14 +137,14 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setMempoiSubFooter(new NumberAverageSubFooter())
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiSubFooter(new NumberAverageSubFooter())
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -164,20 +164,20 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setMempoiSubFooter(new NumberFormulaSubFooter() {
+                    .withMempoiSubFooter(new NumberFormulaSubFooter() {
                         @Override
                         protected String getFormula(String colLetter, int firstDataRowIndex, int lastDataRowIndex) {
                             return "MIN(" + colLetter + firstDataRowIndex + ":" + colLetter + lastDataRowIndex + ")";
                         }
                     })
-                    .setEvaluateCellFormulas(true)
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withEvaluateCellFormulas(true)
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -198,15 +198,15 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
                     .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test LIMIT 0, 10"), "Cats sheet"))
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -226,14 +226,14 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -253,16 +253,16 @@ public class FooterTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
                     .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test LIMIT 0, 10"), "Cats sheet"))
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
-                    .setStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
+                    .withStyleTemplate(new SummerStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

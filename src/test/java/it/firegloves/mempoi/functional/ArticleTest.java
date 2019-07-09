@@ -26,10 +26,10 @@ public class ArticleTest extends FunctionalBaseTest {
             MempoiSheet catsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS CAT_NAME, pet_race AS CAT_RACE FROM pets WHERE pet_type = 'cat'"), "Cats sheet");
             MempoiSheet birdsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS BIRD_NAME, pet_race AS BIRD_RACE FROM pets WHERE pet_type = 'bird'"), "Birds sheet");
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(dogsSheet)
                     .addMempoiSheet(catsSheet)
                     .addMempoiSheet(birdsSheet)

@@ -6,6 +6,7 @@ import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.util.List;
 import java.util.Optional;
 
 public class MempoiStylerBuilder {
@@ -20,41 +21,45 @@ public class MempoiStylerBuilder {
     private CellStyle datetimeCellStyle;
     private CellStyle numberCellStyle;
 
-    public MempoiStylerBuilder(Workbook workbook) {
+    private MempoiStylerBuilder(Workbook workbook) {
         this.workbook = workbook;
     }
 
-    public MempoiStylerBuilder setStyleTemplate(StyleTemplate styleTemplate) {
+    public static MempoiStylerBuilder aMempoiStyler(Workbook workbook) {
+        return new MempoiStylerBuilder(workbook);
+    }
+
+    public MempoiStylerBuilder withStyleTemplate(StyleTemplate styleTemplate) {
         this.styleTemplate = styleTemplate;
         return this;
     }
 
-    public MempoiStylerBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
+    public MempoiStylerBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
         this.headerCellStyle = null != headerCellStyle ? headerCellStyle : this.styleTemplate.getHeaderCellStyle(this.workbook);
         return this;
     }
 
-    public MempoiStylerBuilder setSubFooterCellStyle(CellStyle subFooterCellStyle) {
+    public MempoiStylerBuilder withSubFooterCellStyle(CellStyle subFooterCellStyle) {
         this.subFooterCellStyle = null != subFooterCellStyle ? subFooterCellStyle : this.styleTemplate.getSubfooterCellStyle(this.workbook);
         return this;
     }
 
-    public MempoiStylerBuilder setCommonDataCellStyle(CellStyle commonDataCellStyle) {
+    public MempoiStylerBuilder withCommonDataCellStyle(CellStyle commonDataCellStyle) {
         this.commonDataCellStyle = null != commonDataCellStyle ? commonDataCellStyle : this.styleTemplate.getCommonDataCellStyle(this.workbook);
         return this;
     }
 
-    public MempoiStylerBuilder setDateCellStyle(CellStyle dateCellStyle) {
+    public MempoiStylerBuilder withDateCellStyle(CellStyle dateCellStyle) {
         this.dateCellStyle = null != dateCellStyle ? dateCellStyle : this.styleTemplate.getDateCellStyle(this.workbook);
         return this;
     }
 
-    public MempoiStylerBuilder setDatetimeCellStyle(CellStyle datetimeCellStyle) {
+    public MempoiStylerBuilder withDatetimeCellStyle(CellStyle datetimeCellStyle) {
         this.datetimeCellStyle = null != datetimeCellStyle ? datetimeCellStyle : this.styleTemplate.getDatetimeCellStyle(this.workbook);
         return this;
     }
 
-    public MempoiStylerBuilder setNumberCellStyle(CellStyle numberCellStyle) {
+    public MempoiStylerBuilder withNumberCellStyle(CellStyle numberCellStyle) {
         this.numberCellStyle = null != numberCellStyle ? numberCellStyle : this.styleTemplate.getNumberCellStyle(this.workbook);
         return this;
     }
@@ -93,6 +98,73 @@ public class MempoiStylerBuilder {
         }
 
         return Optional.ofNullable(styler);
+    }
+
+
+
+
+
+    /**
+     * @deprecated Replaced by {@link #withStyleTemplate(StyleTemplate)}
+     */
+    @Deprecated
+    public MempoiStylerBuilder setStyleTemplate(StyleTemplate styleTemplate) {
+        this.styleTemplate = styleTemplate;
+        return this;
+    }
+
+    /**
+     * @deprecated Replaced by {@link #withHeaderCellStyle(CellStyle)}
+     */
+    @Deprecated
+    public MempoiStylerBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
+        this.headerCellStyle = null != headerCellStyle ? headerCellStyle : this.styleTemplate.getHeaderCellStyle(this.workbook);
+        return this;
+    }
+
+    /**
+     * @deprecated Replaced by {@link #withSubFooterCellStyle(CellStyle)}
+     */
+    @Deprecated
+    public MempoiStylerBuilder setSubFooterCellStyle(CellStyle subFooterCellStyle) {
+        this.subFooterCellStyle = null != subFooterCellStyle ? subFooterCellStyle : this.styleTemplate.getSubfooterCellStyle(this.workbook);
+        return this;
+    }
+
+    /**
+     * @deprecated Replaced by {@link #withCommonDataCellStyle(CellStyle)}
+     */
+    @Deprecated
+    public MempoiStylerBuilder setCommonDataCellStyle(CellStyle commonDataCellStyle) {
+        this.commonDataCellStyle = null != commonDataCellStyle ? commonDataCellStyle : this.styleTemplate.getCommonDataCellStyle(this.workbook);
+        return this;
+    }
+
+    /**
+     * @deprecated Replaced by {@link #withDateCellStyle(CellStyle)}
+     */
+    @Deprecated
+    public MempoiStylerBuilder setDateCellStyle(CellStyle dateCellStyle) {
+        this.dateCellStyle = null != dateCellStyle ? dateCellStyle : this.styleTemplate.getDateCellStyle(this.workbook);
+        return this;
+    }
+
+    /**
+     * @deprecated Replaced by {@link #withDatetimeCellStyle(CellStyle)}
+     */
+    @Deprecated
+    public MempoiStylerBuilder setDatetimeCellStyle(CellStyle datetimeCellStyle) {
+        this.datetimeCellStyle = null != datetimeCellStyle ? datetimeCellStyle : this.styleTemplate.getDatetimeCellStyle(this.workbook);
+        return this;
+    }
+
+    /**
+     * @deprecated Replaced by {@link #withNumberCellStyle(CellStyle)}
+     */
+    @Deprecated
+    public MempoiStylerBuilder setNumberCellStyle(CellStyle numberCellStyle) {
+        this.numberCellStyle = null != numberCellStyle ? numberCellStyle : this.styleTemplate.getNumberCellStyle(this.workbook);
+        return this;
     }
 
 }

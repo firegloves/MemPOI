@@ -25,10 +25,10 @@ public class CommonTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
@@ -52,11 +52,11 @@ public class CommonTest extends FunctionalBaseTest {
             numberCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("#.##0,00"));
 
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setNumberCellStyle(numberCellStyle)
+                    .withNumberCellStyle(numberCellStyle)
                     .build();
 
             CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
@@ -74,9 +74,9 @@ public class CommonTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
@@ -98,10 +98,10 @@ public class CommonTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
                     .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Cats sheet"))
                     .build();
@@ -142,17 +142,17 @@ public class CommonTest extends FunctionalBaseTest {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setHeaderCellStyle(headerCellStyle)
-                    .setNumberCellStyle(workbook.createCellStyle())
-                    .setDateCellStyle(dateCellStyle)
-                    .setDatetimeCellStyle(datetimeCellStyle)
-                    .setCommonDataCellStyle(commonDataCellStyle)
+                    .withHeaderCellStyle(headerCellStyle)
+                    .withNumberCellStyle(workbook.createCellStyle())
+                    .withDateCellStyle(dateCellStyle)
+                    .withDatetimeCellStyle(datetimeCellStyle)
+                    .withCommonDataCellStyle(commonDataCellStyle)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

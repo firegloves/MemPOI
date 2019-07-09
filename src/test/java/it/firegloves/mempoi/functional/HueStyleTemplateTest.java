@@ -31,15 +31,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new StandardStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new StandardStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -59,15 +59,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new SummerStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -86,15 +86,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new AquaStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new AquaStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -113,15 +113,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setEvaluateCellFormulas(true)
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -144,16 +144,16 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setHeaderCellStyle(headerCellStyle)
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withHeaderCellStyle(headerCellStyle)
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -183,16 +183,16 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(sheet)
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setHeaderCellStyle(headerCellStyle)
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withHeaderCellStyle(headerCellStyle)
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -212,15 +212,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new StoneStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new StoneStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -239,15 +239,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new RoseStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new RoseStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -267,15 +267,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new PurpleStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new PurpleStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -295,15 +295,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new PanegiriconStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new PanegiriconStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -334,15 +334,15 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
-                    .setMempoiSheetList(sheetList)
-//                    .setStyleTemplate(new PanegiriconStyleTemplate())     <----- it has no effects because for each sheet a template is specified
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
+                    .withMempoiSheetList(sheetList)
+//                    .withStyleTemplate(new PanegiriconStyleTemplate())     <----- it has no effects because for each sheet a template is specified
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

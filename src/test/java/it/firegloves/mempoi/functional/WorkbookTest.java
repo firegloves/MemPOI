@@ -33,10 +33,10 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setWorkbook(new HSSFWorkbook())
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withWorkbook(new HSSFWorkbook())
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
@@ -58,14 +58,14 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -85,15 +85,15 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -132,22 +132,22 @@ public class WorkbookTest extends FunctionalBaseTest {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     // custom header cell style
-                    .setHeaderCellStyle(headerCellStyle)
+                    .withHeaderCellStyle(headerCellStyle)
                     // no style for number fields
-                    .setNumberCellStyle(workbook.createCellStyle())
+                    .withNumberCellStyle(workbook.createCellStyle())
                     // custom date cell style
-                    .setDateCellStyle(dateCellStyle)
+                    .withDateCellStyle(dateCellStyle)
                     // custom datetime cell style
-                    .setDatetimeCellStyle(datetimeCellStyle)
+                    .withDatetimeCellStyle(datetimeCellStyle)
                     // custom common data cell style
-                    .setCommonDataCellStyle(commonDataCellStyle)
+                    .withCommonDataCellStyle(commonDataCellStyle)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -171,9 +171,9 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setWorkbook(new XSSFWorkbook())
-                    .setFile(fileDest)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withWorkbook(new XSSFWorkbook())
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
@@ -195,14 +195,14 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -222,15 +222,15 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -269,22 +269,22 @@ public class WorkbookTest extends FunctionalBaseTest {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     // custom header cell style
-                    .setHeaderCellStyle(headerCellStyle)
+                    .withHeaderCellStyle(headerCellStyle)
                     // no style for number fields
-                    .setNumberCellStyle(workbook.createCellStyle())
+                    .withNumberCellStyle(workbook.createCellStyle())
                     // custom date cell style
-                    .setDateCellStyle(dateCellStyle)
+                    .withDateCellStyle(dateCellStyle)
                     // custom datetime cell style
-                    .setDatetimeCellStyle(datetimeCellStyle)
+                    .withDatetimeCellStyle(datetimeCellStyle)
                     // custom common data cell style
-                    .setCommonDataCellStyle(commonDataCellStyle)
+                    .withCommonDataCellStyle(commonDataCellStyle)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -308,9 +308,9 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setWorkbook(new SXSSFWorkbook())
-                    .setFile(fileDest)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withWorkbook(new SXSSFWorkbook())
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
@@ -332,14 +332,14 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -359,15 +359,15 @@ public class WorkbookTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new ForestStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -406,22 +406,22 @@ public class WorkbookTest extends FunctionalBaseTest {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     // custom header cell style
-                    .setHeaderCellStyle(headerCellStyle)
+                    .withHeaderCellStyle(headerCellStyle)
                     // no style for number fields
-                    .setNumberCellStyle(workbook.createCellStyle())
+                    .withNumberCellStyle(workbook.createCellStyle())
                     // custom date cell style
-                    .setDateCellStyle(dateCellStyle)
+                    .withDateCellStyle(dateCellStyle)
                     // custom datetime cell style
-                    .setDatetimeCellStyle(datetimeCellStyle)
+                    .withDatetimeCellStyle(datetimeCellStyle)
                     // custom common data cell style
-                    .setCommonDataCellStyle(commonDataCellStyle)
+                    .withCommonDataCellStyle(commonDataCellStyle)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

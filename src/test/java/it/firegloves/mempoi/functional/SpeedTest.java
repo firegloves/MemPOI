@@ -53,8 +53,8 @@ public class SpeedTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setFile(fileDest)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
@@ -74,9 +74,9 @@ public class SpeedTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setFile(fileDest)
-//                    .setAdjustColumnWidth(true)                     // adjusting col size on large data set will consistently slow down generation process
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
+//                    .withAdjustColumnWidth(true)                     // adjusting col size on large data set will consistently slow down generation process
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
@@ -96,11 +96,11 @@ public class SpeedTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setFile(fileDest)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setWorkbook(workbook)
-                    .setStyleTemplate(new ForestStyleTemplate())
+                    .withWorkbook(workbook)
+                    .withStyleTemplate(new ForestStyleTemplate())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -120,12 +120,12 @@ public class SpeedTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setFile(fileDest)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setWorkbook(workbook)
-                    .setStyleTemplate(new SummerStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .withWorkbook(workbook)
+                    .withStyleTemplate(new SummerStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -145,13 +145,13 @@ public class SpeedTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setFile(fileDest)
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setWorkbook(workbook)
-                    .setStyleTemplate(new StoneStyleTemplate())
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setMempoiFooter(new StandardMempoiFooter(workbook, "MemPOI attack!"))
+                    .withWorkbook(workbook)
+                    .withStyleTemplate(new StoneStyleTemplate())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withMempoiFooter(new StandardMempoiFooter(workbook, "MemPOI attack!"))
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -178,9 +178,9 @@ public class SpeedTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setFile(fileDest)
-                    .setWorkbook(new HSSFWorkbook())
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
+                    .withWorkbook(new HSSFWorkbook())
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
@@ -207,9 +207,9 @@ public class SpeedTest extends FunctionalBaseTest {
 
         try {
 
-            MemPOI memPOI = new MempoiBuilder()
-                    .setFile(fileDest)
-                    .setWorkbook(new XSSFWorkbook())
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
+                    .withWorkbook(new XSSFWorkbook())
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 

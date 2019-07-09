@@ -44,15 +44,15 @@ public class MempoiBuilderTest {
       headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
       headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-      MemPOI memPOI = new MempoiBuilder()
-              .setWorkbook(workbook)
-              .setFile(fileDest)
-              .setAdjustColumnWidth(true)
+      MemPOI memPOI = MempoiBuilder.aMemPOI()
+              .withWorkbook(workbook)
+              .withFile(fileDest)
+              .withAdjustColumnWidth(true)
               .addMempoiSheet(new MempoiSheet(prepStmt, "test name"))
-              .setStyleTemplate(new ForestStyleTemplate())
-              .setHeaderCellStyle(headerCellStyle)
-              .setMempoiSubFooter(new NumberSumSubFooter())
-              .setEvaluateCellFormulas(true)
+              .withStyleTemplate(new ForestStyleTemplate())
+              .withHeaderCellStyle(headerCellStyle)
+              .withMempoiSubFooter(new NumberSumSubFooter())
+              .withEvaluateCellFormulas(true)
               .build();
 
       assertNotNull("MemPOIBuilder returns a not null MemPOI", memPOI);
@@ -83,7 +83,7 @@ public class MempoiBuilderTest {
    @Test
    public void mempoiBuilderMinimumPopulated() {
 
-      MemPOI memPOI = new MempoiBuilder()
+      MemPOI memPOI = MempoiBuilder.aMemPOI()
               .addMempoiSheet(new MempoiSheet(prepStmt))
               .build();
 
@@ -139,7 +139,7 @@ public class MempoiBuilderTest {
       MempoiSheet sheet5 = new MempoiSheet(prepStmt);
       sheet5.setMempoiFooter(new StandardMempoiFooter(workbook, "title"));
 
-      MemPOI memPOI = new MempoiBuilder()
+      MemPOI memPOI = MempoiBuilder.aMemPOI()
               .addMempoiSheet(sheet1)
               .addMempoiSheet(sheet2)
               .addMempoiSheet(sheet3)
