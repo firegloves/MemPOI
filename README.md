@@ -12,7 +12,7 @@ MemPOI is not designed to be used with an ORM due to performance needs on massiv
 
 ###### With Gradle
 ```
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.1'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.2'
 ```
 
 ###### With Maven
@@ -20,7 +20,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 
 ```
@@ -319,6 +319,19 @@ The best performance choice between the available `Workbook` descendants is the 
 
 MemPOI returns always a CompletableFuture so you can use it synchronously or asynchronously, depending on the requirement.
 In the previous examples you can see how to block an async operation by calling the `get()` method, but using an appropriate environment (e.g. Spring Reactor, Akka or Vert.x) you can choose your favourite approach.
+
+---
+
+### Error handling
+
+Depending on the use of `CompletableFuture` usage, MemPOI can throw 2 different exceptions: `ExecutionException` and `CompletionException`, both containing a MempoiException accessible with `e.getCause()`.
+According to `CompletableFuture` you'll receive an `ExecutionException` if you call `CompletableFuture`'s `get()` method, whereas you'll receive a `CompletionException` if you call `CompletableFuture`'s `join()` method.
+
+---
+
+### Debug
+
+`MempoiBuilder` exposes a `setDebug()` method which, if it receives a `true` value, will print a lot of debug messages. Set it to false to prevent MemPOI printing its logs.
 
 ---
 
