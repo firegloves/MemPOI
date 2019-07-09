@@ -211,8 +211,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setMempoiSheetList(List<MempoiSheet> prepStmtList) {
-        this.mempoiSheetList = prepStmtList;
-        return this;
+        return this.withMempoiSheetList(prepStmtList);
     }
 
     /**
@@ -220,8 +219,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setDebug(boolean debug) {
-        this.debug = debug;
-        return this;
+        return this.withDebug(debug);
     }
 
     /**
@@ -229,8 +227,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setWorkbook(Workbook workbook) {
-        this.workbook = workbook;
-        return this;
+        return this.withWorkbook(workbook);
     }
 
     /**
@@ -238,8 +235,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setAdjustColumnWidth(boolean adjustColumnWidth) {
-        this.adjustColumnWidth = adjustColumnWidth;
-        return this;
+        return this.withAdjustColumnWidth(adjustColumnWidth);
     }
 
     /**
@@ -247,8 +243,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setFile(File file) {
-        this.file = file;
-        return this;
+        return this.withFile(file);
     }
 
     /**
@@ -256,8 +251,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
-        this.mempoiSubFooter = mempoiSubFooter;
-        return this;
+        return this.withMempoiSubFooter(mempoiSubFooter);
     }
 
     /**
@@ -265,8 +259,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setMempoiFooter(MempoiFooter mempoiFooter) {
-        this.mempoiFooter = mempoiFooter;
-        return this;
+        return this.withMempoiFooter(mempoiFooter);
     }
 
     /**
@@ -274,8 +267,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setEvaluateCellFormulas(boolean evaluateCellFormulas) {
-        this.evaluateCellFormulas = evaluateCellFormulas;
-        return this;
+        return this.withEvaluateCellFormulas(evaluateCellFormulas);
     }
 
     /**
@@ -283,8 +275,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setStyleTemplate(StyleTemplate styleTemplate) {
-        this.styleTemplate = styleTemplate;
-        return this;
+        return this.withStyleTemplate(styleTemplate);
     }
 
     /**
@@ -292,8 +283,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
-        this.headerCellStyle = headerCellStyle;
-        return this;
+        return this.withHeaderCellStyle(headerCellStyle);
     }
 
     /**
@@ -301,8 +291,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setSubFooterCellStyle(CellStyle subFooterCellStyle) {
-        this.subFooterCellStyle = subFooterCellStyle;
-        return this;
+        return this.withSubFooterCellStyle(subFooterCellStyle);
     }
 
     /**
@@ -310,8 +299,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setCommonDataCellStyle(CellStyle commonDataCellStyle) {
-        this.commonDataCellStyle = commonDataCellStyle;
-        return this;
+        return this.withCommonDataCellStyle(commonDataCellStyle);
     }
 
     /**
@@ -319,8 +307,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setDateCellStyle(CellStyle dateCellStyle) {
-        this.dateCellStyle = dateCellStyle;
-        return this;
+        return this.withDateCellStyle(dateCellStyle);
     }
 
     /**
@@ -328,8 +315,7 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setDatetimeCellStyle(CellStyle datetimeCellStyle) {
-        this.datetimeCellStyle = datetimeCellStyle;
-        return this;
+        return this.withDatetimeCellStyle(datetimeCellStyle);
     }
 
     /**
@@ -337,7 +323,6 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder setNumberCellStyle(CellStyle numberCellStyle) {
-        this.numberCellStyle = numberCellStyle;
-        return this;
+        return this.withNumberCellStyle(numberCellStyle);
     }
 }
