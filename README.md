@@ -12,7 +12,7 @@ MemPOI is not designed to be used with an ORM due to performance needs on massiv
 
 ###### With Gradle
 ```
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.2'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.3'
 ```
 
 ###### With Maven
@@ -20,7 +20,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.2'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 
 ```
@@ -33,10 +33,9 @@ You need to pass your export queries as a List of `MempoiSheet` (`PreparedStatem
 You can use `MempoiBuilder` to correctly populate your MemPOI instance, like follows:
 
 ```
-MemPOI memPOI = new MempoiBuilder()
-                        .setDebug(true)
-                        .addMempoiSheet(new MempoiSheet(prepStmt, "Sheet name"))
-                        .build();
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .addMempoiSheet (new MempoiSheet(prepStmt))
+                    .build();
                         
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
 ```
@@ -60,23 +59,25 @@ You can choose to write directly to a file or to obtain the byte array of the ge
 
 ```
 File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file.xlsx");
-MemPOI memPOI = new MempoiBuilder()
-                    .setFile(fileDest)
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+String absoluteFileName = fut.get();
 ```
 
 ###### Byte array:
 
 ```
-// With byte array
-MemPOI memPOI = new MempoiBuilder()
-                    .addMempoiSheet(new MempoiSheet(prepStmt))
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .addMempoiSheet (new MempoiSheet(prepStmt))
                     .build();
-
+                        
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
+byte[] bytes = fut.get();
 ```
 
 
@@ -124,20 +125,33 @@ Multiple sheets in the same document are supported: `MempoiBuilder` accepts a li
 Look at this example and at the result above:
 
 ```
-MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
-MempoiSheet catsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS CAT_NAME, pet_race AS CAT_RACE FROM pets WHERE pet_type = 'cat'"), "Cats sheet");
-MempoiSheet birdsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS BIRD_NAME, pet_race AS BIRD_RACE FROM pets WHERE pet_type = 'bird'"), "Birds sheet");
+MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
+                            .withSheetName("Dogs sheet")
+                            .withPrepStmt(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"))
+                            .build();
 
-MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
-                    .addMempoiSheet(dogsSheet)
-                    .addMempoiSheet(catsSheet)
-                    .addMempoiSheet(birdsSheet)
-                    .build();
+MempoiSheet catsSheet = MempoiSheetBuilder.aMempoiSheet()
+                            .withSheetName("Cats sheet")
+                            .withPrepStmt(conn.prepareStatement("SELECT pet_name AS CAT_NAME, pet_race AS CAT_RACE FROM pets WHERE pet_type = 'cat'"))
+                            .build();
+
+MempoiSheet birdsSheet = MempoiSheetBuilder.aMempoiSheet()
+                            .withSheetName("Birds sheet")
+                            .withPrepStmt(conn.prepareStatement("SELECT pet_name AS BIRD_NAME, pet_race AS BIRD_RACE FROM pets WHERE pet_type = 'bird'"))
+                            .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                            .withDebug(true)
+                            .withFile(fileDest)
+                            .withAdjustColumnWidth(true)
+                            .addMempoiSheet(dogsSheet)
+                            .addMempoiSheet(catsSheet)
+                            .addMempoiSheet(birdsSheet)
+                            .build();
 
 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+String absoluteFileName = fut.get();
+
 ```
 
 ![](img/multiple_sheets.gif)
@@ -149,8 +163,8 @@ CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 MemPOI can adjust columns width to fit the longest content by setting to `true` the property `MempoiBuilder.adjustColumnWidth` as follows:
 
 ```
-MemPOI memPOI = new MempoiBuilder()
-                    .setAdjustColumnWidth(true)
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 ```
@@ -172,10 +186,10 @@ The default styles are automatically applied. You can inspect them looking at th
 If you want to reset the default styles you need to use an empty `CellStyle` when you use `MempoiBuilder`, for example:
 
 ```
-MemPOI memPOI = new MempoiBuilder()
-                    .setWorkbook(workbook)
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setNumberCellStyle(workbook.createCellStyle())     // no default style for number fields
+                    .withNumberCellStyle(workbook.createCellStyle())     // no default style for number fields
                     .build();
 ```
 
@@ -186,12 +200,12 @@ CellStyle headerCellStyle = workbook.createCellStyle();
 headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
 headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setHeaderCellStyle(headerCellStyle)
+                    .withHeaderCellStyle(headerCellStyle)
                     .build();
 ```                    
 
@@ -199,37 +213,45 @@ MemPOI memPOI = new MempoiBuilder()
 MemPOI comes with a set of templates ready to use. You can use them as follows:
 
 ```
-MemPOI memPOI = new MempoiBuilder()
-                    .setWorkbook(workbook)
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setStyleTemplate(new ForestStyleTemplate())
+                    .withStyleTemplate(new ForestStyleTemplate())
                     .build();
 ```
 
-Actually you can provide different styles for different sheets:
+Actually you can:
+* provide different styles for different sheets
+* granularly override bundled styles' cell styles
 
 ```
+// SummerStyleTemplate for dogsSheet
 MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Dogs");
 dogsSheet.setStyleTemplate(new SummerStyleTemplate());
 
+// Customized ForestStyleTemplate for catsSheet
 CellStyle numberCellStyle = workbook.createCellStyle();
 numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
 numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-MempoiSheet catsheet = new MempoiSheet(prepStmt, "Cats");
-catsheet.setStyleTemplate(new ForestStyleTemplate());
-catsheet.setNumberCellStyle(numberCellStyle);
 
+MempoiSheet catsheet = MempoiSheetBuilder.aMempoiSheet()
+                                            .withSheetName("Cats")
+                                            .withPrepStmt(prepStmt)
+                                            .withStyleTemplate(new ForestStyleTemplate())
+                                            .withNumberCellStyle(numberCellStyle)           // overrides ForestStyleTemplate's numeric cell style
+                                            .build();
+                                            
 List<MempoiSheet> sheetList = Arrays.asList(dogsSheet, catsheet);
 
-MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
-                    .setAdjustColumnWidth(true)
-                    .setMempoiSheetList(sheetList)
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
+                    .withMempoiSheetList(sheetList)
                     //    .setStyleTemplate(new PanegiriconStyleTemplate())     <----- it has no effects because for each sheet a template is specified
-                    .setMempoiSubFooter(new NumberSumSubFooter())
-                    .setEvaluateCellFormulas(true)
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .withEvaluateCellFormulas(true)
                     .build();
 ``` 
 
@@ -257,12 +279,12 @@ Whereas footers are a simple wrapper of the Excel ones, subfooters are a MemPOI 
 For example, you could choose to add the `NumberSumSubFooter` to your MemPOI report. It will result in an additional line at the end of the sheet containing the sum of the numeric columns. This is an example:
 
 ```
-MemPOI memPOI = new MempoiBuilder()
-                    .setDebug(true)
-                    .setWorkbook(workbook)
-                    .setFile(fileDest)
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .setMempoiSubFooter(new NumberSumSubFooter())
+                    .withMempoiSubFooter(new NumberSumSubFooter())
                     .build();
 ```
 
@@ -355,7 +377,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId> <!-- Exclude Project-D from Project-B -->

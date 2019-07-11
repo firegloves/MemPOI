@@ -2,11 +2,22 @@ package it.firegloves.mempoi.functional;
 
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
+import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
+import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -22,9 +33,20 @@ public class ArticleTest extends FunctionalBaseTest {
 
         try {
 
-            MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
-            MempoiSheet catsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS CAT_NAME, pet_race AS CAT_RACE FROM pets WHERE pet_type = 'cat'"), "Cats sheet");
-            MempoiSheet birdsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS BIRD_NAME, pet_race AS BIRD_RACE FROM pets WHERE pet_type = 'bird'"), "Birds sheet");
+            MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withSheetName("Dogs sheet")
+                    .withPrepStmt(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"))
+                    .build();
+
+            MempoiSheet catsSheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withSheetName("Cats sheet")
+                    .withPrepStmt(conn.prepareStatement("SELECT pet_name AS CAT_NAME, pet_race AS CAT_RACE FROM pets WHERE pet_type = 'cat'"))
+                    .build();
+
+            MempoiSheet birdsSheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withSheetName("Birds sheet")
+                    .withPrepStmt(conn.prepareStatement("SELECT pet_name AS BIRD_NAME, pet_race AS BIRD_RACE FROM pets WHERE pet_type = 'bird'"))
+                    .build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -42,4 +64,5 @@ public class ArticleTest extends FunctionalBaseTest {
             throw new MempoiRuntimeException(e);
         }
     }
+
 }

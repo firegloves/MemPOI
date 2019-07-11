@@ -20,44 +20,87 @@ public class MempoiStylerBuilder {
     private CellStyle datetimeCellStyle;
     private CellStyle numberCellStyle;
 
+    /**
+     * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
+     */
     private MempoiStylerBuilder(Workbook workbook) {
         this.workbook = workbook;
     }
 
+    /**
+     * static method to create a new MempoiStylerBuilder containing the received Workbook
+     * @param workbook the workbook to associate to the MempoiStylerBuilder
+     * @return the MempoiStylerBuilder created
+     */
     public static MempoiStylerBuilder aMempoiStyler(Workbook workbook) {
         return new MempoiStylerBuilder(workbook);
     }
 
+    /**
+     * add the received StyleTemplate to the builder instance
+     * @param styleTemplate
+     * @return the current MempoiStylerBuilder
+     */
     public MempoiStylerBuilder withStyleTemplate(StyleTemplate styleTemplate) {
         this.styleTemplate = styleTemplate;
         return this;
     }
 
+    /**
+     * add the received CellStyle as HeaderCell styler to the builder instance
+     * @param headerCellStyle the CellStyle to set as HeaderCell styler
+     * @return the current MempoiStylerBuilder
+     */
     public MempoiStylerBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
         this.headerCellStyle = null != headerCellStyle ? headerCellStyle : this.styleTemplate.getHeaderCellStyle(this.workbook);
         return this;
     }
 
+    /**
+     * add the received CellStyle as SubFooterCell styler to the builder instance
+     * @param subFooterCellStyle the CellStyle to set as SubFooterCell styler
+     * @return the current MempoiStylerBuilder
+     */
     public MempoiStylerBuilder withSubFooterCellStyle(CellStyle subFooterCellStyle) {
         this.subFooterCellStyle = null != subFooterCellStyle ? subFooterCellStyle : this.styleTemplate.getSubfooterCellStyle(this.workbook);
         return this;
     }
 
+    /**
+     * add the received CellStyle as CommonDataCell styler to the builder instance
+     * @param commonDataCellStyle the CellStyle to set as CommonDataCell styler
+     * @return the current MempoiStylerBuilder
+     */
     public MempoiStylerBuilder withCommonDataCellStyle(CellStyle commonDataCellStyle) {
         this.commonDataCellStyle = null != commonDataCellStyle ? commonDataCellStyle : this.styleTemplate.getCommonDataCellStyle(this.workbook);
         return this;
     }
 
+    /**
+     * add the received CellStyle as DateCell styler to the builder instance
+     * @param dateCellStyle the CellStyle to set as DateCell styler
+     * @return the current MempoiStylerBuilder
+     */
     public MempoiStylerBuilder withDateCellStyle(CellStyle dateCellStyle) {
         this.dateCellStyle = null != dateCellStyle ? dateCellStyle : this.styleTemplate.getDateCellStyle(this.workbook);
         return this;
     }
 
+    /**
+     *add the received CellStyle as DatetimeCell styler to the builder instance
+     * @param datetimeCellStyle the CellStyle to set as DatetimeCell styler
+     * @return the current MempoiStylerBuilder
+     */
     public MempoiStylerBuilder withDatetimeCellStyle(CellStyle datetimeCellStyle) {
         this.datetimeCellStyle = null != datetimeCellStyle ? datetimeCellStyle : this.styleTemplate.getDatetimeCellStyle(this.workbook);
         return this;
     }
 
+    /**
+     * add the received CellStyle as NumberCell styler to the builder instance
+     * @param numberCellStyle the CellStyle to set as NumberCell styler
+     * @return the current MempoiStylerBuilder
+     */
     public MempoiStylerBuilder withNumberCellStyle(CellStyle numberCellStyle) {
         this.numberCellStyle = null != numberCellStyle ? numberCellStyle : this.styleTemplate.getNumberCellStyle(this.workbook);
         return this;

@@ -57,10 +57,17 @@ public class MempoiBuilder {
      */
     private boolean evaluateCellFormulas;
 
+    /**
+     * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
+     */
     private MempoiBuilder() {
         this.mempoiSheetList = new ArrayList<>();
     }
 
+    /**
+     * static method to create a new MempoiBuilder containing the received
+     * @return the MempoiBuilder created
+     */
     public static MempoiBuilder aMemPOI() {
         return new MempoiBuilder();
     }
@@ -208,6 +215,7 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withMempoiSheetList(List)}
+     * @param prepStmtList the List<MempoiSheet> to export
      */
     @Deprecated
     public MempoiBuilder setMempoiSheetList(List<MempoiSheet> prepStmtList) {
@@ -216,6 +224,7 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withDebug(boolean)}
+     * @param debug if true enables log printing during exports
      */
     @Deprecated
     public MempoiBuilder setDebug(boolean debug) {
@@ -224,6 +233,7 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withWorkbook(Workbook)}
+     * @param workbook the Workbook instance to use to generate reports
      */
     @Deprecated
     public MempoiBuilder setWorkbook(Workbook workbook) {
@@ -232,6 +242,9 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withAdjustColumnWidth(boolean)}
+     * @param adjustColumnWidth if true mempoi tries to adjuct column width according to the largest cell
+     *
+     *                          PERFORMANCE DECREASER
      */
     @Deprecated
     public MempoiBuilder setAdjustColumnWidth(boolean adjustColumnWidth) {
@@ -240,6 +253,7 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withFile(File)}
+     * @param file the file to use to write the generated report
      */
     @Deprecated
     public MempoiBuilder setFile(File file) {
@@ -248,6 +262,8 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withMempoiSubFooter(MempoiSubFooter)}
+     * @param mempoiSubFooter the desired MempoiSubFooter to append to the export (can be overriden by the MempoiSheet one)
+     *
      */
     @Deprecated
     public MempoiBuilder setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
@@ -256,6 +272,7 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withMempoiFooter(MempoiFooter)}
+     * @param mempoiFooter the desired MempoiFooter to append to the export
      */
     @Deprecated
     public MempoiBuilder setMempoiFooter(MempoiFooter mempoiFooter) {
@@ -264,6 +281,8 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withEvaluateCellFormulas(boolean)}
+     * @param evaluateCellFormulas tries to evalue cell formulas
+     *                            PERFORMANCE DECREASER
      */
     @Deprecated
     public MempoiBuilder setEvaluateCellFormulas(boolean evaluateCellFormulas) {
