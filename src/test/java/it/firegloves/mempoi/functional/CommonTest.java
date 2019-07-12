@@ -12,8 +12,6 @@ import org.junit.Test;
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
 
 public class CommonTest extends FunctionalBaseTest {

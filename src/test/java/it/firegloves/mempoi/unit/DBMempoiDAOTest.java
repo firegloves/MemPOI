@@ -14,7 +14,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.Types;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 

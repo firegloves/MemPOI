@@ -8,8 +8,6 @@ import org.junit.Test;
 import java.sql.ResultSet;
 import java.sql.Types;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

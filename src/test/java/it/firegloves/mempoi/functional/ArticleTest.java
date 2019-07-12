@@ -4,24 +4,12 @@ import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
-import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
-import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class ArticleTest extends FunctionalBaseTest {

@@ -19,8 +19,6 @@ import java.io.File;
 import java.sql.DriverManager;
 import java.util.concurrent.CompletableFuture;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class SpeedTest extends FunctionalBaseTest {

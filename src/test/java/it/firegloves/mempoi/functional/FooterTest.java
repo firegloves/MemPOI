@@ -11,8 +11,6 @@ import org.junit.Test;
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class FooterTest extends FunctionalBaseTest {
