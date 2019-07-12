@@ -50,14 +50,6 @@ dependencies {
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-//    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
-
-    // https://mvnrepository.com/artifact/systems.manifold/manifold
-//    testImplementation group: 'systems.manifold', name: 'manifold', version: '0.65-alpha'
-
-    // Add manifold-all to -processorpath for javac
-//    testAnnotationProcessor group: 'systems.manifold', name: 'manifold-all', version: '0.65-alpha'
 }
 
 
@@ -78,7 +70,6 @@ modifyPom {
             license {
                 name 'MIT License'
                 url 'http://www.opensource.org/licenses/mit-license.php'
-//                distribution 'repo'
             }
         }
 
@@ -91,6 +82,7 @@ modifyPom {
         }
     }
 }
+
 extraArchive {
     sources = true
     tests = true
