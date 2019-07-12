@@ -364,7 +364,7 @@ MemPOI comes with Apache POI 4.1.0 bundled. If you need to use a different versi
 ###### This is an example using Gradle:
 
 ```
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.0.1') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.1.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -380,7 +380,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
     <version>1.1.0</version>
     <exclusions>
         <exclusion>
-            <groupId>org.apache.poi</groupId> <!-- Exclude Project-D from Project-B -->
+            <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
         </exclusion>
     </exclusions>
