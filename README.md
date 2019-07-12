@@ -193,7 +193,7 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .build();
 ```
 
-Keep in mind that when you use custom styles you need to pass the workbook from outside, otherwise you could encounter problems. This is an example:
+This is an example setting a custom CellStyle for header's cells:
 
 ```
 CellStyle headerCellStyle = workbook.createCellStyle();
@@ -202,7 +202,6 @@ headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
-                    .withWorkbook(workbook)
                     .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .withHeaderCellStyle(headerCellStyle)
