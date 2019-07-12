@@ -12,7 +12,7 @@ MemPOI is not designed to be used with an ORM due to performance needs on massiv
 
 ###### With Gradle
 ```
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.3'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.1.0'
 ```
 
 ###### With Maven
@@ -20,7 +20,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.0.3'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
 </dependency>
 
 ```
@@ -377,7 +377,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId> <!-- Exclude Project-D from Project-B -->

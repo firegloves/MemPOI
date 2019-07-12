@@ -30,6 +30,7 @@ public class MempoiStylerBuilder {
     /**
      * static method to create a new MempoiStylerBuilder containing the received Workbook
      * @param workbook the workbook to associate to the MempoiStylerBuilder
+     *
      * @return the MempoiStylerBuilder created
      */
     public static MempoiStylerBuilder aMempoiStyler(Workbook workbook) {
@@ -38,7 +39,8 @@ public class MempoiStylerBuilder {
 
     /**
      * add the received StyleTemplate to the builder instance
-     * @param styleTemplate
+     * @param styleTemplate the StyleTemplate to use generating the Mempoi report
+     *
      * @return the current MempoiStylerBuilder
      */
     public MempoiStylerBuilder withStyleTemplate(StyleTemplate styleTemplate) {
@@ -49,6 +51,7 @@ public class MempoiStylerBuilder {
     /**
      * add the received CellStyle as HeaderCell styler to the builder instance
      * @param headerCellStyle the CellStyle to set as HeaderCell styler
+     *
      * @return the current MempoiStylerBuilder
      */
     public MempoiStylerBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
@@ -59,6 +62,7 @@ public class MempoiStylerBuilder {
     /**
      * add the received CellStyle as SubFooterCell styler to the builder instance
      * @param subFooterCellStyle the CellStyle to set as SubFooterCell styler
+     *
      * @return the current MempoiStylerBuilder
      */
     public MempoiStylerBuilder withSubFooterCellStyle(CellStyle subFooterCellStyle) {
@@ -69,6 +73,7 @@ public class MempoiStylerBuilder {
     /**
      * add the received CellStyle as CommonDataCell styler to the builder instance
      * @param commonDataCellStyle the CellStyle to set as CommonDataCell styler
+     *
      * @return the current MempoiStylerBuilder
      */
     public MempoiStylerBuilder withCommonDataCellStyle(CellStyle commonDataCellStyle) {
@@ -79,6 +84,7 @@ public class MempoiStylerBuilder {
     /**
      * add the received CellStyle as DateCell styler to the builder instance
      * @param dateCellStyle the CellStyle to set as DateCell styler
+     *
      * @return the current MempoiStylerBuilder
      */
     public MempoiStylerBuilder withDateCellStyle(CellStyle dateCellStyle) {
@@ -89,6 +95,7 @@ public class MempoiStylerBuilder {
     /**
      *add the received CellStyle as DatetimeCell styler to the builder instance
      * @param datetimeCellStyle the CellStyle to set as DatetimeCell styler
+     *
      * @return the current MempoiStylerBuilder
      */
     public MempoiStylerBuilder withDatetimeCellStyle(CellStyle datetimeCellStyle) {
@@ -99,6 +106,7 @@ public class MempoiStylerBuilder {
     /**
      * add the received CellStyle as NumberCell styler to the builder instance
      * @param numberCellStyle the CellStyle to set as NumberCell styler
+     *
      * @return the current MempoiStylerBuilder
      */
     public MempoiStylerBuilder withNumberCellStyle(CellStyle numberCellStyle) {
@@ -148,6 +156,9 @@ public class MempoiStylerBuilder {
 
     /**
      * @deprecated Replaced by {@link #withStyleTemplate(StyleTemplate)}
+     * @param styleTemplate the StyleTemplate to use generating the Mempoi report
+     *
+     * @return the current MempoiStylerBuilder
      */
     @Deprecated
     public MempoiStylerBuilder setStyleTemplate(StyleTemplate styleTemplate) {
@@ -156,6 +167,9 @@ public class MempoiStylerBuilder {
 
     /**
      * @deprecated Replaced by {@link #withHeaderCellStyle(CellStyle)}
+     * @param headerCellStyle the CellStyle to set as HeaderCell styler
+     *
+     * @return the current MempoiStylerBuilder
      */
     @Deprecated
     public MempoiStylerBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
@@ -164,6 +178,9 @@ public class MempoiStylerBuilder {
 
     /**
      * @deprecated Replaced by {@link #withSubFooterCellStyle(CellStyle)}
+     * @param subFooterCellStyle the CellStyle to set as SubFooterCell styler
+     *
+     * @return the current MempoiStylerBuilder
      */
     @Deprecated
     public MempoiStylerBuilder setSubFooterCellStyle(CellStyle subFooterCellStyle) {
@@ -172,6 +189,9 @@ public class MempoiStylerBuilder {
 
     /**
      * @deprecated Replaced by {@link #withCommonDataCellStyle(CellStyle)}
+     * @param commonDataCellStyle the CellStyle to set as CommonDataCell styler
+     *
+     * @return the current MempoiStylerBuilder
      */
     @Deprecated
     public MempoiStylerBuilder setCommonDataCellStyle(CellStyle commonDataCellStyle) {
@@ -180,6 +200,9 @@ public class MempoiStylerBuilder {
 
     /**
      * @deprecated Replaced by {@link #withDateCellStyle(CellStyle)}
+     * @param dateCellStyle the CellStyle to set as DateCell styler
+     *
+     * @return the current MempoiStylerBuilder
      */
     @Deprecated
     public MempoiStylerBuilder setDateCellStyle(CellStyle dateCellStyle) {
@@ -188,6 +211,9 @@ public class MempoiStylerBuilder {
 
     /**
      * @deprecated Replaced by {@link #withDatetimeCellStyle(CellStyle)}
+     * @param datetimeCellStyle the CellStyle to set as DatetimeCell styler
+     *
+     * @return the current MempoiStylerBuilder
      */
     @Deprecated
     public MempoiStylerBuilder setDatetimeCellStyle(CellStyle datetimeCellStyle) {
@@ -196,6 +222,9 @@ public class MempoiStylerBuilder {
 
     /**
      * @deprecated Replaced by {@link #withNumberCellStyle(CellStyle)}
+     * @param numberCellStyle the CellStyle to set as NumberCell styler
+     *
+     * @return the current MempoiStylerBuilder
      */
     @Deprecated
     public MempoiStylerBuilder setNumberCellStyle(CellStyle numberCellStyle) {

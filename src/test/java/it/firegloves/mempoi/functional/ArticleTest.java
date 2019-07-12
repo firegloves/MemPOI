@@ -33,16 +33,19 @@ public class ArticleTest extends FunctionalBaseTest {
 
         try {
 
+            // dogs sheet
             MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
                     .withSheetName("Dogs sheet")
                     .withPrepStmt(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"))
                     .build();
 
+            // cats sheet
             MempoiSheet catsSheet = MempoiSheetBuilder.aMempoiSheet()
                     .withSheetName("Cats sheet")
                     .withPrepStmt(conn.prepareStatement("SELECT pet_name AS CAT_NAME, pet_race AS CAT_RACE FROM pets WHERE pet_type = 'cat'"))
                     .build();
 
+            // birds sheet
             MempoiSheet birdsSheet = MempoiSheetBuilder.aMempoiSheet()
                     .withSheetName("Birds sheet")
                     .withPrepStmt(conn.prepareStatement("SELECT pet_name AS BIRD_NAME, pet_race AS BIRD_RACE FROM pets WHERE pet_type = 'bird'"))

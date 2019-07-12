@@ -66,88 +66,173 @@ public class MempoiBuilder {
 
     /**
      * static method to create a new MempoiBuilder containing the received
-     * @return the MempoiBuilder created
+     * @return the current MempoiBuilder
      */
     public static MempoiBuilder aMemPOI() {
         return new MempoiBuilder();
     }
 
-
-    public MempoiBuilder withMempoiSheetList(List<MempoiSheet> prepStmtList) {
-        this.mempoiSheetList = prepStmtList;
+    /**
+     * sets the list of MempoiSheet to add to the generating report
+     * @param mempoiSheetList the List of MempoiSheet to export
+     *
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withMempoiSheetList(List<MempoiSheet> mempoiSheetList) {
+        this.mempoiSheetList = mempoiSheetList;
         return this;
     }
 
+    /**
+     * @param debug if true enables log printing during exports
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withDebug(boolean debug) {
         this.debug = debug;
         return this;
     }
 
+    /**
+     * @param workbook the Workbook instance to use to generate reports
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withWorkbook(Workbook workbook) {
         this.workbook = workbook;
         return this;
     }
 
+    /**
+     * @param adjustColumnWidth if true mempoi tries to adjuct column width according to the largest cell
+     *
+     * @return the current MempoiBuilder
+     *
+     * PERFORMANCE DECREASER
+     */
     public MempoiBuilder withAdjustColumnWidth(boolean adjustColumnWidth) {
         this.adjustColumnWidth = adjustColumnWidth;
         return this;
     }
 
+    /**
+     * @param file the file to use to write the generated report
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withFile(File file) {
         this.file = file;
         return this;
     }
 
+    /**
+     * @param mempoiSubFooter the desired MempoiSubFooter to append to the export (can be overriden by the MempoiSheet one)
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
         this.mempoiSubFooter = mempoiSubFooter;
         return this;
     }
 
+    /**
+     * @param mempoiFooter the desired MempoiFooter to append to the export
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withMempoiFooter(MempoiFooter mempoiFooter) {
         this.mempoiFooter = mempoiFooter;
         return this;
     }
 
+    /**
+     * @param evaluateCellFormulas if true MemPOI tries to evaluate cell formulas
+     *
+     * @return the current MempoiBuilder
+     *
+     * PERFORMANCE DECREASER
+     */
     public MempoiBuilder withEvaluateCellFormulas(boolean evaluateCellFormulas) {
         this.evaluateCellFormulas = evaluateCellFormulas;
         return this;
     }
 
+    /**
+     * @param styleTemplate the StyleTemplate to use to generate the Mempoi report
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withStyleTemplate(StyleTemplate styleTemplate) {
         this.styleTemplate = styleTemplate;
         return this;
     }
 
+    /**
+     * @param headerCellStyle the CellStyle to apply to header cells
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
         this.headerCellStyle = headerCellStyle;
         return this;
     }
 
+    /**
+     * @param subFooterCellStyle the CellStyle to apply to subfooter cells
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withSubFooterCellStyle(CellStyle subFooterCellStyle) {
         this.subFooterCellStyle = subFooterCellStyle;
         return this;
     }
 
+    /**
+     * @param commonDataCellStyle the CellStyle to apply to common data cells
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withCommonDataCellStyle(CellStyle commonDataCellStyle) {
         this.commonDataCellStyle = commonDataCellStyle;
         return this;
     }
 
+    /**
+     * @param dateCellStyle the CellStyle to apply to date cells
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withDateCellStyle(CellStyle dateCellStyle) {
         this.dateCellStyle = dateCellStyle;
         return this;
     }
 
+    /**
+     * @param datetimeCellStyle the CellStyle to apply to datetime cells
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withDatetimeCellStyle(CellStyle datetimeCellStyle) {
         this.datetimeCellStyle = datetimeCellStyle;
         return this;
     }
 
+    /**
+     * @param numberCellStyle the CellStyle to apply to numeric cells
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder withNumberCellStyle(CellStyle numberCellStyle) {
         this.numberCellStyle = numberCellStyle;
         return this;
     }
 
+    /**
+     * add a MempoiSheet to the list of the sheet to add to the generating export
+     * @param mempoiSheet the MempoiSheet to add to the export queue
+     *
+     * @return the current MempoiBuilder
+     */
     public MempoiBuilder addMempoiSheet(MempoiSheet mempoiSheet) {
         this.mempoiSheetList.add(mempoiSheet);
         return this;
@@ -215,16 +300,20 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withMempoiSheetList(List)}
-     * @param prepStmtList the List<MempoiSheet> to export
+     * @param mempoiSheetList the List of MempoiSheet to export
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
-    public MempoiBuilder setMempoiSheetList(List<MempoiSheet> prepStmtList) {
-        return this.withMempoiSheetList(prepStmtList);
+    public MempoiBuilder setMempoiSheetList(List<MempoiSheet> mempoiSheetList) {
+        return this.withMempoiSheetList(mempoiSheetList);
     }
 
     /**
      * @deprecated Replaced by {@link #withDebug(boolean)}
      * @param debug if true enables log printing during exports
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setDebug(boolean debug) {
@@ -234,6 +323,8 @@ public class MempoiBuilder {
     /**
      * @deprecated Replaced by {@link #withWorkbook(Workbook)}
      * @param workbook the Workbook instance to use to generate reports
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setWorkbook(Workbook workbook) {
@@ -244,7 +335,9 @@ public class MempoiBuilder {
      * @deprecated Replaced by {@link #withAdjustColumnWidth(boolean)}
      * @param adjustColumnWidth if true mempoi tries to adjuct column width according to the largest cell
      *
-     *                          PERFORMANCE DECREASER
+     * @return the current MempoiBuilder
+     *
+     * PERFORMANCE DECREASER
      */
     @Deprecated
     public MempoiBuilder setAdjustColumnWidth(boolean adjustColumnWidth) {
@@ -254,6 +347,8 @@ public class MempoiBuilder {
     /**
      * @deprecated Replaced by {@link #withFile(File)}
      * @param file the file to use to write the generated report
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setFile(File file) {
@@ -264,6 +359,7 @@ public class MempoiBuilder {
      * @deprecated Replaced by {@link #withMempoiSubFooter(MempoiSubFooter)}
      * @param mempoiSubFooter the desired MempoiSubFooter to append to the export (can be overriden by the MempoiSheet one)
      *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
@@ -273,6 +369,8 @@ public class MempoiBuilder {
     /**
      * @deprecated Replaced by {@link #withMempoiFooter(MempoiFooter)}
      * @param mempoiFooter the desired MempoiFooter to append to the export
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setMempoiFooter(MempoiFooter mempoiFooter) {
@@ -281,8 +379,11 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withEvaluateCellFormulas(boolean)}
-     * @param evaluateCellFormulas tries to evalue cell formulas
-     *                            PERFORMANCE DECREASER
+     * @param evaluateCellFormulas if true MemPOI tries to evaluate cell formulas
+     *
+     * @return the current MempoiBuilder
+     *
+     * PERFORMANCE DECREASER
      */
     @Deprecated
     public MempoiBuilder setEvaluateCellFormulas(boolean evaluateCellFormulas) {
@@ -291,6 +392,9 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withStyleTemplate(StyleTemplate)}
+     * @param styleTemplate the StyleTemplate to use to generate the Mempoi report
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setStyleTemplate(StyleTemplate styleTemplate) {
@@ -299,6 +403,9 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withHeaderCellStyle(CellStyle)}
+     * @param headerCellStyle the CellStyle to apply to header cells
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
@@ -307,6 +414,9 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withSubFooterCellStyle(CellStyle)}
+     * @param subFooterCellStyle the CellStyle to apply to subfooter cells
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setSubFooterCellStyle(CellStyle subFooterCellStyle) {
@@ -315,6 +425,9 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withCommonDataCellStyle(CellStyle)}
+     * @param commonDataCellStyle the CellStyle to apply to common data cells
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setCommonDataCellStyle(CellStyle commonDataCellStyle) {
@@ -323,6 +436,9 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withDateCellStyle(CellStyle)}
+     * @param dateCellStyle the CellStyle to apply to date cells
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setDateCellStyle(CellStyle dateCellStyle) {
@@ -331,6 +447,9 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withDatetimeCellStyle(CellStyle)}
+     * @param datetimeCellStyle the CellStyle to apply to datetime cells
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setDatetimeCellStyle(CellStyle datetimeCellStyle) {
@@ -339,6 +458,9 @@ public class MempoiBuilder {
 
     /**
      * @deprecated Replaced by {@link #withNumberCellStyle(CellStyle)}
+     * @param numberCellStyle the CellStyle to apply to numeric cells
+     *
+     * @return the current MempoiBuilder
      */
     @Deprecated
     public MempoiBuilder setNumberCellStyle(CellStyle numberCellStyle) {
