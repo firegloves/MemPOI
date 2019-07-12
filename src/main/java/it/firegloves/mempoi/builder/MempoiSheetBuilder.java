@@ -28,78 +28,170 @@ public final class MempoiSheetBuilder {
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
 
+    /**
+     * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
+     */
     private MempoiSheetBuilder() {
     }
 
+    /**
+     * static method to create a new MempoiSheetBuilder
+     *
+     * @return the MempoiSheetBuilder created
+     */
     public static MempoiSheetBuilder aMempoiSheet() {
         return new MempoiSheetBuilder();
     }
 
+    /**
+     * add the received sheet's name to the builder instance
+     * @param sheetName the sheet's name to associate to the current sheet
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withSheetName(String sheetName) {
         this.sheetName = sheetName;
         return this;
     }
 
+    /**
+     * add the received MempoiStyler to the builder instance
+     * @param sheetStyler the MempoiStyler to associate to the current sheet
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withSheetStyler(MempoiStyler sheetStyler) {
         this.sheetStyler = sheetStyler;
         return this;
     }
 
+    /**
+     * add the received Workbook to the builder instance. it is needed for passing StyleTemplate
+     * @param workbook the Workbook to associate to the current sheet
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withWorkbook(Workbook workbook) {
         this.workbook = workbook;
         return this;
     }
 
+    /**
+     * add the received StyleTemplate to the builder instance. you need to pass a Workbook to use this StyleTemplate
+     * @param styleTemplate the StyleTemplate to associate to the current sheet
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withStyleTemplate(StyleTemplate styleTemplate) {
         this.styleTemplate = styleTemplate;
         return this;
     }
 
+    /**
+     * add the received CellStyle as header cell's styler to the builder instance
+     * @param headerCellStyle the CellStyle to use as header cell's styler
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
         this.headerCellStyle = headerCellStyle;
         return this;
     }
 
+    /**
+     * add the received CellStyle as subfooter cell's styler to the builder instance
+     * @param subFooterCellStyle the CellStyle to use as subfooter cell's styler
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withSubFooterCellStyle(CellStyle subFooterCellStyle) {
         this.subFooterCellStyle = subFooterCellStyle;
         return this;
     }
 
+    /**
+     * add the received CellStyle as common data cell's styler to the builder instance
+     * @param commonDataCellStyle the CellStyle to use as common data cell's styler
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withCommonDataCellStyle(CellStyle commonDataCellStyle) {
         this.commonDataCellStyle = commonDataCellStyle;
         return this;
     }
 
+    /**
+     * add the received CellStyle as date cell's styler to the builder instance
+     * @param dateCellStyle the CellStyle to use as date cell's styler
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withDateCellStyle(CellStyle dateCellStyle) {
         this.dateCellStyle = dateCellStyle;
         return this;
     }
 
+    /**
+     * add the received CellStyle as datetime cell's styler to the builder instance
+     * @param datetimeCellStyle the CellStyle to use as datetime cell's styler
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withDatetimeCellStyle(CellStyle datetimeCellStyle) {
         this.datetimeCellStyle = datetimeCellStyle;
         return this;
     }
 
+    /**
+     * add the received CellStyle as numeric cell's styler to the builder instance
+     * @param numberCellStyle the CellStyle to use as numeric cell's styler
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withNumberCellStyle(CellStyle numberCellStyle) {
         this.numberCellStyle = numberCellStyle;
         return this;
     }
 
+    /**
+     * add the received MempoiFooter to the builder instance
+     * @param mempoiFooter the MempoiFooter to append to the sheet to build
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withMempoiFooter(MempoiFooter mempoiFooter) {
         this.mempoiFooter = mempoiFooter;
         return this;
     }
 
+    /**
+     * add the received MempoiSubFooter to the builder instance
+     * @param mempoiSubFooter the MempoiSubFooter to append to the sheet to build
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
         this.mempoiSubFooter = mempoiSubFooter;
         return this;
     }
 
+    /**
+     * add the received PreparedStatement to the builder instance
+     * @param prepStmt the PreparedStatement to execute to retrieve data to export
+     *
+     * @return the current MempoiSheetBuilder
+     */
     public MempoiSheetBuilder withPrepStmt(PreparedStatement prepStmt) {
         this.prepStmt = prepStmt;
         return this;
     }
 
+
+    /**
+     * builds the MempoiSheet and returns it
+     *
+     * @return the created MempoiSheet
+     */
     public MempoiSheet build() {
         MempoiSheet mempoiSheet = new MempoiSheet(prepStmt);
         mempoiSheet.setSheetName(sheetName);

@@ -20,10 +20,17 @@ public class MemPOI {
         this.workbookConfig = workbookConfig;
     }
 
+    /**
+     * @return the current WorkbookConfig containing report configurations
+     */
     public WorkbookConfig getWorkbookConfig() {
         return workbookConfig;
     }
 
+    /**
+     * set a WorkbookConfig containing report configurations
+     * @param workbookConfig the WorkbookConfig to use for generating export
+     */
     public void setWorkbookConfig(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
     }

@@ -11,6 +11,7 @@ import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -122,7 +123,7 @@ public class Strategos {
         int rowCounter = 0;
 
         // create sheet
-        Sheet sheet = null != mempoiSheet.getSheetName() && !mempoiSheet.getSheetName().isEmpty() ?
+        Sheet sheet = ! StringUtils.isEmpty(mempoiSheet.getSheetName()) ?
                 this.workbookConfig.getWorkbook().createSheet(mempoiSheet.getSheetName()) :
                 this.workbookConfig.getWorkbook().createSheet();
 

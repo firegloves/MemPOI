@@ -64,6 +64,7 @@ public class WorkbookConfig {
     public WorkbookConfig() {
     }
 
+
     public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList) {
         this.mempoiSubFooter = mempoiSubFooter;
         this.mempoiFooter = mempoiFooter;
