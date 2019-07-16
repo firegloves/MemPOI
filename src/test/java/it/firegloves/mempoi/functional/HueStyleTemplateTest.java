@@ -5,13 +5,12 @@ import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.styles.template.*;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 
 import java.io.File;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +42,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new StandardStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,6 +72,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new SummerStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,6 +101,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new AquaStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,6 +129,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,6 +163,9 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, null);
+            // TODO add header overriden style check
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,6 +206,9 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, null);
+            // TODO add header overriden style check
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -224,6 +237,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new StoneStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -250,6 +265,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new RoseStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -279,6 +296,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new PurpleStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -307,6 +326,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new PanegiriconStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -318,7 +339,8 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_templates.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Dogs");
+
+        MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), "Dogs");
         dogsSheet.setStyleTemplate(new SummerStyleTemplate());
 
         CellStyle numberCellStyle = workbook.createCellStyle();
@@ -328,12 +350,12 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
         catsheet.setStyleTemplate(new ForestStyleTemplate());
         catsheet.setNumberCellStyle(numberCellStyle);
 
-        List<MempoiSheet> sheetList = Arrays.asList(dogsSheet, catsheet);
+        List<MempoiSheet> sheetList = Arrays.asList(catsheet, dogsSheet);
 
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
+//                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -345,6 +367,13 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, null);
+            // validates second sheet
+            super.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), fut.get(), 1, HEADERS_2, true, null);
+
+            // TODO add header overriden style check
 
         } catch (Exception e) {
             e.printStackTrace();

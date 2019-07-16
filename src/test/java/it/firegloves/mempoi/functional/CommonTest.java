@@ -3,6 +3,7 @@ package it.firegloves.mempoi.functional;
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -10,6 +11,8 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.*;
@@ -32,6 +35,8 @@ public class CommonTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,6 +66,15 @@ public class CommonTest extends FunctionalBaseTest {
             assertNotNull("not null byte array", fut.get());
             assertNotEquals("not empty byte array", 0, fut.get().length);
 
+            File destFile = new File(this.outReportFolder.getAbsolutePath(), "test_with_byte_array_and_number_styler.xlsx");
+            try (FileOutputStream fos = new FileOutputStream(destFile)) {
+                fos.write(fut.get());
+            }
+
+            super.validateGeneratedFile(this.createStatement(), destFile.getAbsolutePath(), COLUMNS, HEADERS, null, null);
+
+            // TODO add header overriden style check
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,6 +96,13 @@ public class CommonTest extends FunctionalBaseTest {
             assertNotNull("not null byte array", fut.get());
             assertNotEquals("not empty byte array", 0, fut.get().length);
 
+            File destFile = new File(this.outReportFolder.getAbsolutePath(), "test_with_byte_array_and_number_styler.xlsx");
+            try (FileOutputStream fos = new FileOutputStream(destFile)) {
+                fos.write(fut.get());
+            }
+
+            super.validateGeneratedFile(this.createStatement(), destFile.getAbsolutePath(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,11 +122,16 @@ public class CommonTest extends FunctionalBaseTest {
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
-                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Cats sheet"))
+                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), "Cats sheet"))
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // validate first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+            // validate second sheet
+            super.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), fut.get(), 1, HEADERS_2, true, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,6 +181,8 @@ public class CommonTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // TODO validates overriden styles
 
         } catch (Exception e) {
             e.printStackTrace();

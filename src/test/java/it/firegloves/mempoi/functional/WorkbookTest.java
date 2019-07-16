@@ -5,6 +5,7 @@ import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
+import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -41,6 +42,9 @@ public class WorkbookTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,6 +73,9 @@ public class WorkbookTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -96,6 +103,9 @@ public class WorkbookTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,6 +161,11 @@ public class WorkbookTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, null);
+
+            // TODO validate overriden styles
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -177,6 +192,9 @@ public class WorkbookTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,6 +224,9 @@ public class WorkbookTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,6 +254,9 @@ public class WorkbookTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -288,6 +312,11 @@ public class WorkbookTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, null);
+
+            // TODO validate overriden styles
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -314,6 +343,9 @@ public class WorkbookTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -343,6 +375,9 @@ public class WorkbookTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -370,6 +405,9 @@ public class WorkbookTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -424,6 +462,11 @@ public class WorkbookTest extends FunctionalBaseTest {
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            // validates first sheet
+            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, null);
+
+            // TODO validate overriden styles
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,6 +2,7 @@ package it.firegloves.mempoi.functional;
 
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
+import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.*;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
@@ -14,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.Assert.assertEquals;
 
 public class FooterTest extends FunctionalBaseTest {
-
 
 
     @Test
@@ -97,7 +97,6 @@ public class FooterTest extends FunctionalBaseTest {
     }
 
 
-
     @Test
     public void testWithFileAndNumberMinSubfooter() {
 
@@ -124,7 +123,6 @@ public class FooterTest extends FunctionalBaseTest {
             e.printStackTrace();
         }
     }
-
 
 
     @Test
@@ -185,7 +183,6 @@ public class FooterTest extends FunctionalBaseTest {
             e.printStackTrace();
         }
     }
-
 
 
     @Test
@@ -270,5 +267,81 @@ public class FooterTest extends FunctionalBaseTest {
             e.printStackTrace();
         }
     }
+
+
+    @Test
+    public void testWithFileAndMultipleSheetWithMultipleSubfooter() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_and_multiple_subfooter.xlsx");
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+
+        try {
+
+            MempoiSheet sheet1 = MempoiSheetBuilder.aMempoiSheet()
+                    .withSheetName("Dogs sheet")
+                    .withPrepStmt(prepStmt)
+                    .withMempoiSubFooter(new NumberSumSubFooter())
+                    .build();
+
+            MempoiSheet sheet2 = MempoiSheetBuilder.aMempoiSheet()
+                    .withSheetName("Cats sheet")
+                    .withPrepStmt(super.createStatement())
+                    .withMempoiSubFooter(new NumberAverageSubFooter())
+                    .build();
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withDebug(true)
+                    .withWorkbook(workbook)
+                    .withFile(fileDest)
+                    .withEvaluateCellFormulas(true)
+                    .withAdjustColumnWidth(true)
+                    .addMempoiSheet(sheet1)
+                    .addMempoiSheet(sheet2)
+                    .withMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
+                    .withStyleTemplate(new SummerStyleTemplate())
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+//    public byte[] testWithFileAndMultipleSheetWithMultipleSubfooter() {
+//
+//        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "report_2019.xlsx");
+//
+//        try {
+//
+//            MempoiSheet sheet1 = MempoiSheetBuilder.aMempoiSheet()
+//                    .withSheetName("Mans")
+//                    .withPrepStmt(prepStmt)
+//                    .build();
+//
+//            MempoiSheet sheet2 = MempoiSheetBuilder.aMempoiSheet()
+//                    .withSheetName("Emps")
+//                    .withPrepStmt(prepStmt)
+//                    .build();
+//
+//            MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+//                    .withFile(fileDest)
+//                    .withAdjustColumnWidth(true)
+//                    .addMempoiSheet(sheet1)
+//                    .addMempoiSheet(sheet2)
+//                    .withStyleTemplate(new SummerStyleTemplate())
+//                    .build()
+//                    .prepareMempoiReportToByteArray()
+//                    .get();
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

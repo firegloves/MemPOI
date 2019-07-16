@@ -32,7 +32,6 @@ public class FilePathTest extends FunctionalBaseTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
         }

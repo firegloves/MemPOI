@@ -181,7 +181,7 @@ public class Strategos {
 
         int colListLen = columnList.size();
 
-        // crea l'header
+        // creates header
         for (int i = 0; i < colListLen; i++) {
             MempoiColumn cm = columnList.get(i);
             Cell cell = row.createCell(i);
