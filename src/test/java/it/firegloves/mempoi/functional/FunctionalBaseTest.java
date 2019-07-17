@@ -3,14 +3,14 @@ package it.firegloves.mempoi.functional;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.junit.After;
 import org.junit.Before;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.*;
 
 import static org.junit.Assert.assertEquals;
@@ -138,7 +138,7 @@ public abstract class FunctionalBaseTest {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                this.validateGeneratedFileDataRow(rs, sheet.getRow(r), columns);
+                this.validateGeneratedFileDataRow(rs, sheet.getRow(r), columns, styleTemplate, wb);
             }
 
             // validate subfooter cell formula
@@ -197,8 +197,10 @@ public abstract class FunctionalBaseTest {
      * @param rs      the ResultSet against which validate the Row
      * @param row     the Row to validate against the ResultSet
      * @param columns the array of columns name, useful to retrieve data from the ResultSet
+     * @param styleTemplate StyleTemplate to get styles to validate
+     * @param wb the curret Workbook
      */
-    protected void validateGeneratedFileDataRow(ResultSet rs, Row row, String[] columns) {
+    protected void validateGeneratedFileDataRow(ResultSet rs, Row row, String[] columns, StyleTemplate styleTemplate, Workbook wb) {
 
         try {
             assertEquals(rs.getInt(columns[0]), (int) row.getCell(0).getNumericCellValue());
@@ -209,6 +211,17 @@ public abstract class FunctionalBaseTest {
             assertEquals(rs.getBoolean(columns[5]), row.getCell(5).getBooleanCellValue());
             assertEquals(rs.getString(columns[6]), row.getCell(6).getStringCellValue());
             assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
+
+            if (null != styleTemplate) {
+                this.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                this.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                this.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                this.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                this.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                this.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                this.validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                this.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

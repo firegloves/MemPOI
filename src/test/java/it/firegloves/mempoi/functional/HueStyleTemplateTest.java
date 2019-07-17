@@ -8,9 +8,11 @@ import it.firegloves.mempoi.styles.template.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.io.File;
-import java.sql.ResultSet;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +21,10 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.Assert.assertEquals;
 
 public class HueStyleTemplateTest extends FunctionalBaseTest {
+
+    @Mock
+    StyleTemplate styleTemplate;
+
 
     @Test
     public void testWithFileAndStandardTemplate() {
@@ -336,19 +342,22 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
     @Test
     public void testWithFileAndMultipleSheetTemplates() throws SQLException {
 
+        ForestStyleTemplate forestStyleTemplate = new ForestStyleTemplate();
+
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_templates.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
-
-
-        MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), "Dogs");
-        dogsSheet.setStyleTemplate(new SummerStyleTemplate());
 
         CellStyle numberCellStyle = workbook.createCellStyle();
         numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
         numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
         MempoiSheet catsheet = new MempoiSheet(prepStmt, "Cats");
         catsheet.setStyleTemplate(new ForestStyleTemplate());
         catsheet.setNumberCellStyle(numberCellStyle);
+
+
+        MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), "Dogs");
+        dogsSheet.setStyleTemplate(new SummerStyleTemplate());
 
         List<MempoiSheet> sheetList = Arrays.asList(catsheet, dogsSheet);
 
@@ -370,10 +379,22 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
 
             // validates first sheet
             super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, null);
-            // validates second sheet
-            super.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), fut.get(), 1, HEADERS_2, true, null);
 
-            // TODO add header overriden style check
+            try (InputStream inp = new FileInputStream(fut.get())) {
+                Workbook wb = WorkbookFactory.create(inp);
+                Sheet sheet = wb.getSheetAt(0);
+
+                // validates first sheet's header
+                super.validateHeaderRow(sheet.getRow(0), HEADERS, new ForestStyleTemplate().getHeaderCellStyle(workbook));
+
+                // validate custom numerCellStyle
+                CellStyle actual = sheet.getRow(1).getCell(7).getCellStyle();
+                assertEquals(numberCellStyle.getFillForegroundColor(), actual.getFillForegroundColor());
+                assertEquals(numberCellStyle.getFillPattern(), actual.getFillPattern());
+            }
+
+            // validates second sheet
+            super.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), fut.get(), 1, HEADERS_2, true, new SummerStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();

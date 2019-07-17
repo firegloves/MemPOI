@@ -93,8 +93,6 @@ public class ArticleTest extends FunctionalBaseTest {
             assertEquals("Birds header 1", "BIRD_NAME", thirdSheet.getRow(0).getCell(0).getStringCellValue());
             assertEquals("Birds header 2", "BIRD_RACE", thirdSheet.getRow(0).getCell(1).getStringCellValue());
 
-
-
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
         }

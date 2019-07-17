@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.*;
@@ -53,7 +52,6 @@ public class CommonTest extends FunctionalBaseTest {
 
             CellStyle numberCellStyle = workbook.createCellStyle();
             numberCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("#.##0,00"));
-
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
