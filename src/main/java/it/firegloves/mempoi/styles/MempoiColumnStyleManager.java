@@ -21,6 +21,7 @@ public class MempoiColumnStyleManager {
 
     private MempoiStyler reportStyler;
 
+
     public MempoiColumnStyleManager(MempoiStyler reportStyler) {
         this.reportStyler = reportStyler;
         this.initCellStyleMap();
@@ -47,6 +48,7 @@ public class MempoiColumnStyleManager {
     }
 
 
+    // TODO REFACTOR TO PURE FUNCTION? 
     /**
      * populate the received MempoiColumn list with the corresponding CellStyle
      *

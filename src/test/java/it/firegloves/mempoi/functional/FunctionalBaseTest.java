@@ -5,6 +5,7 @@ import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.junit.After;
 import org.junit.Before;
 
@@ -212,7 +213,7 @@ public abstract class FunctionalBaseTest {
             assertEquals(rs.getString(columns[6]), row.getCell(6).getStringCellValue());
             assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
 
-            if (null != styleTemplate) {
+            if (null != styleTemplate && ! (row instanceof XSSFRow)) {      // XSSFRow does not support cell style => skip these tests
                 this.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
                 this.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 this.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));

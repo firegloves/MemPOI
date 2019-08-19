@@ -41,7 +41,7 @@ public class Strategos {
 
 
     public Strategos(WorkbookConfig workbookConfig) {
-       this.workbookConfig = workbookConfig;
+        this.workbookConfig = workbookConfig;
     }
 
 
@@ -51,10 +51,8 @@ public class Strategos {
      *
      * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
      * @param fileToExport    the destination file (with path) where write exported data
-     *
-     * @throws MempoiRuntimeException if something went wrong
-     *
      * @return the filename with path of the report generated file
+     * @throws MempoiRuntimeException if something went wrong
      */
     public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) {
 
@@ -66,9 +64,8 @@ public class Strategos {
     /**
      * starting from export PreparedStatement prepares the MempoiReport for battle!
      *
-     * @throws MempoiRuntimeException if something went wrong
-     *
      * @return the filename with path of the report generated file
+     * @throws MempoiRuntimeException if something went wrong
      */
     public byte[] generateMempoiReportToByteArray() {
 
@@ -79,6 +76,7 @@ public class Strategos {
 
     /**
      * generate the report into the WorkbookConfig.workbook variable
+     *
      * @param mempoiSheetList
      */
     private void generateMempoiReport(List<MempoiSheet> mempoiSheetList) {
@@ -90,6 +88,7 @@ public class Strategos {
 
     /**
      * manages eventual cell formulas to evaluate
+     *
      * @param evaluateCellFormulas
      * @param hasFormulasToEvaluate
      */
@@ -123,13 +122,13 @@ public class Strategos {
         int rowCounter = 0;
 
         // create sheet
-        Sheet sheet = ! StringUtils.isEmpty(mempoiSheet.getSheetName()) ?
+        Sheet sheet = !StringUtils.isEmpty(mempoiSheet.getSheetName()) ?
                 this.workbookConfig.getWorkbook().createSheet(mempoiSheet.getSheetName()) :
                 this.workbookConfig.getWorkbook().createSheet();
 
         // track columns for autosizing
         if (this.workbookConfig.isAdjustColSize() && sheet instanceof SXSSFSheet) {
-            ((SXSSFSheet)sheet).trackAllColumnsForAutoSizing();
+            ((SXSSFSheet) sheet).trackAllColumnsForAutoSizing();
         }
 
         // read data from db
@@ -172,6 +171,7 @@ public class Strategos {
 
     /**
      * create the sheet header row
+     *
      * @param sheet
      * @return the row couter updated
      */
@@ -186,8 +186,9 @@ public class Strategos {
             MempoiColumn cm = columnList.get(i);
             Cell cell = row.createCell(i);
 
+            // for XSSFSheet sets columns' bg colour
             if (sheet instanceof XSSFSheet) {
-                ((XSSFSheet)sheet).getColumnHelper().setColDefaultStyle(i, cm.getCellStyle());
+                ((XSSFSheet) sheet).getColumnHelper().setColDefaultStyle(i, cm.getCellStyle());
             }
 
             cell.setCellStyle(sheetReportStyler.getHeaderCellStyle());
@@ -198,9 +199,9 @@ public class Strategos {
 
         // adjust row height
         if (sheetReportStyler.getHeaderCellStyle() instanceof XSSFCellStyle) {
-            row.setHeightInPoints((float) ((XSSFCellStyle)sheetReportStyler.getHeaderCellStyle()).getFont().getFontHeightInPoints() + ROW_HEIGHT_PLUS);
+            row.setHeightInPoints((float) ((XSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont().getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         } else {
-            row.setHeightInPoints((float) ((HSSFCellStyle)sheetReportStyler.getHeaderCellStyle()).getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
+            row.setHeightInPoints((float) ((HSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         }
 
         return rowCounter;
@@ -217,7 +218,7 @@ public class Strategos {
 
         try {
             while (rs.next()) {
-                logger.debug("creating row");
+                logger.debug("creating row " + rowCounter);
 
                 Row row = sheet.createRow(rowCounter++);
 
@@ -225,7 +226,7 @@ public class Strategos {
                     MempoiColumn col = columnList.get(i);
                     Cell cell = row.createCell(i);
 
-                     if (! (sheet instanceof XSSFSheet)) {
+                    if (!(sheet instanceof XSSFSheet)) {
                         cell.setCellStyle(col.getCellStyle());
                     }
 
@@ -270,6 +271,7 @@ public class Strategos {
 
     /**
      * opens the temp saved report file assigning it to the class workbook variable, then evaluate all available cell formulas
+     *
      * @param tmpFile the temp file from which read the report
      */
     private void openTempFileAndEvaluateCellFormulas(File tmpFile) {
@@ -303,9 +305,9 @@ public class Strategos {
 
             // writes data to file
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                logger.debug("writing final file");
+                logger.debug("writing final file " + file.getAbsolutePath());
                 this.workbookConfig.getWorkbook().write(outputStream);
-                logger.debug("written final file");
+                logger.debug("written final file " + file.getAbsolutePath());
             }
 
             return file.getAbsolutePath();
@@ -353,7 +355,7 @@ public class Strategos {
             }
 
             // set excel to recalculate the formula result when open the document
-            if (! this.workbookConfig.isEvaluateCellFormulas()) {
+            if (!this.workbookConfig.isEvaluateCellFormulas()) {
                 sheet.setForceFormulaRecalculation(true);
             }
         }
@@ -424,7 +426,7 @@ public class Strategos {
 
         // deletes temp poi file
         if (this.workbookConfig.getWorkbook() instanceof SXSSFWorkbook) {
-            ((SXSSFWorkbook)this.workbookConfig.getWorkbook()).dispose();
+            ((SXSSFWorkbook) this.workbookConfig.getWorkbook()).dispose();
         }
 
         // closes the workbook
