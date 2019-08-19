@@ -218,7 +218,7 @@ public class Strategos {
 
         try {
             while (rs.next()) {
-                logger.debug("creating row " + rowCounter);
+                logger.debug("creating row {}", rowCounter);
 
                 Row row = sheet.createRow(rowCounter++);
 
@@ -305,9 +305,9 @@ public class Strategos {
 
             // writes data to file
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                logger.debug("writing final file " + file.getAbsolutePath());
+                logger.debug("writing final file {}", file.getAbsolutePath());
                 this.workbookConfig.getWorkbook().write(outputStream);
-                logger.debug("written final file " + file.getAbsolutePath());
+                logger.debug("written final file {}", file.getAbsolutePath());
             }
 
             return file.getAbsolutePath();
