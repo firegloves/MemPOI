@@ -342,8 +342,6 @@ public class HueStyleTemplateTest extends FunctionalBaseTest {
     @Test
     public void testWithFileAndMultipleSheetTemplates() throws SQLException {
 
-        ForestStyleTemplate forestStyleTemplate = new ForestStyleTemplate();
-
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_templates.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
