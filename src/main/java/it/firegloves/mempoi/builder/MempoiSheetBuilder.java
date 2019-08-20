@@ -27,6 +27,7 @@ public final class MempoiSheetBuilder {
     private MempoiFooter mempoiFooter;
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
+    private String[] groupByColumns;
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -186,6 +187,25 @@ public final class MempoiSheetBuilder {
         return this;
     }
 
+    /**
+     * add the received String array to the builder instance as array of column names included into the SQL query's GROUP BY clause
+     * YOU MUST KEEP THE SAME POSITIONAL ORDER OF THE QUERY THE COLUMNS BELONG TO
+     *
+     * @param groupByColumns the String array of the column's name involved in the GROUP BY clause
+     *
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withGroupByColumns(String[] groupByColumns) {
+
+        if (groupByColumns.length == 0) {
+            // TODO log or throw exception?
+        }
+
+        this.groupByColumns = groupByColumns;
+        return this;
+    }
+
+
 
     /**
      * builds the MempoiSheet and returns it
@@ -206,6 +226,8 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setNumberCellStyle(numberCellStyle);
         mempoiSheet.setMempoiFooter(mempoiFooter);
         mempoiSheet.setMempoiSubFooter(mempoiSubFooter);
+        mempoiSheet.setGroupByColumns(groupByColumns);
         return mempoiSheet;
     }
+
 }

@@ -47,7 +47,10 @@ public class MempoiSheet {
      */
     private MempoiSubFooter mempoiSubFooter;
 
-
+    /**
+     * the String array of the column's name involved in the GROUP BY clause
+     */
+    private String[] groupByColumns;
 
 
     public MempoiSheet(PreparedStatement prepStmt) {
@@ -169,4 +172,11 @@ public class MempoiSheet {
         this.sheetStyler = sheetStyler;
     }
 
+    public String[] getGroupByColumns() {
+        return groupByColumns;
+    }
+
+    public void setGroupByColumns(String[] groupByColumns) {
+        this.groupByColumns = groupByColumns;
+    }
 }

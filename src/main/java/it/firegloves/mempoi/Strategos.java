@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.List;
 
 public class Strategos {
@@ -134,8 +135,8 @@ public class Strategos {
         // read data from db
         ResultSet rs = DBMempoiDAO.getInstance().executeExportQuery(mempoiSheet.getPrepStmt());
 
-        // populates MempoiColumn list with export metadata list
-        List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
+        // preapre MempoiColumn list
+        List<MempoiColumn> columnList = this.prepareMempoiColumn(mempoiSheet, rs);
 
         // associate cell stylers
         MempoiStyler sheetReportStyler = mempoiSheet.getSheetStyler();
@@ -167,6 +168,37 @@ public class Strategos {
             ConnectionManager.closeResultSetAndPrepStmt(rs, mempoiSheet.getPrepStmt());
         }
     }
+
+
+    /**
+     * read the ResultSet's metadata and creates a List of MempoiColumn.
+     * if needed add GROUP BY's clause informations to the interested MempoiColumns
+     *
+     * @param mempoiSheet the MempoiSheet from which get GROUP BY's clause informations
+     * @param rs the ResultSet from which read columns metadata
+     * @return the created List<MempoiColumn>
+     */
+    private List<MempoiColumn> prepareMempoiColumn(MempoiSheet mempoiSheet, ResultSet rs) {
+
+        // populates MempoiColumn list with export metadata list
+        List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
+
+        // manages GROUP BY clause
+        if (null != mempoiSheet.getGroupByColumns()) {
+
+            Arrays.stream(mempoiSheet.getGroupByColumns()).
+                    forEach(colName ->
+
+                        columnList.stream()
+                                .filter(mempoiCol -> colName.equals(mempoiCol.getColumnName()))
+                                .findFirst()
+                                .ifPresent(mempoiCol -> mempoiCol.setInGroupBy(true))
+                    );
+        }
+
+        return columnList;
+    }
+
 
 
     /**

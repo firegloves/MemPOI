@@ -21,6 +21,15 @@ public class MempoiColumn {
 
     private MempoiSubFooterCell subFooterCell;
 
+    /**
+     * if true => this colum belong to a GROUP_BY clause
+     */
+    private boolean inGroupBy;
+
+    public MempoiColumn(String columnName) {
+        this.columnName = columnName;
+    }
+
     public MempoiColumn(int sqlObjType, String columnName) {
         this.columnName = columnName;
         this.setType(sqlObjType);
@@ -78,7 +87,6 @@ public class MempoiColumn {
             throw new MempoiRuntimeException(e);
         }
     }
-
 
     /**
      * set Poi Cell set value method basing on the type return class
@@ -145,6 +153,15 @@ public class MempoiColumn {
         this.cellSetValueMethod = cellSetValueMethod;
     }
 
+    public boolean isInGroupBy() {
+        return inGroupBy;
+    }
+
+    public void setInGroupBy(boolean inGroupBy) {
+        this.inGroupBy = inGroupBy;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -154,12 +171,15 @@ public class MempoiColumn {
             return false;
         }
         final MempoiColumn other = (MempoiColumn) obj;
-        return Objects.equals(this.type, other.type)
-                && Objects.equals(this.cellStyle, other.cellStyle)
-                && Objects.equals(this.columnName, other.columnName)
-                && Objects.equals(this.rsAccessDataMethod, other.rsAccessDataMethod)
-                && Objects.equals(this.cellSetValueMethod, other.cellSetValueMethod)
-                && Objects.equals(this.subFooterCell, other.subFooterCell);
+        return Objects.equals(this.columnName, other.columnName);
+
+        // TODO check if the commented block was used
+
+//                && Objects.equals(this.cellStyle, other.cellStyle)
+//                && Objects.equals(this.type, other.type)
+//                && Objects.equals(this.rsAccessDataMethod, other.rsAccessDataMethod)
+//                && Objects.equals(this.cellSetValueMethod, other.cellSetValueMethod)
+//                && Objects.equals(this.subFooterCell, other.subFooterCell);
     }
 
     @Override
