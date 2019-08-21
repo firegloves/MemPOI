@@ -9,6 +9,7 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
+import it.firegloves.mempoi.strategy.mempoicolumn.GroupByStrategy;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Strategos {
 
@@ -159,6 +161,9 @@ public class Strategos {
             // add optional footer
             this.createFooterRow(sheet, mempoiSheet.getMempoiFooter().orElseGet(() -> this.workbookConfig.getMempoiFooter()));
 
+            // apply mempoi column strategies
+            this.applyMempoiColumnStrategies(columnList, sheet);
+
             // adjust col size
             this.adjustColSize(sheet, columnList.size());
 
@@ -170,12 +175,13 @@ public class Strategos {
     }
 
 
+
     /**
      * read the ResultSet's metadata and creates a List of MempoiColumn.
      * if needed add GROUP BY's clause informations to the interested MempoiColumns
      *
      * @param mempoiSheet the MempoiSheet from which get GROUP BY's clause informations
-     * @param rs the ResultSet from which read columns metadata
+     * @param rs          the ResultSet from which read columns metadata
      * @return the created List<MempoiColumn>
      */
     private List<MempoiColumn> prepareMempoiColumn(MempoiSheet mempoiSheet, ResultSet rs) {
@@ -187,18 +193,23 @@ public class Strategos {
         if (null != mempoiSheet.getGroupByColumns()) {
 
             Arrays.stream(mempoiSheet.getGroupByColumns()).
-                    forEach(colName ->
+                    forEach(colName -> {
 
-                        columnList.stream()
-                                .filter(mempoiCol -> colName.equals(mempoiCol.getColumnName()))
+                        IntStream.range(0, columnList.size())
+                                .filter(colIndex -> colName.equals(columnList.get(colIndex).getColumnName()))
                                 .findFirst()
-                                .ifPresent(mempoiCol -> mempoiCol.setInGroupBy(true))
-                    );
+                                .ifPresent(colIndex -> columnList.get(colIndex).setStrategy(new GroupByStrategy(colIndex)));
+
+//                        columnList.stream()
+//                                .peek(mc -> i++)
+//                                .filter(mempoiCol -> colName.equals(mempoiCol.getColumnName()))
+//                                .findFirst()
+//                                .ifPresent(mempoiCol -> mempoiCol.setStrategy(new GroupByStrategy()))
+                    });
         }
 
         return columnList;
     }
-
 
 
     /**
@@ -264,7 +275,13 @@ public class Strategos {
 
                     logger.debug("SETTING CELL FOR COLUMN {}", col.getColumnName());
 
-                    col.getCellSetValueMethod().invoke(cell, col.getRsAccessDataMethod().invoke(rs, col.getColumnName()));
+                    Object value = col.getRsAccessDataMethod().invoke(rs, col.getColumnName());
+
+                    // sets value in the cell
+                    col.getCellSetValueMethod().invoke(cell, value);
+
+                    // analyze data for mempoi column's strategy
+                    col.strategyAnalyze(cell, value);
                 }
             }
 
@@ -408,6 +425,16 @@ public class Strategos {
             footer.setCenter(mempoiFooter.getCenterText());
             footer.setRight(mempoiFooter.getRightText());
         }
+    }
+
+    /**
+     * applies all availables mempoi column strategies
+     *
+     * @param columnList the List of MempoiColumn containing the strategies to execute
+     * @param sheet the Sheet on which apply the strategy
+     */
+    private void applyMempoiColumnStrategies(List<MempoiColumn> columnList, Sheet sheet) {
+        columnList.stream().forEach(mc -> mc.strategyExecute(sheet));
     }
 
 

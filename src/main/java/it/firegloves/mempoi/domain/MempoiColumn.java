@@ -2,8 +2,10 @@ package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.strategy.mempoicolumn.MempoiColumnStrategy;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Sheet;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -21,10 +23,11 @@ public class MempoiColumn {
 
     private MempoiSubFooterCell subFooterCell;
 
+
     /**
-     * if true => this colum belong to a GROUP_BY clause
+     * strategy pattern variable containing specific MempoiColumn logic
      */
-    private boolean inGroupBy;
+    private MempoiColumnStrategy strategy;
 
     public MempoiColumn(String columnName) {
         this.columnName = columnName;
@@ -49,7 +52,6 @@ public class MempoiColumn {
         this.setResultSetAccessMethod();
         this.setCellSetValueMethod();
     }
-
 
 
     public CellStyle getCellStyle() {
@@ -103,6 +105,7 @@ public class MempoiColumn {
 
     /**
      * basing on the sqlObjType returns the relative EExportDataType
+     *
      * @param sqlObjType
      */
     private EExportDataType getFieldTypeName(int sqlObjType) {
@@ -153,12 +156,32 @@ public class MempoiColumn {
         this.cellSetValueMethod = cellSetValueMethod;
     }
 
-    public boolean isInGroupBy() {
-        return inGroupBy;
+    public void setStrategy(MempoiColumnStrategy strategy) {
+        this.strategy = strategy;
     }
 
-    public void setInGroupBy(boolean inGroupBy) {
-        this.inGroupBy = inGroupBy;
+
+    /**
+     * applies strategy analysis
+     *
+     * @param cell  the Cell from which gain informations
+     * @param value cell value of type T
+     */
+    public void strategyAnalyze(Cell cell, Object value) {
+        if (null != this.strategy) {
+            this.strategy.analyze(cell, value);
+        }
+    }
+
+    /**
+     * applies strategy analysis
+     *
+     * @param sheet the Cell from which gain informations
+     */
+    public void strategyExecute(Sheet sheet) {
+        if (null != this.strategy) {
+            this.strategy.execute(sheet);
+        }
     }
 
 

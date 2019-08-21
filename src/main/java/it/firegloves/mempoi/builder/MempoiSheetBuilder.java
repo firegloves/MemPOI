@@ -189,7 +189,7 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received String array to the builder instance as array of column names included into the SQL query's GROUP BY clause
-     * YOU MUST KEEP THE SAME POSITIONAL ORDER OF THE QUERY THE COLUMNS BELONG TO
+     * positional order is not needed
      *
      * @param groupByColumns the String array of the column's name involved in the GROUP BY clause
      *
@@ -198,7 +198,7 @@ public final class MempoiSheetBuilder {
     public MempoiSheetBuilder withGroupByColumns(String[] groupByColumns) {
 
         if (groupByColumns.length == 0) {
-            // TODO log or throw exception?
+            // TODO log or throw exception? => implement force generate or not as property
         }
 
         this.groupByColumns = groupByColumns;
