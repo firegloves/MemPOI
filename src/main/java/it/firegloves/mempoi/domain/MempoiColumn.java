@@ -174,6 +174,17 @@ public class MempoiColumn {
     }
 
     /**
+     * closes the analysis, often used to manage the point that the ResultSet was already full iterated
+     *
+     * @param lastRowNum last row num
+     */
+    public void strategyCloseAnalysis(int lastRowNum) {
+        if (null != this.strategy) {
+            this.strategy.closeAnalysis(lastRowNum);
+        }
+    }
+
+    /**
      * applies strategy analysis
      *
      * @param sheet the Cell from which gain informations

@@ -8,14 +8,19 @@ package it.firegloves.mempoi.strategy.mempoicolumn;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroupByStrategy<T> implements MempoiColumnStrategy<T> {
+
+    /**
+     * the CellStyle of the containing MempoiColumn
+     */
+    private CellStyle cellStyle;
 
     /**
      * the index of the containing MempoiColumn in the list of columns of the owner sheet
@@ -33,7 +38,9 @@ public class GroupByStrategy<T> implements MempoiColumnStrategy<T> {
     private Integer lastRowNum = 0;
 
 
-    public GroupByStrategy(int mempoiColumnIndex) {
+    public GroupByStrategy(CellStyle cellStyle, int mempoiColumnIndex) {
+        this.cellStyle = cellStyle;
+        this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         this.mempoiColumnIndex = mempoiColumnIndex;
     }
 
@@ -52,11 +59,24 @@ public class GroupByStrategy<T> implements MempoiColumnStrategy<T> {
             // TODO log throw exception => add force generate
         }
 
-        if (!this.lastValue.equals(value)) {
+        // first iteration
+        if (null == this.lastValue) {
             this.lastValue = value;
-            this.groupByLimits.add(new ImmutablePair(lastRowNum, cell.getRow().getRowNum()));
-//            this.groupByLimits.add(new ImmutablePair(lastRowNum, cell.getRow().getRowNum()));
+            this.lastRowNum = cell.getRow().getRowNum();
         }
+
+        if ( ! this.lastValue.equals(value)) {
+            this.groupByLimits.add(new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum()-1));
+//            this.groupByLimits.add(new ImmutablePair(lastRowNum, cell.getRow().getRowNum()));
+
+            this.lastValue = value;
+            this.lastRowNum = cell.getRow().getRowNum();
+        }
+    }
+
+    @Override
+    public void closeAnalysis(int lastRowNum) {
+        this.groupByLimits.add(new ImmutablePair(this.lastRowNum, lastRowNum));
     }
 
     @Override
@@ -69,12 +89,23 @@ public class GroupByStrategy<T> implements MempoiColumnStrategy<T> {
         // for each pair add a MergedRegion
         this.groupByLimits.stream().forEach(pair -> {
 
-            sheet.addMergedRegion(new CellRangeAddress(
-                    pair.getLeft(),         // first row (0-based)
-                    pair.getRight(),        // last row  (0-based)
-                    this.mempoiColumnIndex, // first column (0-based)
-                    this.mempoiColumnIndex  // last column  (0-based)
-            ));
+            System.out.println("### LEFT " + pair.getLeft());
+            System.out.println("### right " + pair.getRight());
+
+            if (pair.getLeft() < pair.getRight()) {
+                // add merged region
+                int ind = sheet.addMergedRegion(new CellRangeAddress(
+                        pair.getLeft(),         // first row (0-based)
+                        pair.getRight(),        // last row  (0-based)
+                        this.mempoiColumnIndex, // first column (0-based)
+                        this.mempoiColumnIndex  // last column  (0-based)
+                ));
+
+                // add style
+                Row row = sheet.getRow(pair.getLeft());
+                Cell cell = row.getCell(this.mempoiColumnIndex);
+                cell.setCellStyle(this.cellStyle);
+            }
         });
     }
 }

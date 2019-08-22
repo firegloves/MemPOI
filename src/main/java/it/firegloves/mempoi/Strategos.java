@@ -140,12 +140,8 @@ public class Strategos {
         // preapre MempoiColumn list
         List<MempoiColumn> columnList = this.prepareMempoiColumn(mempoiSheet, rs);
 
-        // associate cell stylers
-        MempoiStyler sheetReportStyler = mempoiSheet.getSheetStyler();
-        new MempoiColumnStyleManager(sheetReportStyler).setMempoiColumnListStyler(columnList);
-
         // create header
-        rowCounter = this.createHeaderRow(sheet, columnList, rowCounter, sheetReportStyler);
+        rowCounter = this.createHeaderRow(sheet, columnList, rowCounter, mempoiSheet.getSheetStyler());
 
         // keep track of the first data row index (no header and subheaders)
         int firstDataRowIndex = rowCounter + 1;
@@ -156,7 +152,7 @@ public class Strategos {
             rowCounter = this.createDataRows(sheet, rs, columnList, rowCounter);
 
             // add optional sub footer
-            this.createSubFooterRow(sheet, columnList, mempoiSheet.getMempoiSubFooter().orElseGet(() -> this.workbookConfig.getMempoiSubFooter()), firstDataRowIndex, rowCounter, sheetReportStyler);
+            this.createSubFooterRow(sheet, columnList, mempoiSheet.getMempoiSubFooter().orElseGet(() -> this.workbookConfig.getMempoiSubFooter()), firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler());
 
             // add optional footer
             this.createFooterRow(sheet, mempoiSheet.getMempoiFooter().orElseGet(() -> this.workbookConfig.getMempoiFooter()));
@@ -189,6 +185,9 @@ public class Strategos {
         // populates MempoiColumn list with export metadata list
         List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
 
+        // assigns cell styles to MempoiColumns
+        new MempoiColumnStyleManager(mempoiSheet.getSheetStyler()).setMempoiColumnListStyler(columnList);
+
         // manages GROUP BY clause
         if (null != mempoiSheet.getGroupByColumns()) {
 
@@ -198,7 +197,9 @@ public class Strategos {
                         IntStream.range(0, columnList.size())
                                 .filter(colIndex -> colName.equals(columnList.get(colIndex).getColumnName()))
                                 .findFirst()
-                                .ifPresent(colIndex -> columnList.get(colIndex).setStrategy(new GroupByStrategy(colIndex)));
+                                .ifPresent(colIndex -> columnList.get(colIndex).setStrategy(new GroupByStrategy(columnList.get(colIndex).getCellStyle(), colIndex)));
+
+                        // TODO performance test con ciclo for
 
 //                        columnList.stream()
 //                                .peek(mc -> i++)
@@ -284,6 +285,10 @@ public class Strategos {
                     col.strategyAnalyze(cell, value);
                 }
             }
+
+            // close analysis on each MempoiColumn
+            int lastRowNum = rs.getRow() - 1;
+            columnList.stream().forEach(mc -> mc.strategyCloseAnalysis(lastRowNum));
 
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
