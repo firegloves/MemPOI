@@ -9,6 +9,7 @@ import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class GroupByTest extends FunctionalBaseGroupByTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_group_by.xlsx");
 
         try {
-            PreparedStatement prepStmt = this.createStatement(new String[] { "name" }, 90);
+            PreparedStatement prepStmt = this.createStatement(new String[] { "name" }, 200_000);
 
             // dogs sheet
             MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet()
@@ -37,9 +38,10 @@ public class GroupByTest extends FunctionalBaseGroupByTest {
                     .build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
+//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
+                    .withWorkbook(new XSSFWorkbook())
                     .addMempoiSheet(sheet)
                     .build();
 
