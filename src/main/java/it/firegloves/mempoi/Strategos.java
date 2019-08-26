@@ -9,7 +9,7 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
-import it.firegloves.mempoi.strategy.mempoicolumn.GroupByStrategy;
+import it.firegloves.mempoi.pipeline.mempoicolumn.MergedRegionsStep;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,12 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+// TODO son oarrivato che devo creare la pipeline per l'invocazione degli step ed eseguirla.
+//  ci deve essere una variabile in mempoiconfig che avvisa se c'è almeno uno step da eseguire?
+//  chiudere e riaprire il workbook sempre? farlo in mem?
 
 public class Strategos {
 
@@ -85,21 +90,28 @@ public class Strategos {
     private void generateMempoiReport(List<MempoiSheet> mempoiSheetList) {
 
         this.generateReport(mempoiSheetList);
-        this.manageFormulaToEvaluate(this.workbookConfig.isEvaluateCellFormulas(), this.workbookConfig.isHasFormulasToEvaluate());
+
+        // if needed generate a tempfile
+        if ((this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate()) || this.workbookConfig.isHasPostCreationSteps()) {
+            this.writeTempFile();
+            this.manageFormulaToEvaluate();
+            this.applyMempoiColumnStrategies(mempoiSheetList);
+        }
+
+        // apply mempoi column strategies
+//        this.applyMempoiColumnStrategies(mempoiSheetList);
+        // TODO check the result with formulas and merged regions
     }
 
 
     /**
      * manages eventual cell formulas to evaluate
-     *
-     * @param evaluateCellFormulas
-     * @param hasFormulasToEvaluate
      */
-    private void manageFormulaToEvaluate(boolean evaluateCellFormulas, boolean hasFormulasToEvaluate) {
-        if (evaluateCellFormulas && hasFormulasToEvaluate) {
+    private void manageFormulaToEvaluate() {
+        if (this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate()) {
             logger.debug("we have formulas to evaluate");
-            File tmpFile = this.writeTempFile();
-            this.openTempFileAndEvaluateCellFormulas(tmpFile);
+//            File tmpFile = this.writeTempFile();    // TODO check if I can avoid to write file on disk
+            this.evaluateCellFormulas();
         }
     }
 
@@ -158,7 +170,7 @@ public class Strategos {
             this.createFooterRow(sheet, mempoiSheet.getMempoiFooter().orElseGet(() -> this.workbookConfig.getMempoiFooter()));
 
             // apply mempoi column strategies
-            this.applyMempoiColumnStrategies(columnList, sheet);
+//            this.applyMempoiColumnStrategies(columnList, sheet);
 
             // adjust col size
             this.adjustColSize(sheet, columnList.size());
@@ -197,7 +209,10 @@ public class Strategos {
                         IntStream.range(0, columnList.size())
                                 .filter(colIndex -> colName.equals(columnList.get(colIndex).getColumnName()))
                                 .findFirst()
-                                .ifPresent(colIndex -> columnList.get(colIndex).setStrategy(new GroupByStrategy(columnList.get(colIndex).getCellStyle(), colIndex)));
+                                .ifPresent(colIndex -> {
+                                    columnList.get(colIndex).addElaborationStep(new MergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex));
+                                    this.workbookConfig.setHasPostCreationSteps(true);
+                                });
 
                         // TODO performance test con ciclo for
 
@@ -208,6 +223,9 @@ public class Strategos {
 //                                .ifPresent(mempoiCol -> mempoiCol.setStrategy(new GroupByStrategy()))
                     });
         }
+
+        // adds mempoi column list to the current MempoiSheet
+        mempoiSheet.setColumnList(columnList);
 
         return columnList;
     }
@@ -282,13 +300,13 @@ public class Strategos {
                     col.getCellSetValueMethod().invoke(cell, value);
 
                     // analyze data for mempoi column's strategy
-                    col.strategyAnalyze(cell, value);
+                    col.elaborationStepListAnalyze(cell, value);
                 }
             }
 
             // close analysis on each MempoiColumn
             int lastRowNum = rs.getRow() - 1;
-            columnList.stream().forEach(mc -> mc.strategyCloseAnalysis(lastRowNum));
+            columnList.stream().forEach(mc -> mc.elaborationStepListCloseAnalysis(lastRowNum));
 
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
@@ -303,6 +321,7 @@ public class Strategos {
      *
      * @return the written file
      */
+    // TODO return void?
     private File writeTempFile() {
 
         File tmpFile = new File(System.getProperty("java.io.tmpdir") + "mempoi_temp_" + System.currentTimeMillis() + ".xlsx");
@@ -312,6 +331,7 @@ public class Strategos {
             try (FileOutputStream outputStream = new FileOutputStream(tmpFile)) {
                 this.workbookConfig.getWorkbook().write(outputStream);
                 logger.debug("MemPOI temp file created: {}", tmpFile.getAbsolutePath());
+                this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
             }
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
@@ -325,15 +345,13 @@ public class Strategos {
 
     /**
      * opens the temp saved report file assigning it to the class workbook variable, then evaluate all available cell formulas
-     *
-     * @param tmpFile the temp file from which read the report
      */
-    private void openTempFileAndEvaluateCellFormulas(File tmpFile) {
+    private void evaluateCellFormulas() {
 
         try {
-            logger.debug("reading temp file");
-            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
-            logger.debug("readed temp file");
+//            logger.debug("reading temp file");
+//            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
+//            logger.debug("readed temp file");
             this.workbookConfig.getWorkbook().getCreationHelper().createFormulaEvaluator().evaluateAll();
             logger.debug("evaluated formulas");
         } catch (Exception e) {
@@ -435,11 +453,13 @@ public class Strategos {
     /**
      * applies all availables mempoi column strategies
      *
-     * @param columnList the List of MempoiColumn containing the strategies to execute
-     * @param sheet the Sheet on which apply the strategy
+     * @param mempoiSheetList the List of MempoiSheet to process
      */
-    private void applyMempoiColumnStrategies(List<MempoiColumn> columnList, Sheet sheet) {
-        columnList.stream().forEach(mc -> mc.strategyExecute(sheet));
+    private void applyMempoiColumnStrategies(List<MempoiSheet> mempoiSheetList) {
+        mempoiSheetList.stream()
+                .forEach(mSheet -> mSheet.getColumnList().stream().forEach(mc -> mc.elaborationStepListExecute(mSheet, this.workbookConfig.getWorkbook())));
+
+//        columnList.stream().forEach(mc -> mc.elaborationStepListExecute(sheet));
     }
 
 

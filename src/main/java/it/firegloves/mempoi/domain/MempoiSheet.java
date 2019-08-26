@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 import java.util.Optional;
 
 public class MempoiSheet {
@@ -46,6 +47,11 @@ public class MempoiSheet {
      * the sub footer to apply to the sheet. if null => no sub footer is appended to the report
      */
     private MempoiSubFooter mempoiSubFooter;
+
+    /**
+     * list of MempoiColumns belonging to the current MempoiSheet
+     */
+    private List<MempoiColumn> columnList;
 
     /**
      * the String array of the column's name involved in the GROUP BY clause
@@ -178,5 +184,13 @@ public class MempoiSheet {
 
     public void setGroupByColumns(String[] groupByColumns) {
         this.groupByColumns = groupByColumns;
+    }
+
+    public List<MempoiColumn> getColumnList() {
+        return columnList;
+    }
+
+    public void setColumnList(List<MempoiColumn> columnList) {
+        this.columnList = columnList;
     }
 }

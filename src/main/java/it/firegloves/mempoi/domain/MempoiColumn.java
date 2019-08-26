@@ -2,14 +2,17 @@ package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
-import it.firegloves.mempoi.strategy.mempoicolumn.MempoiColumnStrategy;
+import it.firegloves.mempoi.pipeline.mempoicolumn.MempoiColumnElaborationStep;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MempoiColumn {
@@ -25,9 +28,10 @@ public class MempoiColumn {
 
 
     /**
-     * strategy pattern variable containing specific MempoiColumn logic
+     * pipeline pattern for elaborating MempoiColumn's generated data after workbook generation
      */
-    private MempoiColumnStrategy strategy;
+    private List<MempoiColumnElaborationStep> elaborationStepList = new ArrayList<>();
+
 
     public MempoiColumn(String columnName) {
         this.columnName = columnName;
@@ -156,8 +160,8 @@ public class MempoiColumn {
         this.cellSetValueMethod = cellSetValueMethod;
     }
 
-    public void setStrategy(MempoiColumnStrategy strategy) {
-        this.strategy = strategy;
+    public void addElaborationStep(MempoiColumnElaborationStep step) {
+        this.elaborationStepList.add(step);
     }
 
 
@@ -167,10 +171,8 @@ public class MempoiColumn {
      * @param cell  the Cell from which gain informations
      * @param value cell value of type T
      */
-    public void strategyAnalyze(Cell cell, Object value) {
-        if (null != this.strategy) {
-            this.strategy.analyze(cell, value);
-        }
+    public void elaborationStepListAnalyze(Cell cell, Object value) {
+        this.elaborationStepList.stream().forEach(step -> step.analyze(cell, value));
     }
 
     /**
@@ -178,21 +180,18 @@ public class MempoiColumn {
      *
      * @param lastRowNum last row num
      */
-    public void strategyCloseAnalysis(int lastRowNum) {
-        if (null != this.strategy) {
-            this.strategy.closeAnalysis(lastRowNum);
-        }
+    public void elaborationStepListCloseAnalysis(int lastRowNum) {
+        this.elaborationStepList.stream().forEach(step -> step.closeAnalysis(lastRowNum));
     }
 
     /**
      * applies strategy analysis
      *
-     * @param sheet the Cell from which gain informations
+     * @param mempoiSheet the MempoiSheet from which gain informations
+     * @param workbook the Workbook from which get Sheet
      */
-    public void strategyExecute(Sheet sheet) {
-        if (null != this.strategy) {
-            this.strategy.execute(sheet);
-        }
+    public void elaborationStepListExecute(MempoiSheet mempoiSheet, Workbook workbook) {
+        this.elaborationStepList.stream().forEach(step -> step.execute(mempoiSheet, workbook));
     }
 
 

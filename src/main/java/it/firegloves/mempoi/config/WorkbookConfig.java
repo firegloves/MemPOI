@@ -54,6 +54,10 @@ public class WorkbookConfig {
      */
     private boolean evaluateCellFormulas;
 
+    /**
+     * true if some post workbook creation steps are present (e.g. merged region)
+     */
+    private boolean hasPostCreationSteps;
 
     /**
      * the MempoiSheet list equal to the sheet to create in the report
@@ -155,5 +159,13 @@ public class WorkbookConfig {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public boolean isHasPostCreationSteps() {
+        return hasPostCreationSteps;
+    }
+
+    public void setHasPostCreationSteps(boolean hasPostCreationSteps) {
+        this.hasPostCreationSteps = hasPostCreationSteps;
     }
 }

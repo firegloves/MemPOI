@@ -1,13 +1,15 @@
 /**
- * Strategy pattern for specific MempoiColumn logic
+ * pipeline pattern's step for elaborating MempoiColumn's generated data after workbook generation
  */
 
-package it.firegloves.mempoi.strategy.mempoicolumn;
+package it.firegloves.mempoi.pipeline.mempoicolumn;
 
+import it.firegloves.mempoi.domain.MempoiSheet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
-public interface MempoiColumnStrategy<T> {
+public interface MempoiColumnElaborationStep<T> {
 
     /**
      * receives a value of type Cell, analyzes it and collects informations
@@ -25,9 +27,10 @@ public interface MempoiColumnStrategy<T> {
     void closeAnalysis(int lastRowNum);
 
     /**
-     * applies strategy logic to the Workbook modifying it
+     * applies step logic to the Workbook modifying it
      *
-     * @param sheet the sheet on which operate
+     * @param mempoiSheet the MempoiSheet from which gain informations
+     * @param workbook the Workbook from which get Sheet
      */
-    void execute(Sheet sheet);
+    void execute(MempoiSheet mempoiSheet, Workbook workbook);
 }

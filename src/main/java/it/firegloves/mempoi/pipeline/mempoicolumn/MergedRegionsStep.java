@@ -1,21 +1,21 @@
 /**
- * strategy pattern implementation for managing SQL GROUP BY clause
- * <p>
+ * pipeline step for managing merged regions (to be used with ORDER BY clause)
+ *
  * only vertical merge is supported
  */
 
-package it.firegloves.mempoi.strategy.mempoicolumn;
+package it.firegloves.mempoi.pipeline.mempoicolumn;
 
+import it.firegloves.mempoi.domain.MempoiSheet;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupByStrategy<T> implements MempoiColumnStrategy<T> {
+public class MergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
 
     /**
      * the CellStyle of the containing MempoiColumn
@@ -38,16 +38,16 @@ public class GroupByStrategy<T> implements MempoiColumnStrategy<T> {
     private Integer lastRowNum = 0;
 
 
-    public GroupByStrategy(CellStyle cellStyle, int mempoiColumnIndex) {
+    public MergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex) {
         this.cellStyle = cellStyle;
         this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         this.mempoiColumnIndex = mempoiColumnIndex;
     }
 
     /**
-     * if MempoiColumn has to by merged due to GROUP BY clause, this variable contains MergedRegions' limits
+     * if MempoiColumn has to by merged, this variable contains MergedRegions' limits
      */
-    private List<Pair<Integer, Integer>> groupByLimits = new ArrayList<>();
+    private List<Pair<Integer, Integer>> mergedRegionsLimits = new ArrayList<>();
     // TODO test performance
 //    private List<int[]> groupByLimits = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class GroupByStrategy<T> implements MempoiColumnStrategy<T> {
         }
 
         if ( ! this.lastValue.equals(value)) {
-            this.groupByLimits.add(new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum()-1));
+            this.mergedRegionsLimits.add(new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum()-1));
 //            this.groupByLimits.add(new ImmutablePair(lastRowNum, cell.getRow().getRowNum()));
 
             this.lastValue = value;
@@ -76,21 +76,25 @@ public class GroupByStrategy<T> implements MempoiColumnStrategy<T> {
 
     @Override
     public void closeAnalysis(int lastRowNum) {
-        this.groupByLimits.add(new ImmutablePair(this.lastRowNum, lastRowNum));
+        this.mergedRegionsLimits.add(new ImmutablePair(this.lastRowNum, lastRowNum));
     }
 
     @Override
-    public void execute(Sheet sheet) {
+    public void execute(MempoiSheet mempoiSheet, Workbook workbook) {
+
+        // TODO improve checkk
+        Sheet sheet = workbook.getSheet(mempoiSheet.getSheetName());
+
 
         if (null == sheet) {
             // TODO log throw exception => add force generate
         }
 
         // for each pair add a MergedRegion
-        this.groupByLimits.stream().forEach(pair -> {
+        this.mergedRegionsLimits.stream().forEach(pair -> {
 
-            System.out.println("### LEFT " + pair.getLeft());
-            System.out.println("### right " + pair.getRight());
+//            System.out.println("### LEFT " + pair.getLeft());
+//            System.out.println("### right " + pair.getRight());
 
             if (pair.getLeft() < pair.getRight()) {
                 // add merged region
