@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.functional;
 
+import it.firegloves.mempoi.TestConstants;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.commons.lang3.StringUtils;
@@ -76,7 +77,7 @@ public abstract class FunctionalBaseTest {
             sb.append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
-        sb.append(" FROM mempoi.export_test");
+        sb.append(" FROM " + TestConstants.TABLE_EXPORT_TEST);
 
         if (maxLimit > -1) {
             sb.append(" LIMIT 0, " + maxLimit);

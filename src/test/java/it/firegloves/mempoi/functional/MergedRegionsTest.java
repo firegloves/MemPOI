@@ -6,43 +6,37 @@ import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class GroupByTest extends FunctionalBaseGroupByTest {
+public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
 
     @Test
-    public void testWithAnimals() {
+    public void testWithFileAndMergedRegionsHSSF() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_group_by.xlsx");
 
         try {
-            PreparedStatement prepStmt = this.createStatement(null, 60_000);
+            PreparedStatement prepStmt = this.createStatement(null, 60_001);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // dogs sheet
             MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet()
-                    .withSheetName("Grouped by name")
+                    .withSheetName("Merged regions name column")
                     .withPrepStmt(prepStmt)
-                    .withGroupByColumns(new String[] {"name"})
-//                    .withGroupByColumns(new String[] {"name"})
+                    .withMergedRegionColumns(new String[] { "name" })
                     .build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
 //                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
-                    .withWorkbook(new XSSFWorkbook())
+                    .withWorkbook(new HSSFWorkbook())
                     .addMempoiSheet(sheet)
                     .build();
 

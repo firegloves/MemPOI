@@ -2,7 +2,7 @@
  * pipeline pattern's step for elaborating MempoiColumn's generated data after workbook generation
  */
 
-package it.firegloves.mempoi.pipeline.mempoicolumn;
+package it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory;
 
 import it.firegloves.mempoi.domain.MempoiSheet;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,7 +17,7 @@ public interface MempoiColumnElaborationStep<T> {
      * @param cell  the Cell from which gain informations
      * @param value cell value of type T
      */
-    void analyze(Cell cell, T value);
+    void performAnalysis(Cell cell, T value);
 
     /**
      * closes the analysis, often used to manage the point that the ResultSet was already full iterated

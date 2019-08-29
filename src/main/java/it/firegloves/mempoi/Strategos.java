@@ -9,7 +9,9 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
-import it.firegloves.mempoi.pipeline.mempoicolumn.NotSXSSFMergedRegionsStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.NotStreamApiMergedRegionsStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.StreamApiElaborationStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.commons.lang3.StringUtils;
@@ -91,14 +93,14 @@ public class Strategos {
         this.generateReport(mempoiSheetList);
 
         // if needed generate a tempfile
-        if ((this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate()) || this.workbookConfig.isHasPostCreationSteps()) {
+        if ((this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate())) {
             this.writeTempFile();
             this.manageFormulaToEvaluate();
             this.applyMempoiColumnStrategies(mempoiSheetList);
         }
 
         // apply mempoi column strategies
-//        this.applyMempoiColumnStrategies(mempoiSheetList);
+        this.applyMempoiColumnStrategies(mempoiSheetList);
         // TODO check the result with formulas and merged regions
     }
 
@@ -109,8 +111,8 @@ public class Strategos {
     private void manageFormulaToEvaluate() {
         if (this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate()) {
             logger.debug("we have formulas to evaluate");
-//            File tmpFile = this.writeTempFile();    // TODO check if I can avoid to write file on disk
-            this.evaluateCellFormulas();
+            File tmpFile = this.writeTempFile();    // TODO check if I can avoid to write file on disk
+            this.openTempFileAndEvaluateCellFormulas(tmpFile);
         }
     }
 
@@ -199,17 +201,22 @@ public class Strategos {
         new MempoiColumnStyleManager(mempoiSheet.getSheetStyler()).setMempoiColumnListStyler(columnList);
 
         // manages GROUP BY clause
-        if (null != mempoiSheet.getGroupByColumns()) {
+        if (null != mempoiSheet.getMergedRegionColumns()) {
 
-            Arrays.stream(mempoiSheet.getGroupByColumns()).
+            Arrays.stream(mempoiSheet.getMergedRegionColumns()).
                     forEach(colName -> {
 
                         IntStream.range(0, columnList.size())
                                 .filter(colIndex -> colName.equals(columnList.get(colIndex).getColumnName()))
                                 .findFirst()
                                 .ifPresent(colIndex -> {
-                                    columnList.get(colIndex).addElaborationStep(new NotSXSSFMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex));
-                                    this.workbookConfig.setHasPostCreationSteps(true);
+
+                                    MempoiColumnElaborationStep step = this.workbookConfig.getWorkbook() instanceof StreamApiElaborationStep ?
+                                            new NotStreamApiMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex) :  // TODO sistemare creazione per StreamApi version
+                                            new NotStreamApiMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex);
+
+                                    columnList.get(colIndex).addElaborationStep(step);
+//                                    this.workbookConfig.setHasPostCreationSteps(true);
                                 });
 
                         // TODO performance test con ciclo for
@@ -336,11 +343,11 @@ public class Strategos {
             this.closeWorkbook();
         }
 
-        try {
-            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
-        } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
-        }
+//        try {
+//            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
+//        } catch (Exception e) {
+//            throw new MempoiRuntimeException(e);
+//        }
 
         return tmpFile;
     }
@@ -348,13 +355,15 @@ public class Strategos {
 
     /**
      * opens the temp saved report file assigning it to the class workbook variable, then evaluate all available cell formulas
+     *
+     * @param tmpFile the temp file from which read the report
      */
-    private void evaluateCellFormulas() {
+    private void openTempFileAndEvaluateCellFormulas(File tmpFile) {
 
         try {
-//            logger.debug("reading temp file");
-//            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
-//            logger.debug("readed temp file");
+            logger.debug("reading temp file");
+            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
+            logger.debug("readed temp file");
             this.workbookConfig.getWorkbook().getCreationHelper().createFormulaEvaluator().evaluateAll();
             logger.debug("evaluated formulas");
         } catch (Exception e) {
@@ -460,7 +469,7 @@ public class Strategos {
      */
     private void applyMempoiColumnStrategies(List<MempoiSheet> mempoiSheetList) {
         mempoiSheetList.stream()
-                .forEach(mSheet -> mSheet.getColumnList().stream().forEach(mc -> mc.elaborationNotSXSSFStepListExecute(mSheet, this.workbookConfig.getWorkbook())));
+                .forEach(mSheet -> mSheet.getColumnList().stream().forEach(mc -> mc.elaborationStepListExecute(mSheet, this.workbookConfig.getWorkbook())));
 
 //        columnList.stream().forEach(mc -> mc.elaborationStepListExecute(sheet));
     }

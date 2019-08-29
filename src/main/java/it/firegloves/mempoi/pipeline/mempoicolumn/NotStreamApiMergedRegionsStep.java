@@ -7,6 +7,7 @@
 package it.firegloves.mempoi.pipeline.mempoicolumn;
 
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.*;
@@ -15,7 +16,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotSXSSFMergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
+public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
 
     /**
      * the CellStyle of the containing MempoiColumn
@@ -38,7 +39,7 @@ public class NotSXSSFMergedRegionsStep<T> implements MempoiColumnElaborationStep
     private Integer lastRowNum = 0;
 
 
-    public NotSXSSFMergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex) {
+    public NotStreamApiMergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex) {
         this.cellStyle = cellStyle;
         this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         this.mempoiColumnIndex = mempoiColumnIndex;
@@ -53,7 +54,7 @@ public class NotSXSSFMergedRegionsStep<T> implements MempoiColumnElaborationStep
 
 
     @Override
-    public void analyze(Cell cell, T value) {
+    public void performAnalysis(Cell cell, T value) {
 
         System.out.println(lastValue + " : " + value);
         if (null == cell || null == value) {
@@ -84,7 +85,7 @@ public class NotSXSSFMergedRegionsStep<T> implements MempoiColumnElaborationStep
     @Override
     public void execute(MempoiSheet mempoiSheet, Workbook workbook) {
 
-        // TODO improve checkk
+        // TODO improve checks
         Sheet sheet = workbook.getSheet(mempoiSheet.getSheetName());
 
 

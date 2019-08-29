@@ -2,9 +2,8 @@ package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
-import it.firegloves.mempoi.pipeline.mempoicolumn.MempoiColumnElaborationStep;
-import it.firegloves.mempoi.pipeline.mempoicolumn.NotSXSSFElaborationStep;
-import it.firegloves.mempoi.pipeline.mempoicolumn.SXSSFElaborationStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.StreamApiElaborationStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -22,6 +21,9 @@ public class MempoiColumn {
     private CellStyle cellStyle;
     private String columnName;
 
+    /**
+     * contains the ResultSet's method to
+     */
     private Method rsAccessDataMethod;
     private Method cellSetValueMethod;
 
@@ -29,14 +31,9 @@ public class MempoiColumn {
 
 
     /**
-     * pipeline pattern for elaborating MempoiColumn's generated data after workbook generation
+     * pipeline pattern for elaborating MempoiColumn's data
      */
-    private List<NotSXSSFElaborationStep> notSXSSFelaborationStepList = new ArrayList<>();
-
-    /**
-     * pipeline pattern for elaborating MempoiColumn's generated data during workbook generation
-     */
-    private List<SXSSFElaborationStep> sXSSFelaborationStepList = new ArrayList<>();
+    private List<MempoiColumnElaborationStep> elaborationStepList = new ArrayList<>();
 
 
     public MempoiColumn(String columnName) {
@@ -166,14 +163,9 @@ public class MempoiColumn {
         this.cellSetValueMethod = cellSetValueMethod;
     }
 
-    public void addElaborationStep(NotSXSSFElaborationStep step) {
-        this.notSXSSFelaborationStepList.add(step);
+    public void addElaborationStep(MempoiColumnElaborationStep step) {
+        this.elaborationStepList.add(step);
     }
-
-    public void addElaborationStep(SXSSFElaborationStep step) {
-        this.sXSSFelaborationStepList.add(step);
-    }
-
 
     /**
      * applies strategy analysis
@@ -182,8 +174,7 @@ public class MempoiColumn {
      * @param value cell value of type T
      */
     public void elaborationStepListAnalyze(Cell cell, Object value) {
-        this.notSXSSFelaborationStepList.stream().forEach(step -> step.analyze(cell, value));
-        this.sXSSFelaborationStepList.stream().forEach(step -> step.analyze(cell, value));
+        this.elaborationStepList.stream().forEach(step -> step.performAnalysis(cell, value));
     }
 
     /**
@@ -192,8 +183,7 @@ public class MempoiColumn {
      * @param lastRowNum last row num
      */
     public void elaborationStepListCloseAnalysis(int lastRowNum) {
-        this.notSXSSFelaborationStepList.stream().forEach(step -> step.closeAnalysis(lastRowNum));
-        this.sXSSFelaborationStepList.stream().forEach(step -> step.closeAnalysis(lastRowNum));
+        this.elaborationStepList.stream().forEach(step -> step.closeAnalysis(lastRowNum));
     }
 
     /**
@@ -202,8 +192,8 @@ public class MempoiColumn {
      * @param mempoiSheet the MempoiSheet from which gain informations
      * @param workbook the Workbook from which get Sheet
      */
-    public void elaborationNotSXSSFStepListExecute(MempoiSheet mempoiSheet, Workbook workbook) {
-        this.notSXSSFelaborationStepList.stream().forEach(step -> step.execute(mempoiSheet, workbook));
+    public void elaborationStepListExecute(MempoiSheet mempoiSheet, Workbook workbook) {
+        this.elaborationStepList.stream().forEach(step -> step.execute(mempoiSheet, workbook));
     }
 
 
@@ -218,7 +208,7 @@ public class MempoiColumn {
         final MempoiColumn other = (MempoiColumn) obj;
         return Objects.equals(this.columnName, other.columnName);
 
-        // TODO check if the commented block was used
+        // TODO check if the commented block was useful
 
 //                && Objects.equals(this.cellStyle, other.cellStyle)
 //                && Objects.equals(this.type, other.type)

@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.functional;
 
+import it.firegloves.mempoi.TestConstants;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +19,9 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-public abstract class FunctionalBaseGroupByTest extends FunctionalBaseTest {
+public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest {
+
+    // TODO merge into test class?
 
     public static final int MAX_ROWS = 10;
     public static final int NO_LIMITS = -1;
@@ -61,7 +64,7 @@ public abstract class FunctionalBaseGroupByTest extends FunctionalBaseTest {
             sb.append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
-        sb.append(" FROM mempoi.group_by_test");
+        sb.append(" FROM " + TestConstants.TABLE_MERGED_REGIONS);
 
         if (null != groupByColumns && groupByColumns.length > 0) {
             sb.append(" ORDER BY ");

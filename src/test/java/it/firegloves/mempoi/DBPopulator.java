@@ -21,8 +21,8 @@ public class DBPopulator {
         // instance.createTableSpeedTest();
         // instance.populateSpeedTest();
 
-        instance.createTableGroupByTest();
-        instance.populateGroupByTest();
+        instance.createTableMergedRegionsTest();
+        instance.populateMergedRegionsTest();
 
         instance.closeConn();
     }
@@ -50,7 +50,7 @@ public class DBPopulator {
 
     private void createTableSpeedTest() {
 
-        String speedTestTbl = "CREATE TABLE `speed_test` (\n" +
+        String speedTestTbl = "CREATE TABLE " + TestConstants.TABLE_SPEED_TEST + " (\n" +
                 "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
                 "  `creation_date` date NOT NULL,\n" +
                 "  `dateTime` datetime DEFAULT NULL,\n" +
@@ -78,7 +78,7 @@ public class DBPopulator {
     }
 
     private void populateSpeedTest() {
-        String sqlQuery = "insert into speed_test (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sqlQuery = "insert into " + TestConstants.TABLE_SPEED_TEST + " (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         Random rand = new Random(System.currentTimeMillis());
         PreparedStatement pstmt = null;
@@ -122,13 +122,13 @@ public class DBPopulator {
 
 
     /********************************************************************************************
-     *                  GROUP BY TABLE
+     *                  MERGED REGIONS TABLE
      *******************************************************************************************/
 
 
-    private void createTableGroupByTest() {
+    private void createTableMergedRegionsTest() {
 
-        String speedTestTbl = "CREATE TABLE `group_by_test` (\n" +
+        String speedTestTbl = "CREATE TABLE " + TestConstants.TABLE_MERGED_REGIONS + " (\n" +
                 "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
                 "  `creation_date` date NOT NULL,\n" +
                 "  `dateTime` datetime DEFAULT NULL,\n" +
@@ -155,8 +155,8 @@ public class DBPopulator {
         }
     }
 
-    private void populateGroupByTest() {
-        String sqlQuery = "insert into group_by_test (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private void populateMergedRegionsTest() {
+        String sqlQuery = "insert into " + TestConstants.TABLE_MERGED_REGIONS + " (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         Random rand = new Random(System.currentTimeMillis());
         PreparedStatement pstmt = null;

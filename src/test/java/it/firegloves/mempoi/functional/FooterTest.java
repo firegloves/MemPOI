@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.functional;
 
 import it.firegloves.mempoi.MemPOI;
+import it.firegloves.mempoi.TestConstants;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
@@ -199,7 +200,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
-                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test LIMIT 0, 10"), "Cats sheet"))
+                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM " + TestConstants.TABLE_EXPORT_TEST + " LIMIT 0, 10"), "Cats sheet"))
                     .withMempoiSubFooter(new NumberSumSubFooter())
                     .withStyleTemplate(new SummerStyleTemplate())
                     .build();
@@ -254,7 +255,7 @@ public class FooterTest extends FunctionalBaseTest {
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
-                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test LIMIT 0, 10"), "Cats sheet"))
+                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM " + TestConstants.TABLE_EXPORT_TEST + " LIMIT 0, 10"), "Cats sheet"))
                     .withMempoiSubFooter(new NumberSumSubFooter())
                     .withMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
                     .withStyleTemplate(new SummerStyleTemplate())

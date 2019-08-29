@@ -54,9 +54,9 @@ public class MempoiSheet {
     private List<MempoiColumn> columnList;
 
     /**
-     * the String array of the column's name involved in the GROUP BY clause
+     * the String array of the column's names to be merged
      */
-    private String[] groupByColumns;
+    private String[] mergedRegionColumns;
 
 
     public MempoiSheet(PreparedStatement prepStmt) {
@@ -178,12 +178,12 @@ public class MempoiSheet {
         this.sheetStyler = sheetStyler;
     }
 
-    public String[] getGroupByColumns() {
-        return groupByColumns;
+    public String[] getMergedRegionColumns() {
+        return mergedRegionColumns;
     }
 
-    public void setGroupByColumns(String[] groupByColumns) {
-        this.groupByColumns = groupByColumns;
+    public void setMergedRegionColumns(String[] mergedRegionColumns) {
+        this.mergedRegionColumns = mergedRegionColumns;
     }
 
     public List<MempoiColumn> getColumnList() {

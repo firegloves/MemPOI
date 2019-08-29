@@ -10,6 +10,7 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.util.SXSSFRowManager;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class MempoiBuilder {
+
+    // TODO aggiungere lista di pipeline step da aggiungere dall'esterno => così da poterle estendere e creare di custom
 
     // debug
     private boolean debug = false;
@@ -56,6 +59,12 @@ public class MempoiBuilder {
      * but if this var is true MemPOI tries to evaluate cell formulas at runtime instead
      */
     private boolean evaluateCellFormulas;
+
+    /**
+     * the maximum supported in memory rows (SXSSFWorkbook only)
+     */
+    private Integer maxInMemoryRows;
+
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -227,6 +236,18 @@ public class MempoiBuilder {
         return this;
     }
 
+
+    /**
+     * @param maxInMemoryRows the maximum supported in memory rows (SXSSFWorkbook only, otherwise it will be ignored)
+     *
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withMaxInMemoryRows(int maxInMemoryRows) {
+        this.maxInMemoryRows = maxInMemoryRows;
+        return this;
+    }
+
+
     /**
      * add a MempoiSheet to the list of the sheet to add to the generating export
      * @param mempoiSheet the MempoiSheet to add to the export queue
@@ -268,6 +289,13 @@ public class MempoiBuilder {
                 this.evaluateCellFormulas,
                 this.mempoiSheetList,
                 this.file);
+
+
+        // TODO improve checks (>= -1 && != 0)?
+        // add SXSSFRowManager if needed
+        if (null != this.maxInMemoryRows) {
+            workbookConfig.setSxssfRowManager(new SXSSFRowManager(this.maxInMemoryRows));
+        }
 
         return new MemPOI(workbookConfig);
     }

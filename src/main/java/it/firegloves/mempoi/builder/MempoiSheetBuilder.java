@@ -27,7 +27,7 @@ public final class MempoiSheetBuilder {
     private MempoiFooter mempoiFooter;
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
-    private String[] groupByColumns;
+    private String[] mergedRegionColumns;
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -188,20 +188,20 @@ public final class MempoiSheetBuilder {
     }
 
     /**
-     * add the received String array to the builder instance as array of column names included into the SQL query's GROUP BY clause
-     * positional order is not needed
+     * add the received String array to the builder instance as array of column names to be merged
+     * the merge is made merging adiacent cells with the same value in the same column
      *
-     * @param groupByColumns the String array of the column's name involved in the GROUP BY clause
+     * @param mergedRegionColumns the String array of the column's names to be merged
      *
      * @return the current MempoiSheetBuilder
      */
-    public MempoiSheetBuilder withGroupByColumns(String[] groupByColumns) {
+    public MempoiSheetBuilder withMergedRegionColumns(String[] mergedRegionColumns) {
 
-        if (groupByColumns.length == 0) {
+        if (mergedRegionColumns.length == 0) {
             // TODO log or throw exception? => implement force generate or not as property
         }
 
-        this.groupByColumns = groupByColumns;
+        this.mergedRegionColumns = mergedRegionColumns;
         return this;
     }
 
@@ -226,7 +226,7 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setNumberCellStyle(numberCellStyle);
         mempoiSheet.setMempoiFooter(mempoiFooter);
         mempoiSheet.setMempoiSubFooter(mempoiSubFooter);
-        mempoiSheet.setGroupByColumns(groupByColumns);
+        mempoiSheet.setMergedRegionColumns(mergedRegionColumns);
         return mempoiSheet;
     }
 

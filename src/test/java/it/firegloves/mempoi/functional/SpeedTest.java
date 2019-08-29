@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.functional;
 
 import it.firegloves.mempoi.MemPOI;
+import it.firegloves.mempoi.TestConstants;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
@@ -31,7 +32,7 @@ public class SpeedTest extends FunctionalBaseTest {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
-                    "FROM mempoi.speed_test");
+                    "FROM " + TestConstants.TABLE_SPEED_TEST);
 
 
             if (! this.outReportFolder.exists() && ! this.outReportFolder.mkdirs()) {
@@ -169,7 +170,7 @@ public class SpeedTest extends FunctionalBaseTest {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
-                    "FROM mempoi.speed_test LIMIT 0, 65500");
+                    "FROM "+ TestConstants.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,7 +199,7 @@ public class SpeedTest extends FunctionalBaseTest {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
-                    "FROM mempoi.speed_test LIMIT 0, 65500");
+                    "FROM " + TestConstants.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
             e.printStackTrace();
         }

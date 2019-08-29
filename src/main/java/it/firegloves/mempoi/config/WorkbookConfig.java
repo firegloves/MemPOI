@@ -4,6 +4,7 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.FormulaSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import it.firegloves.mempoi.util.SXSSFRowManager;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
@@ -55,14 +56,19 @@ public class WorkbookConfig {
     private boolean evaluateCellFormulas;
 
     /**
-     * true if some post workbook creation steps are present (e.g. merged region)
+     * true if some data elaboration pipeline steps are present (e.g. merged region)
      */
-    private boolean hasPostCreationSteps;
+//    private boolean hasPostCreationSteps;
 
     /**
      * the MempoiSheet list equal to the sheet to create in the report
      */
     private List<MempoiSheet> sheetList;
+
+    /**
+     * responsible of memory access management when using a SXSSFWorkbook
+     */
+    private SXSSFRowManager sxssfRowManager;
 
 
     public WorkbookConfig() {
@@ -136,6 +142,14 @@ public class WorkbookConfig {
         this.hasFormulasToEvaluate = hasFormulasToEvaluate;
     }
 
+    public SXSSFRowManager getSxssfRowManager() {
+        return sxssfRowManager;
+    }
+
+    public void setSxssfRowManager(SXSSFRowManager sxssfRowManager) {
+        this.sxssfRowManager = sxssfRowManager;
+    }
+
     public List<MempoiSheet> getSheetList() {
         return sheetList;
     }
@@ -161,11 +175,11 @@ public class WorkbookConfig {
         this.file = file;
     }
 
-    public boolean isHasPostCreationSteps() {
-        return hasPostCreationSteps;
-    }
-
-    public void setHasPostCreationSteps(boolean hasPostCreationSteps) {
-        this.hasPostCreationSteps = hasPostCreationSteps;
-    }
+//    public boolean isHasPostCreationSteps() {
+//        return hasPostCreationSteps;
+//    }
+//
+//    public void setHasPostCreationSteps(boolean hasPostCreationSteps) {
+//        this.hasPostCreationSteps = hasPostCreationSteps;
+//    }
 }
