@@ -62,10 +62,12 @@ public abstract class FunctionalBaseGroupByTest extends FunctionalBaseTest {
         }
         sb.delete(sb.length() - 2, sb.length());
         sb.append(" FROM mempoi.group_by_test");
-        sb.append(" ORDER BY ");
 
-        String grpCols = Arrays.stream(groupByColumns).collect(Collectors.joining(", "));
-        sb.append(grpCols);
+        if (null != groupByColumns && groupByColumns.length > 0) {
+            sb.append(" ORDER BY ");
+            String grpCols = Arrays.stream(groupByColumns).collect(Collectors.joining(", "));
+            sb.append(grpCols);
+        }
 
         if (maxLimit > -1) {
             sb.append(" LIMIT 0, " + maxLimit);

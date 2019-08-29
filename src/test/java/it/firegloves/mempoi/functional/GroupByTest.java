@@ -28,13 +28,14 @@ public class GroupByTest extends FunctionalBaseGroupByTest {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_group_by.xlsx");
 
         try {
-            PreparedStatement prepStmt = this.createStatement(new String[] { "name" }, 200_000);
+            PreparedStatement prepStmt = this.createStatement(null, 60_000);
 
             // dogs sheet
             MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet()
                     .withSheetName("Grouped by name")
                     .withPrepStmt(prepStmt)
                     .withGroupByColumns(new String[] {"name"})
+//                    .withGroupByColumns(new String[] {"name"})
                     .build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()

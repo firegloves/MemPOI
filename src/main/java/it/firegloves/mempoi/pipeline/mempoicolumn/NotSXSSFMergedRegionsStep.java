@@ -15,7 +15,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
+public class NotSXSSFMergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
 
     /**
      * the CellStyle of the containing MempoiColumn
@@ -38,7 +38,7 @@ public class MergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
     private Integer lastRowNum = 0;
 
 
-    public MergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex) {
+    public NotSXSSFMergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex) {
         this.cellStyle = cellStyle;
         this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         this.mempoiColumnIndex = mempoiColumnIndex;
@@ -55,6 +55,7 @@ public class MergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
     @Override
     public void analyze(Cell cell, T value) {
 
+        System.out.println(lastValue + " : " + value);
         if (null == cell || null == value) {
             // TODO log throw exception => add force generate
         }
@@ -64,6 +65,7 @@ public class MergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
             this.lastValue = value;
             this.lastRowNum = cell.getRow().getRowNum();
         }
+
 
         if ( ! this.lastValue.equals(value)) {
             this.mergedRegionsLimits.add(new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum()-1));
@@ -90,26 +92,33 @@ public class MergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
             // TODO log throw exception => add force generate
         }
 
-        // for each pair add a MergedRegion
-        this.mergedRegionsLimits.stream().forEach(pair -> {
+        if (this.mergedRegionsLimits.size() > 0) {
 
-//            System.out.println("### LEFT " + pair.getLeft());
-//            System.out.println("### right " + pair.getRight());
+            // clone the MempoiColumn's style into another one created by the current workbook
+            CellStyle newStyle = workbook.createCellStyle();
+            newStyle.cloneStyleFrom(this.cellStyle);
 
-            if (pair.getLeft() < pair.getRight()) {
-                // add merged region
-                int ind = sheet.addMergedRegion(new CellRangeAddress(
-                        pair.getLeft(),         // first row (0-based)
-                        pair.getRight(),        // last row  (0-based)
-                        this.mempoiColumnIndex, // first column (0-based)
-                        this.mempoiColumnIndex  // last column  (0-based)
-                ));
+            // for each pair add a MergedRegion
+            this.mergedRegionsLimits.stream().forEach(pair -> {
 
-                // add style
-                Row row = sheet.getRow(pair.getLeft());
-                Cell cell = row.getCell(this.mempoiColumnIndex);
-                cell.setCellStyle(this.cellStyle);
-            }
-        });
+            System.out.println("### LEFT " + pair.getLeft());
+            System.out.println("### right " + pair.getRight());
+
+                if (pair.getLeft() < pair.getRight()) {
+                    // add merged region
+                    int ind = sheet.addMergedRegion(new CellRangeAddress(
+                            pair.getLeft(),         // first row (0-based)
+                            pair.getRight(),        // last row  (0-based)
+                            this.mempoiColumnIndex, // first column (0-based)
+                            this.mempoiColumnIndex  // last column  (0-based)
+                    ));
+
+                    // add style
+                    Row row = sheet.getRow(pair.getLeft());
+                    Cell cell = row.getCell(this.mempoiColumnIndex);
+                    cell.setCellStyle(newStyle);
+                }
+            });
+        }
     }
 }

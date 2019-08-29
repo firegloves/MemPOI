@@ -9,7 +9,7 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
-import it.firegloves.mempoi.pipeline.mempoicolumn.MergedRegionsStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.NotSXSSFMergedRegionsStep;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 // TODO son oarrivato che devo creare la pipeline per l'invocazione degli step ed eseguirla.
@@ -183,7 +182,6 @@ public class Strategos {
     }
 
 
-
     /**
      * read the ResultSet's metadata and creates a List of MempoiColumn.
      * if needed add GROUP BY's clause informations to the interested MempoiColumns
@@ -210,7 +208,7 @@ public class Strategos {
                                 .filter(colIndex -> colName.equals(columnList.get(colIndex).getColumnName()))
                                 .findFirst()
                                 .ifPresent(colIndex -> {
-                                    columnList.get(colIndex).addElaborationStep(new MergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex));
+                                    columnList.get(colIndex).addElaborationStep(new NotSXSSFMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex));
                                     this.workbookConfig.setHasPostCreationSteps(true);
                                 });
 
@@ -331,12 +329,17 @@ public class Strategos {
             try (FileOutputStream outputStream = new FileOutputStream(tmpFile)) {
                 this.workbookConfig.getWorkbook().write(outputStream);
                 logger.debug("MemPOI temp file created: {}", tmpFile.getAbsolutePath());
-                this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
             }
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
         } finally {
             this.closeWorkbook();
+        }
+
+        try {
+            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
+        } catch (Exception e) {
+            throw new MempoiRuntimeException(e);
         }
 
         return tmpFile;
@@ -457,7 +460,7 @@ public class Strategos {
      */
     private void applyMempoiColumnStrategies(List<MempoiSheet> mempoiSheetList) {
         mempoiSheetList.stream()
-                .forEach(mSheet -> mSheet.getColumnList().stream().forEach(mc -> mc.elaborationStepListExecute(mSheet, this.workbookConfig.getWorkbook())));
+                .forEach(mSheet -> mSheet.getColumnList().stream().forEach(mc -> mc.elaborationNotSXSSFStepListExecute(mSheet, this.workbookConfig.getWorkbook())));
 
 //        columnList.stream().forEach(mc -> mc.elaborationStepListExecute(sheet));
     }
