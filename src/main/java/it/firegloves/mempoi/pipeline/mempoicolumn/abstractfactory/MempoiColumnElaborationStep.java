@@ -22,9 +22,9 @@ public interface MempoiColumnElaborationStep<T> {
     /**
      * closes the analysis, often used to manage the point that the ResultSet was already full iterated
      *
-     * @param lastRowNum last row num
+     * @param currRowNum current row num
      */
-    void closeAnalysis(int lastRowNum);
+    void closeAnalysis(int currRowNum);
 
     /**
      * applies step logic to the Workbook modifying it

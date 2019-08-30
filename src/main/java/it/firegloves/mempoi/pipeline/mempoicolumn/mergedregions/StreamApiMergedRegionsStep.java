@@ -7,116 +7,65 @@
 package it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions;
 
 import it.firegloves.mempoi.domain.MempoiSheet;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
+import it.firegloves.mempoi.pipeline.mempoicolumn.StreamApiElaborationStep;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class StreamApiMergedRegionsStep<T> extends NotStreamApiMergedRegionsStep {
-
-//    /**
-//     * the CellStyle of the containing MempoiColumn
-//     */
-//    private CellStyle cellStyle;
-//
-//    /**
-//     * the index of the containing MempoiColumn in the list of columns of the owner sheet
-//     */
-//    private int mempoiColumnIndex;
-//
-//    /**
-//     * contains last cell value
-//     */
-//    private T lastValue;
-//
-//    /**
-//     * contains last row num
-//     */
-//    private Integer lastRowNum = 0;
-
-
-    public StreamApiMergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex) {
-        super(cellStyle, mempoiColumnIndex);
-    }
+public class StreamApiMergedRegionsStep<T> extends StreamApiElaborationStep<T> {
 
     /**
-     * if MempoiColumn has to by merged, this variable contains MergedRegions' limits
+     * the SXSSFWorkbook on which operate
      */
-    private List<Pair<Integer, Integer>> mergedRegionsLimits = new ArrayList<>();
-    // TODO test performance
-//    private List<int[]> groupByLimits = new ArrayList<>();
+    private SXSSFWorkbook workbook;
+
+    /**
+     * the SXSSFSheet on which operate
+     */
+    private SXSSFSheet sheet;
+
+    /**
+     * the CellStyle of the containing MempoiColumn
+     */
+    private CellStyle cellStyle;
+
+    /**
+     * the index of the containing MempoiColumn in the list of columns of the owner sheet
+     */
+    private int mempoiColumnIndex;
+
+    /**
+     * the MergedRegionsManager containing the logic (shared by NotStreamApiMergedRegionsStep and StreamApiMergedRegionsStep)
+     */
+    private MergedRegionsManager<T> mergedRegionsManager;
+
+
+    public StreamApiMergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex, SXSSFWorkbook workbook, MempoiSheet mempoiSheet) {
+        this.workbook = workbook;
+        this.sheet = workbook.getSheet(mempoiSheet.getSheetName());
+        this.cellStyle = cellStyle;
+        this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
+        this.mempoiColumnIndex = mempoiColumnIndex;
+        this.mergedRegionsManager = new MergedRegionsManager<>();
+    }
 
 
     @Override
     public void performAnalysis(Cell cell, T value) {
-
-        System.out.println(lastValue + " : " + value);
-        if (null == cell || null == value) {
-            // TODO log throw exception => add force generate
-        }
-
-        // first iteration
-        if (null == this.lastValue) {
-            this.lastValue = value;
-            this.lastRowNum = cell.getRow().getRowNum();
-        }
-
-
-        if ( ! this.lastValue.equals(value)) {
-            this.mergedRegionsLimits.add(new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum()-1));
-//            this.groupByLimits.add(new ImmutablePair(lastRowNum, cell.getRow().getRowNum()));
-
-            this.lastValue = value;
-            this.lastRowNum = cell.getRow().getRowNum();
-        }
+        this.mergedRegionsManager.performAnalysis(cell, value).ifPresent(pair -> this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, pair.getLeft(), pair.getRight(), this.mempoiColumnIndex));
     }
 
     @Override
-    public void closeAnalysis(int lastRowNum) {
-        this.mergedRegionsLimits.add(new ImmutablePair(this.lastRowNum, lastRowNum));
+    public void closeAnalysis(int currRowNum) {
+        this.mergedRegionsManager.closeAnalysis(currRowNum).ifPresent(pair -> this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, pair.getLeft(), pair.getRight(), this.mempoiColumnIndex));
     }
 
     @Override
     public void execute(MempoiSheet mempoiSheet, Workbook workbook) {
 
-        // TODO improve checks
-        Sheet sheet = workbook.getSheet(mempoiSheet.getSheetName());
-
-
-        if (null == sheet) {
-            // TODO log throw exception => add force generate
-        }
-
-        if (this.mergedRegionsLimits.size() > 0) {
-
-            // clone the MempoiColumn's style into another one created by the current workbook
-            CellStyle newStyle = workbook.createCellStyle();
-            newStyle.cloneStyleFrom(this.cellStyle);
-
-            // for each pair add a MergedRegion
-            this.mergedRegionsLimits.stream().forEach(pair -> {
-
-            System.out.println("### LEFT " + pair.getLeft());
-            System.out.println("### right " + pair.getRight());
-
-                if (pair.getLeft() < pair.getRight()) {
-                    // add merged region
-                    int ind = sheet.addMergedRegion(new CellRangeAddress(
-                            pair.getLeft(),         // first row (0-based)
-                            pair.getRight(),        // last row  (0-based)
-                            this.mempoiColumnIndex, // first column (0-based)
-                            this.mempoiColumnIndex  // last column  (0-based)
-                    ));
-
-                    // add style
-                    Row row = sheet.getRow(pair.getLeft());
-                    Cell cell = row.getCell(this.mempoiColumnIndex);
-                    cell.setCellStyle(newStyle);
-                }
-            });
-        }
+        // DO nothing => execution is done in performAnalysis() and in closeAnalysis()
     }
 }

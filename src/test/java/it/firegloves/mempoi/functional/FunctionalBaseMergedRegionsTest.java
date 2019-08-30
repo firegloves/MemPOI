@@ -53,7 +53,7 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
      * @param maxLimit the upper bound value of the limit statement, set it to -1 if limit is not desired => NO_LIMITS
      * @return the resulting query
      */
-    protected String createQuery(String[] columns, String[] headers, int maxLimit, String[] groupByColumns) {
+    protected String createQuery(String[] columns, String[] headers, int maxLimit, String[] orderByCols) {
 
         StringBuilder sb = new StringBuilder("SELECT ");
         for (int i = 0; i < columns.length; i++) {
@@ -66,9 +66,9 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
         sb.delete(sb.length() - 2, sb.length());
         sb.append(" FROM " + TestConstants.TABLE_MERGED_REGIONS);
 
-        if (null != groupByColumns && groupByColumns.length > 0) {
+        if (null != orderByCols && orderByCols.length > 0) {
             sb.append(" ORDER BY ");
-            String grpCols = Arrays.stream(groupByColumns).collect(Collectors.joining(", "));
+            String grpCols = Arrays.stream(orderByCols).collect(Collectors.joining(", "));
             sb.append(grpCols);
         }
 
@@ -102,8 +102,8 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
      * @return the created PreparedStatement
      * @throws SQLException
      */
-    public PreparedStatement createStatement(String[] groupByCols) throws SQLException {
-        return this.conn.prepareStatement(this.createQuery(COLUMNS, HEADERS, MAX_ROWS, groupByCols));
+    public PreparedStatement createStatement(String[] orderByCols) throws SQLException {
+        return this.conn.prepareStatement(this.createQuery(COLUMNS, HEADERS, MAX_ROWS, orderByCols));
     }
 
     /**
@@ -112,8 +112,8 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
      * @return the created PreparedStatement
      * @throws SQLException
      */
-    public PreparedStatement createStatement(String[] groupByCols, int maxRows) throws SQLException {
-        return this.conn.prepareStatement(this.createQuery(COLUMNS, HEADERS, maxRows, groupByCols));
+    public PreparedStatement createStatement(String[] orderByCols, int maxRows) throws SQLException {
+        return this.conn.prepareStatement(this.createQuery(COLUMNS, HEADERS, maxRows, orderByCols));
     }
 
 

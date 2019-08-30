@@ -29,21 +29,10 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
     private int mempoiColumnIndex;
 
     /**
-     * contains last cell value
+     * the MergedRegionsManager containing the logic (shared by NotStreamApiMergedRegionsStep and StreamApiMergedRegionsStep)
      */
-    private T lastValue;
+    private MergedRegionsManager<T> mergedRegionsManager;
 
-    /**
-     * contains last row num
-     */
-    private Integer lastRowNum = 0;
-
-
-    public NotStreamApiMergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex) {
-        this.cellStyle = cellStyle;
-        this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
-        this.mempoiColumnIndex = mempoiColumnIndex;
-    }
 
     /**
      * if MempoiColumn has to by merged, this variable contains MergedRegions' limits
@@ -51,32 +40,23 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
     private List<Pair<Integer, Integer>> mergedRegionsLimits = new ArrayList<>();
 
 
+
+    public NotStreamApiMergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex) {
+        this.cellStyle = cellStyle;
+        this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
+        this.mempoiColumnIndex = mempoiColumnIndex;
+        this.mergedRegionsManager = new MergedRegionsManager<>();
+    }
+
+
     @Override
     public void performAnalysis(Cell cell, T value) {
-
-        System.out.println(lastValue + " : " + value);
-        if (null == cell || null == value) {
-            // TODO log throw exception => add force generate
-        }
-
-        // first iteration
-        if (null == this.lastValue) {
-            this.lastValue = value;
-            this.lastRowNum = cell.getRow().getRowNum();
-        }
-
-
-        if ( ! this.lastValue.equals(value)) {
-            this.mergedRegionsLimits.add(new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum()-1));
-
-            this.lastValue = value;
-            this.lastRowNum = cell.getRow().getRowNum();
-        }
+        this.mergedRegionsManager.performAnalysis(cell, value).ifPresent(this.mergedRegionsLimits::add);
     }
 
     @Override
-    public void closeAnalysis(int lastRowNum) {
-        this.mergedRegionsLimits.add(new ImmutablePair(this.lastRowNum, lastRowNum));
+    public void closeAnalysis(int currRowNum) {
+        this.mergedRegionsManager.closeAnalysis(currRowNum).ifPresent(this.mergedRegionsLimits::add);
     }
 
     @Override
@@ -98,24 +78,7 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
 
             // for each pair add a MergedRegion
             this.mergedRegionsLimits.stream().forEach(pair -> {
-
-            System.out.println("### LEFT " + pair.getLeft());
-            System.out.println("### right " + pair.getRight());
-
-                if (pair.getLeft() < pair.getRight()) {
-                    // add merged region
-                    int ind = sheet.addMergedRegion(new CellRangeAddress(
-                            pair.getLeft(),         // first row (0-based)
-                            pair.getRight(),        // last row  (0-based)
-                            this.mempoiColumnIndex, // first column (0-based)
-                            this.mempoiColumnIndex  // last column  (0-based)
-                    ));
-
-                    // add style
-                    Row row = sheet.getRow(pair.getLeft());
-                    Cell cell = row.getCell(this.mempoiColumnIndex);
-                    cell.setCellStyle(newStyle);
-                }
+                this.mergedRegionsManager.mergeRegion(sheet, newStyle, pair.getLeft(), pair.getRight(), this.mempoiColumnIndex);
             });
         }
     }

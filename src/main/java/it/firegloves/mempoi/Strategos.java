@@ -12,6 +12,7 @@ import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.pipeline.mempoicolumn.StreamApiElaborationStep;
 import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.commons.lang3.StringUtils;
@@ -96,11 +97,10 @@ public class Strategos {
         if ((this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate())) {
             this.writeTempFile();
             this.manageFormulaToEvaluate();
-            this.applyMempoiColumnStrategies(mempoiSheetList);
         }
 
         // apply mempoi column strategies
-        this.applyMempoiColumnStrategies(mempoiSheetList);
+//        this.applyMempoiColumnStrategies(mempoiSheetList);
         // TODO check the result with formulas and merged regions
     }
 
@@ -171,7 +171,7 @@ public class Strategos {
             this.createFooterRow(sheet, mempoiSheet.getMempoiFooter().orElseGet(() -> this.workbookConfig.getMempoiFooter()));
 
             // apply mempoi column strategies
-//            this.applyMempoiColumnStrategies(columnList, sheet);
+            this.applyMempoiColumnStrategies(mempoiSheet);
 
             // adjust col size
             this.adjustColSize(sheet, columnList.size());
@@ -211,12 +211,11 @@ public class Strategos {
                                 .findFirst()
                                 .ifPresent(colIndex -> {
 
-                                    MempoiColumnElaborationStep step = this.workbookConfig.getWorkbook() instanceof StreamApiElaborationStep ?
-                                            new NotStreamApiMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex) :  // TODO sistemare creazione per StreamApi version
+                                    MempoiColumnElaborationStep step = this.workbookConfig.getWorkbook() instanceof SXSSFWorkbook ?
+                                            new StreamApiMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex, (SXSSFWorkbook) workbookConfig.getWorkbook(), mempoiSheet) :  // TODO sistemare creazione per StreamApi version
                                             new NotStreamApiMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex);
 
                                     columnList.get(colIndex).addElaborationStep(step);
-//                                    this.workbookConfig.setHasPostCreationSteps(true);
                                 });
 
                         // TODO performance test con ciclo for
@@ -343,12 +342,6 @@ public class Strategos {
             this.closeWorkbook();
         }
 
-//        try {
-//            this.workbookConfig.setWorkbook(WorkbookFactory.create(tmpFile));
-//        } catch (Exception e) {
-//            throw new MempoiRuntimeException(e);
-//        }
-
         return tmpFile;
     }
 
@@ -465,13 +458,12 @@ public class Strategos {
     /**
      * applies all availables mempoi column strategies
      *
-     * @param mempoiSheetList the List of MempoiSheet to process
+     * @param mempoiSheet the MempoiSheet to process
      */
-    private void applyMempoiColumnStrategies(List<MempoiSheet> mempoiSheetList) {
-        mempoiSheetList.stream()
-                .forEach(mSheet -> mSheet.getColumnList().stream().forEach(mc -> mc.elaborationStepListExecute(mSheet, this.workbookConfig.getWorkbook())));
-
-//        columnList.stream().forEach(mc -> mc.elaborationStepListExecute(sheet));
+    private void applyMempoiColumnStrategies(MempoiSheet mempoiSheet) {
+//        mempoiSheetList.stream()
+//                .forEach(mSheet -> mSheet.getColumnList().stream().forEach(mc -> mc.elaborationStepListExecute(mSheet, this.workbookConfig.getWorkbook())));
+        mempoiSheet.getColumnList().stream().forEach(mc -> mc.elaborationStepListExecute(mempoiSheet, this.workbookConfig.getWorkbook()));
     }
 
 

@@ -7,7 +7,7 @@ package it.firegloves.mempoi.pipeline.mempoicolumn;
 import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
-public abstract class StreamApiElaborationStep implements MempoiColumnElaborationStep {
+public abstract class StreamApiElaborationStep<T> implements MempoiColumnElaborationStep<T> {
 
     /**
      * reference to the SXSSFWorkbook that is being generated
