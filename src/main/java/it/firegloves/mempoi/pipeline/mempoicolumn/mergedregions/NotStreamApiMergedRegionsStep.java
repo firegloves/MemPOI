@@ -4,7 +4,7 @@
  * only vertical merge is supported
  */
 
-package it.firegloves.mempoi.pipeline.mempoicolumn;
+package it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions;
 
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
@@ -49,8 +49,6 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
      * if MempoiColumn has to by merged, this variable contains MergedRegions' limits
      */
     private List<Pair<Integer, Integer>> mergedRegionsLimits = new ArrayList<>();
-    // TODO test performance
-//    private List<int[]> groupByLimits = new ArrayList<>();
 
 
     @Override
@@ -70,7 +68,6 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
 
         if ( ! this.lastValue.equals(value)) {
             this.mergedRegionsLimits.add(new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum()-1));
-//            this.groupByLimits.add(new ImmutablePair(lastRowNum, cell.getRow().getRowNum()));
 
             this.lastValue = value;
             this.lastRowNum = cell.getRow().getRowNum();

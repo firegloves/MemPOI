@@ -9,7 +9,7 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
-import it.firegloves.mempoi.pipeline.mempoicolumn.NotStreamApiMergedRegionsStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.pipeline.mempoicolumn.StreamApiElaborationStep;
 import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
