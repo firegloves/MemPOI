@@ -5,6 +5,7 @@ import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.junit.After;
@@ -15,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -29,6 +31,7 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
     Connection conn = null;
     PreparedStatement prepStmt = null;
 
+    private final String[] mergedRegionsValues = { "hello dog", "hi dear" };
 
     @Before
     public void init() {
@@ -117,5 +120,34 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
     }
 
 
+    /**
+     * adds merged regions check
+     */
+    protected void validateGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate, int sqlLimit) {
 
+        super.validateGeneratedFile(prepStmt, fileToValidate, columns, headers, subfooterCellFormula, styleTemplate);
+
+        int mergedRegionNums = (int) Math.ceil((double)sqlLimit / 100);
+
+        File file = new File(fileToValidate);
+
+        try (InputStream inp = new FileInputStream(file)) {
+
+            Workbook workbook = WorkbookFactory.create(inp);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            List<CellRangeAddress> cellRangeAddresseList = sheet.getMergedRegions();
+            assertEquals("Merged regions numbers", mergedRegionNums, cellRangeAddresseList.size());
+
+            cellRangeAddresseList.stream().forEach(ca -> {
+
+                assertEquals("Merged region first row % 100 == 1", ca.getFirstRow() % 100, 1);
+                assertEquals("Merged region last row % 100 == 0", ca.getLastRow() % 100, 0);
+                assertEquals("Merged region value", sheet.getRow(ca.getFirstRow()).getCell(ca.getFirstColumn()).getStringCellValue(), mergedRegionsValues[0]);
+            });
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
