@@ -13,10 +13,12 @@ import org.junit.Test;
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 
 public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
+
 
     @Test
     public void testWithFileAndMergedRegionsHSSF() {
@@ -52,9 +54,9 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
 
 
     @Test
-    public void testWithFileAndMergedRegionsSXSSF() {
+    public void testWithFileAndMergedRegionsSXSSFAndFixedRowAccessWindowSize() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size.xlsx");
 
         try {
             PreparedStatement prepStmt = this.createStatement(null, 200_000);    // TODO create tests that exceed HSSF limits and try to manage it
@@ -71,6 +73,38 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new SXSSFWorkbook(200))
+                    .addMempoiSheet(sheet)
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        } catch (Exception e) {
+            throw new MempoiRuntimeException(e);
+        }
+    }
+
+
+    @Test
+    public void testWithFileAndMergedRegionsSXSSFAndVariableRowAccessWindowSize() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size.xlsx");
+
+        try {
+            PreparedStatement prepStmt = this.createStatement(null, 200_000);    // TODO create tests that exceed HSSF limits and try to manage it
+
+            // dogs sheet
+            MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withSheetName("Merged regions name column")
+                    .withPrepStmt(prepStmt)
+                    .withMergedRegionColumns(new String[] { "name" })
+                    .build();
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+                    .withFile(fileDest)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withWorkbook(new SXSSFWorkbook(-1))
                     .addMempoiSheet(sheet)
                     .build();
 
