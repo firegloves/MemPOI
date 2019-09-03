@@ -181,7 +181,7 @@ public class DBPopulator {
             int[] ints3 = new int[] { 4, 13 };
 
 //            for (int i = 1; i <= 2000; i++) {
-            for (int i = 1; i <= 200_000; i++) {
+            for (int i = 0; i < 200_000; i++) {
 
                 int ind = (int) Math.ceil(i / 100) % 2;
 

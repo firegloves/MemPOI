@@ -2,10 +2,14 @@ package it.firegloves.mempoi.functional;
 
 import it.firegloves.mempoi.TestConstants;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
+import it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.junit.After;
@@ -18,12 +22,11 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 
 public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest {
-
-    // TODO merge into test class?
 
     public static final int MAX_ROWS = 10;
     public static final int NO_LIMITS = -1;
@@ -123,9 +126,7 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
     /**
      * adds merged regions check
      */
-    protected void validateGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate, int sqlLimit) {
-
-        super.validateGeneratedFile(prepStmt, fileToValidate, columns, headers, subfooterCellFormula, styleTemplate);
+    protected void validateMergedRegions(String fileToValidate, int sqlLimit) {
 
         int mergedRegionNums = (int) Math.ceil((double)sqlLimit / 100);
 
@@ -139,12 +140,14 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
             List<CellRangeAddress> cellRangeAddresseList = sheet.getMergedRegions();
             assertEquals("Merged regions numbers", mergedRegionNums, cellRangeAddresseList.size());
 
-            cellRangeAddresseList.stream().forEach(ca -> {
+            for (int i=0; i<cellRangeAddresseList.size(); i++) {
 
-                assertEquals("Merged region first row % 100 == 1", ca.getFirstRow() % 100, 1);
-                assertEquals("Merged region last row % 100 == 0", ca.getLastRow() % 100, 0);
-                assertEquals("Merged region value", sheet.getRow(ca.getFirstRow()).getCell(ca.getFirstColumn()).getStringCellValue(), mergedRegionsValues[0]);
-            });
+                CellRangeAddress ca = cellRangeAddresseList.get(i);
+
+                assertEquals("Merged region first row % 100 == 1", 1, ca.getFirstRow() % 100);
+                assertEquals("Merged region last row % 100 == 0", 0, ca.getLastRow() % 100);
+                assertEquals("Merged region value", sheet.getRow(ca.getFirstRow()).getCell(ca.getFirstColumn()).getStringCellValue(), mergedRegionsValues[i%2]);
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);

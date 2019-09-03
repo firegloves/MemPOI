@@ -55,9 +55,45 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate(), limit);
+            super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate());
 
             // TODO add merged regions test code
+
+        } catch (Exception e) {
+            throw new MempoiRuntimeException(e);
+        }
+    }
+
+
+    @Test
+    public void testWithFileAndMergedRegionsHSSFValidateData() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_validate_daa.xlsx");
+        int limit = 500;
+
+        try {
+            prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
+
+            // dogs sheet
+            MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withSheetName("Merged regions name column")
+                    .withPrepStmt(prepStmt)
+                    .withMergedRegionColumns(new String[]{"name"})
+                    .build();
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+                    .withFile(fileDest)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withWorkbook(new HSSFWorkbook())
+                    .addMempoiSheet(sheet)
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate());
+            super.validateMergedRegions(fut.get(), limit);
 
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
@@ -121,8 +157,7 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate());
-
-            // TODO add merged regions test code
+            super.validateMergedRegions(fut.get(), limit);
 
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
@@ -163,6 +198,7 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate());
+            super.validateMergedRegions(fut.get(), limit);
 
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
@@ -198,6 +234,7 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate());
+            super.validateMergedRegions(fut.get(), limit);
 
         } catch (Exception e) {
             throw new MempoiRuntimeException(e);
