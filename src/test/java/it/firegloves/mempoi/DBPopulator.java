@@ -170,7 +170,7 @@ public class DBPopulator {
             Timestamp[] timestamps = new Timestamp[] { new Timestamp(System.currentTimeMillis() - 30_000), new Timestamp(System.currentTimeMillis() + 80_000)};
             String[] names = new String[] { "hello dog", "hi dear" };
             boolean[] bools = new boolean[] { true, false };
-            String[] chars = new String[] { "C", "B" };
+            String[] chars = new String[] { "C", "B", "Z" };
             float[] floats = new float[] { 24.6f, 82.23f };
             boolean[] bools2 = new boolean[] { false, true };
             double[] doubles = new double[] { 2834.3d, 1399.34d };
@@ -183,22 +183,23 @@ public class DBPopulator {
 //            for (int i = 1; i <= 2000; i++) {
             for (int i = 0; i < 200_000; i++) {
 
-                int ind = (int) Math.ceil(i / 100) % 2;
+                int ind2Based = (int) Math.ceil(i / 100) % 2;
+                int ind3Based = (int) Math.ceil(i / 80) % 3;
 
-                pstmt.setDate(1, creationDate[ind]);
-                pstmt.setDate(2, dateTime[ind]);
-                pstmt.setTimestamp(3, timestamps[ind]);
-                pstmt.setString(4, names[ind]);
-                pstmt.setBoolean(5, bools[ind]);
-                pstmt.setString(6, chars[ind]);
-                pstmt.setFloat(7, floats[ind]);
-                pstmt.setBoolean(8, bools2[ind]);
-                pstmt.setDouble(9, doubles[ind]);
-                pstmt.setFloat(10, floats2[ind]);
-                pstmt.setInt(11, ints[ind]);
-                pstmt.setInt(12, ints2[ind]);
-                pstmt.setTime(13, times[ind]);
-                pstmt.setInt(14, ints3[ind]);
+                pstmt.setDate(1, creationDate[ind2Based]);
+                pstmt.setDate(2, dateTime[ind2Based]);
+                pstmt.setTimestamp(3, timestamps[ind2Based]);
+                pstmt.setString(4, names[ind2Based]);
+                pstmt.setBoolean(5, bools[ind2Based]);
+                pstmt.setString(6, chars[ind3Based]);
+                pstmt.setFloat(7, floats[ind2Based]);
+                pstmt.setBoolean(8, bools2[ind2Based]);
+                pstmt.setDouble(9, doubles[ind2Based]);
+                pstmt.setFloat(10, floats2[ind2Based]);
+                pstmt.setInt(11, ints[ind2Based]);
+                pstmt.setInt(12, ints2[ind2Based]);
+                pstmt.setTime(13, times[ind2Based]);
+                pstmt.setInt(14, ints3[ind2Based]);
                 pstmt.addBatch();
             }
 

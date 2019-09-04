@@ -2,16 +2,8 @@ package it.firegloves.mempoi.functional;
 
 import it.firegloves.mempoi.TestConstants;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
-import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
-import it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
-import it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
-import it.firegloves.mempoi.styles.template.StyleTemplate;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.junit.After;
 import org.junit.Before;
 
@@ -22,7 +14,6 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 
@@ -34,7 +25,8 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
     Connection conn = null;
     PreparedStatement prepStmt = null;
 
-    private final String[] mergedRegionsValues = { "hello dog", "hi dear" };
+    private final String[] mergedNameValues = { "hello dog", "hi dear" };
+    private final String[] mergedUsefulCharValues = { "C", "B", "Z" };
 
     @Before
     public void init() {
@@ -124,29 +116,56 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
 
 
     /**
+     * convenience method
+     *
+     * @param fileToValidate
+     * @param mergedRegionNums
+     */
+    protected void validateMergedRegions(String fileToValidate, int mergedRegionNums) {
+        this.validateMergedRegions(fileToValidate, mergedRegionNums, 0);
+    }
+
+
+    /**
      * adds merged regions check
      */
-    protected void validateMergedRegions(String fileToValidate, int sqlLimit) {
+    protected void validateMergedRegions(String fileToValidate, int mergedRegionNums, int sheetNum) {
 
-        int mergedRegionNums = (int) Math.ceil((double)sqlLimit / 100);
+//        int mergedRegionNums = (int) Math.ceil((double)sqlLimit / 100);
 
         File file = new File(fileToValidate);
 
         try (InputStream inp = new FileInputStream(file)) {
 
             Workbook workbook = WorkbookFactory.create(inp);
-            Sheet sheet = workbook.getSheetAt(0);
+            Sheet sheet = workbook.getSheetAt(sheetNum);
 
             List<CellRangeAddress> cellRangeAddresseList = sheet.getMergedRegions();
             assertEquals("Merged regions numbers", mergedRegionNums, cellRangeAddresseList.size());
 
+            int caValueInd = -1;
+            int lastColInd = -1;
             for (int i=0; i<cellRangeAddresseList.size(); i++) {
 
                 CellRangeAddress ca = cellRangeAddresseList.get(i);
 
-                assertEquals("Merged region first row % 100 == 1", 1, ca.getFirstRow() % 100);
-                assertEquals("Merged region last row % 100 == 0", 0, ca.getLastRow() % 100);
-                assertEquals("Merged region value", sheet.getRow(ca.getFirstRow()).getCell(ca.getFirstColumn()).getStringCellValue(), mergedRegionsValues[i%2]);
+                if (lastColInd != ca.getFirstColumn()) {
+                    lastColInd = ca.getFirstColumn();
+                    caValueInd = 0;
+                }
+
+                int module = 100;
+                String expectedValue = mergedNameValues[caValueInd % 2];
+                if (ca.getFirstColumn() == 6) {
+                    module = 80;
+                    expectedValue = mergedUsefulCharValues[caValueInd % 3];
+                }
+
+                assertEquals("Merged region first row % " + module + " == 1 with i = " + i, 1, ca.getFirstRow() % module);
+                assertEquals("Merged region last row % " + module + " == 0 with i = " + i, 0, ca.getLastRow() % module);
+                assertEquals("Merged region value with i = " + i, expectedValue, sheet.getRow(ca.getFirstRow()).getCell(ca.getFirstColumn()).getStringCellValue());
+
+                caValueInd++;
             }
 
         } catch (Exception e) {
