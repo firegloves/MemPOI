@@ -143,29 +143,26 @@ public abstract class FunctionalBaseMergedRegionsTest extends FunctionalBaseTest
             List<CellRangeAddress> cellRangeAddresseList = sheet.getMergedRegions();
             assertEquals("Merged regions numbers", mergedRegionNums, cellRangeAddresseList.size());
 
-            int caValueInd = -1;
-            int lastColInd = -1;
+            int caNameValueInd = 0;
+            int caCharValueInd = 0;
+            String expectedValue = "";
+            int module = -1;
+
             for (int i=0; i<cellRangeAddresseList.size(); i++) {
 
                 CellRangeAddress ca = cellRangeAddresseList.get(i);
 
-                if (lastColInd != ca.getFirstColumn()) {
-                    lastColInd = ca.getFirstColumn();
-                    caValueInd = 0;
-                }
-
-                int module = 100;
-                String expectedValue = mergedNameValues[caValueInd % 2];
                 if (ca.getFirstColumn() == 6) {
                     module = 80;
-                    expectedValue = mergedUsefulCharValues[caValueInd % 3];
+                    expectedValue = mergedUsefulCharValues[caCharValueInd++ % 3];
+                } else {
+                    module = 100;
+                    expectedValue = mergedNameValues[caNameValueInd++ % 2];
                 }
 
                 assertEquals("Merged region first row % " + module + " == 1 with i = " + i, 1, ca.getFirstRow() % module);
                 assertEquals("Merged region last row % " + module + " == 0 with i = " + i, 0, ca.getLastRow() % module);
                 assertEquals("Merged region value with i = " + i, expectedValue, sheet.getRow(ca.getFirstRow()).getCell(ca.getFirstColumn()).getStringCellValue());
-
-                caValueInd++;
             }
 
         } catch (Exception e) {

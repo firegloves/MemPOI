@@ -37,6 +37,9 @@ public class MempoiBuilderTest {
    @Test
    public void mempoiBuilderFullPopulated() {
 
+      String sheetName = "test name";
+      String footerText = "test text";
+
       File fileDest = new File("file.xlsx");
       SXSSFWorkbook workbook = new SXSSFWorkbook();
 
@@ -48,11 +51,12 @@ public class MempoiBuilderTest {
               .withWorkbook(workbook)
               .withFile(fileDest)
               .withAdjustColumnWidth(true)
-              .addMempoiSheet(new MempoiSheet(prepStmt, "test name"))
+              .addMempoiSheet(new MempoiSheet(prepStmt, sheetName))
               .withStyleTemplate(new ForestStyleTemplate())
               .withHeaderCellStyle(headerCellStyle)
               .withMempoiSubFooter(new NumberSumSubFooter())
               .withEvaluateCellFormulas(true)
+              .withMempoiFooter(new StandardMempoiFooter(workbook, footerText))
               .build();
 
       assertNotNull("MemPOIBuilder returns a not null MemPOI", memPOI);
@@ -64,7 +68,8 @@ public class MempoiBuilderTest {
       assertEquals("MemPOI mempoiSheetList size 1", 1, memPOI.getWorkbookConfig().getSheetList().size());
       assertNotNull("MemPOI first mempoiSheet not null", memPOI.getWorkbookConfig().getSheetList().get(0));
       assertNotNull("MemPOI first mempoiSheet sheet name not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetName());
-      assertNotEquals("MemPOI first mempoiSheet sheet name not empty", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetName(), "");
+      assertNotEquals("MemPOI first mempoiSheet sheet name not empty", "", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetName());
+      assertEquals("MemPOI first mempoiSheet sheet name", sheetName, memPOI.getWorkbookConfig().getSheetList().get(0).getSheetName());
       assertNotNull("MemPOI first mempoiSheet prepStmt not null", memPOI.getWorkbookConfig().getSheetList().get(0).getPrepStmt());
       assertNotNull("MemPOI mempoiReportStyler not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler());
       assertNotNull("MemPOI mempoiReportStyler CommonDataCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getCommonDataCellStyle());
@@ -73,6 +78,8 @@ public class MempoiBuilderTest {
       assertNotNull("MemPOI mempoiReportStyler HeaderCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getHeaderCellStyle());
       assertNotNull("MemPOI mempoiReportStyler NumberCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getNumberCellStyle());
       assertNotNull("MemPOI mempoiReportStyler SubFooterCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getSubFooterCellStyle());
+      assertNotNull("MemPOI footer not null", memPOI.getWorkbookConfig().getMempoiFooter());
+      assertEquals("MemPOI footer text", footerText, memPOI.getWorkbookConfig().getMempoiFooter().getCenterText());
       assertTrue("MemPOI evaluateCellFormulas true", memPOI.getWorkbookConfig().isEvaluateCellFormulas());
       assertTrue("MemPOI evaluateCellFormulas true", memPOI.getWorkbookConfig().isHasFormulasToEvaluate());
    }

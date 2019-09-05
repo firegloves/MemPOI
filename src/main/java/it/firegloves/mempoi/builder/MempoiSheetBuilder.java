@@ -13,7 +13,7 @@ import java.sql.PreparedStatement;
 public final class MempoiSheetBuilder {
 
     private String sheetName;
-    private MempoiStyler sheetStyler;
+//    private MempoiStyler sheetStyler;
 
     // style variables
     private Workbook workbook;
@@ -55,16 +55,16 @@ public final class MempoiSheetBuilder {
         return this;
     }
 
-    /**
-     * add the received MempoiStyler to the builder instance
-     * @param sheetStyler the MempoiStyler to associate to the current sheet
-     *
-     * @return the current MempoiSheetBuilder
-     */
-    public MempoiSheetBuilder withSheetStyler(MempoiStyler sheetStyler) {
-        this.sheetStyler = sheetStyler;
-        return this;
-    }
+//    /**
+//     * add the received MempoiStyler to the builder instance
+//     * @param sheetStyler the MempoiStyler to associate to the current sheet
+//     *
+//     * @return the current MempoiSheetBuilder
+//     */
+//    public MempoiSheetBuilder withSheetStyler(MempoiStyler sheetStyler) {
+//        this.sheetStyler = sheetStyler;
+//        return this;
+//    }
 
     /**
      * add the received Workbook to the builder instance. it is needed for passing StyleTemplate
@@ -215,7 +215,7 @@ public final class MempoiSheetBuilder {
     public MempoiSheet build() {
         MempoiSheet mempoiSheet = new MempoiSheet(prepStmt);
         mempoiSheet.setSheetName(sheetName);
-        mempoiSheet.setSheetStyler(sheetStyler);
+//        mempoiSheet.setSheetStyler(sheetStyler);
         mempoiSheet.setWorkbook(workbook);
         mempoiSheet.setStyleTemplate(styleTemplate);
         mempoiSheet.setHeaderCellStyle(headerCellStyle);

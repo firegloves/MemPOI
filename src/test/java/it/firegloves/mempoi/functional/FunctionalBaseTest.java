@@ -3,6 +3,7 @@ package it.firegloves.mempoi.functional;
 import it.firegloves.mempoi.TestConstants;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.utils.AssertHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -230,14 +231,14 @@ public abstract class FunctionalBaseTest {
             assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style => skip these tests
-                this.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
-                this.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                this.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                this.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                this.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                this.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                this.validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                this.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertHelper.validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertHelper.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -325,36 +326,6 @@ public abstract class FunctionalBaseTest {
     }
 
 
-    /**
-     * validate two CellStyle checking all properties managed by MemPOI
-     *
-     * @param cellStyle         the cell's CellStyle
-     * @param expectedCellStyle the expected CellStyle
-     */
-    protected void validateCellStyle(CellStyle cellStyle, CellStyle expectedCellStyle) {
-
-        if (null != expectedCellStyle) {
-
-            assertEquals(expectedCellStyle.getFillForegroundColor(), cellStyle.getFillForegroundColor());
-            assertEquals(expectedCellStyle.getFillPattern(), cellStyle.getFillPattern());
-
-            assertEquals(expectedCellStyle.getBorderBottom(), cellStyle.getBorderBottom());
-            assertEquals(expectedCellStyle.getBottomBorderColor(), cellStyle.getBottomBorderColor());
-            assertEquals(expectedCellStyle.getBorderLeft(), cellStyle.getBorderLeft());
-            assertEquals(expectedCellStyle.getLeftBorderColor(), cellStyle.getLeftBorderColor());
-            assertEquals(expectedCellStyle.getBorderRight(), cellStyle.getBorderRight());
-            assertEquals(expectedCellStyle.getRightBorderColor(), cellStyle.getRightBorderColor());
-            assertEquals(expectedCellStyle.getBorderTop(), cellStyle.getBorderTop());
-            assertEquals(expectedCellStyle.getTopBorderColor(), cellStyle.getTopBorderColor());
-
-            if (expectedCellStyle instanceof XSSFCellStyle) {
-                assertEquals(((XSSFCellStyle) cellStyle).getFont().getFontHeightInPoints(), ((XSSFCellStyle) expectedCellStyle).getFont().getFontHeightInPoints());
-                assertEquals(((XSSFCellStyle) cellStyle).getFont().getColor(), ((XSSFCellStyle) expectedCellStyle).getFont().getColor());
-                assertEquals(((XSSFCellStyle) cellStyle).getFont().getBold(), ((XSSFCellStyle) expectedCellStyle).getFont().getBold());
-            }
-        }
-    }
-
 
     /**
      * checks that the subfooter row contains the correct cell formula
@@ -380,7 +351,7 @@ public abstract class FunctionalBaseTest {
             assertEquals(expectedCellStyle.getWrapText(), cellStyle.getWrapText());
             assertEquals(expectedCellStyle.getAlignment(), cellStyle.getAlignment());
 
-            this.validateCellStyle(cellStyle, expectedCellStyle);
+            AssertHelper.validateCellStyle(cellStyle, expectedCellStyle);
         }
     }
 }

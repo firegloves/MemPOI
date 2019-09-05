@@ -94,7 +94,6 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
     }
 
 
-
     @Test
     public void testWithFileAndMergedRegionsHSSFValidateDataMultiColumn() {
 
@@ -321,7 +320,6 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
             throw new MempoiRuntimeException(e);
         }
     }
-
 
 
     @Test
@@ -554,6 +552,35 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
     }
 
 
+    @Test(expected = ExecutionException.class)
+    public void testWithFileAndMergedRegionsSXSSFAndVariableRowAccessWindowSizeMultiColumn() throws SQLException, ExecutionException, InterruptedException {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size_multicolumn.xlsx");
+        int limit = 200;
+
+        prepStmt = this.createStatement(null, limit);
+
+        // sheet
+        MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+                .withFile(fileDest)
+                .withStyleTemplate(new ForestStyleTemplate())
+                .withWorkbook(new SXSSFWorkbook(-1))
+                .addMempoiSheet(sheet)
+                .build();
+
+        CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
+
+        super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate());
+        super.validateMergedRegions(fut.get(), mergedRegionsNum);
+    }
+
+
     @Test
     public void testWithFileAndMergedRegionsSXSSFAndVariableRowAccessWindowSizeMultisheet() {
 
@@ -598,6 +625,10 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
     }
 
 
+
+
+
+
     @Test(expected = ExecutionException.class)
     public void testWithFileAndMergedRegionsSXSSFAndLimitedFixedRowAccessWindowSize() throws SQLException, ExecutionException, InterruptedException {
 
@@ -617,8 +648,7 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
     }
 
 
-    // TODO add multisheet tests e multicolumns
-
+    // SXSSF multicolumn is not supported => multisheet and multicolumn also
 
 
     /***********************************************************************
@@ -646,7 +676,6 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
     }
 
     /**
-     *
      * @param prepStmt
      * @return
      */
@@ -682,7 +711,6 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
 
 
     /**
-     *
      * @param prepStmt
      * @return
      */
@@ -700,11 +728,12 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
 
     /**
      * calculates and returns the
+     *
      * @param limit
      * @param multiColumn
      * @return
      */
     private int getMergedRegionsNumber(int limit, boolean multiColumn) {
-        return (int) Math.ceil((double)limit / 100) + (multiColumn ? (int) Math.ceil((double)limit / 80) : 0);
+        return (int) Math.ceil((double) limit / 100) + (multiColumn ? (int) Math.ceil((double) limit / 80) : 0);
     }
 }

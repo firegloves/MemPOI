@@ -60,11 +60,6 @@ public class MempoiBuilder {
      */
     private boolean evaluateCellFormulas;
 
-    /**
-     * the maximum supported in memory rows (SXSSFWorkbook only)
-     */
-    private Integer maxInMemoryRows;
-
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -238,17 +233,6 @@ public class MempoiBuilder {
 
 
     /**
-     * @param maxInMemoryRows the maximum supported in memory rows (SXSSFWorkbook only, otherwise it will be ignored)
-     *
-     * @return the current MempoiBuilder
-     */
-    public MempoiBuilder withMaxInMemoryRows(int maxInMemoryRows) {
-        this.maxInMemoryRows = maxInMemoryRows;
-        return this;
-    }
-
-
-    /**
      * add a MempoiSheet to the list of the sheet to add to the generating export
      * @param mempoiSheet the MempoiSheet to add to the export queue
      *
@@ -289,13 +273,6 @@ public class MempoiBuilder {
                 this.evaluateCellFormulas,
                 this.mempoiSheetList,
                 this.file);
-
-
-        // TODO improve checks (>= -1 && != 0)?
-        // add SXSSFRowManager if needed
-        if (null != this.maxInMemoryRows) {
-            workbookConfig.setSxssfRowManager(new SXSSFRowManager(this.maxInMemoryRows));
-        }
 
         return new MemPOI(workbookConfig);
     }
