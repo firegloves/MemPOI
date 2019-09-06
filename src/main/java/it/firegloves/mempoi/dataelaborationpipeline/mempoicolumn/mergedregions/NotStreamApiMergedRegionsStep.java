@@ -4,14 +4,12 @@
  * only vertical merge is supported
  */
 
-package it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions;
+package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions;
 
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.pipeline.mempoicolumn.abstractfactory.MempoiColumnElaborationStep;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.MempoiColumnElaborationStep;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,9 +75,9 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
             newStyle.cloneStyleFrom(this.cellStyle);
 
             // for each pair add a MergedRegion
-            this.mergedRegionsLimits.stream().forEach(pair -> {
-                this.mergedRegionsManager.mergeRegion(sheet, newStyle, pair.getLeft(), pair.getRight(), this.mempoiColumnIndex);
-            });
+            this.mergedRegionsLimits.stream().forEach(pair ->
+                    this.mergedRegionsManager.mergeRegion(sheet, newStyle, pair.getLeft(), pair.getRight(), this.mempoiColumnIndex)
+            );
         }
     }
 }

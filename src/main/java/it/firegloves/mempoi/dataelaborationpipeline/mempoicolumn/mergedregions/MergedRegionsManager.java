@@ -1,4 +1,4 @@
-package it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions;
+package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.poi.ss.usermodel.Cell;
@@ -36,16 +36,18 @@ public class MergedRegionsManager<T> {
             // TODO log throw exception => add force generate
         }
 
+        // TODO move into init?
         // first iteration
         if (null == this.lastValue) {
             this.lastValue = value;
             this.lastRowNum = cell.getRow().getRowNum();
         }
 
+        if (! this.lastValue.equals(value)) {
 
-        if (!this.lastValue.equals(value)) {
-
-            pair = new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum() - 1);
+            if (this.lastRowNum < cell.getRow().getRowNum() - 1) {
+                pair = new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum() - 1);
+            }
 
             this.lastValue = value;
             this.lastRowNum = cell.getRow().getRowNum();
@@ -66,7 +68,7 @@ public class MergedRegionsManager<T> {
 
         ImmutablePair pair = null;
 
-        if (this.lastRowNum != currRowNum) {
+        if (this.lastRowNum < currRowNum - 2) {
             pair = new ImmutablePair(this.lastRowNum, currRowNum);
         }
 
@@ -83,13 +85,13 @@ public class MergedRegionsManager<T> {
      * @param lastRow           the last row of the region to merge
      * @param mempoiColumnIndex the column index in the row (0 based)
      */
-    public void mergeRegion(Sheet sheet, CellStyle cellStyle, int firstRow, int lastRow, int mempoiColumnIndex) {
+    public boolean mergeRegion(Sheet sheet, CellStyle cellStyle, int firstRow, int lastRow, int mempoiColumnIndex) {
 
         if (null == sheet) {
             // TODO log throw exception => add force generate
         }
 
-        if (firstRow < lastRow) {
+        if (firstRow < lastRow && firstRow > -1 && lastRow > -1) {
 
             // add merged region
             sheet.addMergedRegion(new CellRangeAddress(
@@ -101,6 +103,11 @@ public class MergedRegionsManager<T> {
 
             // add style
             sheet.getRow(firstRow).getCell(mempoiColumnIndex).setCellStyle(cellStyle);
+
+            return true;
+
+        } else {
+            return false;
         }
     }
 }

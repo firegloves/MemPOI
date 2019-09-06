@@ -4,10 +4,13 @@
  * only vertical merge is supported
  */
 
-package it.firegloves.mempoi.pipeline.mempoicolumn.mergedregions;
+package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions;
 
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.pipeline.mempoicolumn.StreamApiElaborationStep;
+import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.StreamApiElaborationStep;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.util.Errors;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -41,6 +44,11 @@ public class StreamApiMergedRegionsStep<T> extends StreamApiElaborationStep<T> {
 
     public StreamApiMergedRegionsStep(CellStyle cellStyle, int mempoiColumnIndex, SXSSFWorkbook workbook, MempoiSheet mempoiSheet) {
         super(workbook);
+
+        if (StringUtils.isEmpty(mempoiSheet.getSheetName())) {
+            throw new MempoiRuntimeException(Errors.ERR_MERGED_REGIONS_NEED_SHEETNAME);
+        }
+
         this.sheet = workbook.getSheet(mempoiSheet.getSheetName());
         this.cellStyle = cellStyle;
         this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
@@ -66,6 +74,10 @@ public class StreamApiMergedRegionsStep<T> extends StreamApiElaborationStep<T> {
     }
 
 
+    /**
+     * merge the region identified by the param
+     * @param pair the Pair identifying the rows to merge
+     */
     private void mergeRegion(Pair<Integer, Integer> pair) {
         this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, pair.getLeft(), pair.getRight(), this.mempoiColumnIndex);
         this.manageFlush(this.sheet);

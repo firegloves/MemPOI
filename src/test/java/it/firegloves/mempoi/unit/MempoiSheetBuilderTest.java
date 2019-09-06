@@ -4,6 +4,7 @@ import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
@@ -84,6 +85,7 @@ public class MempoiSheetBuilderTest {
 
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withStyleTemplate(forestStyleTemplate)
+                .withPrepStmt(prepStmt)
                 .withWorkbook(wb)
                 .build();
 
@@ -111,6 +113,7 @@ public class MempoiSheetBuilderTest {
                 .withCommonDataCellStyle(styleTemplate.getCommonDataCellStyle(wb))
                 .withDateCellStyle(styleTemplate.getDateCellStyle(wb))
                 .withWorkbook(wb)
+                .withPrepStmt(prepStmt)
                 .build();
 
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
@@ -121,5 +124,16 @@ public class MempoiSheetBuilderTest {
         AssertHelper.validateCellStyle(forestStyleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
         AssertHelper.validateCellStyle(forestStyleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
+    }
+
+
+    @Test(expected = MempoiRuntimeException.class)
+    public void mempoiSheetBuilderWithousPrepStmt() {
+
+        Workbook wb = new XSSFWorkbook();
+
+        MempoiSheetBuilder.aMempoiSheet()
+                .withWorkbook(wb)
+                .build();
     }
 }

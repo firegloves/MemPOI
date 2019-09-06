@@ -3,8 +3,10 @@ package it.firegloves.mempoi.builder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -13,7 +15,6 @@ import java.sql.PreparedStatement;
 public final class MempoiSheetBuilder {
 
     private String sheetName;
-//    private MempoiStyler sheetStyler;
 
     // style variables
     private Workbook workbook;
@@ -54,17 +55,6 @@ public final class MempoiSheetBuilder {
         this.sheetName = sheetName;
         return this;
     }
-
-//    /**
-//     * add the received MempoiStyler to the builder instance
-//     * @param sheetStyler the MempoiStyler to associate to the current sheet
-//     *
-//     * @return the current MempoiSheetBuilder
-//     */
-//    public MempoiSheetBuilder withSheetStyler(MempoiStyler sheetStyler) {
-//        this.sheetStyler = sheetStyler;
-//        return this;
-//    }
 
     /**
      * add the received Workbook to the builder instance. it is needed for passing StyleTemplate
@@ -213,9 +203,13 @@ public final class MempoiSheetBuilder {
      * @return the created MempoiSheet
      */
     public MempoiSheet build() {
+
+        if (null == prepStmt) {
+            throw new MempoiRuntimeException("PreparedStatement null for MempoiSheet " + (! StringUtils.isEmpty(sheetName) ? " with name " + sheetName : ""));
+        }
+
         MempoiSheet mempoiSheet = new MempoiSheet(prepStmt);
         mempoiSheet.setSheetName(sheetName);
-//        mempoiSheet.setSheetStyler(sheetStyler);
         mempoiSheet.setWorkbook(workbook);
         mempoiSheet.setStyleTemplate(styleTemplate);
         mempoiSheet.setHeaderCellStyle(headerCellStyle);
