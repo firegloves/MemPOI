@@ -106,73 +106,82 @@ public class WorkbookConfig {
         return mempoiSubFooter;
     }
 
-    public void setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
+    public WorkbookConfig setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
         this.mempoiSubFooter = mempoiSubFooter;
+        return this;
     }
 
     public MempoiFooter getMempoiFooter() {
         return mempoiFooter;
     }
 
-    public void setMempoiFooter(MempoiFooter mempoiFooter) {
+    public WorkbookConfig setMempoiFooter(MempoiFooter mempoiFooter) {
         this.mempoiFooter = mempoiFooter;
+        return this;
     }
 
     public Workbook getWorkbook() {
         return workbook;
     }
 
-    public void setWorkbook(Workbook workbook) {
+    public WorkbookConfig setWorkbook(Workbook workbook) {
         this.workbook = workbook;
+        return this;
     }
 
     public boolean isAdjustColSize() {
         return adjustColSize;
     }
 
-    public void setAdjustColSize(boolean adjustColSize) {
+    public WorkbookConfig setAdjustColSize(boolean adjustColSize) {
         this.adjustColSize = adjustColSize;
+        return this;
     }
 
     public boolean isHasFormulasToEvaluate() {
         return hasFormulasToEvaluate;
     }
 
-    public void setHasFormulasToEvaluate(boolean hasFormulasToEvaluate) {
+    public WorkbookConfig setHasFormulasToEvaluate(boolean hasFormulasToEvaluate) {
         this.hasFormulasToEvaluate = hasFormulasToEvaluate;
+        return this;
     }
 
     public SXSSFRowManager getSxssfRowManager() {
         return sxssfRowManager;
     }
 
-    public void setSxssfRowManager(SXSSFRowManager sxssfRowManager) {
+    public WorkbookConfig setSxssfRowManager(SXSSFRowManager sxssfRowManager) {
         this.sxssfRowManager = sxssfRowManager;
+        return this;
     }
 
     public List<MempoiSheet> getSheetList() {
         return sheetList;
     }
 
-    public void setSheetList(List<MempoiSheet> sheetList) {
+    public WorkbookConfig setSheetList(List<MempoiSheet> sheetList) {
         this.sheetList = sheetList;
+        return this;
     }
 
     public boolean isEvaluateCellFormulas() {
         return evaluateCellFormulas;
     }
 
-    public void setEvaluateCellFormulas(boolean evaluateCellFormulas) {
+    public WorkbookConfig setEvaluateCellFormulas(boolean evaluateCellFormulas) {
         this.evaluateCellFormulas = evaluateCellFormulas;
         this.setHasFormulasToEvaluate();
+        return this;
     }
 
     public File getFile() {
         return file;
     }
 
-    public void setFile(File file) {
+    public WorkbookConfig setFile(File file) {
         this.file = file;
+        return this;
     }
 
 //    public boolean isHasPostCreationSteps() {

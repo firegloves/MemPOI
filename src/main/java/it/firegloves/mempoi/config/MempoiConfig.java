@@ -9,6 +9,7 @@ public class MempoiConfig {
     private static MempoiConfig instance = new MempoiConfig();
 
     private boolean debug = false;
+    private boolean forceGeneration = false;
 
     private MempoiConfig() {
         this.setLogLevel();
@@ -22,9 +23,20 @@ public class MempoiConfig {
         return debug;
     }
 
-    public void setDebug(boolean debug) {
+    public MempoiConfig setDebug(boolean debug) {
         this.debug = debug;
         this.setLogLevel();
+        return this;
+    }
+
+    public MempoiConfig setForceGeneration(boolean forceGeneration) {
+        this.forceGeneration = forceGeneration;
+        return this;
+    }
+
+
+    public boolean isForceGeneration() {
+        return this.forceGeneration;
     }
 
     private void setLogLevel() {

@@ -3,6 +3,8 @@ package it.firegloves.mempoi.unit;
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
+import it.firegloves.mempoi.config.MempoiConfig;
+import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberMinSubFooter;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
@@ -49,6 +51,7 @@ public class MempoiBuilderTest {
 
       MemPOI memPOI = MempoiBuilder.aMemPOI()
               .withWorkbook(workbook)
+              .withForceGeneration(true)
               .withFile(fileDest)
               .withAdjustColumnWidth(true)
               .addMempoiSheet(new MempoiSheet(prepStmt, sheetName))
@@ -64,6 +67,7 @@ public class MempoiBuilderTest {
       assertNotNull("MemPOI file not null", memPOI.getWorkbookConfig().getFile());
       assertTrue("MemPOI adjustColumnWidth true ", memPOI.getWorkbookConfig().isAdjustColSize());
       assertNotNull("MemPOI workbook not null", memPOI.getWorkbookConfig().getWorkbook());
+      assertTrue("MemPOI force generation true", MempoiConfig.getInstance().isForceGeneration());
       assertNotNull("MemPOI mempoiSheetList not null", memPOI.getWorkbookConfig().getSheetList());
       assertEquals("MemPOI mempoiSheetList size 1", 1, memPOI.getWorkbookConfig().getSheetList().size());
       assertNotNull("MemPOI first mempoiSheet not null", memPOI.getWorkbookConfig().getSheetList().get(0));
@@ -99,6 +103,7 @@ public class MempoiBuilderTest {
       assertNull("MemPOI file null", memPOI.getWorkbookConfig().getFile());
       assertFalse("MemPOI adjustColumnWidth false", memPOI.getWorkbookConfig().isAdjustColSize());
       assertNotNull("MemPOI workbook not null", memPOI.getWorkbookConfig().getWorkbook());
+      assertFalse("MemPOI force generation false", MempoiConfig.getInstance().isForceGeneration());
       assertNotNull("MemPOI mempoiSheetList not null", memPOI.getWorkbookConfig().getSheetList());
       assertEquals("MemPOI mempoiSheetList size 1", 1, memPOI.getWorkbookConfig().getSheetList().size());
       assertNotNull("MemPOI first mempoiSheet not null", memPOI.getWorkbookConfig().getSheetList().get(0));

@@ -238,6 +238,7 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
     }
 
 
+
     /***********************************************************************
      *                               XSSF
      **********************************************************************/
@@ -649,6 +650,121 @@ public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
 
 
     // SXSSF multicolumn is not supported => multisheet and multicolumn also
+
+
+
+    /***********************************************************************
+     *                               GENERICS
+     **********************************************************************/
+
+    @Test(expected = MempoiRuntimeException.class)
+    public void testWithFileAndMergedRegionsHSSFNullMergedRegions_Fail() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+        int limit = 450;
+
+        try {
+            prepStmt = this.createStatement(null, limit);
+
+            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, null);
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+                    .withFile(fileDest)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withWorkbook(new HSSFWorkbook())
+                    .addMempoiSheet(sheet)
+                    .build();
+
+            memPOI.prepareMempoiReportToFile().get();
+
+        } catch (Exception e) {
+            throw new MempoiRuntimeException(e);
+        }
+    }
+
+    @Test(expected = MempoiRuntimeException.class)
+    public void testWithFileAndMergedRegionsHSSFEmptyMergedRegions_Fail() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+        int limit = 450;
+
+        try {
+            prepStmt = this.createStatement(null, limit);
+
+            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, new String[0]);
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+                    .withFile(fileDest)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withWorkbook(new HSSFWorkbook())
+                    .addMempoiSheet(sheet)
+                    .build();
+
+            memPOI.prepareMempoiReportToFile().get();
+
+        } catch (Exception e) {
+            throw new MempoiRuntimeException(e);
+        }
+    }
+
+    @Test
+    public void testWithFileAndMergedRegionsHSSFNullMergedRegionsForceGeneration() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+        int limit = 450;
+
+        try {
+            prepStmt = this.createStatement(null, limit);
+// FIXME Problema: viene istanziato prima il mempoisheet e poi le config => al check in sheetbuilder forcegeneration è ancora null
+            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, null);
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+                    .withForceGeneration(true)
+                    .withFile(fileDest)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withWorkbook(new HSSFWorkbook())
+                    .addMempoiSheet(sheet)
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        } catch (Exception e) {
+            throw new MempoiRuntimeException(e);
+        }
+    }
+
+
+    @Test
+    public void testWithFileAndMergedRegionsHSSFEmptyMergedRegionsForceGeneration() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+        int limit = 450;
+
+        try {
+            prepStmt = this.createStatement(null, limit);
+
+            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, new String[0]);
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+                    .withForceGeneration(true)
+                    .withFile(fileDest)
+                    .withStyleTemplate(new ForestStyleTemplate())
+                    .withWorkbook(new HSSFWorkbook())
+                    .addMempoiSheet(sheet)
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        } catch (Exception e) {
+            throw new MempoiRuntimeException(e);
+        }
+    }
 
 
     /***********************************************************************

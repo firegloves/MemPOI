@@ -1,5 +1,6 @@
 package it.firegloves.mempoi;
 
+import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
 import it.firegloves.mempoi.domain.MempoiColumn;
@@ -7,6 +8,7 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
@@ -14,6 +16,7 @@ import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.MempoiColumnEla
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
+import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
@@ -29,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -216,14 +220,6 @@ public class Strategos {
 
                                     columnList.get(colIndex).addElaborationStep(step);
                                 });
-
-                        // TODO performance test con ciclo for
-
-//                        columnList.stream()
-//                                .peek(mc -> i++)
-//                                .filter(mempoiCol -> colName.equals(mempoiCol.getColumnName()))
-//                                .findFirst()
-//                                .ifPresent(mempoiCol -> mempoiCol.setStrategy(new GroupByStrategy()))
                     });
         }
 
@@ -445,6 +441,10 @@ public class Strategos {
      */
     private void createFooterRow(Sheet sheet, MempoiFooter mempoiFooter) {
 
+        if (null == sheet) {
+            throw new MempoiException(Errors.ERR_SHEET_NULL);
+        }
+
         if (null != mempoiFooter) {
 
             Footer footer = sheet.getFooter();
@@ -460,9 +460,22 @@ public class Strategos {
      * @param mempoiSheet the MempoiSheet to process
      */
     private void applyMempoiColumnStrategies(MempoiSheet mempoiSheet) {
-//        mempoiSheetList.stream()
-//                .forEach(mSheet -> mSheet.getColumnList().stream().forEach(mc -> mc.elaborationStepListExecute(mSheet, this.workbookConfig.getWorkbook())));
-        mempoiSheet.getColumnList().stream().forEach(mc -> mc.elaborationStepListExecute(mempoiSheet, this.workbookConfig.getWorkbook()));
+
+        if (null == mempoiSheet) {
+            throw new MempoiException(Errors.ERR_MEMPOISHEET_NULL);
+        }
+
+        List<MempoiColumn> colList = mempoiSheet.getColumnList();
+
+        if (null == colList) {
+            if (MempoiConfig.getInstance().isForceGeneration()) {
+                colList = new ArrayList<>();
+            } else {
+                throw new MempoiException(Errors.ERR_MEMPOICOLUMN_LIST_NULL);
+            }
+        }
+
+        colList.stream().forEach(mc -> mc.elaborationStepListExecute(mempoiSheet, this.workbookConfig.getWorkbook()));
     }
 
 
@@ -493,11 +506,11 @@ public class Strategos {
     /**
      * if requested adjust col size
      *
-     * @param sheet
+     * @param sheet the Sheet on which autosize columns
      */
     private void adjustColSize(Sheet sheet, int colListLen) {
 
-        if (this.workbookConfig.isAdjustColSize()) {
+        if (null != sheet && this.workbookConfig.isAdjustColSize()) {
             for (int i = 0; i < colListLen; i++) {
                 logger.debug("autosizing col num {}", i);
                 sheet.autoSizeColumn(i);
@@ -510,6 +523,10 @@ public class Strategos {
      * closes the current workbook
      */
     private void closeWorkbook() {
+
+        if (null == this.workbookConfig.getWorkbook()) {
+            throw new MempoiException(Errors.ERR_WORKBOOK_NULL);
+        }
 
         // deletes temp poi file
         if (this.workbookConfig.getWorkbook() instanceof SXSSFWorkbook) {

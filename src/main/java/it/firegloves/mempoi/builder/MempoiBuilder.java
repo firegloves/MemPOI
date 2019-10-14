@@ -7,9 +7,11 @@ import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.SXSSFRowManager;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -19,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MempoiBuilder {
 
@@ -26,6 +29,9 @@ public class MempoiBuilder {
 
     // debug
     private boolean debug = false;
+
+    // force generation when possible
+    private boolean forceGeneration;
 
     // workbook
     private Workbook workbook;
@@ -77,13 +83,32 @@ public class MempoiBuilder {
     }
 
     /**
+     * Replaced by {@link #withMempoiSheetListBuilder(List)}
+     *
      * sets the list of MempoiSheet to add to the generating report
      * @param mempoiSheetList the List of MempoiSheet to export
      *
      * @return the current MempoiBuilder
      */
+    @Deprecated
     public MempoiBuilder withMempoiSheetList(List<MempoiSheet> mempoiSheetList) {
         this.mempoiSheetList = mempoiSheetList;
+        return this;
+    }
+
+
+    /**
+     * sets the list of MempoiSheetBuilder to generate the MempoiSheet to add to the generating report
+     * @param mempoiSheetListBuilder the List of MempoiSheetBuilder to generate the MempoiSheet to export
+     *
+     * @return the current MempoiBuilder
+     */
+    // TODO test
+    public MempoiBuilder withMempoiSheetListBuilder(List<MempoiSheetBuilder> mempoiSheetListBuilder) {
+
+        if (null != mempoiSheetListBuilder) {
+            this.mempoiSheetList = mempoiSheetListBuilder.stream().map(MempoiSheetBuilder::build).collect(Collectors.toList());
+        }
         return this;
     }
 
@@ -94,6 +119,17 @@ public class MempoiBuilder {
      */
     public MempoiBuilder withDebug(boolean debug) {
         this.debug = debug;
+        return this;
+    }
+
+    /**
+     * THIS HAS TO BE USED WITH CAUTION: THE RESULT OF THE EXPORT COULD NOT REFLECT THE EXPECTED RESULT
+     *
+     * @param forceGeneration if true tries to skip errors when possible
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withForceGeneration(boolean forceGeneration) {
+        this.forceGeneration = forceGeneration;
         return this;
     }
 
@@ -244,6 +280,19 @@ public class MempoiBuilder {
     }
 
 
+    /**
+     * add a MempoiSheet to the list of the sheet to add to the generating export
+     * @param mempoiSheetBuilder the MempoiSheetBuilder to generate the MempoiSheet to add to the export queue
+     *
+     * @return the current MempoiBuilder
+     */
+    // TODO test
+    public MempoiBuilder addMempoiSheet(MempoiSheetBuilder mempoiSheetBuilder) {
+        this.mempoiSheetList.add(mempoiSheetBuilder.build());
+        return this;
+    }
+
+
 
     /**
      * build the MemPOI with the desired preferences
@@ -251,7 +300,9 @@ public class MempoiBuilder {
      */
     public MemPOI build() {
 
-        MempoiConfig.getInstance().setDebug(debug);
+        MempoiConfig.getInstance()
+                .setDebug(debug)
+                .setForceGeneration(forceGeneration);
 
         if (null == workbook) {
             this.workbook = new SXSSFWorkbook();
@@ -262,6 +313,10 @@ public class MempoiBuilder {
         }
 
         // configure MempoiSheet list
+        if (null == this.mempoiSheetList) {
+            throw new MempoiException(Errors.ERR_MEMPOISHEET_LIST_NULL);
+        }
+
         this.mempoiSheetList.stream().forEach(this::configureMempoiSheet);
 
         // builds WorkbookConfig

@@ -12,7 +12,7 @@ MemPOI is not designed to be used with an ORM due to performance needs on massiv
 
 ###### With Gradle
 ```
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.1.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 ```
 
 ###### With Maven
@@ -20,7 +20,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.1.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 </dependency>
 
 ```
@@ -396,7 +396,6 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 ### Coming soon
 
 - Per column index style
-- `GROUP BY` clause support
 - R2DBC support
 
 :soon: If you have any request, feel free to ask for new features.

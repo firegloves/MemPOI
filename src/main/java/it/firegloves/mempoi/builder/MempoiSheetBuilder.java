@@ -1,11 +1,14 @@
 package it.firegloves.mempoi.builder;
 
+import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -187,8 +190,12 @@ public final class MempoiSheetBuilder {
      */
     public MempoiSheetBuilder withMergedRegionColumns(String[] mergedRegionColumns) {
 
-        if (mergedRegionColumns.length == 0) {
-            // TODO log or throw exception? => implement force generate or not as property
+        if (null == mergedRegionColumns || mergedRegionColumns.length == 0) {
+            if (MempoiConfig.getInstance().isForceGeneration()) {
+                mergedRegionColumns = null;
+            } else {
+                throw new MempoiException(Errors.ERR_MERGED_REGIONS_LIST_NULL);
+            }
         }
 
         this.mergedRegionColumns = mergedRegionColumns;

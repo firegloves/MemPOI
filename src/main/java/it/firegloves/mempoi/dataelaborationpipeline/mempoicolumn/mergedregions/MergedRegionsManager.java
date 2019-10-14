@@ -1,5 +1,7 @@
 package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions;
 
+import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -33,7 +35,7 @@ public class MergedRegionsManager<T> {
         ImmutablePair pair = null;
 
         if (null == cell || null == value) {
-            // TODO log throw exception => add force generate
+            throw new MempoiException(Errors.ERR_MERGED_REGIONS_CELL_OR_VALUE_NULL);
         }
 
         // TODO move into init?
@@ -88,7 +90,7 @@ public class MergedRegionsManager<T> {
     public boolean mergeRegion(Sheet sheet, CellStyle cellStyle, int firstRow, int lastRow, int mempoiColumnIndex) {
 
         if (null == sheet) {
-            // TODO log throw exception => add force generate
+            throw new MempoiException(Errors.ERR_MERGED_REGIONS_SHEET_NULL);
         }
 
         if (firstRow < lastRow && firstRow > -1 && lastRow > -1) {

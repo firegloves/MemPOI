@@ -8,6 +8,8 @@ package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions;
 
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.*;
 
@@ -60,12 +62,10 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
     @Override
     public void execute(MempoiSheet mempoiSheet, Workbook workbook) {
 
-        // TODO improve checks
         Sheet sheet = workbook.getSheet(mempoiSheet.getSheetName());
 
-
         if (null == sheet) {
-            // TODO log throw exception => add force generate
+            throw new MempoiException(Errors.ERR_MERGED_REGIONS_SHEET_NULL);
         }
 
         if (this.mergedRegionsLimits.size() > 0) {
