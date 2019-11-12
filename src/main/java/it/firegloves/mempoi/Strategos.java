@@ -525,6 +525,7 @@ public class Strategos {
     private void closeWorkbook() {
 
         if (null == this.workbookConfig.getWorkbook()) {
+            this.logger.warn(Errors.WARN_NULL_WB_NOT_CLOSED);
             throw new MempoiException(Errors.ERR_WORKBOOK_NULL);
         }
 

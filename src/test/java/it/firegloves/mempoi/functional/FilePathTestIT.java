@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class FilePathTest extends FunctionalBaseTest {
+public class FilePathTestIT extends FunctionalBaseTestIT {
 
     @Test
     public void testWithoutPath() {

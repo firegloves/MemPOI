@@ -7,7 +7,6 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
-import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.Assert.assertEquals;
 
 
-public class MergedRegionsTest extends FunctionalBaseMergedRegionsTest {
+public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
 
     /***********************************************************************
      *                               HSSF

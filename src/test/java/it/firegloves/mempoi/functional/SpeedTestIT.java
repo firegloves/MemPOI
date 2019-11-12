@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class SpeedTest extends FunctionalBaseTest {
+public class SpeedTestIT extends FunctionalBaseTestIT {
 
     // in order to run tests you need to first run DBPopulator's main method
     // then adjust db connection string accordingly with your parameters

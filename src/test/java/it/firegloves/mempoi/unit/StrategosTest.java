@@ -1,18 +1,13 @@
 package it.firegloves.mempoi.unit;
 
 import it.firegloves.mempoi.Strategos;
-import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.exception.MempoiException;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Before;
@@ -25,8 +20,10 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 public class StrategosTest {
@@ -261,8 +258,7 @@ public class StrategosTest {
     @Test(expected = MempoiException.class)
     public void closeWorkbookNullWorkbook() throws Throwable {
 
-        WorkbookConfig wbConfig = new WorkbookConfig()
-                .setWorkbook(new SXSSFWorkbook());
+        WorkbookConfig wbConfig = new WorkbookConfig();
 
         Strategos strategos = new Strategos(wbConfig);
 
@@ -275,4 +271,48 @@ public class StrategosTest {
             throw e.getCause();
         }
     }
+
+    /******************************************************************************************************************
+     *                          createSubFooterRow
+     *****************************************************************************************************************/
+//    createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
+
+    @Test
+    public void createSubFooterRow() throws Exception {
+
+        WorkbookConfig wbConfig = new WorkbookConfig()
+                .setWorkbook(new SXSSFWorkbook());
+
+        Strategos strategos = new Strategos(wbConfig);
+
+        Method m = Strategos.class.getDeclaredMethod("closeWorkbook");
+        m.setAccessible(true);
+        m.invoke(strategos);
+    }
+
+
+//
+//            writeFile
+//
+//    openTempFileAndEvaluateCellFormulas
+//
+//            writeTempFile
+//
+//    createDataRows
+//
+//            createHeaderRow
+//
+//    prepareMempoiColumn
+//
+//            generateSheet
+//
+//    generateReport
+//
+//            manageFormulaToEvaluate
+//
+//    generateMempoiReport
+//
+//            generateMempoiReportToByteArray
+//
+//    generateMempoiReportToFile
 }
