@@ -4,7 +4,7 @@
 
 package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn;
 
-import it.firegloves.mempoi.Strategos;
+import it.firegloves.mempoi.strategos.Strategos;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;

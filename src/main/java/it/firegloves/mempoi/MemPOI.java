@@ -5,6 +5,7 @@ package it.firegloves.mempoi;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.strategos.Strategos;
 
 import java.util.concurrent.CompletableFuture;
 
