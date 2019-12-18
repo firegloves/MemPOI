@@ -15,6 +15,8 @@ public class Errors {
     public static final String ERR_MEMPOISHEET_NULL = "Null MempoiSheet received";
     public static final String ERR_MEMPOICOLUMN_LIST_NULL = "Null MempoiColumn List received";
 
+    public static final String ERR_FILE_TO_EXPORT_PARENT_DIR_CANT_BE_CREATED = "FILE TO EXPORT PARENT DIR: %s can't be created";
+
     public static final String ERR_MEMPOISHEET_LIST_NULL = "MemPOI received a null or empty list of MempoiSheet";
 
     public static final String ERR_MERGED_REGIONS_LIST_NULL = "A MempoiSheet has been created requesting to apply merge region strategy but it received an empty array of columns to merge";

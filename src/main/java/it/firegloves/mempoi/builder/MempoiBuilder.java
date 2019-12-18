@@ -13,14 +13,13 @@ import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.SXSSFRowManager;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MempoiBuilder {
@@ -84,6 +83,7 @@ public class MempoiBuilder {
         return new MempoiBuilder();
     }
 
+
     /**
      * Replaced by {@link #withMempoiSheetListBuilder(List)}
      *
@@ -94,7 +94,9 @@ public class MempoiBuilder {
      */
     @Deprecated
     public MempoiBuilder withMempoiSheetList(List<MempoiSheet> mempoiSheetList) {
-        this.mempoiSheetList = mempoiSheetList;
+        if (null != mempoiSheetList) {
+            this.mempoiSheetList = mempoiSheetList;
+        }
         return this;
     }
 
@@ -105,7 +107,6 @@ public class MempoiBuilder {
      *
      * @return the current MempoiBuilder
      */
-    // TODO test
     public MempoiBuilder withMempoiSheetListBuilder(List<MempoiSheetBuilder> mempoiSheetListBuilder) {
 
         if (null != mempoiSheetListBuilder) {
@@ -277,7 +278,9 @@ public class MempoiBuilder {
      * @return the current MempoiBuilder
      */
     public MempoiBuilder addMempoiSheet(MempoiSheet mempoiSheet) {
-        this.mempoiSheetList.add(mempoiSheet);
+        if (null != mempoiSheet) {
+            this.mempoiSheetList.add(mempoiSheet);
+        }
         return this;
     }
 
@@ -288,9 +291,10 @@ public class MempoiBuilder {
      *
      * @return the current MempoiBuilder
      */
-    // TODO test
     public MempoiBuilder addMempoiSheet(MempoiSheetBuilder mempoiSheetBuilder) {
-        this.mempoiSheetList.add(mempoiSheetBuilder.build());
+        if (null != mempoiSheetBuilder) {
+            this.mempoiSheetList.add(mempoiSheetBuilder.build());
+        }
         return this;
     }
 
@@ -315,11 +319,11 @@ public class MempoiBuilder {
         }
 
         // configure MempoiSheet list
-        if (null == this.mempoiSheetList) {
+        if (CollectionUtils.isEmpty(this.mempoiSheetList)) {
             throw new MempoiException(Errors.ERR_MEMPOISHEET_LIST_NULL);
         }
 
-        this.mempoiSheetList.stream().forEach(this::configureMempoiSheet);
+        this.mempoiSheetList.forEach(this::configureMempoiSheet);
 
         // builds WorkbookConfig
         WorkbookConfig workbookConfig = new WorkbookConfig(

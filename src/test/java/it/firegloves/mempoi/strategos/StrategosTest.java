@@ -1,15 +1,11 @@
 package it.firegloves.mempoi.strategos;
 
-import it.firegloves.mempoi.strategos.Strategos;
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.domain.footer.MempoiFooter;
-import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.styles.MempoiStyler;
-import it.firegloves.mempoi.testutil.PrivateAccessHelper;
+import it.firegloves.mempoi.manager.FileManager;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -18,28 +14,32 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 public class StrategosTest {
 
     @Mock
-    MempoiSheet mempoiSheet;
-    @Mock
-    MempoiFooter mempoiFooter;
+    private MempoiSheet mempoiSheet;
+//    @Mock
+//    private MempoiFooter mempoiFooter;
+
+    private WorkbookConfig wbConfig;
+
+    private FileManager fileManager;
 
     @Before
     public void prepare() {
         MockitoAnnotations.initMocks(this);
+
+        this.wbConfig = new WorkbookConfig()
+                .setWorkbook(new SXSSFWorkbook());
+
+        this.fileManager = new FileManager(wbConfig);
     }
 
 
@@ -97,40 +97,7 @@ public class StrategosTest {
     }
 
 
-    /******************************************************************************************************************
-     *                          writeToByteArray
-     *****************************************************************************************************************/
 
-    @Test
-    public void writeToByteArray() throws Exception {
-
-        WorkbookConfig wbConfig = new WorkbookConfig()
-                .setWorkbook(new SXSSFWorkbook());
-
-        Strategos strategos = new Strategos(wbConfig);
-
-        Method m = PrivateAccessHelper.getAccessibleMethod(Strategos.class, "writeToByteArray");
-        Object o = m.invoke(strategos);
-
-        assertNotNull("not null", o);
-        assertThat("instance of byte[]", o, instanceOf(byte[].class));
-
-        byte[] bytes = (byte[]) o;
-
-        assertThat("byte array not empty", bytes.length, greaterThan(0));
-    }
-
-
-    @Test(expected = InvocationTargetException.class)
-    public void writeToByteArrayNullWorkbook() throws Exception {
-
-        WorkbookConfig wbConfig = new WorkbookConfig();
-
-        Strategos strategos = new Strategos(wbConfig);
-
-        Method m = PrivateAccessHelper.getAccessibleMethod(Strategos.class, "writeToByteArray");
-        m.invoke(strategos);
-    }
 
 
     /******************************************************************************************************************
@@ -185,52 +152,81 @@ public class StrategosTest {
     }
 
 
+
+
+
     /******************************************************************************************************************
-     *                          close workbook
+     *                          openTempFileAndEvaluateCellFormulas
      *****************************************************************************************************************/
 
     @Test
-    public void closeWorkbook() throws Exception {
+    public void openTempFileAndEvaluateCellFormulasTest() throws Throwable {
 
-        WorkbookConfig wbConfig = new WorkbookConfig()
-                .setWorkbook(new SXSSFWorkbook());
+        File file = new File("temp.xlsx");
 
-        Strategos strategos = new Strategos(wbConfig);
+        this.fileManager.createFinalFile(file);
+        this.invokeOpenTempFileAndEvaluateCellFormulas(file, this.wbConfig);
+    }
 
-        Method m = PrivateAccessHelper.getAccessibleMethod(Strategos.class, "closeWorkbook");
-        m.invoke(strategos);
+    @Test
+    public void openTempFileAndEvaluateCellFormulas_nullWorkbook() throws Throwable {
+
+        File file = new File("temp.xlsx");
+
+        this.fileManager.createFinalFile(file);
+        this.invokeOpenTempFileAndEvaluateCellFormulas(file, new WorkbookConfig());
     }
 
     @Test(expected = MempoiException.class)
-    public void closeWorkbookNullWorkbook() throws Throwable {
+    public void openTempFileAndEvaluateCellFormulas_invalidFilePath() throws Throwable {
 
-        WorkbookConfig wbConfig = new WorkbookConfig();
+        File file = new File("/not_existing/temp.xlsx");
+
+        this.fileManager.createFinalFile(file);
+        this.invokeOpenTempFileAndEvaluateCellFormulas(file, this.wbConfig);
+    }
+
+
+    @Test(expected = MempoiException.class)
+    public void openTempFileAndEvaluateCellFormulas_invalidFilePathAndNullWorkbook() throws Throwable {
+
+        File file = new File("/not_existing/temp.xlsx");
+
+        this.fileManager.createFinalFile(file);
+        this.invokeOpenTempFileAndEvaluateCellFormulas(file, new WorkbookConfig());
+    }
+
+    /**
+     * invoke private method writeFile with received params
+     * @param file
+     * @param wbConfig
+     * @throws Throwable
+     */
+    private void invokeOpenTempFileAndEvaluateCellFormulas(File file, WorkbookConfig wbConfig) throws Throwable {
 
         Strategos strategos = new Strategos(wbConfig);
 
-        Method m = PrivateAccessHelper.getAccessibleMethod(Strategos.class, "closeWorkbook");
+        Method m = Strategos.class.getDeclaredMethod("openTempFileAndEvaluateCellFormulas", File.class);
+        m.setAccessible(true);
 
         try {
-            m.invoke(strategos);
+            m.invoke(strategos, file);
         } catch (Exception e) {
             throw e.getCause();
         }
     }
 
+
     /******************************************************************************************************************
-     *                          createSubFooterRow
+     *                          createDataRows
      *****************************************************************************************************************/
 
+    @Test
+    public void createDataRowsTest() {
 
+    }
 
 //
-//            writeFile
-//
-//    openTempFileAndEvaluateCellFormulas
-//
-//            writeTempFile
-//
-//    createDataRows
 //
 //            createHeaderRow
 //

@@ -1,45 +1,22 @@
 package it.firegloves.mempoi.strategos;
 
-import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
-import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.MempoiColumnElaborationStep;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
-import it.firegloves.mempoi.manager.ConnectionManager;
-import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.util.Errors;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Footer;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
-
-// TODO son oarrivato che devo creare la pipeline per l'invocazione degli step ed eseguirla.
-//  ci deve essere una variabile in mempoiconfig che avvisa se c'è almeno uno step da eseguire?
-//  chiudere e riaprire il workbook sempre? farlo in mem?
 
 class FooterStrategos {
 
@@ -55,9 +32,34 @@ class FooterStrategos {
     }
 
     /**
+     * manages the creation of subfooter and footer if needed
+     *
+     * @param sheet the Sheet to which add footer and subfooter
+     * @param columnList the list of MempoiColumn from which get info data
+     * @param mempoiSheet the MempoiSheet containing footer and subfooter configuration
+     * @param firstDataRowIndex index of the first data row
+     * @param rowCounter counter of the current row
+     * @param reportStyler MempoiStyler containing style configuration
+     */
+    protected void createFooterAndSubfooter(Sheet sheet, List<MempoiColumn> columnList, MempoiSheet mempoiSheet, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
+
+        // add optional sub footer
+        this.createSubFooterRow(sheet, columnList, mempoiSheet.getMempoiSubFooter().orElseGet(() -> this.workbookConfig.getMempoiSubFooter()), firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler());
+
+        // add optional footer
+        this.createFooterRow(sheet, mempoiSheet.getMempoiFooter().orElseGet(() -> this.workbookConfig.getMempoiFooter()));
+    }
+
+
+    /**
      * creates and appends the sub footer row to the current report
      *
-     * @param sheet the sheet to which append sub footer row
+     * @param sheet the Sheet to which add footer and subfooter
+     * @param columnList the list of MempoiColumn from which get info data
+     * @param mempoiSubFooter MempoiSubFooter to which add data
+     * @param firstDataRowIndex index of the first data row
+     * @param rowCounter counter of the current row
+     * @param reportStyler MempoiStyler containing style configuration
      */
     void createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
 
@@ -100,6 +102,7 @@ class FooterStrategos {
      * creates and appends the footer row to the current report
      *
      * @param sheet the sheet to which append sub footer row
+     * @param mempoiFooter MempoiFooter containing info about Footer to create
      */
     void createFooterRow(Sheet sheet, MempoiFooter mempoiFooter) {
 
