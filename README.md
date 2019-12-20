@@ -398,7 +398,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 ### Coming soon
 
 - Per column index style
-- `GROUP BY` clause support
+- Merged regions support
 - R2DBC support
 
 :soon: If you have any request, feel free to ask for new features.
