@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.dataelaborationpipeline.mergedregions;
 
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.MergedRegionsManager;
+import it.firegloves.mempoi.exception.MempoiException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -68,6 +69,24 @@ public class MergedRegionsManagerTest {
 
     }
 
+    @Test(expected = MempoiException.class)
+    public void performAnalysisNullCell() {
+
+        this.mergedRegionsManager.performAnalysis(null, cell1.getStringCellValue());
+    }
+
+    @Test(expected = MempoiException.class)
+    public void performAnalysisNullValue() {
+
+        this.mergedRegionsManager.performAnalysis(cell1, null);
+    }
+
+    @Test(expected = MempoiException.class)
+    public void performAnalysisNullCellAndValue() {
+
+        this.mergedRegionsManager.performAnalysis(null, null);
+    }
+
 
     @Test
     public void mergeRegionTest() {
@@ -113,7 +132,7 @@ public class MergedRegionsManagerTest {
 
 
     @Test
-    public void mergeRegionFailTest() {
+    public void mergeRegionLastRowLowerThanFirst() {
 
         int firstRow = 5, lastRow = 4, colInd = 1;
 
@@ -122,5 +141,46 @@ public class MergedRegionsManagerTest {
         assertEquals("Merged regions false", false, merged);
     }
 
-    // TODO add test for sheet null?
+    @Test(expected = MempoiException.class)
+    public void mergeRegionNullSheet() {
+
+        int firstRow = 5, lastRow = 4, colInd = 1;
+
+        this.mergedRegionsManager.mergeRegion(null, this.cellStyle, firstRow, lastRow, colInd);
+    }
+
+    @Test
+    public void mergeRegionNullCellStyle() {
+
+        int firstRow = 5, lastRow = 4, colInd = 1;
+
+        this.mergedRegionsManager.mergeRegion(this.sheet, null, firstRow, lastRow, colInd);
+    }
+
+    @Test
+    public void mergeRegionNegativeFirstRow() {
+
+        int firstRow = -5, lastRow = 4, colInd = 1;
+
+        this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd);
+    }
+
+    @Test
+    public void mergeRegionNegativeColInd() {
+
+        int firstRow = -5, lastRow = 4, colInd = -1;
+
+        this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd);
+    }
+
+
+    @Test
+    public void closeAnalysis() {
+
+        Optional<ImmutablePair<Integer, Integer>> optPair = this.mergedRegionsManager.closeAnalysis(5);
+
+        assertEquals((int) optPair.get().left, 0);
+        assertEquals((int) optPair.get().right, 5);
+    }
+
 }

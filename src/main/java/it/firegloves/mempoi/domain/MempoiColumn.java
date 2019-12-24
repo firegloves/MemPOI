@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.MempoiColumnElaborationStep;
 import org.apache.poi.ss.usermodel.Cell;
@@ -35,9 +36,9 @@ public class MempoiColumn {
     private List<MempoiColumnElaborationStep> elaborationStepList = new ArrayList<>();
 
 
-    public MempoiColumn(String columnName) {
-        this.columnName = columnName;
-    }
+//    public MempoiColumn(String columnName) {
+//        this.columnName = columnName;
+//    }
 
     public MempoiColumn(int sqlObjType, String columnName) {
         this.columnName = columnName;
@@ -49,14 +50,14 @@ public class MempoiColumn {
         return type;
     }
 
-    public void setType(EExportDataType type) {
-        this.type = type;
-    }
+//    public void setType(EExportDataType type) {
+//        this.type = type;
+//    }
 
     public void setType(int sqlObjType) {
         this.type = this.getFieldTypeName(sqlObjType);
-        this.setResultSetAccessMethod();
-        this.setCellSetValueMethod();
+        this.setResultSetAccessMethod(this.type);
+        this.setCellSetValueMethod(this.type);
     }
 
 
@@ -72,9 +73,9 @@ public class MempoiColumn {
         return columnName;
     }
 
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
+//    public void setColumnName(String columnName) {
+//        this.columnName = columnName;
+//    }
 
     public MempoiSubFooterCell getSubFooterCell() {
         return subFooterCell;
@@ -87,24 +88,24 @@ public class MempoiColumn {
     /**
      * read result set access method String from type and set the relative java.reflect.Method
      */
-    private void setResultSetAccessMethod() {
+    private void setResultSetAccessMethod(EExportDataType type) {
 
         try {
-            this.rsAccessDataMethod = ResultSet.class.getMethod(this.type.getRsAccessDataMethodName(), this.type.getRsAccessParamClass());
+            this.rsAccessDataMethod = ResultSet.class.getMethod(type.getRsAccessDataMethodName(), type.getRsAccessParamClass());
         } catch (NoSuchMethodException e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
     /**
      * set Poi Cell set value method basing on the type return class
      */
-    private void setCellSetValueMethod() {
+    private void setCellSetValueMethod(EExportDataType type) {
 
         try {
-            this.cellSetValueMethod = Cell.class.getMethod("setCellValue", this.type.getRsReturnClass());
+            this.cellSetValueMethod = Cell.class.getMethod("setCellValue", type.getRsReturnClass());
         } catch (NoSuchMethodException e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -146,7 +147,7 @@ public class MempoiColumn {
             case Types.BOOLEAN:
                 return EExportDataType.BOOLEAN;
             default:
-                throw new MempoiRuntimeException("SQL TYPE NOT RECOGNIZED: " + sqlObjType);
+                throw new MempoiException("SQL TYPE NOT RECOGNIZED: " + sqlObjType);
         }
     }
 
@@ -158,12 +159,14 @@ public class MempoiColumn {
         return cellSetValueMethod;
     }
 
-    public void setCellSetValueMethod(Method cellSetValueMethod) {
-        this.cellSetValueMethod = cellSetValueMethod;
-    }
+//    public void setCellSetValueMethod(Method cellSetValueMethod) {
+//        this.cellSetValueMethod = cellSetValueMethod;
+//    }
 
     public void addElaborationStep(MempoiColumnElaborationStep step) {
-        this.elaborationStepList.add(step);
+        if (null != step) {
+            this.elaborationStepList.add(step);
+        }
     }
 
     /**
@@ -173,7 +176,7 @@ public class MempoiColumn {
      * @param value cell value of type T
      */
     public void elaborationStepListAnalyze(Cell cell, Object value) {
-        this.elaborationStepList.stream().forEach(step -> step.performAnalysis(cell, value));
+        this.elaborationStepList.forEach(step -> step.performAnalysis(cell, value));
     }
 
     /**
@@ -182,7 +185,7 @@ public class MempoiColumn {
      * @param lastRowNum last row num
      */
     public void elaborationStepListCloseAnalysis(int lastRowNum) {
-        this.elaborationStepList.stream().forEach(step -> step.closeAnalysis(lastRowNum));
+        this.elaborationStepList.forEach(step -> step.closeAnalysis(lastRowNum));
     }
 
     /**
@@ -192,7 +195,7 @@ public class MempoiColumn {
      * @param workbook the Workbook from which get Sheet
      */
     public void elaborationStepListExecute(MempoiSheet mempoiSheet, Workbook workbook) {
-        this.elaborationStepList.stream().forEach(step -> step.execute(mempoiSheet, workbook));
+        this.elaborationStepList.forEach(step -> step.execute(mempoiSheet, workbook));
     }
 
 

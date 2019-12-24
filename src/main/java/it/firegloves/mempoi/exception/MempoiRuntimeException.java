@@ -2,9 +2,6 @@ package it.firegloves.mempoi.exception;
 
 public class MempoiRuntimeException extends RuntimeException {
 
-    public MempoiRuntimeException() {
-    }
-
     public MempoiRuntimeException(String message) {
         super(message);
     }

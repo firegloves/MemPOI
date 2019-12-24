@@ -48,7 +48,7 @@ public class MergedRegionsManager<T> {
         if (! this.lastValue.equals(value)) {
 
             if (this.lastRowNum < cell.getRow().getRowNum() - 1) {
-                pair = new ImmutablePair(this.lastRowNum, cell.getRow().getRowNum() - 1);
+                pair = new ImmutablePair<>(this.lastRowNum, cell.getRow().getRowNum() - 1);
             }
 
             this.lastValue = value;
@@ -68,10 +68,10 @@ public class MergedRegionsManager<T> {
      */
     public Optional<ImmutablePair<Integer, Integer>> closeAnalysis(int currRowNum) {
 
-        ImmutablePair pair = null;
+        ImmutablePair<Integer, Integer> pair = null;
 
         if (this.lastRowNum < currRowNum - 2) {
-            pair = new ImmutablePair(this.lastRowNum, currRowNum);
+            pair = new ImmutablePair<>(this.lastRowNum, currRowNum);
         }
 
         return Optional.ofNullable(pair);

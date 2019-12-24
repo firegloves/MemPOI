@@ -2,7 +2,7 @@ package it.firegloves.mempoi.dao.impl;
 
 
 import it.firegloves.mempoi.domain.MempoiColumn;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -36,7 +36,7 @@ public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
             logger.debug(marker, "EXECUTING EXPORT QUERY: {}", prepStmt);
             return prepStmt.executeQuery();
         } catch (SQLException e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -46,7 +46,7 @@ public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
     public List<MempoiColumn> readMetadata(ResultSet rs) {
 
         if (null == rs) {
-            throw new MempoiRuntimeException("NULL ResultSet!");
+            throw new MempoiException("NULL ResultSet!");
         }
 
         try {
@@ -61,7 +61,7 @@ public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
             return columnList;
 
         } catch (SQLException e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 

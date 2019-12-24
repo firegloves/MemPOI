@@ -5,6 +5,7 @@ import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.StreamApiElabor
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.MergedRegionsManager;
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.exception.MempoiException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -132,5 +133,19 @@ public class NotStreamApiMergedRegionsStepTest {
         assertEquals("Merged regions first column", colInd, ca.getFirstColumn());
         assertEquals("Merged regions last column", colInd, ca.getLastColumn());
         assertEquals("Merged regions cell style", cellStyle, this.sheet.getRow(firstRow).getCell(colInd).getCellStyle());
+    }
+
+
+    @Test(expected = MempoiException.class)
+    public void executNullSheet() {
+
+        this.step.execute(null, this.workbook);
+    }
+
+    @Test(expected = MempoiException.class)
+    public void executeNullWorkbook() {
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt).withSheetName("test").build();
+        this.step.execute(mempoiSheet, null);
     }
 }

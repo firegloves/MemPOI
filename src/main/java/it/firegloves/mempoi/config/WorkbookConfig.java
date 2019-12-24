@@ -4,7 +4,7 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.FormulaSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
-import it.firegloves.mempoi.util.SXSSFRowManager;
+//import it.firegloves.mempoi.util.SXSSFRowManager;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
@@ -68,21 +68,12 @@ public class WorkbookConfig {
     /**
      * responsible of memory access management when using a SXSSFWorkbook
      */
-    private SXSSFRowManager sxssfRowManager;
+//    private SXSSFRowManager sxssfRowManager;
 
 
     public WorkbookConfig() {
     }
 
-
-    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList) {
-        this.mempoiSubFooter = mempoiSubFooter;
-        this.mempoiFooter = mempoiFooter;
-        this.workbook = workbook;
-        this.adjustColSize = adjustColSize;
-        this.evaluateCellFormulas = evaluateCellFormulas;
-        this.sheetList = sheetList;
-    }
 
     public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList, File file) {
         this.mempoiSubFooter = mempoiSubFooter;
@@ -147,14 +138,14 @@ public class WorkbookConfig {
         return this;
     }
 
-    public SXSSFRowManager getSxssfRowManager() {
-        return sxssfRowManager;
-    }
-
-    public WorkbookConfig setSxssfRowManager(SXSSFRowManager sxssfRowManager) {
-        this.sxssfRowManager = sxssfRowManager;
-        return this;
-    }
+//    public SXSSFRowManager getSxssfRowManager() {
+//        return sxssfRowManager;
+//    }
+//
+//    public WorkbookConfig setSxssfRowManager(SXSSFRowManager sxssfRowManager) {
+//        this.sxssfRowManager = sxssfRowManager;
+//        return this;
+//    }
 
     public List<MempoiSheet> getSheetList() {
         return sheetList;

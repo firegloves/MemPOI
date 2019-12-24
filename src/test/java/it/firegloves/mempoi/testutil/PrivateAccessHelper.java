@@ -17,7 +17,7 @@ public class PrivateAccessHelper {
      * @return the Field now accessible
      * @throws Exception
      */
-    private static Field setAccessibleField(Object o, String fieldName) throws Exception {
+    public static Field getPrivateField(Object o, String fieldName) throws Exception {
         Field f = o.getClass().getDeclaredField(fieldName);
         f.setAccessible(true);
         return f;

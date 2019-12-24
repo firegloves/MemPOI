@@ -62,6 +62,10 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
     @Override
     public void execute(MempoiSheet mempoiSheet, Workbook workbook) {
 
+        if (null == mempoiSheet || null == workbook) {
+            throw new MempoiException();
+        }
+
         Sheet sheet = workbook.getSheet(mempoiSheet.getSheetName());
 
         if (null == sheet) {

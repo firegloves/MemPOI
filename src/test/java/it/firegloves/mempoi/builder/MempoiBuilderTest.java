@@ -1,10 +1,8 @@
 package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.MemPOI;
-import it.firegloves.mempoi.builder.MempoiBuilder;
-import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.config.MempoiConfig;
-import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.config.MempoiConfigTest;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.NumberMinSubFooter;
@@ -33,9 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static org.junit.Assert.*;

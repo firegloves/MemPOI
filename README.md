@@ -358,7 +358,7 @@ According to `CompletableFuture` you'll receive an `ExecutionException` if you c
 
 ### Apache POI version
 
-MemPOI comes with Apache POI 4.1.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+MemPOI comes with Apache POI 4.1.1 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
 ###### This is an example using Gradle:
 

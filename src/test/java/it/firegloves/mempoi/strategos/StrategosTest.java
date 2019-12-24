@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.MempoiConfig;
+import it.firegloves.mempoi.config.MempoiConfigTest;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
@@ -17,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Types;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.when;
@@ -50,7 +52,7 @@ public class StrategosTest {
     @Test
     public void applyMempoiColumnStrategies() throws Exception {
 
-        when(mempoiSheet.getColumnList()).thenReturn(Arrays.asList(new MempoiColumn("temp")));
+        when(mempoiSheet.getColumnList()).thenReturn(Arrays.asList(new MempoiColumn(Types.BIGINT, "temp")));
 
         Strategos strategos = new Strategos(new WorkbookConfig());
 

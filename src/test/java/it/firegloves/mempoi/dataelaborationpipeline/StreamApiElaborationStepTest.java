@@ -4,6 +4,7 @@ import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.StreamApiElaborationStep;
 import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -12,12 +13,16 @@ import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 public class StreamApiElaborationStepTest {
 
@@ -29,7 +34,8 @@ public class StreamApiElaborationStepTest {
 
     @Mock
     private PreparedStatement prepStmt;
-
+    @Mock
+    private SXSSFSheet mockSheet;
 
     @Before
     public void beforeTest() {
@@ -74,6 +80,23 @@ public class StreamApiElaborationStepTest {
     }
 
 
+    @Test(expected = MempoiException.class)
+    public void notFlushingThrowException() throws Throwable {
+
+        Mockito.doThrow(new IOException()).when(mockSheet).flushRows(Mockito.anyInt());
+
+        workbook = new SXSSFWorkbook(-1);
+        sheet = workbook.createSheet();
+        step = new StreamApiMergedRegionsStep(workbook.createCellStyle(), 5, workbook, mempoiSheet);
+
+        try {
+            manageFlushMethod.invoke(step, mockSheet);
+        } catch (Exception e) {
+            throw e.getCause();
+        }
+    }
+
+
     @Test
     public void flushing() {
 
@@ -100,7 +123,6 @@ public class StreamApiElaborationStepTest {
         try {
             manageFlushMethod.invoke(step, sheet);
             assertEquals("Flush - not all rows are flushed", false, sheet.areAllRowsFlushed());
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,16 +2,14 @@ package it.firegloves.mempoi.dao;
 
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.exception.MempoiException;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Types;
+import java.sql.*;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -72,5 +70,27 @@ public class DBMempoiDAOTest {
         assertEquals("DBMempoiDAO executing readMetadata list size == 2", 2, columnList.size() );
         assertEquals("DBMempoiDAO executing readMetadata column 1", id, columnList.get(0));
         assertEquals("DBMempoiDAO executing readMetadata column 2", name, columnList.get(1));
+    }
+
+    @Test(expected = MempoiException.class)
+    public void givenANullResultSetReadMetadata() {
+
+        DBMempoiDAO.getInstance().readMetadata(null);
+    }
+
+    @Test(expected = MempoiException.class)
+    public void givenAResultSetReadMetadataAndThrowException() throws SQLException {
+
+        when(resultSet.getMetaData()).thenThrow(new SQLException());
+
+        DBMempoiDAO.getInstance().readMetadata(this.resultSet);
+    }
+
+    @Test(expected = MempoiException.class)
+    public void invalidPrepStmt() throws Exception {
+
+        when(this.prepStmt.executeQuery()).thenThrow(new SQLException());
+
+        DBMempoiDAO.getInstance().executeExportQuery(this.prepStmt);
     }
 }

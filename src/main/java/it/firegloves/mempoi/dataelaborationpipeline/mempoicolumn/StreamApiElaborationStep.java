@@ -5,7 +5,7 @@
 package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn;
 
 import it.firegloves.mempoi.strategos.Strategos;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public abstract class StreamApiElaborationStep<T> implements MempoiColumnElabora
                 logger.debug("SXSSFSheet in memory rows flushed");
                 return true;
             } catch (IOException e) {
-                throw new MempoiRuntimeException(e);
+                throw new MempoiException(e);
             }
         }
 
