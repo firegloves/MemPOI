@@ -4,11 +4,11 @@
  * only vertical merge is supported
  */
 
-package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions;
+package it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions;
 
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.StreamApiElaborationStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.StreamApiElaborationStep;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -46,7 +46,7 @@ public class StreamApiMergedRegionsStep<T> extends StreamApiElaborationStep<T> {
         super(workbook);
 
         if (StringUtils.isEmpty(mempoiSheet.getSheetName())) {
-            throw new MempoiRuntimeException(Errors.ERR_MERGED_REGIONS_NEED_SHEETNAME);
+            throw new MempoiException(Errors.ERR_MERGED_REGIONS_NEED_SHEETNAME);
         }
 
         this.sheet = workbook.getSheet(mempoiSheet.getSheetName());

@@ -4,7 +4,7 @@ import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -94,7 +94,7 @@ public class ArticleTestIT extends FunctionalBaseTestIT {
             assertEquals("Birds header 2", "BIRD_RACE", thirdSheet.getRow(0).getCell(1).getStringCellValue());
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 

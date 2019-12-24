@@ -1,12 +1,12 @@
 package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.MemPOI;
-import it.firegloves.mempoi.testutil.TestConstants;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.*;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
+import it.firegloves.mempoi.testutil.TestConstants;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 

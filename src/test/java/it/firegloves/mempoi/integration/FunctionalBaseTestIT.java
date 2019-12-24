@@ -1,9 +1,9 @@
 package it.firegloves.mempoi.integration;
 
-import it.firegloves.mempoi.testutil.TestConstants;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertHelper;
+import it.firegloves.mempoi.testutil.TestConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -50,7 +50,7 @@ public abstract class FunctionalBaseTestIT {
             this.prepStmt = this.createStatement();
 
             if (!this.outReportFolder.exists() && !this.outReportFolder.mkdirs()) {
-                throw new MempoiRuntimeException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");
+                throw new MempoiException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");
             }
 
         } catch (Exception e) {

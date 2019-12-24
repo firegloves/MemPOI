@@ -1,12 +1,10 @@
 package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.config.MempoiConfig;
-import it.firegloves.mempoi.config.MempoiConfigTest;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
@@ -126,7 +124,7 @@ public class MempoiSheetBuilderTest {
     }
 
 
-    @Test(expected = MempoiRuntimeException.class)
+    @Test(expected = MempoiException.class)
     public void mempoiSheetBuilderWithoutPrepStmt() {
 
         Workbook wb = new XSSFWorkbook();

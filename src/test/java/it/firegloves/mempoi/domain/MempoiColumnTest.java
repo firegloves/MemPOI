@@ -1,9 +1,9 @@
 package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.MempoiColumnElaborationStep;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.MergedRegionsManager;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.MergedRegionsManager;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
@@ -24,12 +24,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
 public class MempoiColumnTest {
 

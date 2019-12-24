@@ -26,6 +26,13 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 ```
 
 
+### What's new in 1.2.0
+
+- Data elaboration pipeline
+    - Merged regions
+- Force generation (experimental)
+  
+    
 ### Basic usage
 
 All you need is to instantiate a MemPOI passing it the List of your exporting queries. MemPOI will do all the stuff for you generating a .xlsx file containing resulting data.
@@ -321,6 +328,76 @@ So actually the best solution for huge dataset is to force Excel to evaluate cel
 
 ---
 
+### Data elaboration pipeline
+
+In some cases it's useful to have a way to make a data elaboration after the export file is generated. A good example could be the creation of <a href="https://poi.apache.org/components/spreadsheet/quick-guide.html#MergedCells">merged regions</a>.
+For this reason MemPOI introduced the `Data post elaboration system`. The main concept resides in the list of `MempoiColumnElaborationStep` added to the `MempoiColumn` class.
+
+The elaboration consists in 2 phases: analysing data and applying transformation based on previously collected data.
+This is the working process:
+
+- after each row is added to each sheet -> analyze and collect data
+- after the last row is added to each sheet -> close analysis making some final operations
+- after the export data completion -> apply data tranformations
+
+You can create your own `Data post elaboration system`'s implementation by 2 ways:
+
+- implementing the base interface `MempoiColumnElaborationStep`
+- extending the abstract class `StreamApiElaborationStep`
+
+###### MempoiColumnElaborationStep
+
+This represents the base functionality and defines the methods you should implement to manage your desired data post elaboration flow.
+You can find an example in `NotStreamApiMergedRegionsStep`.
+
+###### StreamApiElaborationStep
+
+This class supplies some basic implementations to deal with <a href="https://poi.apache.org/components/spreadsheet/how-to.html#sxssf">Apache POI stream API</a>.
+Then you have to implement, as for `MempoiColumnElaborationStep`, the interface logic methods.
+You can find an example in `StreamApiMergedRegionsStep`.
+
+###### Differences
+
+The main difference resides in the underlying Apache POI system, so it is a good practice to use the right implementation depending on the used `Workbook` implementation.
+However we could list some behaviours:
+
+*MempoiColumnElaborationStep*
+- it should be used with `HSSF` or `XSSF`
+- it should access the generated `Workbook` as all in memory => document too large could saturate your memory causing an error
+- memory is never flushed
+
+*StreamApiElaborationStep*
+- it should be used with `SXSSF`
+- it should access only a portion of the generated `Workbook` keeping in mind that at each time only a subset of the created rows are loaded in memory
+- you could find your desired configuration for the workbook's `RandomAccessWindowSize` property or you could try with its default value.
+- memory is flushed in order to keep only a subset of the generated rows in memory
+- memory flush mechanism is automated but it is a fragile mechanism, as reported by Apache POI doc, so it has to be used carefully
+
+###### Merged Regions
+
+Currently MemPOI supplies only one `Data post elaboration system`'s step in order to ease merged regions management.
+All you have to do is to pass a String array to the `MempoiSheetBuilder` representing the list of columns to merge.
+
+```
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+    .withSheetName("Merged regions name column 2")
+    .withPrepStmt(prepStmt)
+    .withMergedRegionColumns(mergedColumns)
+    .withStyleTemplate(new RoseStyleTemplate())
+    .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+    .withFile(fileDest)
+    .withStyleTemplate(new ForestStyleTemplate())
+    .withWorkbook(new HSSFWorkbook())
+    .addMempoiSheet(mempoiSheet)
+    .build();
+
+memPOI.prepareMempoiReportToFile().get();
+```
+
+---
+
 ### Performance
 
 Since you might have to face foolish requests like exporting hundreds of thousands of rows in a few seconds, I added some speed tests.
@@ -363,7 +440,7 @@ MemPOI comes with Apache POI 4.1.1 bundled. If you need to use a different versi
 ###### This is an example using Gradle:
 
 ```
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.1.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.2.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -376,7 +453,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>

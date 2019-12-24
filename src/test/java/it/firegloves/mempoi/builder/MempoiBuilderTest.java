@@ -2,7 +2,6 @@ package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.config.MempoiConfig;
-import it.firegloves.mempoi.config.MempoiConfigTest;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.NumberMinSubFooter;

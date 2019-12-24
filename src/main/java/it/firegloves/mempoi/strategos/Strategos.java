@@ -3,13 +3,12 @@ package it.firegloves.mempoi.strategos;
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.MempoiColumnElaborationStep;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.manager.FileManager;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
@@ -64,7 +63,7 @@ public class Strategos {
      * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
      * @param fileToExport    the destination file (with path) where write exported data
      * @return the filename with path of the report generated file
-     * @throws MempoiRuntimeException if something went wrong
+     * @throws MempoiException if something went wrong
      */
     public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) {
 
@@ -77,7 +76,7 @@ public class Strategos {
      * starting from export PreparedStatement prepares the MempoiReport for battle!
      *
      * @return the filename with path of the report generated file
-     * @throws MempoiRuntimeException if something went wrong
+     * @throws MempoiException if something went wrong
      */
     public byte[] generateMempoiReportToByteArray() {
 
@@ -173,7 +172,7 @@ public class Strategos {
             this.adjustColSize(sheet, columnList.size());
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         } finally {
             ConnectionManager.closeResultSetAndPrepStmt(rs, mempoiSheet.getPrepStmt());
         }
@@ -235,8 +234,10 @@ public class Strategos {
         // assigns cell styles to MempoiColumns
         new MempoiColumnStyleManager(mempoiSheet.getSheetStyler()).setMempoiColumnListStyler(columnList);
 
-        // manages GROUP BY clause
+        // manages merged regions
         if (null != mempoiSheet.getMergedRegionColumns()) {
+
+            // TODO fare la configurazione in modo che sia possibile aggiungere step creati dagli utenti
 
             Arrays.stream(mempoiSheet.getMergedRegionColumns()).
                     forEach(colName -> {
@@ -302,7 +303,7 @@ public class Strategos {
             }
         }
 
-        colList.stream().forEach(mc -> mc.elaborationStepListExecute(mempoiSheet, this.workbookConfig.getWorkbook()));
+        colList.forEach(mc -> mc.elaborationStepListExecute(mempoiSheet, this.workbookConfig.getWorkbook()));
     }
 
 

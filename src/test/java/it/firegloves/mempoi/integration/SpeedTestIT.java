@@ -1,15 +1,15 @@
 package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.MemPOI;
-import it.firegloves.mempoi.testutil.TestConstants;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
+import it.firegloves.mempoi.testutil.TestConstants;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -36,7 +36,7 @@ public class SpeedTestIT extends FunctionalBaseTestIT {
 
 
             if (! this.outReportFolder.exists() && ! this.outReportFolder.mkdirs()) {
-                throw new MempoiRuntimeException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");
+                throw new MempoiException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");
             }
 
         } catch (Exception e) {

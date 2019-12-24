@@ -4,7 +4,7 @@ import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -54,7 +54,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate());
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -88,7 +88,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -123,7 +123,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -187,7 +187,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
 
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -232,7 +232,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
 
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -272,7 +272,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -317,7 +317,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
 
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -351,7 +351,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -396,7 +396,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
 
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -435,7 +435,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -479,7 +479,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -513,7 +513,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -547,7 +547,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -620,7 +620,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             super.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -656,7 +656,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
      *                               GENERICS
      **********************************************************************/
 
-    @Test(expected = MempoiRuntimeException.class)
+    @Test(expected = MempoiException.class)
     public void testWithFileAndMergedRegionsHSSFNullMergedRegions_Fail() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
@@ -678,11 +678,11 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             memPOI.prepareMempoiReportToFile().get();
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
-    @Test(expected = MempoiRuntimeException.class)
+    @Test(expected = MempoiException.class)
     public void testWithFileAndMergedRegionsHSSFEmptyMergedRegions_Fail() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
@@ -704,7 +704,7 @@ public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
             memPOI.prepareMempoiReportToFile().get();
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 

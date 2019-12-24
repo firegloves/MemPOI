@@ -14,8 +14,8 @@ public class MemPOI {
 
     private WorkbookConfig workbookConfig;
 
-    public MemPOI() {
-    }
+//    public MemPOI() {
+//    }
 
     public MemPOI(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
@@ -28,13 +28,13 @@ public class MemPOI {
         return workbookConfig;
     }
 
-    /**
-     * set a WorkbookConfig containing report configurations
-     * @param workbookConfig the WorkbookConfig to use for generating export
-     */
-    public void setWorkbookConfig(WorkbookConfig workbookConfig) {
-        this.workbookConfig = workbookConfig;
-    }
+//    /**
+//     * set a WorkbookConfig containing report configurations
+//     * @param workbookConfig the WorkbookConfig to use for generating export
+//     */
+//    public void setWorkbookConfig(WorkbookConfig workbookConfig) {
+//        this.workbookConfig = workbookConfig;
+//    }
 
     /**
      * exports data into a POI report. saves exported data into the File identified by the file variable

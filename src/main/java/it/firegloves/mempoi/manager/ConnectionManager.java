@@ -1,7 +1,6 @@
 package it.firegloves.mempoi.manager;
 
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

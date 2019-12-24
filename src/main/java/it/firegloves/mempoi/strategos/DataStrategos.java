@@ -2,7 +2,7 @@ package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -115,7 +115,7 @@ public class DataStrategos {
             columnList.forEach(mc -> mc.elaborationStepListCloseAnalysis(lastRowNum));
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
 
         return rowCounter;

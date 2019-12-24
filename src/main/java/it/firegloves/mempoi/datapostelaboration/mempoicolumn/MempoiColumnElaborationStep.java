@@ -2,7 +2,7 @@
  * pipeline pattern's step for elaborating MempoiColumn's generated data after workbook generation
  */
 
-package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn;
+package it.firegloves.mempoi.datapostelaboration.mempoicolumn;
 
 import it.firegloves.mempoi.domain.MempoiSheet;
 import org.apache.poi.ss.usermodel.Cell;

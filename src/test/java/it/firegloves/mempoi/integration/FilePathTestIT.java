@@ -3,7 +3,7 @@ package it.firegloves.mempoi.integration;
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 import org.junit.Test;
 
 import java.io.File;
@@ -33,7 +33,7 @@ public class FilePathTestIT extends FunctionalBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -58,7 +58,7 @@ public class FilePathTestIT extends FunctionalBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 }

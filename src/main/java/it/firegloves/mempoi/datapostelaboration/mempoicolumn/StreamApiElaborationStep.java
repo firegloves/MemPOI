@@ -2,10 +2,10 @@
  * pipeline pattern's step for elaborating MempoiColumn's into a HSSF or XSSF
  */
 
-package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn;
+package it.firegloves.mempoi.datapostelaboration.mempoicolumn;
 
-import it.firegloves.mempoi.strategos.Strategos;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.strategos.Strategos;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
@@ -26,7 +26,6 @@ public abstract class StreamApiElaborationStep<T> implements MempoiColumnElabora
      * this variable contains the SXSSFWorkbook in memory max rows number
      */
     protected int maxRowsNum;
-
 
 
     public StreamApiElaborationStep(SXSSFWorkbook workbook) {

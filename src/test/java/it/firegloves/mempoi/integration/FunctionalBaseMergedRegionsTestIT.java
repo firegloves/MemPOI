@@ -1,8 +1,10 @@
 package it.firegloves.mempoi.integration;
 
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.TestConstants;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.After;
 import org.junit.Before;
@@ -10,7 +12,10 @@ import org.junit.Before;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +39,7 @@ public abstract class FunctionalBaseMergedRegionsTestIT extends FunctionalBaseTe
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
 
             if (!this.outReportFolder.exists() && !this.outReportFolder.mkdirs()) {
-                throw new MempoiRuntimeException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");
+                throw new MempoiException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");
             }
 
         } catch (Exception e) {

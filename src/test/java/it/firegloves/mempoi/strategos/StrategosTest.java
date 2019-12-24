@@ -1,7 +1,6 @@
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.MempoiConfig;
-import it.firegloves.mempoi.config.MempoiConfigTest;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;

@@ -1,8 +1,6 @@
 package it.firegloves.mempoi.styles;
 
 import it.firegloves.mempoi.domain.MempoiColumn;
-import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
-import it.firegloves.mempoi.styles.MempoiStyler;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.junit.Before;
 import org.junit.Test;

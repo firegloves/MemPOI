@@ -1,4 +1,4 @@
-package it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions;
+package it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions;
 
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;

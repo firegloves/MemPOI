@@ -1,15 +1,11 @@
-package it.firegloves.mempoi.dataelaborationpipeline.mergedregions;
+package it.firegloves.mempoi.datapostelaboration.mergedregions;
 
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.StreamApiElaborationStep;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.MergedRegionsManager;
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;

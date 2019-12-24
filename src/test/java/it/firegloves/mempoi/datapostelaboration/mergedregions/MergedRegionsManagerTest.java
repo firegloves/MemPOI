@@ -1,6 +1,6 @@
-package it.firegloves.mempoi.dataelaborationpipeline.mergedregions;
+package it.firegloves.mempoi.datapostelaboration.mergedregions;
 
-import it.firegloves.mempoi.dataelaborationpipeline.mempoicolumn.mergedregions.MergedRegionsManager;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.MergedRegionsManager;
 import it.firegloves.mempoi.exception.MempoiException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.poi.ss.usermodel.*;

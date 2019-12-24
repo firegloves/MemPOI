@@ -5,7 +5,6 @@
 package it.firegloves.mempoi.testutil;
 
 import it.firegloves.mempoi.styles.MempoiStyler;
-import it.firegloves.mempoi.styles.StyleTemplateTest;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;

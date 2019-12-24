@@ -2,13 +2,15 @@ package it.firegloves.mempoi.manager;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class FileManager {
 
@@ -47,7 +49,7 @@ public class FileManager {
      *
      * @param file the file with path to which write exported data
      * @return created file name with path
-     * @throws MempoiRuntimeException if write operation fails
+     * @throws MempoiException if write operation fails
      */
     public String createFinalFile(File file) {
         try {
@@ -97,7 +99,7 @@ public class FileManager {
      * write report to byte array
      *
      * @return the byte array corresponding to the poi export
-     * @throws IOException
+     * @throws MempoiException
      */
     public byte[] writeToByteArray() {
 
@@ -110,7 +112,7 @@ public class FileManager {
             }
 
         } catch (Exception e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         } finally {
             this.closeWorkbook();
         }
