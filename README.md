@@ -10,12 +10,12 @@ MemPOI is not designed to be used with an ORM due to performance needs on massiv
 
 ### Import
 
-###### With Gradle
+#### With Gradle
 ```
 implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 ```
 
-###### With Maven
+#### With Maven
 ```
 <dependency>
     <groupId>it.firegloves</groupId>
@@ -61,7 +61,7 @@ By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s des
 
 You can choose to write directly to a file or to obtain the byte array of the generated report (for example to pass it back to a waiting client)
 
-###### File:
+#### File:
 
 ```
 File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file.xlsx");
@@ -75,7 +75,7 @@ CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 String absoluteFileName = fut.get();
 ```
 
-###### Byte array:
+#### Byte array:
 
 ```
 MemPOI memPOI = MempoiBuilder.aMemPOI()
@@ -344,18 +344,18 @@ You can create your own `Data post elaboration system`'s implementation by 2 way
 - implementing the base interface `MempoiColumnElaborationStep`
 - extending the abstract class `StreamApiElaborationStep`
 
-###### MempoiColumnElaborationStep
+#### MempoiColumnElaborationStep
 
 This represents the base functionality and defines the methods you should implement to manage your desired data post elaboration flow.
 You can find an example in `NotStreamApiMergedRegionsStep`.
 
-###### StreamApiElaborationStep
+#### StreamApiElaborationStep
 
 This class supplies some basic implementations to deal with <a href="https://poi.apache.org/components/spreadsheet/how-to.html#sxssf">Apache POI stream API</a>.
 Then you have to implement, as for `MempoiColumnElaborationStep`, the interface logic methods.
 You can find an example in `StreamApiMergedRegionsStep`.
 
-###### Differences
+#### Differences
 
 The main difference resides in the underlying Apache POI system, so it is a good practice to use the right implementation depending on the used `Workbook` implementation.
 However we could list some behaviors:
@@ -372,7 +372,7 @@ However we could list some behaviors:
 - memory is flushed in order to keep only a subset of the generated rows in memory
 - memory flush mechanism is automated but it is a fragile mechanism, as reported by Apache POI doc, so it has to be used carefully
 
-###### Adding data post elaboration steps
+#### Adding data post elaboration steps
 
 You can add as many steps as you want as follows:
 
@@ -416,7 +416,7 @@ return MempoiSheetBuilder.aMempoiSheet()
            .withDataElaborationStep("name", new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex))
 ```
 
-###### Merged Regions
+#### Merged Regions
 
 Currently MemPOI supplies only one `Data post elaboration system`'s step in order to ease merged regions management.
 All you have to do is to pass a String array to the `MempoiSheetBuilder` representing the list of columns to merge.
@@ -489,7 +489,7 @@ According to `CompletableFuture` you'll receive an `ExecutionException` if you c
 
 MemPOI comes with Apache POI 4.1.1 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
-###### This is an example using Gradle:
+#### This is an example using Gradle:
 
 ```
 implementation (group: 'it.firegloves', name: 'mempoi', version: '1.2.0') {
@@ -499,7 +499,7 @@ implementation (group: 'it.firegloves', name: 'mempoi', version: '1.2.0') {
 implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 ```
 
-###### This is an example using Maven:
+#### This is an example using Maven:
 
 ```
 <dependency>
