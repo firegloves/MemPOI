@@ -132,13 +132,6 @@ public class MempoiStylerBuilder {
 
         this.styleTemplate = null != this.styleTemplate ? this.styleTemplate : new StandardStyleTemplate();
 
-//        if (null != this.headerCellStyle ||
-//                null != this.dateCellStyle ||
-//                null != this.datetimeCellStyle ||
-//                null != this.numberCellStyle ||
-//                null != this.commonDataCellStyle ||
-//                null != this.subFooterCellStyle) {
-
             styler = new MempoiStyler();
 
             // customize styles
@@ -148,8 +141,6 @@ public class MempoiStylerBuilder {
             styler.setNumberCellStyle(Optional.ofNullable(this.numberCellStyle).orElseGet(() -> this.styleTemplate.getNumberCellStyle(this.workbook)));
             styler.setCommonDataCellStyle(Optional.ofNullable(this.commonDataCellStyle).orElseGet(() -> this.styleTemplate.getCommonDataCellStyle(this.workbook)));
             styler.setSubFooterCellStyle(Optional.ofNullable(this.subFooterCellStyle).orElseGet(() -> this.styleTemplate.getSubfooterCellStyle(this.workbook)));
-
-//        }
 
         return Optional.ofNullable(styler);
     }

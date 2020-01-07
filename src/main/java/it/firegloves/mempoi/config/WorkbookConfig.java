@@ -9,8 +9,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import java.io.File;
 import java.util.List;
 
-//import it.firegloves.mempoi.util.SXSSFRowManager;
-
 public class WorkbookConfig {
 
     /**
@@ -57,19 +55,9 @@ public class WorkbookConfig {
     private boolean evaluateCellFormulas;
 
     /**
-     * true if some data elaboration pipeline steps are present (e.g. merged region)
-     */
-//    private boolean hasPostCreationSteps;
-
-    /**
      * the MempoiSheet list equal to the sheet to create in the report
      */
     private List<MempoiSheet> sheetList;
-
-    /**
-     * responsible of memory access management when using a SXSSFWorkbook
-     */
-//    private SXSSFRowManager sxssfRowManager;
 
 
     public WorkbookConfig() {
@@ -139,15 +127,6 @@ public class WorkbookConfig {
         return this;
     }
 
-//    public SXSSFRowManager getSxssfRowManager() {
-//        return sxssfRowManager;
-//    }
-//
-//    public WorkbookConfig setSxssfRowManager(SXSSFRowManager sxssfRowManager) {
-//        this.sxssfRowManager = sxssfRowManager;
-//        return this;
-//    }
-
     public List<MempoiSheet> getSheetList() {
         return sheetList;
     }
@@ -175,12 +154,4 @@ public class WorkbookConfig {
         this.file = file;
         return this;
     }
-
-//    public boolean isHasPostCreationSteps() {
-//        return hasPostCreationSteps;
-//    }
-//
-//    public void setHasPostCreationSteps(boolean hasPostCreationSteps) {
-//        this.hasPostCreationSteps = hasPostCreationSteps;
-//    }
 }

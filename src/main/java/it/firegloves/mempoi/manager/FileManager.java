@@ -32,7 +32,6 @@ public class FileManager {
      *
      * @return the written file
      */
-    // TODO return void?
     public File writeTempFile() {
 
         File tmpFile = new File(System.getProperty("java.io.tmpdir") + "mempoi_temp_" + System.currentTimeMillis() + ".xlsx");
@@ -125,7 +124,7 @@ public class FileManager {
     private void closeWorkbook() {
 
         if (null == this.workbookConfig.getWorkbook()) {
-            this.logger.warn(Errors.WARN_NULL_WB_NOT_CLOSED);
+            logger.warn(Errors.WARN_NULL_WB_NOT_CLOSED);
             throw new MempoiException(Errors.ERR_WORKBOOK_NULL);
         }
 

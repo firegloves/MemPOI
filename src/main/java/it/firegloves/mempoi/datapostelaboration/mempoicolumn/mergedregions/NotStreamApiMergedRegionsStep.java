@@ -72,7 +72,7 @@ public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaboration
             throw new MempoiException(Errors.ERR_MERGED_REGIONS_SHEET_NULL);
         }
 
-        if (this.mergedRegionsLimits.size() > 0) {
+        if (! this.mergedRegionsLimits.isEmpty()) {
 
             // clone the MempoiColumn's style into another one created by the current workbook
             CellStyle newStyle = workbook.createCellStyle();

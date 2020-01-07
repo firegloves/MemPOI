@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class WorkbookTestIT extends FunctionalBaseTestIT {
+public class WorkbookTestIT extends IntegrationBaseTestIT {
 
     /**********************************************************************************************
      * HSSFWorkbook

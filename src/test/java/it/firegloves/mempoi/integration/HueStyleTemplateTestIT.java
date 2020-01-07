@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class HueStyleTemplateTestIT extends FunctionalBaseTestIT {
+public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
 
     @Mock
     StyleTemplate styleTemplate;

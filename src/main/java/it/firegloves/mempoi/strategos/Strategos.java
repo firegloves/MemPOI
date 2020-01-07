@@ -26,17 +26,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
-
-// TODO son oarrivato che devo creare la pipeline per l'invocazione degli step ed eseguirla.
-//  ci deve essere una variabile in mempoiconfig che avvisa se c'è almeno uno step da eseguire?
-//  chiudere e riaprire il workbook sempre? farlo in mem?
 
 public class Strategos {
 
     private static final Logger logger = LoggerFactory.getLogger(Strategos.class);
-
-    private static final int ROW_HEIGHT_PLUS = 5;
 
     /**
      * contains the workbook configurations
@@ -99,10 +94,6 @@ public class Strategos {
             this.fileManager.writeTempFile();
             this.manageFormulaToEvaluate();
         }
-
-        // apply mempoi column strategies
-//        this.applyMempoiColumnStrategies(mempoiSheetList);
-        // TODO check the result with formulas and merged regions
     }
 
 
@@ -125,7 +116,7 @@ public class Strategos {
      */
     private void generateReport(List<MempoiSheet> mempoiSheetList) {
 
-        mempoiSheetList.stream().forEach(this::generateSheet);
+        mempoiSheetList.forEach(this::generateSheet);
     }
 
 
@@ -148,21 +139,9 @@ public class Strategos {
         ResultSet rs = DBMempoiDAO.getInstance().executeExportQuery(mempoiSheet.getPrepStmt());
 
         // preapre MempoiColumn list
-        List<MempoiColumn> columnList = this.prepareMempoiColumn(mempoiSheet, rs);
+        List<MempoiColumn> columnList = new MempoiColumnStrategos().prepareMempoiColumn(mempoiSheet, rs, this.workbookConfig.getWorkbook());
 
         try {
-//            // create header
-//            rowCounter = this.dataStrategos.createHeaderRow(sheet, columnList, rowCounter, mempoiSheet.getSheetStyler());
-//
-//            // keep track of the first data row index (no header and subheaders)
-//            int firstDataRowIndex = rowCounter + 1;
-//
-//            // create rows
-//            rowCounter = this.dataStrategos.createDataRows(sheet, rs, columnList, rowCounter);
-//
-//            // footer
-//            this.footerStrategos.createFooterAndSubfooter(sheet, columnList, mempoiSheet, firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler());
-
             this.createSheetData(sheet, rs, columnList, mempoiSheet);
 
             // apply mempoi column strategies
@@ -215,51 +194,6 @@ public class Strategos {
         return ! StringUtils.isEmpty(sheetName) ?
                 this.workbookConfig.getWorkbook().createSheet(sheetName) :
                 this.workbookConfig.getWorkbook().createSheet();
-    }
-
-
-    /**
-     * read the ResultSet's metadata and creates a List of MempoiColumn.
-     * if needed add GROUP BY's clause informations to the interested MempoiColumns
-     *
-     * @param mempoiSheet the MempoiSheet from which get GROUP BY's clause informations
-     * @param rs          the ResultSet from which read columns metadata
-     * @return the created List<MempoiColumn>
-     */
-    private List<MempoiColumn> prepareMempoiColumn(MempoiSheet mempoiSheet, ResultSet rs) {
-
-        // populates MempoiColumn list with export metadata list
-        List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
-
-        // assigns cell styles to MempoiColumns
-        new MempoiColumnStyleManager(mempoiSheet.getSheetStyler()).setMempoiColumnListStyler(columnList);
-
-        // manages merged regions
-        if (null != mempoiSheet.getMergedRegionColumns()) {
-
-            // TODO fare la configurazione in modo che sia possibile aggiungere step creati dagli utenti
-
-            Arrays.stream(mempoiSheet.getMergedRegionColumns()).
-                    forEach(colName -> {
-
-                        IntStream.range(0, columnList.size())
-                                .filter(colIndex -> colName.equals(columnList.get(colIndex).getColumnName()))
-                                .findFirst()
-                                .ifPresent(colIndex -> {
-
-                                    MempoiColumnElaborationStep step = this.workbookConfig.getWorkbook() instanceof SXSSFWorkbook ?
-                                            new StreamApiMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex, (SXSSFWorkbook) workbookConfig.getWorkbook(), mempoiSheet) :  // TODO sistemare creazione per StreamApi version
-                                            new NotStreamApiMergedRegionsStep(columnList.get(colIndex).getCellStyle(), colIndex);
-
-                                    columnList.get(colIndex).addElaborationStep(step);
-                                });
-                    });
-        }
-
-        // adds mempoi column list to the current MempoiSheet
-        mempoiSheet.setColumnList(columnList);
-
-        return columnList;
     }
 
 

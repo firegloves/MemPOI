@@ -25,12 +25,11 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 
 ```
 
-
 ### What's new in 1.2.0
 
-- Data elaboration pipeline
-    - Merged regions
-- Force generation (experimental)
+- [Data elaboration pipeline](#data-elaboration-pipeline)
+    - [Merged regions](#merged-regions)
+- [Force generation (experimental)](#force-generation)
   
     
 ### Basic usage
@@ -331,14 +330,14 @@ So actually the best solution for huge dataset is to force Excel to evaluate cel
 ### Data elaboration pipeline
 
 In some cases it's useful to have a way to make a data elaboration after the export file is generated. A good example could be the creation of <a href="https://poi.apache.org/components/spreadsheet/quick-guide.html#MergedCells">merged regions</a>.
-For this reason MemPOI introduced the `Data post elaboration system`. The main concept resides in the list of `MempoiColumnElaborationStep` added to the `MempoiColumn` class.
+For this reason MemPOI introduces the `Data post elaboration system`. The main concept resides in the list of `MempoiColumnElaborationStep` added to the `MempoiColumn` class.
 
-The elaboration consists in 2 phases: analysing data and applying transformation based on previously collected data.
+The elaboration consists of 2 phases: analyzing data and applying transformation based on previously collected data.
 This is the working process:
 
 - after each row is added to each sheet -> analyze and collect data
 - after the last row is added to each sheet -> close analysis making some final operations
-- after the export data completion -> apply data tranformations
+- after data export completion -> apply data transformations
 
 You can create your own `Data post elaboration system`'s implementation by 2 ways:
 
@@ -359,7 +358,7 @@ You can find an example in `StreamApiMergedRegionsStep`.
 ###### Differences
 
 The main difference resides in the underlying Apache POI system, so it is a good practice to use the right implementation depending on the used `Workbook` implementation.
-However we could list some behaviours:
+However we could list some behaviors:
 
 *MempoiColumnElaborationStep*
 - it should be used with `HSSF` or `XSSF`
@@ -373,12 +372,58 @@ However we could list some behaviours:
 - memory is flushed in order to keep only a subset of the generated rows in memory
 - memory flush mechanism is automated but it is a fragile mechanism, as reported by Apache POI doc, so it has to be used carefully
 
+###### Adding data post elaboration steps
+
+You can add as many steps as you want as follows:
+
+```
+return MempoiSheetBuilder.aMempoiSheet()
+           .withSheetName("Multiple steps")
+           .withPrepStmt(prepStmt)
+           .withDataElaborationStep("name", step1)
+           .withDataElaborationStep("usefulChar", step2)
+           .withDataElaborationStep("name", step3)
+```
+
+Note that you can add more than one step on each column. Keep in mind that order matters: for each column, steps will be executed in the added order so be careful.
+Built-in steps (like Merged Regions) will be added firstly. If you want to change this behavior you could configure them without using built-in functionalities.
+
+For example both the following codes will result in executing merged regions step and then the custom one:
+
+```
+return MempoiSheetBuilder.aMempoiSheet()
+           .withSheetName("Multiple steps")
+           .withPrepStmt(prepStmt)
+           .withMergedRegionColumns(new String[]{"name"})
+           .withDataElaborationStep("name", customStep)
+```
+
+```
+return MempoiSheetBuilder.aMempoiSheet()
+           .withSheetName("Multiple steps")
+           .withPrepStmt(prepStmt)
+           .withDataElaborationStep("name", customStep)
+           .withMergedRegionColumns(new String[]{"name"})
+```
+
+But this one will execute firstly the custom step and then the merged regions one:
+
+```
+return MempoiSheetBuilder.aMempoiSheet()
+           .withSheetName("Multiple steps")
+           .withPrepStmt(prepStmt)
+           .withDataElaborationStep("name", customStep)
+           .withDataElaborationStep("name", new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex))
+```
+
 ###### Merged Regions
 
 Currently MemPOI supplies only one `Data post elaboration system`'s step in order to ease merged regions management.
 All you have to do is to pass a String array to the `MempoiSheetBuilder` representing the list of columns to merge.
 
 ```
+String[] mergedColumns = new String[]{"name"}
+
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
     .withSheetName("Merged regions name column 2")
     .withPrepStmt(prepStmt)
@@ -395,6 +440,13 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 memPOI.prepareMempoiReportToFile().get();
 ```
+
+---
+
+### Force Generation
+
+MemPOI 1.2 introduces the `forceGeneration` property that helps you to ignore some possible errors, if possible.
+Force Generation is still experimental, a list of all supported errors to ignore will be available in future releases.
 
 ---
 

@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.domain;
 
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.styles.MempoiStyler;
@@ -8,7 +9,9 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.PreparedStatement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class MempoiSheet {
@@ -58,6 +61,12 @@ public class MempoiSheet {
      */
     private String[] mergedRegionColumns;
 
+    /**
+     * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
+     * it defines the post data elaboration processes to apply
+     */
+    private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
+
 
     public MempoiSheet(PreparedStatement prepStmt) {
         this.prepStmt = prepStmt;
@@ -66,12 +75,6 @@ public class MempoiSheet {
     public MempoiSheet(PreparedStatement prepStmt, String sheetName) {
         this.prepStmt = prepStmt;
         this.sheetName = sheetName;
-    }
-
-    public MempoiSheet(PreparedStatement prepStmt, String sheetName, Workbook workbook) {
-        this.prepStmt = prepStmt;
-        this.sheetName = sheetName;
-        this.workbook = workbook;
     }
 
     public PreparedStatement getPrepStmt() {
@@ -192,5 +195,13 @@ public class MempoiSheet {
 
     public void setColumnList(List<MempoiColumn> columnList) {
         this.columnList = columnList;
+    }
+
+    public Map<String, List<MempoiColumnElaborationStep>> getDataElaborationStepMap() {
+        return dataElaborationStepMap;
+    }
+
+    public void setDataElaborationStepMap(Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap) {
+        this.dataElaborationStepMap = dataElaborationStepMap;
     }
 }

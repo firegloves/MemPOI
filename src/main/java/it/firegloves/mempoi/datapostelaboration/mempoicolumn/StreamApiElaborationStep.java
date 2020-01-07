@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public abstract class StreamApiElaborationStep<T> implements MempoiColumnElaborationStep<T> {
 
-    private static final Logger logger = LoggerFactory.getLogger(Strategos.class);
+    private static final Logger logger = LoggerFactory.getLogger(StreamApiElaborationStep.class);
 
     /**
      * reference to the SXSSFWorkbook that is being generated

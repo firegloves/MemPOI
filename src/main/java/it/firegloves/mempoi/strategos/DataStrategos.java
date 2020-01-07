@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.ResultSet;
 import java.util.List;
 
-// TODO add test
 public class DataStrategos {
 
     private static final Logger logger = LoggerFactory.getLogger(DataStrategos.class);

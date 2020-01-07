@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.config.MempoiConfig;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
@@ -12,6 +13,10 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class MempoiSheetBuilder {
 
@@ -30,6 +35,12 @@ public final class MempoiSheetBuilder {
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
     private String[] mergedRegionColumns;
+
+    /**
+     * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
+     * it defines the post data elaboration processes to apply
+     */
+    private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -200,7 +211,34 @@ public final class MempoiSheetBuilder {
         return this;
     }
 
+    /**
+     * add the received map of column name - DataPostElaborationStep to the builder and then to the mempoisheet
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withDataElaborationStepMap(Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap) {
 
+        this.dataElaborationStepMap = dataElaborationStepMap;
+        return this;
+    }
+
+    /**
+     * add one record to the map of column name - DataPostElaborationStep
+     * @param colName the column name to post process
+     * @param step the step to apply to post process data
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withDataElaborationStep(String colName, MempoiColumnElaborationStep step) {
+
+        // TODO force generation here
+        if (null == this.dataElaborationStepMap) {
+            throw new MempoiException(Errors.ERR_POST_DATA_ELABORATION_NULL);
+        }
+
+        this.dataElaborationStepMap.putIfAbsent(colName, new ArrayList<>());
+        this.dataElaborationStepMap.get(colName).add(step);
+
+        return this;
+    }
 
     /**
      * builds the MempoiSheet and returns it
@@ -225,6 +263,7 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setNumberCellStyle(numberCellStyle);
         mempoiSheet.setMempoiFooter(mempoiFooter);
         mempoiSheet.setMempoiSubFooter(mempoiSubFooter);
+        mempoiSheet.setDataElaborationStepMap(dataElaborationStepMap);
         mempoiSheet.setMergedRegionColumns(mergedRegionColumns);
         return mempoiSheet;
     }

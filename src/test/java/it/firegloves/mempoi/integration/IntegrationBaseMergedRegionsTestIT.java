@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-public abstract class FunctionalBaseMergedRegionsTestIT extends FunctionalBaseTestIT {
+public abstract class IntegrationBaseMergedRegionsTestIT extends IntegrationBaseTestIT {
 
     public static final int MAX_ROWS = 10;
     public static final int NO_LIMITS = -1;

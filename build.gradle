@@ -21,6 +21,9 @@ version '1.1.0'
 sourceCompatibility = 1.8
 
 def poiVersion = '4.1.1'
+def comonsLang3Version = '3.9'
+def comonsMath3Version = '3.6.1'
+def logbackClassicVersion = '1.2.3'
 
 repositories {
     mavenCentral()
@@ -42,13 +45,13 @@ dependencies {
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poiVersion
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: comonsLang3Version
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-math3
-    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    compile group: 'org.apache.commons', name: 'commons-math3', version: comonsMath3Version
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackClassicVersion
 
 }
 

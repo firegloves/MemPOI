@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 
-public class MempoiExceptionTestIT extends FunctionalBaseTestIT {
+public class MempoiExceptionTestIT extends IntegrationBaseTestIT {
 
     @Test(expected = ExecutionException.class)
     public void testGeneratingExecutionException() throws SQLException, ExecutionException, InterruptedException {

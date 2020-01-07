@@ -19,6 +19,8 @@ public class Errors {
 
     public static final String ERR_MEMPOISHEET_LIST_NULL = "MemPOI received a null or empty list of MempoiSheet";
 
+    public static final String ERR_POST_DATA_ELABORATION_NULL = "A post data elaboration step was added to a null map";
+
     public static final String ERR_MERGED_REGIONS_LIST_NULL = "A MempoiSheet has been created requesting to apply merge region strategy but it received an empty array of columns to merge";
     public static final String ERR_MERGED_REGIONS_NEED_SHEETNAME = "Sheet name null. Specify a sheet name is mandatory to use MemPOI's MergedRegions implementation";
     public static final String ERR_MERGED_REGIONS_SHEET_NULL = "A null sheet was received during merged regions analysis";
@@ -31,4 +33,13 @@ public class Errors {
      * WARNINGS
      ********************************************************************************************************************/
     public static final String WARN_NULL_WB_NOT_CLOSED = "A null workbook is received while trying to close the current workbook";
+
+
+
+
+
+
+
+    private Errors() {
+    }
 }

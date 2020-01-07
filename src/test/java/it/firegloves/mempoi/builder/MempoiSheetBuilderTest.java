@@ -187,4 +187,18 @@ public class MempoiSheetBuilderTest {
 
     }
 
+    @Test
+    public void mempoiSheetBuilderChangedPrepStmt() {
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .build();
+
+        assertEquals(prepStmt, mempoiSheet.getPrepStmt());
+
+        mempoiSheet.setPrepStmt(null);
+
+        assertNull(mempoiSheet.getPrepStmt());
+    }
+
 }

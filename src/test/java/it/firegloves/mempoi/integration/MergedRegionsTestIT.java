@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.Assert.assertEquals;
 
 
-public class MergedRegionsTestIT extends FunctionalBaseMergedRegionsTestIT {
+public class MergedRegionsTestIT extends IntegrationBaseMergedRegionsTestIT {
 
     /***********************************************************************
      *                               HSSF

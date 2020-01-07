@@ -20,7 +20,7 @@ import java.util.List;
 
 class FooterStrategos {
 
-    private static final Logger logger = LoggerFactory.getLogger(Strategos.class);
+    private static final Logger logger = LoggerFactory.getLogger(FooterStrategos.class);
 
     /**
      * contains the workbook configurations

@@ -17,7 +17,7 @@ import java.sql.*;
 
 import static org.junit.Assert.assertEquals;
 
-public abstract class FunctionalBaseTestIT {
+public abstract class IntegrationBaseTestIT {
 
     public static final int MAX_ROWS = 10;
     public static final int NO_LIMITS = -1;

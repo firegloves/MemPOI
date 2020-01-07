@@ -35,9 +35,9 @@ public class MempoiColumn {
     private List<MempoiColumnElaborationStep> elaborationStepList = new ArrayList<>();
 
 
-//    public MempoiColumn(String columnName) {
-//        this.columnName = columnName;
-//    }
+    public MempoiColumn(String columnName) {
+        this.columnName = columnName;
+    }
 
     public MempoiColumn(int sqlObjType, String columnName) {
         this.columnName = columnName;
@@ -48,10 +48,6 @@ public class MempoiColumn {
     public EExportDataType getType() {
         return type;
     }
-
-//    public void setType(EExportDataType type) {
-//        this.type = type;
-//    }
 
     public void setType(int sqlObjType) {
         this.type = this.getFieldTypeName(sqlObjType);
@@ -71,10 +67,6 @@ public class MempoiColumn {
     public String getColumnName() {
         return columnName;
     }
-
-//    public void setColumnName(String columnName) {
-//        this.columnName = columnName;
-//    }
 
     public MempoiSubFooterCell getSubFooterCell() {
         return subFooterCell;
@@ -158,9 +150,9 @@ public class MempoiColumn {
         return cellSetValueMethod;
     }
 
-//    public void setCellSetValueMethod(Method cellSetValueMethod) {
-//        this.cellSetValueMethod = cellSetValueMethod;
-//    }
+    public void setElaborationStepList(List<MempoiColumnElaborationStep> elaborationStepList) {
+        this.elaborationStepList = elaborationStepList;
+    }
 
     public void addElaborationStep(MempoiColumnElaborationStep step) {
         if (null != step) {
@@ -208,14 +200,6 @@ public class MempoiColumn {
         }
         final MempoiColumn other = (MempoiColumn) obj;
         return Objects.equals(this.columnName, other.columnName);
-
-        // TODO check if the commented block was useful
-
-//                && Objects.equals(this.cellStyle, other.cellStyle)
-//                && Objects.equals(this.type, other.type)
-//                && Objects.equals(this.rsAccessDataMethod, other.rsAccessDataMethod)
-//                && Objects.equals(this.cellSetValueMethod, other.cellSetValueMethod)
-//                && Objects.equals(this.subFooterCell, other.subFooterCell);
     }
 
     @Override

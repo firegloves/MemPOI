@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.*;
 
-public class CommonTestIT extends FunctionalBaseTestIT {
+public class CommonTestIT extends IntegrationBaseTestIT {
 
     @Test
     public void testWithoutStyler() {

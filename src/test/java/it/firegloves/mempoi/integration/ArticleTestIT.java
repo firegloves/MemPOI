@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class ArticleTestIT extends FunctionalBaseTestIT {
+public class ArticleTestIT extends IntegrationBaseTestIT {
 
     @Test
     public void testWithAnimals() {
