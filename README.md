@@ -524,6 +524,12 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 
 ---
 
+### Contributing
+
+Feel free to contribute. The easiest way could be adding new templates, sub footers or data post elaboration steps.
+
+---
+
 ### Coming soon
 
 - Per column index style
