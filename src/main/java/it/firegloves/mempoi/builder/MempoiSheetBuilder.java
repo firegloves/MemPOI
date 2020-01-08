@@ -1,19 +1,26 @@
 package it.firegloves.mempoi.builder;
 
+import it.firegloves.mempoi.config.MempoiConfig;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
-import it.firegloves.mempoi.styles.MempoiStyler;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.util.Errors;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class MempoiSheetBuilder {
 
     private String sheetName;
-    private MempoiStyler sheetStyler;
 
     // style variables
     private Workbook workbook;
@@ -27,6 +34,13 @@ public final class MempoiSheetBuilder {
     private MempoiFooter mempoiFooter;
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
+    private String[] mergedRegionColumns;
+
+    /**
+     * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
+     * it defines the post data elaboration processes to apply
+     */
+    private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -51,17 +65,6 @@ public final class MempoiSheetBuilder {
      */
     public MempoiSheetBuilder withSheetName(String sheetName) {
         this.sheetName = sheetName;
-        return this;
-    }
-
-    /**
-     * add the received MempoiStyler to the builder instance
-     * @param sheetStyler the MempoiStyler to associate to the current sheet
-     *
-     * @return the current MempoiSheetBuilder
-     */
-    public MempoiSheetBuilder withSheetStyler(MempoiStyler sheetStyler) {
-        this.sheetStyler = sheetStyler;
         return this;
     }
 
@@ -186,6 +189,56 @@ public final class MempoiSheetBuilder {
         return this;
     }
 
+    /**
+     * add the received String array to the builder instance as array of column names to be merged
+     * the merge is made merging adiacent cells with the same value in the same column
+     *
+     * @param mergedRegionColumns the String array of the column's names to be merged
+     *
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withMergedRegionColumns(String[] mergedRegionColumns) {
+
+        if (null == mergedRegionColumns || mergedRegionColumns.length == 0) {
+            if (MempoiConfig.getInstance().isForceGeneration()) {
+                mergedRegionColumns = null;
+            } else {
+                throw new MempoiException(Errors.ERR_MERGED_REGIONS_LIST_NULL);
+            }
+        }
+
+        this.mergedRegionColumns = mergedRegionColumns;
+        return this;
+    }
+
+    /**
+     * add the received map of column name - DataPostElaborationStep to the builder and then to the mempoisheet
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withDataElaborationStepMap(Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap) {
+
+        this.dataElaborationStepMap = dataElaborationStepMap;
+        return this;
+    }
+
+    /**
+     * add one record to the map of column name - DataPostElaborationStep
+     * @param colName the column name to post process
+     * @param step the step to apply to post process data
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withDataElaborationStep(String colName, MempoiColumnElaborationStep step) {
+
+        // TODO force generation here
+        if (null == this.dataElaborationStepMap) {
+            throw new MempoiException(Errors.ERR_POST_DATA_ELABORATION_NULL);
+        }
+
+        this.dataElaborationStepMap.putIfAbsent(colName, new ArrayList<>());
+        this.dataElaborationStepMap.get(colName).add(step);
+
+        return this;
+    }
 
     /**
      * builds the MempoiSheet and returns it
@@ -193,9 +246,13 @@ public final class MempoiSheetBuilder {
      * @return the created MempoiSheet
      */
     public MempoiSheet build() {
+
+        if (null == prepStmt) {
+            throw new MempoiException("PreparedStatement null for MempoiSheet " + (! StringUtils.isEmpty(sheetName) ? " with name " + sheetName : ""));
+        }
+
         MempoiSheet mempoiSheet = new MempoiSheet(prepStmt);
         mempoiSheet.setSheetName(sheetName);
-        mempoiSheet.setSheetStyler(sheetStyler);
         mempoiSheet.setWorkbook(workbook);
         mempoiSheet.setStyleTemplate(styleTemplate);
         mempoiSheet.setHeaderCellStyle(headerCellStyle);
@@ -206,6 +263,9 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setNumberCellStyle(numberCellStyle);
         mempoiSheet.setMempoiFooter(mempoiFooter);
         mempoiSheet.setMempoiSubFooter(mempoiSubFooter);
+        mempoiSheet.setDataElaborationStepMap(dataElaborationStepMap);
+        mempoiSheet.setMergedRegionColumns(mergedRegionColumns);
         return mempoiSheet;
     }
+
 }

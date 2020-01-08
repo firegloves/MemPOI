@@ -12,22 +12,28 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 
 ### Import
 
-###### With Gradle
+#### With Gradle
 ```
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.1.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 ```
 
-###### With Maven
+#### With Maven
 ```
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 </dependency>
 
 ```
 
+### What's new in 1.2.0
 
+- [Data elaboration pipeline](#data-elaboration-pipeline)
+    - [Merged regions](#merged-regions)
+- [Force generation (experimental)](#force-generation)
+  
+    
 ### Basic usage
 
 All you need is to instantiate a MemPOI passing it the List of your exporting queries. MemPOI will do all the stuff for you generating a .xlsx file containing resulting data.
@@ -57,7 +63,7 @@ By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s des
 
 You can choose to write directly to a file or to obtain the byte array of the generated report (for example to pass it back to a waiting client)
 
-###### File:
+#### File:
 
 ```
 File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file.xlsx");
@@ -71,7 +77,7 @@ CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 String absoluteFileName = fut.get();
 ```
 
-###### Byte array:
+#### Byte array:
 
 ```
 MemPOI memPOI = MempoiBuilder.aMemPOI()
@@ -227,7 +233,7 @@ Actually you can:
 
 ```
 // SummerStyleTemplate for dogsSheet
-MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM mempoi.export_test"), "Dogs");
+MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM " + TestConstants.TABLE_EXPORT_TEST), "Dogs");
 dogsSheet.setStyleTemplate(new SummerStyleTemplate());
 
 // Customized ForestStyleTemplate for catsSheet
@@ -323,6 +329,129 @@ So actually the best solution for huge dataset is to force Excel to evaluate cel
 
 ---
 
+### Data elaboration pipeline
+
+In some cases it's useful to have a way to make a data elaboration after the export file is generated. A good example could be the creation of <a href="https://poi.apache.org/components/spreadsheet/quick-guide.html#MergedCells">merged regions</a>.
+For this reason MemPOI introduces the `Data post elaboration system`. The main concept resides in the list of `MempoiColumnElaborationStep` added to the `MempoiColumn` class.
+
+The elaboration consists of 2 phases: analyzing data and applying transformation based on previously collected data.
+This is the working process:
+
+- after each row is added to each sheet -> analyze and collect data
+- after the last row is added to each sheet -> close analysis making some final operations
+- after data export completion -> apply data transformations
+
+You can create your own `Data post elaboration system`'s implementation by 2 ways:
+
+- implementing the base interface `MempoiColumnElaborationStep`
+- extending the abstract class `StreamApiElaborationStep`
+
+#### MempoiColumnElaborationStep
+
+This represents the base functionality and defines the methods you should implement to manage your desired data post elaboration flow.
+You can find an example in `NotStreamApiMergedRegionsStep`.
+
+#### StreamApiElaborationStep
+
+This class supplies some basic implementations to deal with <a href="https://poi.apache.org/components/spreadsheet/how-to.html#sxssf">Apache POI stream API</a>.
+Then you have to implement, as for `MempoiColumnElaborationStep`, the interface logic methods.
+You can find an example in `StreamApiMergedRegionsStep`.
+
+#### Differences
+
+The main difference resides in the underlying Apache POI system, so it is a good practice to use the right implementation depending on the used `Workbook` implementation.
+However we could list some behaviors:
+
+*MempoiColumnElaborationStep*
+- it should be used with `HSSF` or `XSSF`
+- it should access the generated `Workbook` as all in memory => document too large could saturate your memory causing an error
+- memory is never flushed
+
+*StreamApiElaborationStep*
+- it should be used with `SXSSF`
+- it should access only a portion of the generated `Workbook` keeping in mind that at each time only a subset of the created rows are loaded in memory
+- you could find your desired configuration for the workbook's `RandomAccessWindowSize` property or you could try with its default value.
+- memory is flushed in order to keep only a subset of the generated rows in memory
+- memory flush mechanism is automated but it is a fragile mechanism, as reported by Apache POI doc, so it has to be used carefully
+
+#### Adding data post elaboration steps
+
+You can add as many steps as you want as follows:
+
+```
+return MempoiSheetBuilder.aMempoiSheet()
+           .withSheetName("Multiple steps")
+           .withPrepStmt(prepStmt)
+           .withDataElaborationStep("name", step1)
+           .withDataElaborationStep("usefulChar", step2)
+           .withDataElaborationStep("name", step3)
+```
+
+Note that you can add more than one step on each column. Keep in mind that order matters: for each column, steps will be executed in the added order so be careful.
+Built-in steps (like Merged Regions) will be added firstly. If you want to change this behavior you could configure them without using built-in functionalities.
+
+For example both the following codes will result in executing merged regions step and then the custom one:
+
+```
+return MempoiSheetBuilder.aMempoiSheet()
+           .withSheetName("Multiple steps")
+           .withPrepStmt(prepStmt)
+           .withMergedRegionColumns(new String[]{"name"})
+           .withDataElaborationStep("name", customStep)
+```
+
+```
+return MempoiSheetBuilder.aMempoiSheet()
+           .withSheetName("Multiple steps")
+           .withPrepStmt(prepStmt)
+           .withDataElaborationStep("name", customStep)
+           .withMergedRegionColumns(new String[]{"name"})
+```
+
+But this one will execute firstly the custom step and then the merged regions one:
+
+```
+return MempoiSheetBuilder.aMempoiSheet()
+           .withSheetName("Multiple steps")
+           .withPrepStmt(prepStmt)
+           .withDataElaborationStep("name", customStep)
+           .withDataElaborationStep("name", new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex))
+```
+
+#### Merged Regions
+
+Currently MemPOI supplies only one `Data post elaboration system`'s step in order to ease merged regions management.
+All you have to do is to pass a String array to the `MempoiSheetBuilder` representing the list of columns to merge.
+
+```
+String[] mergedColumns = new String[]{"name"}
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+    .withSheetName("Merged regions name column 2")
+    .withPrepStmt(prepStmt)
+    .withMergedRegionColumns(mergedColumns)
+    .withStyleTemplate(new RoseStyleTemplate())
+    .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+    .withFile(fileDest)
+    .withStyleTemplate(new ForestStyleTemplate())
+    .withWorkbook(new HSSFWorkbook())
+    .addMempoiSheet(mempoiSheet)
+    .build();
+
+memPOI.prepareMempoiReportToFile().get();
+```
+
+---
+
+### Force Generation
+
+MemPOI 1.2 introduces the `forceGeneration` property that helps you to ignore some possible errors, if possible.
+Force Generation is still experimental, a list of all supported errors to ignore will be available in future releases.
+
+---
+
 ### Performance
 
 Since you might have to face foolish requests like exporting hundreds of thousands of rows in a few seconds, I added some speed tests.
@@ -360,25 +489,25 @@ According to `CompletableFuture` you'll receive an `ExecutionException` if you c
 
 ### Apache POI version
 
-MemPOI comes with Apache POI 4.1.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+MemPOI comes with Apache POI 4.1.1 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
-###### This is an example using Gradle:
+#### This is an example using Gradle:
 
 ```
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.1.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.2.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
 implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 ```
 
-###### This is an example using Maven:
+#### This is an example using Maven:
 
 ```
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>
@@ -398,7 +527,6 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 ### Coming soon
 
 - Per column index style
-- Merged regions support
 - R2DBC support
 
 :soon: If you have any request, feel free to ask for new features.

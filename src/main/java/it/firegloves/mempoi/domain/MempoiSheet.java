@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.domain;
 
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.styles.MempoiStyler;
@@ -8,6 +9,9 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.PreparedStatement;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class MempoiSheet {
@@ -47,7 +51,21 @@ public class MempoiSheet {
      */
     private MempoiSubFooter mempoiSubFooter;
 
+    /**
+     * list of MempoiColumns belonging to the current MempoiSheet
+     */
+    private List<MempoiColumn> columnList;
 
+    /**
+     * the String array of the column's names to be merged
+     */
+    private String[] mergedRegionColumns;
+
+    /**
+     * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
+     * it defines the post data elaboration processes to apply
+     */
+    private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
 
 
     public MempoiSheet(PreparedStatement prepStmt) {
@@ -57,12 +75,6 @@ public class MempoiSheet {
     public MempoiSheet(PreparedStatement prepStmt, String sheetName) {
         this.prepStmt = prepStmt;
         this.sheetName = sheetName;
-    }
-
-    public MempoiSheet(PreparedStatement prepStmt, String sheetName, Workbook workbook) {
-        this.prepStmt = prepStmt;
-        this.sheetName = sheetName;
-        this.workbook = workbook;
     }
 
     public PreparedStatement getPrepStmt() {
@@ -169,4 +181,27 @@ public class MempoiSheet {
         this.sheetStyler = sheetStyler;
     }
 
+    public String[] getMergedRegionColumns() {
+        return mergedRegionColumns;
+    }
+
+    public void setMergedRegionColumns(String[] mergedRegionColumns) {
+        this.mergedRegionColumns = mergedRegionColumns;
+    }
+
+    public List<MempoiColumn> getColumnList() {
+        return columnList;
+    }
+
+    public void setColumnList(List<MempoiColumn> columnList) {
+        this.columnList = columnList;
+    }
+
+    public Map<String, List<MempoiColumnElaborationStep>> getDataElaborationStepMap() {
+        return dataElaborationStepMap;
+    }
+
+    public void setDataElaborationStepMap(Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap) {
+        this.dataElaborationStepMap = dataElaborationStepMap;
+    }
 }

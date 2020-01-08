@@ -1,6 +1,6 @@
 package it.firegloves.mempoi.manager;
 
-import it.firegloves.mempoi.exception.MempoiRuntimeException;
+import it.firegloves.mempoi.exception.MempoiException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +36,7 @@ public class ConnectionManager {
             }
 
         } catch (SQLException e) {
-            throw new MempoiRuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 }
