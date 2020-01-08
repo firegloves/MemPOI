@@ -34,7 +34,7 @@ public abstract class StreamApiElaborationStep<T> implements MempoiColumnElabora
     }
 
     /**
-     * if workbook's randomAccessWindowSize == -1 => manages rows flush
+     * if workbook's randomAccessWindowSize == -1 : manages rows flush
      * @param sheet
      *
      * @return true if rows have been flushed

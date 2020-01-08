@@ -180,7 +180,7 @@ public class MempoiColumn {
     }
 
     /**
-     * applies pipeline elaboration steps (NOT SXSSF => after workbook creation)
+     * applies pipeline elaboration steps (NOT SXSSF - after workbook creation)
      *
      * @param mempoiSheet the MempoiSheet from which gain informations
      * @param workbook the Workbook from which get Sheet

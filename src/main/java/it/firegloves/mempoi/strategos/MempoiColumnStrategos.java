@@ -28,7 +28,7 @@ public class MempoiColumnStrategos {
      * @param mempoiSheet the MempoiSheet from which get GROUP BY's clause informations
      * @param rs          the ResultSet from which read columns metadata
      * @param workbook the workbook where generate the export
-     * @return the created List<MempoiColumn>
+     * @return the created List
      */
     protected List<MempoiColumn> prepareMempoiColumn(MempoiSheet mempoiSheet, ResultSet rs, Workbook workbook) {
 
