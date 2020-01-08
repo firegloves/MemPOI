@@ -2,8 +2,12 @@
 /gradlew
 /gradlew.bat
 /gradle/
-/.idea/
 /.gradle/
+/.idea/
 /out/
 /NOT_TO_PUBLISH/
 *.gpg
+/build/
+.gradle/gradle.properties
+/todo/
+/mempoi.iml
