@@ -154,7 +154,7 @@ You can use `MempoiBuilder` to correctly populate your MemPOI instance, like fol
 
 ```
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .addMempoiSheet (new MempoiSheet(prepStmt))
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
                         
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
