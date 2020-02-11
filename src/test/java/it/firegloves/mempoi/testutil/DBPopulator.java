@@ -50,7 +50,7 @@ public class DBPopulator {
 
     private void createTableSpeedTest() {
 
-        String speedTestTbl = "CREATE TABLE " + TestConstants.TABLE_SPEED_TEST + " (\n" +
+        String speedTestTbl = "CREATE TABLE " + TestHelper.TABLE_SPEED_TEST + " (\n" +
                 "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
                 "  `creation_date` date NOT NULL,\n" +
                 "  `dateTime` datetime DEFAULT NULL,\n" +
@@ -78,7 +78,7 @@ public class DBPopulator {
     }
 
     private void populateSpeedTest() {
-        String sqlQuery = "insert into " + TestConstants.TABLE_SPEED_TEST + " (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sqlQuery = "insert into " + TestHelper.TABLE_SPEED_TEST + " (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         Random rand = new Random(System.currentTimeMillis());
         PreparedStatement pstmt = null;
@@ -128,7 +128,7 @@ public class DBPopulator {
 
     private void createTableMergedRegionsTest() {
 
-        String speedTestTbl = "CREATE TABLE " + TestConstants.TABLE_MERGED_REGIONS + " (\n" +
+        String speedTestTbl = "CREATE TABLE " + TestHelper.TABLE_MERGED_REGIONS + " (\n" +
                 "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
                 "  `creation_date` date NOT NULL,\n" +
                 "  `dateTime` datetime DEFAULT NULL,\n" +
@@ -156,7 +156,7 @@ public class DBPopulator {
     }
 
     private void populateMergedRegionsTest() {
-        String sqlQuery = "insert into " + TestConstants.TABLE_MERGED_REGIONS + " (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sqlQuery = "insert into " + TestHelper.TABLE_MERGED_REGIONS + " (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         Random rand = new Random(System.currentTimeMillis());
         PreparedStatement pstmt = null;

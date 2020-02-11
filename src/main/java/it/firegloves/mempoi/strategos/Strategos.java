@@ -38,6 +38,7 @@ public class Strategos {
      */
     private WorkbookConfig workbookConfig;
 
+    private TableStrategos tableStrategos;
     private DataStrategos dataStrategos;
     private FooterStrategos footerStrategos;
     private FileManager fileManager;
@@ -45,6 +46,7 @@ public class Strategos {
 
     public Strategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
+        this.tableStrategos = new TableStrategos(workbookConfig);
         this.dataStrategos = new DataStrategos(workbookConfig);
         this.footerStrategos = new FooterStrategos(workbookConfig);
         this.fileManager = new FileManager(workbookConfig);
@@ -130,6 +132,9 @@ public class Strategos {
         // create sheet
         Sheet sheet = this.createSheet(mempoiSheet.getSheetName());
 
+        // adds optional excel table
+        this.tableStrategos.manageMempoiTable(sheet, mempoiSheet);
+
         // track columns for autosizing
         if (this.workbookConfig.isAdjustColSize() && sheet instanceof SXSSFSheet) {
             ((SXSSFSheet) sheet).trackAllColumnsForAutoSizing();
@@ -156,6 +161,7 @@ public class Strategos {
             ConnectionManager.closeResultSetAndPrepStmt(rs, mempoiSheet.getPrepStmt());
         }
     }
+
 
 
     /**

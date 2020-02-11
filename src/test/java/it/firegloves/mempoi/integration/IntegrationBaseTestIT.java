@@ -3,7 +3,7 @@ package it.firegloves.mempoi.integration;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertHelper;
-import it.firegloves.mempoi.testutil.TestConstants;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -77,7 +77,7 @@ public abstract class IntegrationBaseTestIT {
             sb.append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
-        sb.append(" FROM " + TestConstants.TABLE_EXPORT_TEST);
+        sb.append(" FROM " + TestHelper.TABLE_EXPORT_TEST);
 
         if (maxLimit > -1) {
             sb.append(" LIMIT 0, " + maxLimit);

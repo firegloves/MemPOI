@@ -1,7 +1,7 @@
 package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.testutil.TestConstants;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -67,7 +67,7 @@ public abstract class IntegrationBaseMergedRegionsTestIT extends IntegrationBase
             sb.append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
-        sb.append(" FROM " + TestConstants.TABLE_MERGED_REGIONS);
+        sb.append(" FROM " + TestHelper.TABLE_MERGED_REGIONS);
 
         if (null != orderByCols && orderByCols.length > 0) {
             sb.append(" ORDER BY ");

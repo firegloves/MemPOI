@@ -2,6 +2,7 @@ package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
 import it.firegloves.mempoi.exception.MempoiException;
@@ -21,6 +22,10 @@ import java.sql.PreparedStatement;
 import static org.junit.Assert.*;
 
 public class MempoiSheetBuilderTest {
+
+    private final String areaReference = "A1:E5";
+    private final String tableName = "nice table";
+    private final String displayTableName = "nice display table";
 
     @Mock
     private PreparedStatement prepStmt;
@@ -42,6 +47,12 @@ public class MempoiSheetBuilderTest {
         NumberSumSubFooter numberSumSubFooter = new NumberSumSubFooter();
         ForestStyleTemplate forestStyleTemplate = new ForestStyleTemplate();
 
+        MempoiTableBuilder mempoiTableBuilder = MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(wb)
+                .withTableName(tableName)
+                .withDisplayTableName(displayTableName)
+                .withAreaReference(areaReference);
+
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withStyleTemplate(forestStyleTemplate)
                 .withPrepStmt(prepStmt)
@@ -56,6 +67,7 @@ public class MempoiSheetBuilderTest {
                 .withMempoiFooter(new StandardMempoiFooter(wb, footerName))
                 .withMergedRegionColumns(mergedCols)
                 .withWorkbook(wb)
+                .withMempoiTableBuilder(mempoiTableBuilder)
                 .build();
 
 
@@ -72,6 +84,14 @@ public class MempoiSheetBuilderTest {
         assertEquals("footer text", footerName, mempoiSheet.getMempoiFooter().get().getCenterText());
         assertArrayEquals("merged cols", mergedCols, mempoiSheet.getMergedRegionColumns());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
+
+        mempoiSheet.getMempoiTable().ifPresent(mempoiTable -> {
+            assertEquals(tableName, mempoiTable.getTableName());
+            assertEquals(displayTableName, mempoiTable.getDisplayTableName());
+            assertEquals(areaReference, mempoiTable.getAreaReference());
+            assertEquals(wb, mempoiTable.getWorkbook());
+        });
+
     }
 
 
@@ -95,6 +115,7 @@ public class MempoiSheetBuilderTest {
         AssertHelper.validateCellStyle(forestStyleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
         AssertHelper.validateCellStyle(forestStyleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
+        assertNull(mempoiSheet.getMempoiTable());
     }
 
 

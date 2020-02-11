@@ -67,6 +67,11 @@ public class MempoiSheet {
      */
     private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
 
+    /**
+     * a MempoTable containing data to build an optional Excel Table inside the current sheet
+     */
+    private Optional<MempoiTable> mempoiTable;
+
 
     public MempoiSheet(PreparedStatement prepStmt) {
         this.prepStmt = prepStmt;
@@ -203,5 +208,13 @@ public class MempoiSheet {
 
     public void setDataElaborationStepMap(Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap) {
         this.dataElaborationStepMap = dataElaborationStepMap;
+    }
+
+    public Optional<MempoiTable> getMempoiTable() {
+        return mempoiTable;
+    }
+
+    public void setMempoiTable(MempoiTable mempoiTable) {
+        this.mempoiTable = Optional.ofNullable(mempoiTable);
     }
 }
