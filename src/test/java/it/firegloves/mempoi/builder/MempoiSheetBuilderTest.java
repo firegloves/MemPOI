@@ -114,7 +114,7 @@ public class MempoiSheetBuilderTest {
         AssertionHelper.validateCellStyle(forestStyleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
         AssertionHelper.validateCellStyle(forestStyleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
-        assertNull(mempoiSheet.getMempoiTable());
+        assertFalse(mempoiSheet.getMempoiTable().isPresent());
     }
 
 
