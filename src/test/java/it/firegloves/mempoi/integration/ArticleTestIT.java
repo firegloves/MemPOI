@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class ArticleTestIT extends IntegrationBaseTestIT {
 
     @Test
-    public void testWithAnimals() {
+    public void testWithAnimals() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_animals.xlsx");
 
@@ -32,70 +33,64 @@ public class ArticleTestIT extends IntegrationBaseTestIT {
         String catsSheetName = "Cats sheet";
         String birdsSheetName = "Birds sheet";
 
-        try {
+        // dogs sheet
+        MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName(dogsSheetName)
+                .withPrepStmt(conn.prepareStatement(dogsQuery))
+                .build();
 
-            // dogs sheet
-            MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
-                    .withSheetName(dogsSheetName)
-                    .withPrepStmt(conn.prepareStatement(dogsQuery))
-                    .build();
+        // cats sheet
+        MempoiSheet catsSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName(catsSheetName)
+                .withPrepStmt(conn.prepareStatement(catsQuery))
+                .build();
 
-            // cats sheet
-            MempoiSheet catsSheet = MempoiSheetBuilder.aMempoiSheet()
-                    .withSheetName(catsSheetName)
-                    .withPrepStmt(conn.prepareStatement(catsQuery))
-                    .build();
+        // birds sheet
+        MempoiSheet birdsSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName(birdsSheetName)
+                .withPrepStmt(conn.prepareStatement(birdsQuery))
+                .build();
 
-            // birds sheet
-            MempoiSheet birdsSheet = MempoiSheetBuilder.aMempoiSheet()
-                    .withSheetName(birdsSheetName)
-                    .withPrepStmt(conn.prepareStatement(birdsQuery))
-                    .build();
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withDebug(true)
+                .withFile(fileDest)
+                .withAdjustColumnWidth(true)
+                .addMempoiSheet(dogsSheet)
+                .addMempoiSheet(catsSheet)
+                .addMempoiSheet(birdsSheet)
+                .build();
 
-            MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
-                    .withFile(fileDest)
-                    .withAdjustColumnWidth(true)
-                    .addMempoiSheet(dogsSheet)
-                    .addMempoiSheet(catsSheet)
-                    .addMempoiSheet(birdsSheet)
-                    .build();
+        CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+        File file = new File(fut.get());
+        Workbook wb = null;
+        try (InputStream inp = new FileInputStream(file)) {
 
-            File file = new File(fut.get());
-            Workbook wb = null;
-            try (InputStream inp = new FileInputStream(file)) {
-
-                wb = WorkbookFactory.create(inp);
-            }
-
-            Sheet firstSheet = wb.getSheetAt(0);
-            Sheet secondSheet = wb.getSheetAt(1);
-            Sheet thirdSheet = wb.getSheetAt(2);
-
-            assertEquals("Sheet number", 3, wb.getNumberOfSheets());
-
-            assertEquals("First sheet name", dogsSheetName, firstSheet.getSheetName());
-            assertEquals("Second sheet name", catsSheetName, secondSheet.getSheetName());
-            assertEquals("Third sheet name", birdsSheetName, thirdSheet.getSheetName());
-
-            assertEquals("Dogs header 1", "DOG_NAME", firstSheet.getRow(0).getCell(0).getStringCellValue());
-            assertEquals("Dogs header 2", "DOG_RACE", firstSheet.getRow(0).getCell(1).getStringCellValue());
-
-            assertEquals("Dogs header 1", "CAT_NAME", secondSheet.getRow(0).getCell(0).getStringCellValue());
-            assertEquals("Dogs header 2", "CAT_RACE", secondSheet.getRow(0).getCell(1).getStringCellValue());
-
-            assertEquals("Cats header 1", "CAT_NAME", secondSheet.getRow(0).getCell(0).getStringCellValue());
-            assertEquals("Cats header 2", "CAT_RACE", secondSheet.getRow(0).getCell(1).getStringCellValue());
-
-            assertEquals("Birds header 1", "BIRD_NAME", thirdSheet.getRow(0).getCell(0).getStringCellValue());
-            assertEquals("Birds header 2", "BIRD_RACE", thirdSheet.getRow(0).getCell(1).getStringCellValue());
-
-        } catch (Exception e) {
-            throw new MempoiException(e);
+            wb = WorkbookFactory.create(inp);
         }
+
+        Sheet firstSheet = wb.getSheetAt(0);
+        Sheet secondSheet = wb.getSheetAt(1);
+        Sheet thirdSheet = wb.getSheetAt(2);
+
+        assertEquals("Sheet number", 3, wb.getNumberOfSheets());
+
+        assertEquals("First sheet name", dogsSheetName, firstSheet.getSheetName());
+        assertEquals("Second sheet name", catsSheetName, secondSheet.getSheetName());
+        assertEquals("Third sheet name", birdsSheetName, thirdSheet.getSheetName());
+
+        assertEquals("Dogs header 1", "DOG_NAME", firstSheet.getRow(0).getCell(0).getStringCellValue());
+        assertEquals("Dogs header 2", "DOG_RACE", firstSheet.getRow(0).getCell(1).getStringCellValue());
+
+        assertEquals("Dogs header 1", "CAT_NAME", secondSheet.getRow(0).getCell(0).getStringCellValue());
+        assertEquals("Dogs header 2", "CAT_RACE", secondSheet.getRow(0).getCell(1).getStringCellValue());
+
+        assertEquals("Cats header 1", "CAT_NAME", secondSheet.getRow(0).getCell(0).getStringCellValue());
+        assertEquals("Cats header 2", "CAT_RACE", secondSheet.getRow(0).getCell(1).getStringCellValue());
+
+        assertEquals("Birds header 1", "BIRD_NAME", thirdSheet.getRow(0).getCell(0).getStringCellValue());
+        assertEquals("Birds header 2", "BIRD_RACE", thirdSheet.getRow(0).getCell(1).getStringCellValue());
     }
 
 }

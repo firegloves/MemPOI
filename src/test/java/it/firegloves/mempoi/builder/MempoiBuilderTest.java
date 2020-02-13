@@ -13,7 +13,7 @@ import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
-import it.firegloves.mempoi.testutil.AssertHelper;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -182,7 +182,7 @@ public class MempoiBuilderTest {
 
         assertNull("null style template", mempoi.getWorkbookConfig().getSheetList().get(0).getStyleTemplate());
 
-        AssertHelper.validateTemplateAndStyler(mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), template, wb);
+        AssertionHelper.validateTemplateAndStyler(mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), template, wb);
     }
 
 
@@ -633,7 +633,7 @@ public class MempoiBuilderTest {
                 .setStyleTemplate(template)
                 .build();
 
-        AssertHelper.validateTemplateAndStyler(mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), template, wb);
+        AssertionHelper.validateTemplateAndStyler(mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), template, wb);
     }
 
 
@@ -645,7 +645,7 @@ public class MempoiBuilderTest {
                 .setHeaderCellStyle(this.cellStyle)
                 .build();
 
-        AssertHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getHeaderCellStyle());
+        AssertionHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getHeaderCellStyle());
     }
 
     @Test
@@ -656,7 +656,7 @@ public class MempoiBuilderTest {
                 .setSubFooterCellStyle(this.cellStyle)
                 .build();
 
-        AssertHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getSubFooterCellStyle());
+        AssertionHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getSubFooterCellStyle());
     }
 
     @Test
@@ -667,7 +667,7 @@ public class MempoiBuilderTest {
                 .setCommonDataCellStyle(this.cellStyle)
                 .build();
 
-        AssertHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getCommonDataCellStyle());
+        AssertionHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getCommonDataCellStyle());
     }
 
     @Test
@@ -678,7 +678,7 @@ public class MempoiBuilderTest {
                 .setDateCellStyle(this.cellStyle)
                 .build();
 
-        AssertHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getDateCellStyle());
+        AssertionHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getDateCellStyle());
     }
 
     @Test
@@ -689,7 +689,7 @@ public class MempoiBuilderTest {
                 .setDatetimeCellStyle(this.cellStyle)
                 .build();
 
-        AssertHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getDatetimeCellStyle());
+        AssertionHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getDatetimeCellStyle());
     }
 
     @Test
@@ -700,6 +700,6 @@ public class MempoiBuilderTest {
                 .setNumberCellStyle(this.cellStyle)
                 .build();
 
-        AssertHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getNumberCellStyle());
+        AssertionHelper.validateCellStyle(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getNumberCellStyle());
     }
 }

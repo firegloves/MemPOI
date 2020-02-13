@@ -70,7 +70,7 @@ public class MempoiSheet {
     /**
      * a MempoTable containing data to build an optional Excel Table inside the current sheet
      */
-    private Optional<MempoiTable> mempoiTable;
+    private Optional<MempoiTable> mempoiTable = Optional.empty();
 
 
     public MempoiSheet(PreparedStatement prepStmt) {

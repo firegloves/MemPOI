@@ -2,14 +2,13 @@ package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
-import it.firegloves.mempoi.testutil.AssertHelper;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
@@ -75,12 +74,12 @@ public class MempoiSheetBuilderTest {
         assertEquals("Prepared Statement", prepStmt, mempoiSheet.getPrepStmt());
         assertEquals("Sheet name", sheetName, mempoiSheet.getSheetName());
         assertEquals("Subfooter", numberSumSubFooter, mempoiSheet.getMempoiSubFooter().get());
-        AssertHelper.validateCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
-        AssertHelper.validateCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
-        AssertHelper.validateCellStyle(styleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
-        AssertHelper.validateCellStyle(styleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
-        AssertHelper.validateCellStyle(styleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
-        AssertHelper.validateCellStyle(styleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
         assertEquals("footer text", footerName, mempoiSheet.getMempoiFooter().get().getCenterText());
         assertArrayEquals("merged cols", mergedCols, mempoiSheet.getMergedRegionColumns());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
@@ -108,12 +107,12 @@ public class MempoiSheetBuilderTest {
                 .build();
 
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
         assertNull(mempoiSheet.getMempoiTable());
     }
@@ -135,12 +134,12 @@ public class MempoiSheetBuilderTest {
                 .build();
 
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
-        AssertHelper.validateCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
-        AssertHelper.validateCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
-        AssertHelper.validateCellStyle(forestStyleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getNumberCellStyle(wb), mempoiSheet.getNumberCellStyle());
+        AssertionHelper.validateCellStyle(forestStyleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
     }
 

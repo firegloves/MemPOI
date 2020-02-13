@@ -3,6 +3,11 @@ package it.firegloves.mempoi.testutil;
 import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.domain.MempoiTable;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class TestHelper {
 
@@ -36,5 +41,22 @@ public class TestHelper {
     public static MempoiTable getTestMempoiTable(Workbook wb) {
 
         return getTestMempoiTableBuilder(wb).build();
+    }
+
+
+
+    /**
+     * loads the workbook from the received file name and returns it
+     * @param fileToValidate the file to validate with absolute path
+     * @return the loaded Workbook
+     * @throws Exception
+     */
+    public static Workbook loadWorkbookFromDisk(String fileToValidate) throws Exception {
+
+        File file = new File(fileToValidate);
+
+        try (InputStream inp = new FileInputStream(file)) {
+            return WorkbookFactory.create(inp);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package it.firegloves.mempoi.styles;
 
 import it.firegloves.mempoi.styles.template.*;
-import it.firegloves.mempoi.testutil.AssertHelper;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -93,12 +93,12 @@ public class StyleTemplateTest {
 
         MempoiStyler styler = new DummyStyleTemplate().toMempoiStyler(new SXSSFWorkbook());
 
-        AssertHelper.validateCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
-        AssertHelper.validateCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
-        AssertHelper.validateCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
-        AssertHelper.validateCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
-        AssertHelper.validateCellStyle(styler.getNumberCellStyle(), styler.getNumberCellStyle());
-        AssertHelper.validateCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
+        AssertionHelper.validateCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
+        AssertionHelper.validateCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
+        AssertionHelper.validateCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
+        AssertionHelper.validateCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
+        AssertionHelper.validateCellStyle(styler.getNumberCellStyle(), styler.getNumberCellStyle());
+        AssertionHelper.validateCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
     }
 
 

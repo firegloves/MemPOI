@@ -36,7 +36,7 @@ public class TableStrategos {
      */
     public void manageMempoiTable(Sheet sheet, MempoiSheet mempoiSheet) {
 
-        if (! (sheet instanceof XSSFSheet)) {
+        if (mempoiSheet.getMempoiTable().isPresent() && ! (sheet instanceof XSSFSheet)) {
             throw new MempoiException(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
         }
 

@@ -2,7 +2,7 @@ package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
-import it.firegloves.mempoi.testutil.AssertHelper;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -18,6 +18,8 @@ import java.sql.*;
 import static org.junit.Assert.assertEquals;
 
 public abstract class IntegrationBaseTestIT {
+
+    // TODO migrate to TestHelper some of this logic
 
     public static final int MAX_ROWS = 10;
     public static final int NO_LIMITS = -1;
@@ -230,14 +232,14 @@ public abstract class IntegrationBaseTestIT {
             assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style => skip these tests
-                AssertHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
-                AssertHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertHelper.validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertHelper.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -350,7 +352,7 @@ public abstract class IntegrationBaseTestIT {
             assertEquals(expectedCellStyle.getWrapText(), cellStyle.getWrapText());
             assertEquals(expectedCellStyle.getAlignment(), cellStyle.getAlignment());
 
-            AssertHelper.validateCellStyle(cellStyle, expectedCellStyle);
+            AssertionHelper.validateCellStyle(cellStyle, expectedCellStyle);
         }
     }
 }
