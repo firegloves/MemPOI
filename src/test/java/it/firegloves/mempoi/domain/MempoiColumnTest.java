@@ -7,7 +7,7 @@ import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.Strea
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
-import it.firegloves.mempoi.testutil.AssertHelper;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -178,7 +178,7 @@ public class MempoiColumnTest {
         MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.setCellStyle(this.cellStyle);
 
-        AssertHelper.validateCellStyle(mc.getCellStyle(), this.cellStyle);
+        AssertionHelper.validateCellStyle(mc.getCellStyle(), this.cellStyle);
     }
 
     @Test
@@ -200,7 +200,7 @@ public class MempoiColumnTest {
         MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.setSubFooterCell(subFooterCell);
 
-        AssertHelper.validateCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
+        AssertionHelper.validateCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
     }
 
     @Test
@@ -211,7 +211,7 @@ public class MempoiColumnTest {
         MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.setSubFooterCell(subFooterCell);
 
-        AssertHelper.validateCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
+        AssertionHelper.validateCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
     }
 
 

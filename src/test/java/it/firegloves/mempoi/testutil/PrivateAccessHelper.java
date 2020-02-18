@@ -40,22 +40,24 @@ public class PrivateAccessHelper {
      * sets as accessible a method of the received object and returns it
      * @param o the object of which set accessible a method
      * @param methodName the name of the method to make accessible
+     * @param parameterTypes the list of the param classes received by the method to set accessible
      * @return the Method now accessible
      * @throws Exception
      */
-    public static Method getAccessibleMethod(Object o, String methodName) throws Exception {
-        return getAccessibleMethod(o.getClass(), methodName);
+    public static Method getAccessibleMethod(Object o, String methodName, Class<?>... parameterTypes) throws Exception {
+        return getAccessibleMethod(o.getClass(), methodName, parameterTypes);
     }
 
     /**
      * sets as accessible a method of the received object and returns it
      * @param clazz the Class of the object of which set accessible a method
      * @param methodName the name of the method to make accessible
+     *                   @param parameterTypes the list of the param classes received by the method to set accessible
      * @return the Method now accessible
      * @throws Exception
      */
-    public static Method getAccessibleMethod(Class clazz, String methodName) throws Exception {
-        Method m = clazz.getDeclaredMethod(methodName);
+    public static Method getAccessibleMethod(Class clazz, String methodName, Class<?>... parameterTypes) throws Exception {
+        Method m = clazz.getDeclaredMethod(methodName, parameterTypes);
         m.setAccessible(true);
         return m;
     }

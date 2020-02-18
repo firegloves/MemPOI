@@ -4,6 +4,9 @@
 
 package it.firegloves.mempoi.util;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Errors {
 
     /*********************************************************************************************************************
@@ -26,6 +29,8 @@ public class Errors {
     public static final String ERR_MERGED_REGIONS_SHEET_NULL = "A null sheet was received during merged regions analysis";
     public static final String ERR_MERGED_REGIONS_CELL_OR_VALUE_NULL = "A null cell or a null value was received during merged regions analysis";
 
+    public static final String ERR_AREA_REFERENCE_NOT_VALID = "The received Area reference is not valid";
+    public static final String ERR_TABLE_SUPPORTS_ONLY_XSSF = "Only XSSFWorkbook supports Excel table and it seems you are using a different workbook type";
 
 
 
@@ -34,12 +39,4 @@ public class Errors {
      ********************************************************************************************************************/
     public static final String WARN_NULL_WB_NOT_CLOSED = "A null workbook is received while trying to close the current workbook";
 
-
-
-
-
-
-
-    private Errors() {
-    }
 }

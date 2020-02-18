@@ -6,19 +6,22 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.strategos.Strategos;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
+import it.firegloves.mempoi.util.ForceGenerationHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class MempoiSheetBuilder {
+
+    private static final Logger logger = LoggerFactory.getLogger(MempoiSheetBuilder.class);
 
     private String sheetName;
 
@@ -35,6 +38,7 @@ public final class MempoiSheetBuilder {
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
     private String[] mergedRegionColumns;
+    private Optional<MempoiTableBuilder> mempoiTableBuilder = Optional.empty();
 
     /**
      * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
@@ -59,8 +63,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received sheet's name to the builder instance
-     * @param sheetName the sheet's name to associate to the current sheet
      *
+     * @param sheetName the sheet's name to associate to the current sheet
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withSheetName(String sheetName) {
@@ -70,8 +74,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received Workbook to the builder instance. it is needed for passing StyleTemplate
-     * @param workbook the Workbook to associate to the current sheet
      *
+     * @param workbook the Workbook to associate to the current sheet
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withWorkbook(Workbook workbook) {
@@ -81,8 +85,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received StyleTemplate to the builder instance. you need to pass a Workbook to use this StyleTemplate
-     * @param styleTemplate the StyleTemplate to associate to the current sheet
      *
+     * @param styleTemplate the StyleTemplate to associate to the current sheet
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withStyleTemplate(StyleTemplate styleTemplate) {
@@ -92,8 +96,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received CellStyle as header cell's styler to the builder instance
-     * @param headerCellStyle the CellStyle to use as header cell's styler
      *
+     * @param headerCellStyle the CellStyle to use as header cell's styler
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
@@ -103,8 +107,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received CellStyle as subfooter cell's styler to the builder instance
-     * @param subFooterCellStyle the CellStyle to use as subfooter cell's styler
      *
+     * @param subFooterCellStyle the CellStyle to use as subfooter cell's styler
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withSubFooterCellStyle(CellStyle subFooterCellStyle) {
@@ -114,8 +118,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received CellStyle as common data cell's styler to the builder instance
-     * @param commonDataCellStyle the CellStyle to use as common data cell's styler
      *
+     * @param commonDataCellStyle the CellStyle to use as common data cell's styler
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withCommonDataCellStyle(CellStyle commonDataCellStyle) {
@@ -125,8 +129,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received CellStyle as date cell's styler to the builder instance
-     * @param dateCellStyle the CellStyle to use as date cell's styler
      *
+     * @param dateCellStyle the CellStyle to use as date cell's styler
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withDateCellStyle(CellStyle dateCellStyle) {
@@ -136,8 +140,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received CellStyle as datetime cell's styler to the builder instance
-     * @param datetimeCellStyle the CellStyle to use as datetime cell's styler
      *
+     * @param datetimeCellStyle the CellStyle to use as datetime cell's styler
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withDatetimeCellStyle(CellStyle datetimeCellStyle) {
@@ -147,8 +151,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received CellStyle as numeric cell's styler to the builder instance
-     * @param numberCellStyle the CellStyle to use as numeric cell's styler
      *
+     * @param numberCellStyle the CellStyle to use as numeric cell's styler
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withNumberCellStyle(CellStyle numberCellStyle) {
@@ -158,8 +162,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received MempoiFooter to the builder instance
-     * @param mempoiFooter the MempoiFooter to append to the sheet to build
      *
+     * @param mempoiFooter the MempoiFooter to append to the sheet to build
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMempoiFooter(MempoiFooter mempoiFooter) {
@@ -169,8 +173,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received MempoiSubFooter to the builder instance
-     * @param mempoiSubFooter the MempoiSubFooter to append to the sheet to build
      *
+     * @param mempoiSubFooter the MempoiSubFooter to append to the sheet to build
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
@@ -180,8 +184,8 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received PreparedStatement to the builder instance
-     * @param prepStmt the PreparedStatement to execute to retrieve data to export
      *
+     * @param prepStmt the PreparedStatement to execute to retrieve data to export
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withPrepStmt(PreparedStatement prepStmt) {
@@ -194,7 +198,6 @@ public final class MempoiSheetBuilder {
      * the merge is made merging adiacent cells with the same value in the same column
      *
      * @param mergedRegionColumns the String array of the column's names to be merged
-     *
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMergedRegionColumns(String[] mergedRegionColumns) {
@@ -213,6 +216,7 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received map of column name - DataPostElaborationStep to the builder and then to the mempoisheet
+     *
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withDataElaborationStepMap(Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap) {
@@ -223,8 +227,9 @@ public final class MempoiSheetBuilder {
 
     /**
      * add one record to the map of column name - DataPostElaborationStep
+     *
      * @param colName the column name to post process
-     * @param step the step to apply to post process data
+     * @param step    the step to apply to post process data
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withDataElaborationStep(String colName, MempoiColumnElaborationStep step) {
@@ -241,6 +246,18 @@ public final class MempoiSheetBuilder {
     }
 
     /**
+     * adds a MempoiTableBuilder responsible of building the MempoiTable object containing data to build an optional Excel Table inside the current sheet
+     *
+     * @param mempoiTableBuilder
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withMempoiTableBuilder(MempoiTableBuilder mempoiTableBuilder) {
+        this.mempoiTableBuilder = Optional.ofNullable(mempoiTableBuilder);
+        return this;
+    }
+
+
+    /**
      * builds the MempoiSheet and returns it
      *
      * @return the created MempoiSheet
@@ -248,7 +265,7 @@ public final class MempoiSheetBuilder {
     public MempoiSheet build() {
 
         if (null == prepStmt) {
-            throw new MempoiException("PreparedStatement null for MempoiSheet " + (! StringUtils.isEmpty(sheetName) ? " with name " + sheetName : ""));
+            throw new MempoiException("PreparedStatement null for MempoiSheet " + (!StringUtils.isEmpty(sheetName) ? " with name " + sheetName : ""));
         }
 
         MempoiSheet mempoiSheet = new MempoiSheet(prepStmt);
@@ -265,7 +282,17 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setMempoiSubFooter(mempoiSubFooter);
         mempoiSheet.setDataElaborationStepMap(dataElaborationStepMap);
         mempoiSheet.setMergedRegionColumns(mergedRegionColumns);
+
+        this.mempoiTableBuilder.ifPresent(builder -> {
+            try {
+                mempoiSheet.setMempoiTable(builder.build());
+            } catch (MempoiException e) {
+                ForceGenerationHelper.manageForceGeneration(e, Errors.ERR_AREA_REFERENCE_NOT_VALID + ". Forcing generation without Excel table", logger);
+            }
+        });
+
         return mempoiSheet;
     }
+
 
 }

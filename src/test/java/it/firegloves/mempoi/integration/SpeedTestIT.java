@@ -9,7 +9,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
-import it.firegloves.mempoi.testutil.TestConstants;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -32,7 +32,7 @@ public class SpeedTestIT extends IntegrationBaseTestIT {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
-                    "FROM " + TestConstants.TABLE_SPEED_TEST);
+                    "FROM " + TestHelper.TABLE_SPEED_TEST);
 
 
             if (! this.outReportFolder.exists() && ! this.outReportFolder.mkdirs()) {
@@ -170,7 +170,7 @@ public class SpeedTestIT extends IntegrationBaseTestIT {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
-                    "FROM "+ TestConstants.TABLE_SPEED_TEST + " LIMIT 0, 65500");
+                    "FROM "+ TestHelper.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -199,7 +199,7 @@ public class SpeedTestIT extends IntegrationBaseTestIT {
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
-                    "FROM " + TestConstants.TABLE_SPEED_TEST + " LIMIT 0, 65500");
+                    "FROM " + TestHelper.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
             e.printStackTrace();
         }

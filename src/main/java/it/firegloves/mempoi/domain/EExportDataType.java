@@ -1,7 +1,14 @@
 package it.firegloves.mempoi.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 import java.util.Date;
 
+@Getter
+@AllArgsConstructor
 public enum EExportDataType {
 
     TEXT("getString", String.class, String.class),
@@ -17,22 +24,4 @@ public enum EExportDataType {
     private String rsAccessDataMethodName;
     private Class rsAccessParamClass;
     private Class rsReturnClass;
-
-    EExportDataType(String rsAccessDataMethodName, Class rsAccessParamClass, Class rsReturnClass) {
-        this.rsAccessDataMethodName = rsAccessDataMethodName;
-        this.rsAccessParamClass = rsAccessParamClass;
-        this.rsReturnClass = rsReturnClass;
-    }
-
-    public String getRsAccessDataMethodName() {
-        return rsAccessDataMethodName;
-    }
-
-    public Class getRsAccessParamClass() {
-        return rsAccessParamClass;
-    }
-
-    public Class getRsReturnClass() {
-        return rsReturnClass;
-    }
 }

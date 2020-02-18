@@ -4,11 +4,15 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.FormulaSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.util.List;
 
+@Data
+@Accessors(chain = true)
 public class WorkbookConfig {
 
     /**
@@ -81,64 +85,6 @@ public class WorkbookConfig {
         this.hasFormulasToEvaluate = this.mempoiSubFooter instanceof FormulaSubFooter;
     }
 
-
-    public MempoiSubFooter getMempoiSubFooter() {
-        return mempoiSubFooter;
-    }
-
-    public WorkbookConfig setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
-        this.mempoiSubFooter = mempoiSubFooter;
-        return this;
-    }
-
-    public MempoiFooter getMempoiFooter() {
-        return mempoiFooter;
-    }
-
-    public WorkbookConfig setMempoiFooter(MempoiFooter mempoiFooter) {
-        this.mempoiFooter = mempoiFooter;
-        return this;
-    }
-
-    public Workbook getWorkbook() {
-        return workbook;
-    }
-
-    public WorkbookConfig setWorkbook(Workbook workbook) {
-        this.workbook = workbook;
-        return this;
-    }
-
-    public boolean isAdjustColSize() {
-        return adjustColSize;
-    }
-
-    public WorkbookConfig setAdjustColSize(boolean adjustColSize) {
-        this.adjustColSize = adjustColSize;
-        return this;
-    }
-
-    public boolean isHasFormulasToEvaluate() {
-        return hasFormulasToEvaluate;
-    }
-
-    public WorkbookConfig setHasFormulasToEvaluate(boolean hasFormulasToEvaluate) {
-        this.hasFormulasToEvaluate = hasFormulasToEvaluate;
-        return this;
-    }
-
-    public List<MempoiSheet> getSheetList() {
-        return sheetList;
-    }
-
-    public WorkbookConfig setSheetList(List<MempoiSheet> sheetList) {
-        this.sheetList = sheetList;
-        return this;
-    }
-
-    public boolean isEvaluateCellFormulas() {
-        return evaluateCellFormulas;
-    }
 
     public WorkbookConfig setEvaluateCellFormulas(boolean evaluateCellFormulas) {
         this.evaluateCellFormulas = evaluateCellFormulas;
