@@ -4,6 +4,9 @@
 
 package it.firegloves.mempoi.util;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Errors {
 
     /*********************************************************************************************************************
@@ -36,12 +39,4 @@ public class Errors {
      ********************************************************************************************************************/
     public static final String WARN_NULL_WB_NOT_CLOSED = "A null workbook is received while trying to close the current workbook";
 
-
-
-
-
-
-
-    private Errors() {
-    }
 }

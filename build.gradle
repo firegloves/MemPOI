@@ -11,6 +11,7 @@ plugins {
     id 'java-library'
     id 'signing'
     id 'io.codearte.nexus-staging' version '0.21.0'
+    id "io.freefair.lombok" version "4.1.6"
 }
 
 apply plugin: 'com.bmuschko.nexus'

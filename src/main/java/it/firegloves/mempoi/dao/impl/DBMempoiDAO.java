@@ -18,7 +18,7 @@ import java.util.List;
 public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(DBMempoiDAO.class);
-    Marker marker = MarkerFactory.getMarker("test");
+    private Marker marker = MarkerFactory.getMarker("test");
 
     private static DBMempoiDAO instance = new DBMempoiDAO();
 

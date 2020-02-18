@@ -1,7 +1,11 @@
 package it.firegloves.mempoi.domain.footer;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.Workbook;
 
+@Data
+@Accessors(chain = true)
 public class MempoiFooter {
 
     protected Workbook workbook;
@@ -12,29 +16,5 @@ public class MempoiFooter {
 
     public MempoiFooter(Workbook workbook) {
         this.workbook = workbook;
-    }
-
-    public String getLeftText() {
-        return leftText;
-    }
-
-    public void setLeftText(String leftText) {
-        this.leftText = leftText;
-    }
-
-    public String getCenterText() {
-        return centerText;
-    }
-
-    public void setCenterText(String centerText) {
-        this.centerText = centerText;
-    }
-
-    public String getRightText() {
-        return rightText;
-    }
-
-    public void setRightText(String rightText) {
-        this.rightText = rightText;
     }
 }

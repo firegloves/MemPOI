@@ -3,6 +3,8 @@ package it.firegloves.mempoi.domain;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Data
+@Accessors(chain = true)
 public class MempoiColumn {
 
     private EExportDataType type;
@@ -44,36 +48,10 @@ public class MempoiColumn {
         this.setType(sqlObjType);
     }
 
-
-    public EExportDataType getType() {
-        return type;
-    }
-
     public void setType(int sqlObjType) {
         this.type = this.getFieldTypeName(sqlObjType);
         this.setResultSetAccessMethod(this.type);
         this.setCellSetValueMethod(this.type);
-    }
-
-
-    public CellStyle getCellStyle() {
-        return cellStyle;
-    }
-
-    public void setCellStyle(CellStyle cellStyle) {
-        this.cellStyle = cellStyle;
-    }
-
-    public String getColumnName() {
-        return columnName;
-    }
-
-    public MempoiSubFooterCell getSubFooterCell() {
-        return subFooterCell;
-    }
-
-    public void setSubFooterCell(MempoiSubFooterCell subFooterCell) {
-        this.subFooterCell = subFooterCell;
     }
 
     /**
@@ -140,18 +118,6 @@ public class MempoiColumn {
             default:
                 throw new MempoiException("SQL TYPE NOT RECOGNIZED: " + sqlObjType);
         }
-    }
-
-    public Method getRsAccessDataMethod() {
-        return rsAccessDataMethod;
-    }
-
-    public Method getCellSetValueMethod() {
-        return cellSetValueMethod;
-    }
-
-    public void setElaborationStepList(List<MempoiColumnElaborationStep> elaborationStepList) {
-        this.elaborationStepList = elaborationStepList;
     }
 
     public void addElaborationStep(MempoiColumnElaborationStep step) {

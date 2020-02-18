@@ -7,8 +7,10 @@ package it.firegloves.mempoi.util;
 
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.exception.MempoiException;
+import lombok.experimental.UtilityClass;
 import org.slf4j.Logger;
 
+@UtilityClass
 public class ForceGenerationHelper {
 
     /**

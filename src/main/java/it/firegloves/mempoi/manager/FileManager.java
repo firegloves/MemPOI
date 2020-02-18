@@ -3,6 +3,7 @@ package it.firegloves.mempoi.manager;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
+import lombok.AllArgsConstructor;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+@AllArgsConstructor
 public class FileManager {
 
     private static final Logger logger = LoggerFactory.getLogger(FileManager.class);
@@ -20,11 +22,6 @@ public class FileManager {
      * contains the workbook configurations
      */
     private WorkbookConfig workbookConfig;
-
-
-    public FileManager(WorkbookConfig workbookConfig) {
-        this.workbookConfig = workbookConfig;
-    }
 
 
     /**
