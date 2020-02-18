@@ -7,6 +7,11 @@
   font-size: 24pt;
 }
 
+.mempoino {
+  background-image: url('img/mempoino_ino_logo.png');
+  background-size: 100%;
+}
+
 .orange {
   color: #FF9300;
 }
@@ -388,6 +393,17 @@
   flex: 0 0 100%;
   animation: mempoiPowered 2s ease-out 13s forwards;
 }
+
+.big-mempoino {
+  position: absolute;
+  text-align: center;
+  margin-top: 70px;
+  width: 70px;
+  height: 70px;
+  opacity: 0;
+  animation: mempoiPowered 2s ease-out 13.5s forwards;
+}
+
 .mempoi .mempoi-code {
   font-size: 24px;
   opacity: 0;
@@ -415,6 +431,16 @@
   background-image: linear-gradient(to right, #155799, #159957);
   animation: fadeIn 2s ease-out 17s forwards;
 }
+
+.final-mempoi-powered .mempoino {
+  position: relative;
+  text-align: center;
+  width: 25px;
+  height: 22px;
+  opacity: 1;
+  display: inline-block;
+}
+
 @media only screen and (max-width: 964px) {
   .final-mempoi-powered {
     position: relative;
