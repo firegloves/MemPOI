@@ -3,6 +3,7 @@ package it.firegloves.mempoi.domain;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import lombok.Data;
@@ -76,6 +77,11 @@ public class MempoiSheet {
      */
     private Optional<MempoiTable> mempoiTable = Optional.empty();
 
+    /**
+     * a MempoPivotTable containing data to build an optional Excel PivotTable inside the current sheet
+     */
+    private Optional<MempoiPivotTable> mempoiPivotTable = Optional.empty();
+
 
     public MempoiSheet(PreparedStatement prepStmt) {
         this.prepStmt = prepStmt;
@@ -96,5 +102,9 @@ public class MempoiSheet {
 
     public void setMempoiTable(MempoiTable mempoiTable) {
         this.mempoiTable = Optional.ofNullable(mempoiTable);
+    }
+
+    public void setMempoiPivotTable(MempoiPivotTable mempoiPivotTable) {
+        this.mempoiPivotTable = Optional.ofNullable(mempoiPivotTable);
     }
 }

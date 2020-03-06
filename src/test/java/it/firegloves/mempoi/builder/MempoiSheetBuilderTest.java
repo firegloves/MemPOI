@@ -9,6 +9,7 @@ import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
@@ -21,10 +22,6 @@ import java.sql.PreparedStatement;
 import static org.junit.Assert.*;
 
 public class MempoiSheetBuilderTest {
-
-    private final String areaReference = "A1:E5";
-    private final String tableName = "nice table";
-    private final String displayTableName = "nice display table";
 
     @Mock
     private PreparedStatement prepStmt;
@@ -46,12 +43,6 @@ public class MempoiSheetBuilderTest {
         NumberSumSubFooter numberSumSubFooter = new NumberSumSubFooter();
         ForestStyleTemplate forestStyleTemplate = new ForestStyleTemplate();
 
-        MempoiTableBuilder mempoiTableBuilder = MempoiTableBuilder.aMempoiTable()
-                .withWorkbook(wb)
-                .withTableName(tableName)
-                .withDisplayTableName(displayTableName)
-                .withAreaReference(areaReference);
-
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withStyleTemplate(forestStyleTemplate)
                 .withPrepStmt(prepStmt)
@@ -66,9 +57,9 @@ public class MempoiSheetBuilderTest {
                 .withMempoiFooter(new StandardMempoiFooter(wb, footerName))
                 .withMergedRegionColumns(mergedCols)
                 .withWorkbook(wb)
-                .withMempoiTableBuilder(mempoiTableBuilder)
+                .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
+                .withMempoiPivotTableBuilder(TestHelper.getTestMempoiPivotTableBuilder(wb))
                 .build();
-
 
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
         assertEquals("Prepared Statement", prepStmt, mempoiSheet.getPrepStmt());
@@ -84,13 +75,8 @@ public class MempoiSheetBuilderTest {
         assertArrayEquals("merged cols", mergedCols, mempoiSheet.getMergedRegionColumns());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
 
-        mempoiSheet.getMempoiTable().ifPresent(mempoiTable -> {
-            assertEquals(tableName, mempoiTable.getTableName());
-            assertEquals(displayTableName, mempoiTable.getDisplayTableName());
-            assertEquals(areaReference, mempoiTable.getAreaReference());
-            assertEquals(wb, mempoiTable.getWorkbook());
-        });
-
+       AssertionHelper.validateMempoiTable(wb, mempoiSheet.getMempoiTable().get());
+       AssertionHelper.validateMempoiPivotTable(wb, mempoiSheet.getMempoiPivotTable().get());
     }
 
 

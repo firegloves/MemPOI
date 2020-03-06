@@ -39,6 +39,7 @@ public final class MempoiSheetBuilder {
     private PreparedStatement prepStmt;
     private String[] mergedRegionColumns;
     private Optional<MempoiTableBuilder> mempoiTableBuilder = Optional.empty();
+    private Optional<MempoiPivotTableBuilder> mempoiPivotTableBuilder = Optional.empty();
 
     /**
      * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
@@ -258,6 +259,18 @@ public final class MempoiSheetBuilder {
 
 
     /**
+     * adds a MempoiPivotTableBuilder responsible of building the MempoiPivotTable object containing data to build an optional Excel PivotTable inside the current sheet
+     *
+     * @param mempoiPivotTableBuilder
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withMempoiPivotTableBuilder(MempoiPivotTableBuilder mempoiPivotTableBuilder) {
+        this.mempoiPivotTableBuilder = Optional.ofNullable(mempoiPivotTableBuilder);
+        return this;
+    }
+
+
+    /**
      * builds the MempoiSheet and returns it
      *
      * @return the created MempoiSheet
@@ -287,9 +300,20 @@ public final class MempoiSheetBuilder {
             try {
                 mempoiSheet.setMempoiTable(builder.build());
             } catch (MempoiException e) {
-                ForceGenerationHelper.manageForceGeneration(e, Errors.ERR_AREA_REFERENCE_NOT_VALID + ". Forcing generation without Excel table", logger);
+                ForceGenerationHelper.manageForceGeneration(e, e.getMessage(), logger); // TODO check if the error is well managed
+//                ForceGenerationHelper.manageForceGeneration(e, Errors.ERR_AREA_REFERENCE_NOT_VALID + ". Forcing generation without Excel table", logger);
             }
         });
+
+        this.mempoiPivotTableBuilder.ifPresent(builder -> {
+            try {
+                mempoiSheet.setMempoiPivotTable(builder.build());
+            } catch (MempoiException e) {
+                ForceGenerationHelper.manageForceGeneration(e, e.getMessage(), logger);  // TODO check if the error is well managed
+            }
+        });
+
+        // TODO add check of overlapping area references?
 
         return mempoiSheet;
     }

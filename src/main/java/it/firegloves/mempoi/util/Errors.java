@@ -32,6 +32,7 @@ public class Errors {
 
     public static final String ERR_AREA_REFERENCE_NOT_VALID = "The received Area reference is not valid";
     public static final String ERR_TABLE_SUPPORTS_ONLY_XSSF = "Only XSSFWorkbook supports Excel table and it seems you are using a different workbook type";
+    public static final String ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF = "Only XSSFWorkbook supports Excel Pivot Table and it seems you are using a different workbook type";
 
     public static final String ERR_PIVOTTABLE_SOURCE_AMBIGUOUS = "Ambiguous source specified for pivot table. You can choose only one source between table and area reference";
 

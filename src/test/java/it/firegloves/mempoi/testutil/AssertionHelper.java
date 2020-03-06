@@ -4,6 +4,8 @@
 
 package it.firegloves.mempoi.testutil;
 
+import it.firegloves.mempoi.domain.MempoiTable;
+import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -19,8 +21,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.ResultSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 public class AssertionHelper {
 
@@ -90,6 +92,38 @@ public class AssertionHelper {
         assertEquals(4, table.getEndColIndex());
         assertEquals(0, table.getStartRowIndex());
         assertEquals(4, table.getEndRowIndex());
+    }
+
+
+    /**
+     * validates the MempoiTable assuming that the table reflects TestHelper data
+     *
+     * @param wb the Workbook used to create the MempoiTable
+     * @param mempoiTable the MempoiTable to validate
+     */
+    public static void validateMempoiTable(Workbook wb, MempoiTable mempoiTable) {
+
+        assertEquals(TestHelper.TABLE_NAME, mempoiTable.getTableName());
+        assertEquals(TestHelper.DISPLAY_TABLE_NAME, mempoiTable.getDisplayTableName());
+        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReference());
+        assertEquals(wb, mempoiTable.getWorkbook());
+    }
+
+    /**
+     * validates the MempoiPivotTable assuming that the table reflects TestHelper data
+     *
+     * @param wb the Workbook used to create the MempoiTable
+     * @param mempoiPivotTable the MempoiTable to validate
+     */
+    public static void validateMempoiPivotTable(Workbook wb, MempoiPivotTable mempoiPivotTable) {
+
+        assertEquals(wb, mempoiPivotTable.getWorkbook());
+        assertEquals(TestHelper.POSITION, mempoiPivotTable.getPosition());
+        assertNotNull(mempoiPivotTable.getSource().getMempoiSheet());
+        assertEquals(TestHelper.AREA_REFERENCE, mempoiPivotTable.getSource().getAreaReference().formatAsString());
+        assertArrayEquals(TestHelper.COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns());
+        assertArrayEquals(TestHelper.ROW_LABEL_COLUMNS, mempoiPivotTable.getRowLabelColumns());
+        assertArrayEquals(TestHelper.REPORT_FILTER_COLUMNS, mempoiPivotTable.getReportFilterColumns());
     }
 
 }

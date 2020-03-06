@@ -1,44 +1,33 @@
 package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.domain.MempoiTable;
+import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
-public class MempoiTableBuilderTest {
+public final class MempoiPivotTableBuilderTest {
 
     private final Workbook wb = new XSSFWorkbook();
-
-    @Before
-    public void prepare() {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     public void fullyPopulated() {
 
-        MempoiTable mempoiTable = TestHelper.getTestMempoiTable(wb);
-
-        assertEquals(TestHelper.TABLE_NAME, mempoiTable.getTableName());
-        assertEquals(TestHelper.DISPLAY_TABLE_NAME, mempoiTable.getDisplayTableName());
-        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReference());
-        assertEquals(wb, mempoiTable.getWorkbook());
+        AssertionHelper.validateMempoiPivotTable(wb, TestHelper.getTestMempoiPivotTable(wb));
     }
+
 
     @Test
     public void withInvalidReferenceArea_throwsMempoiException() {
@@ -47,14 +36,33 @@ public class MempoiTableBuilderTest {
                 .forEach(areaRef -> {
 
                     try {
-                        MempoiTableBuilder.aMempoiTable()
+                        MempoiPivotTableBuilder.aMempoiPivotTable()
                                 .withWorkbook(wb)
-                                .withAreaReference(areaRef)
+                                .withAreaReferenceSource(areaRef)
                                 .build();
                     } catch (MempoiException e) {
                         assertEquals(Errors.ERR_AREA_REFERENCE_NOT_VALID, e.getMessage());
                     }
                 });
+    }
+
+    @Test(expected = MempoiException.class)
+    public void withReferenceAreaAndTable_throwsMempoiException() {
+
+        MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource("A1:B2")
+                .withMempoiTableSource(new MempoiTable())
+                .build();
+
+    }
+
+    @Test(expected = MempoiException.class)
+    public void withoutReferenceAreaAndTable_throwsMempoiException() {
+
+        MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .build();
     }
 
 
@@ -74,12 +82,12 @@ public class MempoiTableBuilderTest {
                     }
 
                     try {
-                        MempoiTableBuilder.aMempoiTable()
+                        MempoiPivotTableBuilder.aMempoiPivotTable()
                                 .withWorkbook(workbook)
-                                .withAreaReference(TestHelper.AREA_REFERENCE)
+                                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                                 .build();
                     } catch (MempoiException e) {
-                        assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
+                        assertEquals(Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
                     }
                 });
 
@@ -89,30 +97,23 @@ public class MempoiTableBuilderTest {
     @Test(expected = MempoiException.class)
     public void withNullWorkbook_throwsMempoiException() {
 
-        MempoiTableBuilder.aMempoiTable()
-                .withAreaReference(TestHelper.AREA_REFERENCE)
+        MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                 .build();
     }
 
-    @Test(expected = MempoiException.class)
-    public void withNullAreaReference_throwsMempoiException() {
-
-        MempoiTableBuilder.aMempoiTable()
-                .withWorkbook(wb)
-                .build();
-    }
 
     @Test
     public void minPopulated() {
 
-        MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
+        MempoiPivotTable mempoiPivotTable = MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
-                .withAreaReference(TestHelper.AREA_REFERENCE)
+                .withPosition(TestHelper.POSITION)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                 .build();
 
-        assertNotNull(mempoiTable.getTableName());
-        assertNotNull(mempoiTable.getDisplayTableName());
-        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReference());
-        assertEquals(wb, mempoiTable.getWorkbook());
+        assertEquals(wb, mempoiPivotTable.getWorkbook());
+        assertNotNull(mempoiPivotTable.getSource().getAreaReference());
+        assertNotNull(mempoiPivotTable.getPosition());
     }
 }

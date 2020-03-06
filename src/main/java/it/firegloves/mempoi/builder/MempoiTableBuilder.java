@@ -87,14 +87,6 @@ public final class MempoiTableBuilder {
      */
     public MempoiTable build() {
 
-//        if (! this.validateAreaReference(this.areaReference)) {
-//            throw new MempoiException(Errors.ERR_AREA_REFERENCE_NOT_VALID);
-//        }
-//
-//        if (! (this.workbook instanceof XSSFWorkbook)) {
-//            throw new MempoiException(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
-//        }
-
         this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
         this.areaReferenceValidator.validateAreaReferenceAndThrow(this.areaReference);
 

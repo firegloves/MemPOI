@@ -8,13 +8,10 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.validator.AreaReferenceValidator;
 import it.firegloves.mempoi.validator.WorkbookValidator;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.util.regex.Pattern;
 
 public final class MempoiPivotTableBuilder {
 
@@ -147,15 +144,12 @@ public final class MempoiPivotTableBuilder {
      */
     public MempoiPivotTable build() {
 
+        // TODO add force generation supplying a default precedence order
         if (null != areaReference && null != mempoiTable) {
             throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS);
         }
 
-//        if (! (this.workbook instanceof XSSFWorkbook)) {
-//            throw new MempoiException(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF); // TODO è vero? o le pivot table sono supportate anche da altri sistemi?
-//        }
-
-        this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
+        this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
         this.areaReferenceValidator.validateAreaReferenceAndThrow(this.areaReference);
 
         MempoiPivotTableSource source = new MempoiPivotTableSource(
