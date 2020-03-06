@@ -16,6 +16,7 @@ import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
@@ -198,7 +199,7 @@ public class Strategos {
     private Sheet createSheet(String sheetName) {
 
         return ! StringUtils.isEmpty(sheetName) ?
-                this.workbookConfig.getWorkbook().createSheet(sheetName) :
+                this.workbookConfig.getWorkbook().createSheet(WorkbookUtil.createSafeSheetName(sheetName)) :
                 this.workbookConfig.getWorkbook().createSheet();
     }
 

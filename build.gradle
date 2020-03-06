@@ -21,7 +21,7 @@ version '1.2.0'
 
 sourceCompatibility = 1.8
 
-def poiVersion = '4.1.1'
+def poiVersion = '4.1.2'
 def comonsLang3Version = '3.9'
 def comonsMath3Version = '3.6.1'
 def logbackClassicVersion = '1.2.3'

@@ -24,9 +24,6 @@ public class MempoiTableBuilderTest {
 
     private final Workbook wb = new XSSFWorkbook();
 
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-
     @Before
     public void prepare() {
         MockitoAnnotations.initMocks(this);
@@ -46,16 +43,17 @@ public class MempoiTableBuilderTest {
     @Test
     public void withInvalidReferenceArea_throwsMempoiException() {
 
-        Arrays.asList("A1:5B", "1A:B5", "A:B4", "A1:B", "A1B5", "A1:B5:C6", "", ":").stream()
+        Arrays.asList("A1:5B", "1A:B5", "A:B4", "A1:B", "A1B5", "A1:B5:C6", "", ":", "C1", "A-1:B5")
                 .forEach(areaRef -> {
 
-                    exceptionRule.expect(MempoiException.class);
-                    exceptionRule.expectMessage(Errors.ERR_AREA_REFERENCE_NOT_VALID);
-
-                    MempoiTableBuilder.aMempoiTable()
-                            .withWorkbook(wb)
-                            .withAreaReference(areaRef)
-                            .build();
+                    try {
+                        MempoiTableBuilder.aMempoiTable()
+                                .withWorkbook(wb)
+                                .withAreaReference(areaRef)
+                                .build();
+                    } catch (MempoiException e) {
+                        assertEquals(Errors.ERR_AREA_REFERENCE_NOT_VALID, e.getMessage());
+                    }
                 });
     }
 
@@ -66,9 +64,6 @@ public class MempoiTableBuilderTest {
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
 
-                    exceptionRule.expect(MempoiException.class);
-                    exceptionRule.expectMessage(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
-
                     Constructor<? extends Workbook> constructor;
                     Workbook workbook;
                     try {
@@ -78,10 +73,14 @@ public class MempoiTableBuilderTest {
                         throw new RuntimeException();
                     }
 
-                    MempoiTableBuilder.aMempoiTable()
-                            .withWorkbook(workbook)
-                            .withAreaReference(TestHelper.AREA_REFERENCE)
-                            .build();
+                    try {
+                        MempoiTableBuilder.aMempoiTable()
+                                .withWorkbook(workbook)
+                                .withAreaReference(TestHelper.AREA_REFERENCE)
+                                .build();
+                    } catch (MempoiException e) {
+                        assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
+                    }
                 });
 
     }

@@ -3,6 +3,8 @@ package it.firegloves.mempoi.builder;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
+import it.firegloves.mempoi.validator.AreaReferenceValidator;
+import it.firegloves.mempoi.validator.WorkbookValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -11,17 +13,22 @@ import java.util.regex.Pattern;
 
 public final class MempoiTableBuilder {
 
-    private final Pattern areaReferencePattern = Pattern.compile("[a-zA-Z]+\\d+\\:[a-zA-Z]+\\d+");
+    // TODO add modo per specificare che tutti i dati dello sheet siano aggiunti alla tabella, senza specificare l'area reference
 
     private Workbook workbook;
     private String areaReference;
     private String tableName;
     private String displayTableName;
 
+    private AreaReferenceValidator areaReferenceValidator;
+    private WorkbookValidator workbookValidator;
+
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
      */
-    private MempoiTableBuilder() {
+    private MempoiTableBuilder() {this.areaReferenceValidator = new AreaReferenceValidator();
+        this.areaReferenceValidator = new AreaReferenceValidator();
+        this.workbookValidator = new WorkbookValidator();
     }
 
     /**
@@ -80,31 +87,21 @@ public final class MempoiTableBuilder {
      */
     public MempoiTable build() {
 
-        if (! this.validateAreaReference(this.areaReference)) {
-            throw new MempoiException(Errors.ERR_AREA_REFERENCE_NOT_VALID);
-        }
+//        if (! this.validateAreaReference(this.areaReference)) {
+//            throw new MempoiException(Errors.ERR_AREA_REFERENCE_NOT_VALID);
+//        }
+//
+//        if (! (this.workbook instanceof XSSFWorkbook)) {
+//            throw new MempoiException(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
+//        }
 
-        if (! (this.workbook instanceof XSSFWorkbook)) {
-            throw new MempoiException(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
-        }
+        this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
+        this.areaReferenceValidator.validateAreaReferenceAndThrow(this.areaReference);
 
         return new MempoiTable()
                 .setWorkbook(this.workbook)
                 .setTableName(StringUtils.isEmpty(this.tableName) ? "Table" : this.tableName)
                 .setDisplayTableName(StringUtils.isEmpty(this.displayTableName) ? "Table" : this.displayTableName)
                 .setAreaReference(this.areaReference);
-    }
-
-
-    /**
-     * check that areaReference respect the needed format like A1:E5
-     *
-     * @param areaReference the area reference to validate
-     * @return true if area reference is valid, false otherwise
-     */
-    private boolean validateAreaReference(String areaReference) {
-
-        return ! StringUtils.isEmpty(areaReference) &&
-                areaReferencePattern.matcher(areaReference).find();
     }
 }
