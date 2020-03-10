@@ -14,8 +14,6 @@ import org.apache.poi.ss.util.AreaReference;
 @Accessors(chain = true)
 public class MempoiPivotTableSource {
 
-    // TODO (o table o area reference obbligatori)
-
     // TODO capire se è meglio usare direttamente la table => non credo perché in fase di configurazione ancora non è stata creata
     private final MempoiTable mempoiTable;
     private final AreaReference areaReference;

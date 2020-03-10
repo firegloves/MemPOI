@@ -3,6 +3,7 @@ package it.firegloves.mempoi.strategos;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
+import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -34,25 +35,27 @@ public class TableStrategos {
     /**
      * if needed, adds the Excel Table to the current sheet
      */
-    public void manageMempoiTable(Sheet sheet, MempoiSheet mempoiSheet) {
+    public void manageMempoiTable(MempoiSheet mempoiSheet) {
 
-        if (mempoiSheet.getMempoiTable().isPresent() && ! (sheet instanceof XSSFSheet)) {
+        if (mempoiSheet.getMempoiTable().isPresent() && ! (mempoiSheet.getSheet() instanceof XSSFSheet)) {
             throw new MempoiException(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
         }
 
         mempoiSheet.getMempoiTable()
-                .ifPresent(mempoiTable -> this.addTable((XSSFSheet) sheet, mempoiTable));
+                .ifPresent(mempoiTable -> this.addTable(mempoiSheet, mempoiTable));
     }
 
 
     /**
      * adds the desired table to the received sheet
-     * @param sheet the XSSFSheet on which add the table
+     * @param mempoiSheet the MempoiSheet on which add the table
      * @param mempoiTable the MempoiTable containing table settings
      */
-    private void addTable(XSSFSheet sheet, MempoiTable mempoiTable) {
+    private void addTable(MempoiSheet mempoiSheet, MempoiTable mempoiTable) {
 
-        XSSFTable table = sheet.createTable(new AreaReference(mempoiTable.getAreaReference(), this.workbookConfig.getWorkbook().getSpreadsheetVersion()));
+        XSSFTable table = ((XSSFSheet)mempoiSheet.getSheet()).createTable(new AreaReference(mempoiTable.getAreaReference(), this.workbookConfig.getWorkbook().getSpreadsheetVersion()));
+        mempoiTable.setTable(table);
+
         table.getCTTable().addNewAutoFilter().setRef(table.getArea().formatAsString());
 
         this.setColumnIds(table);
@@ -72,4 +75,6 @@ public class TableStrategos {
         IntStream.range(0, tableColumnList.size())
                 .forEachOrdered(i -> tableColumnList.get(i).setId(i));
     }
+
+
 }

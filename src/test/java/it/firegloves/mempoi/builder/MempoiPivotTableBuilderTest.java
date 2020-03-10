@@ -7,14 +7,17 @@ import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
@@ -56,6 +59,25 @@ public final class MempoiPivotTableBuilderTest {
                 .build();
 
     }
+
+    @Test
+    public void withoutReferenceAreaButTable() {
+
+        MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withMempoiTableSource(new MempoiTable())
+                .build();
+    }
+
+    @Test
+    public void withoutTableButReferenceArea() {
+
+        MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
+                .build();
+    }
+
 
     @Test(expected = MempoiException.class)
     public void withoutReferenceAreaAndTable_throwsMempoiException() {
@@ -115,5 +137,25 @@ public final class MempoiPivotTableBuilderTest {
         assertEquals(wb, mempoiPivotTable.getWorkbook());
         assertNotNull(mempoiPivotTable.getSource().getAreaReference());
         assertNotNull(mempoiPivotTable.getPosition());
+    }
+
+    @Test
+    public void withColumnLabelColumnsPopulatedManually() {
+
+        MempoiPivotTable mempoiPivotTable = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withPosition(TestHelper.POSITION)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
+                .addColumnLabelColumns(DataConsolidateFunction.SUM, Arrays.asList("col1", "col2"))
+                .addColumnLabelColumns(DataConsolidateFunction.AVERAGE, Arrays.asList("col3", "col4"))
+                .build();
+
+        assertEquals(wb, mempoiPivotTable.getWorkbook());
+        assertNotNull(mempoiPivotTable.getSource().getAreaReference());
+        assertNotNull(mempoiPivotTable.getPosition());
+
+        AssertionHelper.validateColumnLabelColumns(TestHelper.SUM_COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.SUM));
+        AssertionHelper.validateColumnLabelColumns(TestHelper.AVERAGE_COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.AVERAGE));
+
     }
 }

@@ -132,9 +132,10 @@ public class Strategos {
 
         // create sheet
         Sheet sheet = this.createSheet(mempoiSheet.getSheetName());
+        mempoiSheet.setSheet(sheet);
 
         // adds optional excel table
-        this.tableStrategos.manageMempoiTable(sheet, mempoiSheet);
+        this.tableStrategos.manageMempoiTable(mempoiSheet);
 
         // track columns for autosizing
         if (this.workbookConfig.isAdjustColSize() && sheet instanceof SXSSFSheet) {
@@ -148,7 +149,7 @@ public class Strategos {
         List<MempoiColumn> columnList = new MempoiColumnStrategos().prepareMempoiColumn(mempoiSheet, rs, this.workbookConfig.getWorkbook());
 
         try {
-            this.createSheetData(sheet, rs, columnList, mempoiSheet);
+            this.createSheetData(rs, columnList, mempoiSheet);
 
             // apply mempoi column strategies
             this.applyMempoiColumnStrategies(mempoiSheet);
@@ -168,26 +169,25 @@ public class Strategos {
     /**
      * generates sheet data
      *
-     * @param sheet the Sheet where generate data
      * @param rs the ResultSet from which read data
      * @param columnList the list of MempoiColumn from which read data configuration
      * @param mempoiSheet the MempoiSheet from which read configuration
      */
-    private void createSheetData(Sheet sheet, ResultSet rs, List<MempoiColumn> columnList, MempoiSheet mempoiSheet) {
+    private void createSheetData(ResultSet rs, List<MempoiColumn> columnList, MempoiSheet mempoiSheet) {
 
         int rowCounter = 0;
 
         // create header
-        rowCounter = this.dataStrategos.createHeaderRow(sheet, columnList, rowCounter, mempoiSheet.getSheetStyler());
+        rowCounter = this.dataStrategos.createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, mempoiSheet.getSheetStyler());
 
         // keep track of the first data row index (no header and subheaders)
         int firstDataRowIndex = rowCounter + 1;
 
         // create rows
-        rowCounter = this.dataStrategos.createDataRows(sheet, rs, columnList, rowCounter);
+        rowCounter = this.dataStrategos.createDataRows(mempoiSheet.getSheet(), rs, columnList, rowCounter);
 
         // footer
-        this.footerStrategos.createFooterAndSubfooter(sheet, columnList, mempoiSheet, firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler());
+        this.footerStrategos.createFooterAndSubfooter(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler());
     }
 
     /**

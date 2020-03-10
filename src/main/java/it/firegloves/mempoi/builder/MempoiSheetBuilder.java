@@ -3,10 +3,11 @@ package it.firegloves.mempoi.builder;
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.strategos.Strategos;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.ForceGenerationHelper;
@@ -22,6 +23,8 @@ import java.util.*;
 public final class MempoiSheetBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(MempoiSheetBuilder.class);
+    private final String OVERRIDING_MEMPOI_TABLE = "A previously setted value of Excel Table is about to be replaced";
+    private final String OVERRIDING_MEMPOI_PIVOT_TABLE = "A previously setted value of Excel Pivot Table is about to be replaced";
 
     private String sheetName;
 
@@ -38,8 +41,8 @@ public final class MempoiSheetBuilder {
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
     private String[] mergedRegionColumns;
-    private Optional<MempoiTableBuilder> mempoiTableBuilder = Optional.empty();
-    private Optional<MempoiPivotTableBuilder> mempoiPivotTableBuilder = Optional.empty();
+    private Optional<MempoiTable> mempoiTable = Optional.empty();
+    private Optional<MempoiPivotTable> mempoiPivotTable = Optional.empty();
 
     /**
      * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
@@ -247,25 +250,65 @@ public final class MempoiSheetBuilder {
     }
 
     /**
-     * adds a MempoiTableBuilder responsible of building the MempoiTable object containing data to build an optional Excel Table inside the current sheet
+     * adds a MempoiTable object containing data to build an optional Excel Table inside the current sheet
+     *
+     * @param mempoiTable
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withMempoiTable(MempoiTable mempoiTable) {
+
+        this.mempoiTable.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_TABLE));
+
+        this.mempoiTable = Optional.ofNullable(mempoiTable);
+        return this;
+    }
+
+    /**
+     * adds a MempoiTableBuilder object containing data to build an optional Excel Table inside the current sheet
      *
      * @param mempoiTableBuilder
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMempoiTableBuilder(MempoiTableBuilder mempoiTableBuilder) {
-        this.mempoiTableBuilder = Optional.ofNullable(mempoiTableBuilder);
+
+        this.mempoiTable.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_TABLE));
+
+        this.mempoiTable = Optional.ofNullable(mempoiTableBuilder)
+                .map(MempoiTableBuilder::build);
+
         return this;
     }
 
 
     /**
-     * adds a MempoiPivotTableBuilder responsible of building the MempoiPivotTable object containing data to build an optional Excel PivotTable inside the current sheet
+     * adds a MempoiPivotTable object containing data to build an optional Excel PivotTable inside the current sheet
+     *
+     * @param mempoiPivotTable
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withMempoiPivotTable(MempoiPivotTable mempoiPivotTable) {
+
+        this.mempoiTable.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_PIVOT_TABLE));
+
+        this.mempoiPivotTable = Optional.ofNullable(mempoiPivotTable);
+        return this;
+    }
+
+    /**
+     * adds a MempoiPivotTableBuilder object containing data to build an optional Excel PivotTable inside the current sheet
      *
      * @param mempoiPivotTableBuilder
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMempoiPivotTableBuilder(MempoiPivotTableBuilder mempoiPivotTableBuilder) {
-        this.mempoiPivotTableBuilder = Optional.ofNullable(mempoiPivotTableBuilder);
+
+        // TODO test what happens if build throws exception
+
+        this.mempoiTable.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_PIVOT_TABLE));
+
+        this.mempoiPivotTable = Optional.ofNullable(mempoiPivotTableBuilder)
+                .map(MempoiPivotTableBuilder::build);
+
         return this;
     }
 
@@ -296,18 +339,18 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setDataElaborationStepMap(dataElaborationStepMap);
         mempoiSheet.setMergedRegionColumns(mergedRegionColumns);
 
-        this.mempoiTableBuilder.ifPresent(builder -> {
+        this.mempoiTable.ifPresent(mempoiTable -> {
             try {
-                mempoiSheet.setMempoiTable(builder.build());
+                mempoiSheet.setMempoiTable(mempoiTable);
             } catch (MempoiException e) {
                 ForceGenerationHelper.manageForceGeneration(e, e.getMessage(), logger); // TODO check if the error is well managed
 //                ForceGenerationHelper.manageForceGeneration(e, Errors.ERR_AREA_REFERENCE_NOT_VALID + ". Forcing generation without Excel table", logger);
             }
         });
 
-        this.mempoiPivotTableBuilder.ifPresent(builder -> {
+        this.mempoiPivotTable.ifPresent(mempoiPivotTable -> {
             try {
-                mempoiSheet.setMempoiPivotTable(builder.build());
+                mempoiSheet.setMempoiPivotTable(mempoiPivotTable);
             } catch (MempoiException e) {
                 ForceGenerationHelper.manageForceGeneration(e, e.getMessage(), logger);  // TODO check if the error is well managed
             }

@@ -9,6 +9,7 @@ import it.firegloves.mempoi.styles.template.StyleTemplate;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.PreparedStatement;
@@ -81,6 +82,12 @@ public class MempoiSheet {
      * a MempoPivotTable containing data to build an optional Excel PivotTable inside the current sheet
      */
     private Optional<MempoiPivotTable> mempoiPivotTable = Optional.empty();
+
+    /**
+     * reference to the Sheet generated with the current MempoiSheet
+     * DON'T POPULATE IT MANUALLY
+     */
+    private Sheet sheet;
 
 
     public MempoiSheet(PreparedStatement prepStmt) {

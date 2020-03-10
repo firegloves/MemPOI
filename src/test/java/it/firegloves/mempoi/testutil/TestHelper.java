@@ -5,6 +5,7 @@ import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
@@ -12,6 +13,7 @@ import org.apache.poi.ss.util.CellReference;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.*;
 
 public class TestHelper {
 
@@ -24,12 +26,13 @@ public class TestHelper {
     public static final String DISPLAY_TABLE_NAME = "nice display table";
 
     public static final CellReference POSITION = new CellReference("A0");
-    public static final String[] ROW_LABEL_COLUMNS = { "row_label_col1", "row_label_col2"};
-    public static final String[] COLS_LABEL_COLUMNS = { "cols_label_col1", "cols_label_col2", "cols_label_col3"};
-    public static final String[] REPORT_FILTER_COLUMNS = { "report_filter_col1", "report_filter_col2", "report_filter_col3", "report_filter_col4"};
+    public static final List<String> ROW_LABEL_COLUMNS = Arrays.asList("row_label_col1", "row_label_col2");
+    public static final List<String> SUM_COLS_LABEL_COLUMNS = Arrays.asList("sum_cols_label_col1", "sum_cols_label_col2");
+    public static final List<String> AVERAGE_COLS_LABEL_COLUMNS = Arrays.asList("ave_cols_label_col1", "ave_cols_label_col2", "ave_cols_label_col3");
+    public static final List<String> REPORT_FILTER_COLUMNS = Arrays.asList("report_filter_col1", "report_filter_col2", "report_filter_col3", "report_filter_col4");
 
-    public static final String[] SUCCESSFUL_AREA_REFERENCES = { "A1:B5", "C1:C10", "C1:F1", "F10:A1" };
-    public static final String[] FAILING_AREA_REFERENCES = { "A1:5B", "1A:B5", "A:B4", "A1:B", "A1B5", "A1:B5:C6", "", ":", "C1", "A-1:B5" };
+    public static final String[] SUCCESSFUL_AREA_REFERENCES = {"A1:B5", "C1:C10", "C1:F1", "F10:A1"};
+    public static final String[] FAILING_AREA_REFERENCES = {"A1:5B", "1A:B5", "A:B4", "A1:B", "A1B5", "A1:B5:C6", "", ":", "C1", "A-1:B5"};
 
     /**********************************************************************************************************
      * MempoiTable
@@ -76,8 +79,21 @@ public class TestHelper {
                 .withMempoiSheetSource(new MempoiSheet(null))
                 .withPosition(POSITION)
                 .withRowLabelColumns(ROW_LABEL_COLUMNS)
-                .withColumnLabelColumns(COLS_LABEL_COLUMNS)
+                .withColumnLabelColumns(getColumnLabelColumns())
                 .withReportFilterColumns(REPORT_FILTER_COLUMNS);
+    }
+
+    /**
+     * craetes and returns a Map<DataConsolidateFunction, List<String>> populated with test data
+     *
+     * @return
+     */
+    public static EnumMap<DataConsolidateFunction, List<String>> getColumnLabelColumns() {
+
+        EnumMap<DataConsolidateFunction, List<String>> map = new EnumMap<>(DataConsolidateFunction.class);
+        map.put(DataConsolidateFunction.SUM, SUM_COLS_LABEL_COLUMNS);
+        map.put(DataConsolidateFunction.AVERAGE, AVERAGE_COLS_LABEL_COLUMNS);
+        return map;
     }
 
 

@@ -35,6 +35,7 @@ public class Errors {
     public static final String ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF = "Only XSSFWorkbook supports Excel Pivot Table and it seems you are using a different workbook type";
 
     public static final String ERR_PIVOTTABLE_SOURCE_AMBIGUOUS = "Ambiguous source specified for pivot table. You can choose only one source between table and area reference";
+    public static final String ERR_PIVOTTABLE_SOURCE_NOT_FOUND = "Source for pivot table not found";
 
 
 

@@ -8,20 +8,23 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.validator.AreaReferenceValidator;
 import it.firegloves.mempoi.validator.WorkbookValidator;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.util.*;
+
 public final class MempoiPivotTableBuilder {
 
     private Workbook workbook;
     private CellReference position;
-    private String[] rowLabelColumns;
-    private String[] columnLabelColumns;
-    private String[] reportFilterColumns;
+    private List<String> rowLabelColumns;
+    private EnumMap<DataConsolidateFunction, List<String>> columnLabelColumns;
+    private List<String> reportFilterColumns;
 
-    private MempoiTable mempoiTable;
+    private MempoiTable mempoiTable;    // TODO make example in particular on how to bind table to pivot table
     private String areaReference;
     private MempoiSheet mempoiSheet;
 
@@ -34,6 +37,9 @@ public final class MempoiPivotTableBuilder {
     private MempoiPivotTableBuilder() {
         this.areaReferenceValidator = new AreaReferenceValidator();
         this.workbookValidator = new WorkbookValidator();
+        this.columnLabelColumns = new EnumMap<>(DataConsolidateFunction.class);
+        this.rowLabelColumns = new ArrayList<>();
+        this.reportFilterColumns = new ArrayList<>();
     }
 
     /**
@@ -74,7 +80,7 @@ public final class MempoiPivotTableBuilder {
      * @param rowLabelColumns the rowLabelColumns of the pivot table
      * @return this MempoiPivotTableBuilder
      */
-    public MempoiPivotTableBuilder withRowLabelColumns(String[] rowLabelColumns) {
+    public MempoiPivotTableBuilder withRowLabelColumns(List<String> rowLabelColumns) {
         this.rowLabelColumns = rowLabelColumns;
         return this;
     }
@@ -85,8 +91,20 @@ public final class MempoiPivotTableBuilder {
      * @param columnLabelColumns the columnLabelColumns of the pivot table
      * @return this MempoiPivotTableBuilder
      */
-    public MempoiPivotTableBuilder withColumnLabelColumns(String[] columnLabelColumns) {
+    public MempoiPivotTableBuilder withColumnLabelColumns(EnumMap<DataConsolidateFunction, List<String>> columnLabelColumns) {
         this.columnLabelColumns = columnLabelColumns;
+        return this;
+    }
+
+    /**
+     * sets the columnLabelColumns of the pivot table
+     *
+     * @param dataConsolidateFunction the DataConsolidateFunction on which add the table column
+     * @param columnLabelColumnList the list of column names to add to the pivot table
+     * @return this MempoiPivotTableBuilder
+     */
+    public MempoiPivotTableBuilder addColumnLabelColumns(DataConsolidateFunction dataConsolidateFunction, List<String> columnLabelColumnList) {
+        this.columnLabelColumns.put(dataConsolidateFunction, columnLabelColumnList);
         return this;
     }
 
@@ -96,7 +114,7 @@ public final class MempoiPivotTableBuilder {
      * @param reportFilterColumns the reportFilterColumns of the pivot table
      * @return this MempoiPivotTableBuilder
      */
-    public MempoiPivotTableBuilder withReportFilterColumns(String[] reportFilterColumns) {
+    public MempoiPivotTableBuilder withReportFilterColumns(List<String> reportFilterColumns) {
         this.reportFilterColumns = reportFilterColumns;
         return this;
     }
@@ -144,17 +162,11 @@ public final class MempoiPivotTableBuilder {
      */
     public MempoiPivotTable build() {
 
-        // TODO add force generation supplying a default precedence order
-        if (null != areaReference && null != mempoiTable) {
-            throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS);
-        }
-
-        this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
-        this.areaReferenceValidator.validateAreaReferenceAndThrow(this.areaReference);
+        this.validate();
 
         MempoiPivotTableSource source = new MempoiPivotTableSource(
                 this.mempoiTable,
-                new AreaReference(this.areaReference, this.workbook.getSpreadsheetVersion()),
+                null != this.areaReference ? new AreaReference(this.areaReference, this.workbook.getSpreadsheetVersion()) : null,
                 this.mempoiSheet);
 
         return new MempoiPivotTable(
@@ -164,5 +176,27 @@ public final class MempoiPivotTableBuilder {
                 this.rowLabelColumns,
                 this.columnLabelColumns,
                 this.reportFilterColumns);
+    }
+
+
+    /**
+     * makes validations required in order to build the MempoiPivotTable
+     */
+    private void validate() {
+
+        // TODO add force generation supplying a default precedence order
+        if (null != areaReference && null != mempoiTable) {
+            throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS);
+        }
+
+        if (null == areaReference && null == mempoiTable) {
+            throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_NOT_FOUND);
+        }
+
+        this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
+
+        if (null == mempoiTable) {
+            this.areaReferenceValidator.validateAreaReferenceAndThrow(this.areaReference);
+        }
     }
 }

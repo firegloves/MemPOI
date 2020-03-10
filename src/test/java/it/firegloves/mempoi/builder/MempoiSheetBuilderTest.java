@@ -2,8 +2,10 @@ package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
+import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
@@ -205,6 +207,23 @@ public class MempoiSheetBuilderTest {
         mempoiSheet.setPrepStmt(null);
 
         assertNull(mempoiSheet.getPrepStmt());
+    }
+
+    @Test
+    public void mempoiSheetBuilder_withMempoiTableAndPivotTable() {
+
+        Workbook wb = new XSSFWorkbook();
+        MempoiTable mempoiTable = TestHelper.getTestMempoiTable(wb);
+        MempoiPivotTable mempoiPivotTable = TestHelper.getTestMempoiPivotTable(wb);
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .withMempoiTable(mempoiTable)
+                .withMempoiPivotTable(mempoiPivotTable)
+                .build();
+
+        assertEquals(mempoiTable, mempoiSheet.getMempoiTable().get());
+        assertEquals(mempoiPivotTable, mempoiSheet.getMempoiPivotTable().get());
     }
 
 }

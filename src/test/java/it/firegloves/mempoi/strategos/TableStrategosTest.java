@@ -87,10 +87,13 @@ public class TableStrategosTest {
     public void addsAnExcelTable() throws Exception {
 
         XSSFSheet sheet = wb.createSheet();
+        MempoiSheet mempoiSheet = new MempoiSheet(prepStmt)
+                .setSheet(sheet);
+
         MempoiTable mempoiTable = TestHelper.getTestMempoiTable(wb);
 
-        Method addTableMethod = PrivateAccessHelper.getAccessibleMethod(tableStrategos, "addTable", XSSFSheet.class, MempoiTable.class);
-        addTableMethod.invoke(tableStrategos, sheet, mempoiTable);
+        Method addTableMethod = PrivateAccessHelper.getAccessibleMethod(tableStrategos, "addTable", MempoiSheet.class, MempoiTable.class);
+        addTableMethod.invoke(tableStrategos, mempoiSheet, mempoiTable);
 
         XSSFTable table = sheet.getTables().get(0);
 
@@ -107,16 +110,17 @@ public class TableStrategosTest {
      *****************************************************************************************************************/
 
     @Test
-    public void manageMempoiTable() throws Exception {
+    public void manageMempoiTable() {
 
         XSSFSheet sheet = wb.createSheet();
 
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withPrepStmt(prepStmt)
                 .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
-                .build();
+                .build()
+                .setSheet(sheet);
 
-        tableStrategos.manageMempoiTable(sheet, mempoiSheet);
+        tableStrategos.manageMempoiTable(mempoiSheet);
 
         XSSFTable table = sheet.getTables().get(0);
 
@@ -152,7 +156,7 @@ public class TableStrategosTest {
                             .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
                             .build();
 
-                    tableStrategos.manageMempoiTable(sheet, mempoiSheet);
+                    tableStrategos.manageMempoiTable(mempoiSheet);
                 });
     }
 

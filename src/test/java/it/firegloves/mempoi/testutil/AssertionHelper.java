@@ -8,10 +8,7 @@ import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
@@ -20,6 +17,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertArrayEquals;
@@ -121,9 +120,23 @@ public class AssertionHelper {
         assertEquals(TestHelper.POSITION, mempoiPivotTable.getPosition());
         assertNotNull(mempoiPivotTable.getSource().getMempoiSheet());
         assertEquals(TestHelper.AREA_REFERENCE, mempoiPivotTable.getSource().getAreaReference().formatAsString());
-        assertArrayEquals(TestHelper.COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns());
-        assertArrayEquals(TestHelper.ROW_LABEL_COLUMNS, mempoiPivotTable.getRowLabelColumns());
-        assertArrayEquals(TestHelper.REPORT_FILTER_COLUMNS, mempoiPivotTable.getReportFilterColumns());
+
+        assertArrayEquals(TestHelper.ROW_LABEL_COLUMNS.toArray(), mempoiPivotTable.getRowLabelColumns().toArray());
+        assertArrayEquals(TestHelper.REPORT_FILTER_COLUMNS.toArray(), mempoiPivotTable.getReportFilterColumns().toArray());
+
+        validateColumnLabelColumns(TestHelper.SUM_COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.SUM));
+        validateColumnLabelColumns(TestHelper.AVERAGE_COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.AVERAGE));
     }
 
+
+    /**
+     * validates the 2 List
+     * @param expected
+     * @param actual
+     */
+    public static void validateColumnLabelColumns(List<String> expected, List<String> actual) {
+
+        IntStream.range(0, expected.size())
+                .forEach(i -> assertEquals(expected.get(i), actual.get(i)));
+    }
 }
