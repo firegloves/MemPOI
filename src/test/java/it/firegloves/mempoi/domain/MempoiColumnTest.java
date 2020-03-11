@@ -43,6 +43,7 @@ public class MempoiColumnTest {
 
     private MempoiSheet mempoiSheet;
     private MempoiColumnElaborationStep step;
+    private MempoiColumn mc;
 
     @Before
     public void setup() {
@@ -54,6 +55,8 @@ public class MempoiColumnTest {
 
         this.mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(this.prepStmt).withSheetName("name").build();
         this.step = new StreamApiMergedRegionsStep(this.wb.createCellStyle(), 5, (SXSSFWorkbook) this.wb, mempoiSheet);
+
+        this.mc = new MempoiColumn(Types.BOOLEAN, "test", 0);
     }
 
     @Test
@@ -162,7 +165,7 @@ public class MempoiColumnTest {
      */
     private void assertMempoiColumn(String colName, int sqlObjType, EExportDataType eExportDataType) throws NoSuchMethodException {
 
-        MempoiColumn mc = new MempoiColumn(sqlObjType, colName);
+        MempoiColumn mc = new MempoiColumn(sqlObjType, colName, 0);
 
         assertEquals("mc " + colName + " EExportDataType", eExportDataType, mc.getType());
         assertEquals("mc " + colName + " column name", colName, mc.getColumnName());
@@ -175,7 +178,6 @@ public class MempoiColumnTest {
     @Test
     public void setCellStyle() {
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.setCellStyle(this.cellStyle);
 
         AssertionHelper.validateCellStyle(mc.getCellStyle(), this.cellStyle);
@@ -186,7 +188,6 @@ public class MempoiColumnTest {
 
         MempoiSubFooterCell subFooterCell = new MempoiSubFooterCell();
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.setSubFooterCell(subFooterCell);
 
         assertEquals(subFooterCell, mc.getSubFooterCell());
@@ -197,7 +198,6 @@ public class MempoiColumnTest {
 
         MempoiSubFooterCell subFooterCell = new MempoiSubFooterCell(this.cellStyle);
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.setSubFooterCell(subFooterCell);
 
         AssertionHelper.validateCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
@@ -208,7 +208,6 @@ public class MempoiColumnTest {
 
         MempoiSubFooterCell subFooterCell = new MempoiSubFooterCell("value", true, this.cellStyle);
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.setSubFooterCell(subFooterCell);
 
         AssertionHelper.validateCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
@@ -217,8 +216,6 @@ public class MempoiColumnTest {
 
     @Test
     public void setResultSetAccessMethod() throws Exception {
-
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
 
         Method m = MempoiColumn.class.getDeclaredMethod("setResultSetAccessMethod", EExportDataType.class);
         m.setAccessible(true);
@@ -232,7 +229,7 @@ public class MempoiColumnTest {
     @Test(expected = MempoiException.class)
     public void newMempoiColumnUnknowSqlType() {
 
-        new MempoiColumn(9999, "test");
+        new MempoiColumn(9999, "test", 0);
     }
 
 //    @Test(expected = MempoiException.class)
@@ -247,7 +244,6 @@ public class MempoiColumnTest {
     public void addElaborationStep() throws Exception {
 
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.addElaborationStep(step);
 
         assertEquals(step, this.getElaborationStepList(mc).get(0));
@@ -256,7 +252,6 @@ public class MempoiColumnTest {
     @Test
     public void addNullElaborationStep() throws Exception {
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.addElaborationStep(null);
 
         assertEquals(0, this.getElaborationStepList(mc).size());
@@ -282,7 +277,6 @@ public class MempoiColumnTest {
 //      when(this.mergedRegionsManager.performAnalysis(Mockito.any(), Mockito.anyString())).thenReturn(Optional.empty());
         doNothing().when(this.mockedStep).performAnalysis(Mockito.any(), Mockito.anyString());
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.addElaborationStep(step);
         mc.elaborationStepListAnalyze(this.wb.createSheet().createRow(0).createCell(0), "testValue");
     }
@@ -292,7 +286,6 @@ public class MempoiColumnTest {
 
         doNothing().when(this.mockedStep).closeAnalysis(Mockito.anyInt());
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.addElaborationStep(this.mockedStep);
         mc.elaborationStepListCloseAnalysis(5);
     }
@@ -302,7 +295,6 @@ public class MempoiColumnTest {
 
         doNothing().when(this.mockedStep).execute(Mockito.any(), Mockito.any());
 
-        MempoiColumn mc = new MempoiColumn(Types.BOOLEAN, "test");
         mc.addElaborationStep(this.mockedStep);
         mc.elaborationStepListExecute(this.mempoiSheet, this.wb);
     }

@@ -23,6 +23,7 @@ public class MempoiColumn {
     private EExportDataType type;
     private CellStyle cellStyle;
     private String columnName;
+    private int colIndex;
 
     /**
      * contains the ResultSet's method to
@@ -43,9 +44,10 @@ public class MempoiColumn {
         this.columnName = columnName;
     }
 
-    public MempoiColumn(int sqlObjType, String columnName) {
+    public MempoiColumn(int sqlObjType, String columnName, int colIndex) {
         this.columnName = columnName;
         this.setType(sqlObjType);
+        this.colIndex = colIndex;
     }
 
     public void setType(int sqlObjType) {

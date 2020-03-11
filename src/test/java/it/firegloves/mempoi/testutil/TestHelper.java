@@ -25,7 +25,7 @@ public class TestHelper {
     public static final String TABLE_NAME = "nice table";
     public static final String DISPLAY_TABLE_NAME = "nice display table";
 
-    public static final CellReference POSITION = new CellReference("A0");
+    public static final CellReference POSITION = new CellReference("A5");
     public static final List<String> ROW_LABEL_COLUMNS = Arrays.asList("row_label_col1", "row_label_col2");
     public static final List<String> SUM_COLS_LABEL_COLUMNS = Arrays.asList("sum_cols_label_col1", "sum_cols_label_col2");
     public static final List<String> AVERAGE_COLS_LABEL_COLUMNS = Arrays.asList("ave_cols_label_col1", "ave_cols_label_col2", "ave_cols_label_col3");

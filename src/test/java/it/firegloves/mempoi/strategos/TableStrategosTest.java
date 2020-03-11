@@ -137,7 +137,7 @@ public class TableStrategosTest {
 
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
-
+// TODO check che vengano eseguite le varie iterazioni
                     exceptionRule.expect(MempoiException.class);
                     exceptionRule.expectMessage(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
 

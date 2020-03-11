@@ -51,7 +51,7 @@ public class StrategosTest {
     @Test
     public void applyMempoiColumnStrategies() throws Exception {
 
-        when(mempoiSheet.getColumnList()).thenReturn(Arrays.asList(new MempoiColumn(Types.BIGINT, "temp")));
+        when(mempoiSheet.getColumnList()).thenReturn(Arrays.asList(new MempoiColumn(Types.BIGINT, "temp", 0)));
 
         Strategos strategos = new Strategos(new WorkbookConfig());
 
