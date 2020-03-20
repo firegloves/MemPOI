@@ -10,13 +10,13 @@ import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataField;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageField;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.sql.ResultSet;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -138,5 +138,33 @@ public class AssertionHelper {
 
         IntStream.range(0, expected.size())
                 .forEach(i -> assertEquals(expected.get(i), actual.get(i)));
+    }
+
+
+    /**
+     * asserts that the received XSSFPivotTable reflects the data contained in the TestHelper.class
+     * @param pivotTable
+     */
+    public static void assertPivotTable(XSSFPivotTable pivotTable) {
+
+        // RowLabel
+        List<Integer> rowLabelIndexes = TestHelper.getRowLabelIndexesForAssertion();
+        pivotTable.getRowLabelColumns().forEach(i -> assertTrue(rowLabelIndexes.contains(i)));
+
+        // ReportFilter
+        List<Integer> rowFilterIndexes = TestHelper.getRowFilterIndexesForAssertion();
+        List<CTPageField> pageFieldList = pivotTable.getCTPivotTableDefinition().getPageFields().getPageFieldList();
+
+        assertEquals(rowFilterIndexes.size(), pageFieldList.size());
+        pageFieldList.forEach(ctPageField -> assertTrue(rowFilterIndexes.contains(ctPageField.getFld())));
+
+        // ColumnLabel
+        EnumMap<DataConsolidateFunction, List<Long>> columnLabelColumns = TestHelper.getColumnLabelColumnsForAssertion();
+        List<CTDataField> dataFieldList = pivotTable.getCTPivotTableDefinition().getDataFields().getDataFieldList();
+
+        dataFieldList.forEach(ctDataField -> {
+            DataConsolidateFunction key = DataConsolidateFunction.valueOf(ctDataField.getSubtotal().toString().toUpperCase());
+            assertTrue(columnLabelColumns.get(key).contains(ctDataField.getFld()));
+        });
     }
 }

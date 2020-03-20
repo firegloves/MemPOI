@@ -4,10 +4,12 @@ import it.firegloves.mempoi.builder.MempoiPivotTableBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
@@ -27,10 +29,12 @@ import org.mockito.MockitoAnnotations;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
@@ -77,6 +81,7 @@ public class PivotTableStrategosTest {
      * createPivotTable
      *****************************************************************************************************************/
 
+    // TODO add more asserts on the generated table: check that the table is created respecting the instruction received
 
     @Test
     public void createPivotTableWithAreaReferece() throws Exception {
@@ -155,58 +160,76 @@ public class PivotTableStrategosTest {
     }
 
 
-//    /******************************************************************************************************************
-//     *                          addTable
-//     *****************************************************************************************************************/
-//
-//
+    /******************************************************************************************************************
+     *                          addColumnsToPivotTable
+     *****************************************************************************************************************/
+
+    // UNTESTABLE BECAUSE IT'S PRIVATE AND IT RECEIVES A FUNCTION => FUNCTION IS NOT CASTABLE TO OBJECT
+
 //    @Test
-//    public void addsAnExcelTable() throws Exception {
+//    public void addColumnsToPivotTable() throws Exception {
 //
-//        XSSFSheet sheet = wb.createSheet();
-//        MempoiSheet mempoiSheet = new MempoiSheet(prepStmt)
-//                .setSheet(sheet);
+//        XSSFPivotTable pivotTable = sheet.createPivotTable(new AreaReference(TestHelper.AREA_REFERENCE, wb.getSpreadsheetVersion()), TestHelper.POSITION);
+//        List<MempoiColumn> mempoiColumnList = TestHelper.getMempoiColumnList(wb);
 //
-//        MempoiTable mempoiTable = TestHelper.getTestMempoiTable(wb);
-//
-//        Method addTableMethod = PrivateAccessHelper.getAccessibleMethod(tableStrategos, "addTable", MempoiSheet.class, MempoiTable.class);
-//        addTableMethod.invoke(tableStrategos, mempoiSheet, mempoiTable);
-//
-//        XSSFTable table = sheet.getTables().get(0);
-//
-//        assertEquals(1, sheet.getTables().size());
-//        this.validateTableColumns(table);
-//        assertTrue(table.getCTTable().isSetAutoFilter());
-//        assertEquals(TestHelper.TABLE_NAME, table.getCTTable().getName());
-//        assertEquals(TestHelper.DISPLAY_TABLE_NAME, table.getCTTable().getDisplayName());
+//        Method addColumnsToPivotTableMethod = PrivateAccessHelper.getAccessibleMethod(this.pivotTableStrategos, "addColumnsToPivotTable", List.class, List.class, Consumer.class);
+//        addColumnsToPivotTableMethod.invoke(this.pivotTableStrategos, Arrays.asList(TestHelper.MEMPOI_COLUMN_AGE), mempoiColumnList, (Integer i) -> pivotTable.addRowLabel(i));
 //    }
-//
-//
-//    /******************************************************************************************************************
-//     *                          manageMempoiTable
-//     *****************************************************************************************************************/
-//
-//    @Test
-//    public void manageMempoiTable() {
-//
-//        XSSFSheet sheet = wb.createSheet();
-//
-//        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-//                .withPrepStmt(prepStmt)
-//                .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
-//                .build()
-//                .setSheet(sheet);
-//
-//        tableStrategos.manageMempoiTable(mempoiSheet);
-//
-//        XSSFTable table = sheet.getTables().get(0);
-//
-//        assertEquals(1, sheet.getTables().size());
-//        this.validateTableColumns(table);
-//        assertTrue(table.getCTTable().isSetAutoFilter());
-//        assertEquals(TestHelper.TABLE_NAME, table.getCTTable().getName());
-//        assertEquals(TestHelper.DISPLAY_TABLE_NAME, table.getCTTable().getDisplayName());
-//    }
+
+
+
+    /******************************************************************************************************************
+     *                          addPivotTable
+     *****************************************************************************************************************/
+
+    @Test
+    public void addPivotTable() throws Exception {
+
+        MempoiSheet mempoiSheet = TestHelper.getMempoiSheet(wb, prepStmt).setSheet(sheet);
+        Field columnList = PrivateAccessHelper.getPrivateField(mempoiSheet, "columnList");
+        columnList.set(mempoiSheet, TestHelper.getMempoiColumnList(wb));
+
+        MempoiPivotTable mempoiPivotTable = TestHelper.getTestMempoiPivotTable(wb, mempoiSheet);
+
+        Method addPivotTableMethod = PrivateAccessHelper.getAccessibleMethod(this.pivotTableStrategos, "addPivotTable", MempoiSheet.class, MempoiPivotTable.class);
+        addPivotTableMethod.invoke(this.pivotTableStrategos, mempoiSheet, mempoiPivotTable);
+
+        XSSFPivotTable pivotTables = sheet.getPivotTables().get(0);
+        AssertionHelper.assertPivotTable(pivotTables);
+    }
+
+
+    @Test(expected = Exception.class)
+    public void addPivotTablewithNullMempoiSheet_willFail() throws Exception {
+
+        MempoiSheet mempoiSheet = TestHelper.getMempoiSheet(wb, prepStmt).setSheet(sheet);
+        Field columnList = PrivateAccessHelper.getPrivateField(mempoiSheet, "columnList");
+        columnList.set(mempoiSheet, TestHelper.getMempoiColumnList(wb));
+
+        MempoiPivotTable mempoiPivotTable = TestHelper.getTestMempoiPivotTable(wb, mempoiSheet);
+
+        Method addPivotTableMethod = PrivateAccessHelper.getAccessibleMethod(this.pivotTableStrategos, "addPivotTable", MempoiSheet.class, MempoiPivotTable.class);
+        addPivotTableMethod.invoke(this.pivotTableStrategos, null, mempoiPivotTable);
+    }
+
+    @Test(expected = Exception.class)
+    public void addPivotTablewithNullMempoiPivotTable_willFail() throws Exception {
+
+        MempoiSheet mempoiSheet = TestHelper.getMempoiSheet(wb, prepStmt).setSheet(sheet);
+        Field columnList = PrivateAccessHelper.getPrivateField(mempoiSheet, "columnList");
+        columnList.set(mempoiSheet, TestHelper.getMempoiColumnList(wb));
+
+        Method addPivotTableMethod = PrivateAccessHelper.getAccessibleMethod(this.pivotTableStrategos, "addPivotTable", MempoiSheet.class, MempoiPivotTable.class);
+        addPivotTableMethod.invoke(this.pivotTableStrategos, mempoiSheet, null);
+    }
+
+    @Test(expected = Exception.class)
+    public void addPivotTablewitAllNullParams_willFail() throws Exception {
+
+        Method addPivotTableMethod = PrivateAccessHelper.getAccessibleMethod(this.pivotTableStrategos, "addPivotTable", MempoiSheet.class, MempoiPivotTable.class);
+        addPivotTableMethod.invoke(this.pivotTableStrategos, null, null);
+    }
+
 //
 //
 //    @Test

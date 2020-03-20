@@ -62,32 +62,19 @@ public class PivotTableStrategos {
 
         List<MempoiColumn> mempoiColumnList = mempoiSheet.getColumnList();
 
-//        mempoiPivotTable.getRowLabelColumns().stream()
-//                .map(mempoiColumnList::indexOf)
-//                .filter(i -> i > -1)
-//                .forEach(pivotTable::addRowLabel);
-
         this.addColumnsToPivotTable(mempoiPivotTable.getRowLabelColumns(), mempoiColumnList, pivotTable::addRowLabel);
         this.addColumnsToPivotTable(mempoiPivotTable.getReportFilterColumns(), mempoiColumnList, pivotTable::addReportFilter);
 
         Map<DataConsolidateFunction, List<String>> columnLabelColumns = mempoiPivotTable.getColumnLabelColumns();
         columnLabelColumns.keySet()
                 .forEach(dataConsolidateFunction -> addColumnsToPivotTable(columnLabelColumns.get(dataConsolidateFunction), mempoiColumnList, i -> pivotTable.addColumnLabel(dataConsolidateFunction, i)));
-
-        // row label
-        //      cerca indici colonne e setta
-        // column label
-        //      cerca indici colonne e setta
-        // report filter label
-        //      cerca indici colonne e setta
-
     }
 
 
     private void addColumnsToPivotTable(List<String> columnNames, List<MempoiColumn> mempoiColumnList, Consumer<Integer> pivotTablePopulator) {
 
         columnNames.stream()
-                .map(mempoiColumnList::indexOf)
+                .map(name -> mempoiColumnList.indexOf(new MempoiColumn(name)))
                 .filter(i -> i > -1)
                 .forEach(pivotTablePopulator);
     }
