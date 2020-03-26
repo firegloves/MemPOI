@@ -173,9 +173,9 @@ public final class MempoiPivotTableBuilder {
                 this.workbook,
                 source,
                 this.position,
-                this.rowLabelColumns,
-                this.columnLabelColumns,
-                this.reportFilterColumns);
+                null != this.rowLabelColumns ? this.rowLabelColumns : new ArrayList<>(),
+                null != this.columnLabelColumns ? this.columnLabelColumns : new EnumMap<>(DataConsolidateFunction.class),
+                null != this.reportFilterColumns ? this.reportFilterColumns : new ArrayList<>());
     }
 
 
@@ -191,6 +191,10 @@ public final class MempoiPivotTableBuilder {
 
         if (null == areaReference && null == mempoiTable) {
             throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_NOT_FOUND);
+        }
+
+        if (null == position) {
+            throw new MempoiException(Errors.ERR_PIVOTTABLE_POSITION_NOT_FOUND);
         }
 
         this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);

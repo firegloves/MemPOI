@@ -161,6 +161,21 @@ public class TableStrategosTest {
     }
 
 
+    @Test
+    public void manageTableTest_withoutMempoiTable() {
+
+        XSSFSheet sheet = wb.createSheet();
+
+        MempoiSheet mempoiSheet = TestHelper.getMempoiSheetBuilder(wb, prepStmt)
+                .withMempoiTableBuilder(null)
+                .build()
+                .setSheet(sheet);
+
+        this.tableStrategos.manageMempoiTable(mempoiSheet);
+
+        assertEquals(0, ((XSSFSheet)mempoiSheet.getSheet()).getTables().size());
+    }
+
 
     /******************************************************************************************************************
      *                          generic validations
@@ -170,7 +185,7 @@ public class TableStrategosTest {
 
         List<CTTableColumn> tableColumnList = table.getCTTable().getTableColumns().getTableColumnList();
 
-        assertEquals(5, tableColumnList.size());
+        assertEquals(TestHelper.MEMPOI_COLUMN_NAMES.length, tableColumnList.size());
         IntStream.range(0, tableColumnList.size()).forEachOrdered(i -> assertEquals(i, tableColumnList.get(i).getId()));
     }
 }

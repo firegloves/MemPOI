@@ -36,6 +36,7 @@ public class Errors {
 
     public static final String ERR_PIVOTTABLE_SOURCE_AMBIGUOUS = "Ambiguous source specified for pivot table. You can choose only one source between table and area reference";
     public static final String ERR_PIVOTTABLE_SOURCE_NOT_FOUND = "Source for pivot table not found";
+    public static final String ERR_PIVOTTABLE_POSITION_NOT_FOUND = "Position for pivot table not found";
 
 
 

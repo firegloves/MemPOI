@@ -88,6 +88,16 @@ public final class MempoiPivotTableBuilderTest {
     }
 
 
+    @Test(expected = MempoiException.class)
+    public void withoutPosition_throwsMempoiException() {
+
+        MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
+                .build();
+    }
+
+
     @Test
     public void withWorkbookNotOfTypeXSSFWorkbook_throwsMempoiException() {
 

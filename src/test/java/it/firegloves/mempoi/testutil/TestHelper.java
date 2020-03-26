@@ -17,6 +17,7 @@ import org.apache.poi.ss.util.CellReference;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.*;
@@ -214,4 +215,16 @@ public class TestHelper {
                 .withPrepStmt(prepStmt)
                 .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb));
     }
+
+
+    public static MempoiSheet getMempoiSheetWithMempoiColumns(Workbook wb, PreparedStatement prepStmt) throws Exception {
+
+        MempoiSheet mempoiSheet = getMempoiSheetBuilder(wb, prepStmt).build();
+
+        Field columnList = PrivateAccessHelper.getPrivateField(mempoiSheet, "columnList");
+        columnList.set(mempoiSheet, TestHelper.getMempoiColumnList(wb));
+
+        return mempoiSheet;
+    }
+
 }
