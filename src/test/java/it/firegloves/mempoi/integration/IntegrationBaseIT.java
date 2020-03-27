@@ -43,6 +43,11 @@ public abstract class IntegrationBaseIT {
         }
     }
 
+
+    protected String createQuery(String[] columns, String[] headers, int maxLimit) {
+        return createQuery(TestHelper.TABLE_EXPORT_TEST, columns, headers, maxLimit);
+    }
+
     /**
      * creates and returns the export query
      *
@@ -51,7 +56,7 @@ public abstract class IntegrationBaseIT {
      * @param maxLimit the upper bound value of the limit statement, set it to -1 if limit is not desired => NO_LIMITS
      * @return the resulting query
      */
-    protected String createQuery(String[] columns, String[] headers, int maxLimit) {
+    protected String createQuery(String tableName, String[] columns, String[] headers, int maxLimit) {
 
         StringBuilder sb = new StringBuilder("SELECT ");
         for (int i = 0; i < columns.length; i++) {
@@ -62,7 +67,7 @@ public abstract class IntegrationBaseIT {
             sb.append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
-        sb.append(" FROM " + TestHelper.TABLE_EXPORT_TEST);
+        sb.append(" FROM " + tableName);
 
         if (maxLimit > -1) {
             sb.append(" LIMIT 0, " + maxLimit);

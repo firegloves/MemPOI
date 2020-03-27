@@ -16,6 +16,7 @@ import org.apache.poi.ss.util.CellReference;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
@@ -27,6 +28,7 @@ public class TestHelper {
     public static final String TABLE_EXPORT_TEST = "`export_test`";
     public static final String TABLE_SPEED_TEST = "`speed_test`";
     public static final String TABLE_MERGED_REGIONS = "`merged_regions_test`";
+    public static final String TABLE_PIVOT_TABLE = "`pivot_table_test`";
 
     public static final String AREA_REFERENCE = "A1:F6";
     public static final String TABLE_NAME = "nice table";
@@ -64,6 +66,8 @@ public class TestHelper {
 
     public static final String[] MERGED_NAME_VALUES = { "hello dog", "hi dear" };
     public static final String[] MERGED_USEFUL_CHAR_VALUES = { "C", "B", "Z" };
+
+    public static final String SHEET_NAME = "Nice Sheet";
 
     /**********************************************************************************************************
      * MempoiTable
@@ -108,6 +112,23 @@ public class TestHelper {
                 .withWorkbook(wb)
                 .withAreaReferenceSource(AREA_REFERENCE)
                 .withMempoiSheetSource(new MempoiSheet(null))
+                .withPosition(POSITION)
+                .withRowLabelColumns(ROW_LABEL_COLUMNS)
+                .withColumnLabelColumns(getColumnLabelColumns())
+                .withReportFilterColumns(REPORT_FILTER_COLUMNS);
+    }
+
+    /**
+     * craetes and returns a MempoiPivotTableBuilder populated with test data
+     *
+     * @return
+     */
+    public static MempoiPivotTableBuilder getTestMempoiPivotTableBuilder(Workbook wb, MempoiSheet mempoiSheet) {
+
+        return MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource(AREA_REFERENCE)
+                .withMempoiSheetSource(mempoiSheet)
                 .withPosition(POSITION)
                 .withRowLabelColumns(ROW_LABEL_COLUMNS)
                 .withColumnLabelColumns(getColumnLabelColumns())
@@ -243,4 +264,14 @@ public class TestHelper {
         return mempoiSheet;
     }
 
+
+    public static Workbook openFile(String filePath) {
+
+        try (InputStream inp = new FileInputStream(new File(filePath))) {
+           return WorkbookFactory.create(inp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

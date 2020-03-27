@@ -40,6 +40,7 @@ public class Strategos {
     private WorkbookConfig workbookConfig;
 
     private TableStrategos tableStrategos;
+    private PivotTableStrategos pivotTableStrategos;
     private DataStrategos dataStrategos;
     private FooterStrategos footerStrategos;
     private FileManager fileManager;
@@ -48,6 +49,7 @@ public class Strategos {
     public Strategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
         this.tableStrategos = new TableStrategos(workbookConfig);
+        this.pivotTableStrategos = new PivotTableStrategos(workbookConfig);
         this.dataStrategos = new DataStrategos(workbookConfig);
         this.footerStrategos = new FooterStrategos(workbookConfig);
         this.fileManager = new FileManager(workbookConfig);
@@ -134,8 +136,11 @@ public class Strategos {
         Sheet sheet = this.createSheet(mempoiSheet.getSheetName());
         mempoiSheet.setSheet(sheet);
 
-        // adds optional excel table
-        this.tableStrategos.manageMempoiTable(mempoiSheet);
+//        // adds optional excel table
+//        this.tableStrategos.manageMempoiTable(mempoiSheet);
+//
+//        // adds optional pivot table
+//        this.pivotTableStrategos.manageMempoiPivotTable(mempoiSheet);
 
         // track columns for autosizing
         if (this.workbookConfig.isAdjustColSize() && sheet instanceof SXSSFSheet) {
@@ -150,6 +155,12 @@ public class Strategos {
 
         try {
             this.createSheetData(rs, columnList, mempoiSheet);
+
+            // adds optional excel table
+            this.tableStrategos.manageMempoiTable(mempoiSheet);
+
+            // adds optional pivot table
+            this.pivotTableStrategos.manageMempoiPivotTable(mempoiSheet);
 
             // apply mempoi column strategies
             this.applyMempoiColumnStrategies(mempoiSheet);

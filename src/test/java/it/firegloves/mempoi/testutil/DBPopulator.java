@@ -21,8 +21,11 @@ public class DBPopulator {
         // instance.createTableSpeedTest();
         // instance.populateSpeedTest();
 
-        instance.createTableMergedRegionsTest();
-        instance.populateMergedRegionsTest();
+//        instance.createTableMergedRegionsTest();
+//        instance.populateMergedRegionsTest();
+
+//        instance.createTablePivotTableTest();
+//        instance.populatePivotTableTest();
 
         instance.closeConn();
     }
@@ -200,6 +203,82 @@ public class DBPopulator {
                 pstmt.setInt(12, ints2[ind2Based]);
                 pstmt.setTime(13, times[ind2Based]);
                 pstmt.setInt(14, ints3[ind2Based]);
+                pstmt.addBatch();
+            }
+
+            int[] result = pstmt.executeBatch();
+            System.out.println("The number of rows inserted: "+ result.length);
+            this.conn.commit();
+        } catch (Exception e) {
+            throw new MempoiException(e);
+        } finally {
+            try {
+                pstmt.close();
+            } catch (SQLException e) {
+                throw new MempoiException(e);
+            }
+        }
+    }
+
+
+
+    /********************************************************************************************
+     *                  PIVOT TABLE TABLE
+     *******************************************************************************************/
+
+
+    private void createTablePivotTableTest() {
+
+        String speedTestTbl = "CREATE TABLE " + TestHelper.TABLE_PIVOT_TABLE + " (\n" +
+                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
+                "  `" + TestHelper.MEMPOI_COLUMN_NAME + "` varchar(64) NOT NULL,\n" +
+                "  `" + TestHelper.MEMPOI_COLUMN_SURNAME + "` varchar(64) DEFAULT NULL,\n" +
+                "  `" + TestHelper.MEMPOI_COLUMN_AGE + "` int DEFAULT NULL,\n" +
+                "  `" + TestHelper.MEMPOI_COLUMN_ADDRESS + "` varchar(128) NOT NULL,\n" +
+                "  `" + TestHelper.MEMPOI_COLUMN_AMOUNT + "` float DEFAULT NULL,\n" +
+                "  `" + TestHelper.MEMPOI_COLUMN_WITCHER + "` char(128) COLLATE utf8mb4_general_ci DEFAULT NULL,\n" +
+                "  PRIMARY KEY (`id`)\n" +
+                ") ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+
+        try {
+            PreparedStatement stmt = this.conn.prepareStatement(speedTestTbl);
+            stmt.execute();
+        } catch (Exception e) {
+            throw new MempoiException(e);
+        }
+    }
+
+    private void populatePivotTableTest() {
+
+        String sqlQuery = String.format("insert into " + TestHelper.TABLE_PIVOT_TABLE + " (%s, %s, %s, %s, %s, %s) values (?,?,?,?,?,?)",
+                TestHelper.MEMPOI_COLUMN_NAME, TestHelper.MEMPOI_COLUMN_SURNAME, TestHelper.MEMPOI_COLUMN_AGE,
+                TestHelper.MEMPOI_COLUMN_ADDRESS, TestHelper.MEMPOI_COLUMN_AMOUNT, TestHelper.MEMPOI_COLUMN_WITCHER);
+
+        Random rand = new Random(System.currentTimeMillis());
+        PreparedStatement pstmt = null;
+
+        try {
+            pstmt = this.conn.prepareStatement(sqlQuery);
+            this.conn.setAutoCommit(false);
+
+            String[] names = new String[] { "Igor", "Marco", "Gigio", "Barnaba" };
+            String[] surnames = new String[] { "Alenko", "Rossi", "Topo", "Barabba" };
+            int[] ages = new int[] { 15, 26, 36, 73, 24, 43, 63 };
+            String[] addresses = new String[] { "Cremlin Street", "Rebel Road", "Arzigogolo Street" , "Place de la Concorde", "Jack London Street" };
+            float[] amounts = new float[] { 24.6f, 82.23f, 63.3f, 18.34f, 27.5f, 84.3f };
+            String[] witchers = new String[] { "Geralt", "Rivia", "Wolf", "Ascanio", "Ettore", "Bear", "Ciry" };
+
+            for (int i = 0; i < 100; i++) {
+
+//                int ind4Based = (int) Math.ceil(i / 100) % 4;
+//                int ind7Based = (int) Math.ceil(i / 80) % 7;
+
+                pstmt.setString(1, names[i % 4]);
+                pstmt.setString(2, surnames[i % 4]);
+                pstmt.setInt(3, ages[i % 7]);
+                pstmt.setString(4, addresses[i % 5]);
+                pstmt.setFloat(5, amounts[i % 6]);
+                pstmt.setString(6, witchers[i % 7]);
                 pstmt.addBatch();
             }
 
