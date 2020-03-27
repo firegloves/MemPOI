@@ -6,6 +6,8 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
+import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -19,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class WorkbookTestIT extends IntegrationBaseTestIT {
+public class WorkbookIT extends IntegrationBaseIT {
 
     /**********************************************************************************************
      * HSSFWorkbook
@@ -43,7 +45,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,7 +76,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,7 +107,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,7 +164,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, null);
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, null);
 
             // TODO validate overriden styles
 
@@ -194,7 +196,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,7 +227,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -256,7 +258,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -313,7 +315,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, null);
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, null);
 
             // TODO validate overriden styles
 
@@ -345,7 +347,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -376,7 +378,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -407,7 +409,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -464,7 +466,7 @@ public class WorkbookTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, null);
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, null);
 
             // TODO validate overriden styles
 

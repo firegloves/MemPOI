@@ -49,6 +49,22 @@ public class TestHelper {
     public static final List<String> AVERAGE_COLS_LABEL_COLUMNS = Arrays.asList(MEMPOI_COLUMN_AGE);
     public static final List<String> REPORT_FILTER_COLUMNS = Arrays.asList(MEMPOI_COLUMN_ADDRESS, MEMPOI_COLUMN_WITCHER);
 
+    public static final int MAX_ROWS = 10;
+    public static final int NO_LIMITS = -1;
+    public static final String[] COLUMNS = {"id", "creation_date", "dateTime", "timeStamp", "name", "valid", "usefulChar", "decimalOne"};
+    public static final String[] HEADERS = {"id", "WONDERFUL DATE", "dateTime", "timeStamp", "name", "valid", "usefulChar", "decimalOne"};
+
+    public static final String[] COLUMNS_2 = {"id", "creation_date", "dateTime", "timeStamp", "name", "valid", "usefulChar", "decimalOne", "bitTwo", "doublone", "floattone", "interao", "mediano", "attempato", "interuccio"};
+    public static final String[] HEADERS_2 = {"id", "creation_date", "dateTime", "STAMPONE", "name", "valid", "usefulChar", "decimalOne", "bitTwo", "doublone", "floattone", "interao", "mediano", "attempato", "interuccio"};
+
+    public static final String SUM_CELL_FORMULA = "SUM(H2:H11)";
+    public static final String MAX_CELL_FORMULA = "MAX(H2:H11)";
+    public static final String MIN_CELL_FORMULA = "MIN(H2:H11)";
+    public static final String AVERAGE_CELL_FORMULA = "AVERAGE(H2:H11)";
+
+    public static final String[] MERGED_NAME_VALUES = { "hello dog", "hi dear" };
+    public static final String[] MERGED_USEFUL_CHAR_VALUES = { "C", "B", "Z" };
+
     /**********************************************************************************************************
      * MempoiTable
      *********************************************************************************************************/

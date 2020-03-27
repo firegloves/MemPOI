@@ -22,16 +22,10 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-public abstract class IntegrationBaseMergedRegionsTestIT extends IntegrationBaseTestIT {
-
-    public static final int MAX_ROWS = 10;
-    public static final int NO_LIMITS = -1;
+public abstract class IntegrationBaseMergedRegionsIT extends IntegrationBaseIT {
 
     Connection conn = null;
     PreparedStatement prepStmt = null;
-
-    private final String[] mergedNameValues = { "hello dog", "hi dear" };
-    private final String[] mergedUsefulCharValues = { "C", "B", "Z" };
 
     @Before
     public void init() {
@@ -106,7 +100,7 @@ public abstract class IntegrationBaseMergedRegionsTestIT extends IntegrationBase
      * @throws SQLException
      */
     public PreparedStatement createStatement(String[] orderByCols) throws SQLException {
-        return this.conn.prepareStatement(this.createQuery(COLUMNS, HEADERS, MAX_ROWS, orderByCols));
+        return this.conn.prepareStatement(this.createQuery(TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.MAX_ROWS, orderByCols));
     }
 
     /**
@@ -116,62 +110,7 @@ public abstract class IntegrationBaseMergedRegionsTestIT extends IntegrationBase
      * @throws SQLException
      */
     public PreparedStatement createStatement(String[] orderByCols, int maxRows) throws SQLException {
-        return this.conn.prepareStatement(this.createQuery(COLUMNS, HEADERS, maxRows, orderByCols));
+        return this.conn.prepareStatement(this.createQuery(TestHelper.COLUMNS, TestHelper.HEADERS, maxRows, orderByCols));
     }
 
-
-    /**
-     * convenience method
-     *
-     * @param fileToValidate
-     * @param mergedRegionNums
-     */
-    protected void validateMergedRegions(String fileToValidate, int mergedRegionNums) {
-        this.validateMergedRegions(fileToValidate, mergedRegionNums, 0);
-    }
-
-
-    /**
-     * adds merged regions check
-     */
-    protected void validateMergedRegions(String fileToValidate, int mergedRegionNums, int sheetNum) {
-
-//        int mergedRegionNums = (int) Math.ceil((double)sqlLimit / 100);
-
-        File file = new File(fileToValidate);
-
-        try (InputStream inp = new FileInputStream(file)) {
-
-            Workbook workbook = WorkbookFactory.create(inp);
-            Sheet sheet = workbook.getSheetAt(sheetNum);
-
-            List<CellRangeAddress> cellRangeAddresseList = sheet.getMergedRegions();
-            assertEquals("Merged regions numbers", mergedRegionNums, cellRangeAddresseList.size());
-
-            int caNameValueInd = 0;
-            int caCharValueInd = 0;
-            String expectedValue = "";
-            int module = -1;
-
-            for (int i=0; i<cellRangeAddresseList.size(); i++) {
-
-                CellRangeAddress ca = cellRangeAddresseList.get(i);
-
-                if (ca.getFirstColumn() == 6) {
-                    module = 80;
-                    expectedValue = mergedUsefulCharValues[caCharValueInd++ % 3];
-                } else {
-                    module = 100;
-                    expectedValue = mergedNameValues[caNameValueInd++ % 2];
-                }
-
-                assertEquals("Merged region first row % " + module + " == 1 with i = " + i, 1, ca.getFirstRow() % module);
-                assertEquals("Merged region last row % " + module + " == 0 with i = " + i, 0, ca.getLastRow() % module);
-                assertEquals("Merged region value with i = " + i, expectedValue, sheet.getRow(ca.getFirstRow()).getCell(ca.getFirstColumn()).getStringCellValue());
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

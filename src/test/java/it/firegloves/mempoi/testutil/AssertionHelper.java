@@ -10,16 +10,20 @@ import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFPivotTable;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFTable;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.*;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataFields;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageField;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageFields;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -275,6 +279,304 @@ public class AssertionHelper {
         } else {
 
             assertEquals(0, ((XSSFSheet)mempoiSheet.getSheet()).getPivotTables().size());
+        }
+    }
+
+
+
+    /**
+     * convenience method
+     *
+     * @param prepStmt
+     * @param fileToValidate
+     * @param columns
+     * @param headers
+     * @param subfooterCellFormula
+     * @param styleTemplate
+     */
+    public static void validateGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate) {
+        validateGeneratedFile(prepStmt, fileToValidate, columns, headers, subfooterCellFormula, styleTemplate, 0);
+    }
+
+
+    /**
+     * opens the received generated xlsx file and applies generic asserts
+     *
+     * @param prepStmt             the PreparedStatement to execute to validate data
+     * @param fileToValidate       the absolute filename of the xlsx file on which apply the generic asserts
+     * @param columns              the array of columns name, useful to retrieve data from the ResultSet
+     * @param headers              the array of headers name
+     * @param subfooterCellFormula if not null it defines the check to run against the last row. if null no check is required
+     */
+    public static void validateGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate, int sheetNum) {
+
+        File file = new File(fileToValidate);
+
+        try (InputStream inp = new FileInputStream(file)) {
+
+            ResultSet rs = prepStmt.executeQuery();
+
+            Workbook wb = WorkbookFactory.create(inp);
+
+            Sheet sheet = wb.getSheetAt(sheetNum);
+
+            // validates header row
+            validateHeaderRow(sheet.getRow(0), headers, null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
+
+            // validates data rows
+            for (int r = 1; rs.next(); r++) {
+                validateGeneratedFileDataRow(rs, sheet.getRow(r), columns, styleTemplate, wb);
+            }
+
+            // validate subfooter cell formula
+            if (!StringUtils.isEmpty(subfooterCellFormula)) {
+                validateSubfooterFormula(sheet.getRow(TestHelper.MAX_ROWS + 1), TestHelper.COLUMNS.length - 1, subfooterCellFormula);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * opens the received generated xlsx file and applies generic asserts
+     *
+     * @param prepStmt             the PreparedStatement to execute to validate data
+     * @param fileToValidate       the absolute filename of the xlsx file on which apply the generic asserts
+     * @param sheetIndex           the index to get the desired sheet to validate
+     * @param headers              the array of headers name
+     * @param validateCellFormulas if true validates also subfooter cell formulas
+     */
+    public static void validateSecondPrepStmtSheet(PreparedStatement prepStmt, String fileToValidate, int sheetIndex, String[] headers, boolean validateCellFormulas, StyleTemplate styleTemplate) {
+
+        File file = new File(fileToValidate);
+
+        try (InputStream inp = new FileInputStream(file)) {
+
+            ResultSet rs = prepStmt.executeQuery();
+
+            Workbook wb = WorkbookFactory.create(inp);
+
+            Sheet sheet = wb.getSheetAt(sheetIndex);
+
+            // validates header row
+            validateHeaderRow(sheet.getRow(0), headers, null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
+
+            // validates data rows
+            int subfooterInd = validateGeneratedFileDataRowSecondQuery(rs, sheet);
+
+            // validates subfooter formulas
+            if (validateCellFormulas) {
+                validateCellFormulasSecondQuery(sheet.getRow(subfooterInd), subfooterInd);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+// TODO add style check
+
+    /**
+     * validate one Row of the generic export (created with createStatement()) against the resulting ResultSet generated by the execution of the same method
+     *
+     * @param rs            the ResultSet against which validate the Row
+     * @param row           the Row to validate against the ResultSet
+     * @param columns       the array of columns name, useful to retrieve data from the ResultSet
+     * @param styleTemplate StyleTemplate to get styles to validate
+     * @param wb            the curret Workbook
+     */
+    public static void validateGeneratedFileDataRow(ResultSet rs, Row row, String[] columns, StyleTemplate styleTemplate, Workbook wb) {
+
+        try {
+            assertEquals(rs.getInt(columns[0]), (int) row.getCell(0).getNumericCellValue());
+            assertEquals(rs.getDate(columns[1]), row.getCell(1).getDateCellValue());
+            assertEquals(rs.getDate(columns[2]), row.getCell(2).getDateCellValue());
+            assertEquals(rs.getDate(columns[3]), row.getCell(3).getDateCellValue());
+            assertEquals(rs.getString(columns[4]), row.getCell(4).getStringCellValue());
+            assertEquals(rs.getBoolean(columns[5]), row.getCell(5).getBooleanCellValue());
+            assertEquals(rs.getString(columns[6]), row.getCell(6).getStringCellValue());
+            assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
+
+            if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style => skip these tests
+                AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+// TODO add style check
+
+    /**
+     * validate one Row of the generic export (created with createStatement()) against the resulting ResultSet generated by the execution of the same method
+     *
+     * @param rs the ResultSet against which validate the Row
+     * @param s  the sheet to validate
+     * @return the next row number (useful if after this method you want to validate subfooter)
+     */
+    protected static int validateGeneratedFileDataRowSecondQuery(ResultSet rs, Sheet s) {
+
+        try {
+            int i = 1;
+            while (rs.next()) {
+                try {
+                    Row row = s.getRow(i);
+                    assertEquals(rs.getInt(TestHelper.COLUMNS_2[0]), (int) row.getCell(0).getNumericCellValue());
+                    assertEquals(rs.getDate(TestHelper.COLUMNS_2[1]), row.getCell(1).getDateCellValue());
+                    assertEquals(rs.getDate(TestHelper.COLUMNS_2[2]), row.getCell(2).getDateCellValue());
+                    assertEquals(rs.getDate(TestHelper.COLUMNS_2[3]), row.getCell(3).getDateCellValue());
+                    assertEquals(rs.getString(TestHelper.COLUMNS_2[4]), row.getCell(4).getStringCellValue());
+                    assertEquals(rs.getBoolean(TestHelper.COLUMNS_2[5]), row.getCell(5).getBooleanCellValue());
+                    assertEquals(rs.getString(TestHelper.COLUMNS_2[6]), row.getCell(6).getStringCellValue());
+                    assertEquals(rs.getDouble(TestHelper.COLUMNS_2[7]), row.getCell(7).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getBoolean(TestHelper.COLUMNS_2[8]), row.getCell(8).getBooleanCellValue());
+                    assertEquals(rs.getDouble(TestHelper.COLUMNS_2[9]), row.getCell(9).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getFloat(TestHelper.COLUMNS_2[10]), row.getCell(10).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getInt(TestHelper.COLUMNS_2[11]), (int) row.getCell(11).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getInt(TestHelper.COLUMNS_2[12]), (int) row.getCell(12).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getTime(TestHelper.COLUMNS_2[13]), row.getCell(13).getDateCellValue());
+                    assertEquals(rs.getInt(TestHelper.COLUMNS_2[14]), (int) row.getCell(14).getNumericCellValue());
+
+                    i++;
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            return i;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * @param row the row of the subfooter to validate
+     * @param i   the index of the last row
+     */
+    public static void validateCellFormulasSecondQuery(Row row, int i) {
+        validateSubfooterFormula(row, 7, "SUM(H2:H" + i + ")");
+        validateSubfooterFormula(row, 9, "SUM(J2:J" + i + ")");
+        validateSubfooterFormula(row, 10, "SUM(K2:K" + i + ")");
+        validateSubfooterFormula(row, 11, "SUM(L2:L" + i + ")");
+        validateSubfooterFormula(row, 12, "SUM(M2:M" + i + ")");
+        validateSubfooterFormula(row, 14, "SUM(O2:O" + i + ")");
+    }
+
+    // TODO add style check
+
+    /**
+     * validates one Row of the generic export (created with createStatement()) against the resulting ResultSet generated by the execution of the same method
+     *
+     * @param headerRow         the header row to validate against the received headers
+     * @param headers           the array of headers name
+     * @param expectedCellStyle the expected cell style of the headers
+     */
+    public static void validateHeaderRow(Row headerRow, String[] headers, CellStyle expectedCellStyle) {
+
+        for (int i = 0; i < headers.length; i++) {
+
+            Cell cell = headerRow.getCell(i);
+            assertEquals(headers[i], cell.getStringCellValue());
+
+            validateHeaderCellStyle(cell.getCellStyle(), expectedCellStyle);
+        }
+    }
+
+
+
+    /**
+     * checks that the subfooter row contains the correct cell formula
+     *
+     * @param subfooterRow
+     * @param subfooterCellFormula
+     */
+    public static void validateSubfooterFormula(Row subfooterRow, int columnIndex, String subfooterCellFormula) {
+        assertEquals(subfooterCellFormula, subfooterRow.getCell(columnIndex).getCellFormula());
+    }
+
+
+    /**
+     * validate two header's CellStyle checking all properties managed by MemPOI
+     *
+     * @param cellStyle         the cell's CellStyle
+     * @param expectedCellStyle the expected CellStyle
+     */
+    public static void validateHeaderCellStyle(CellStyle cellStyle, CellStyle expectedCellStyle) {
+
+        if (null != expectedCellStyle) {
+
+            assertEquals(expectedCellStyle.getWrapText(), cellStyle.getWrapText());
+            assertEquals(expectedCellStyle.getAlignment(), cellStyle.getAlignment());
+
+            AssertionHelper.validateCellStyle(cellStyle, expectedCellStyle);
+        }
+    }
+
+
+    /**
+     * convenience method
+     *
+     * @param fileToValidate
+     * @param mergedRegionNums
+     */
+    public static void validateMergedRegions(String fileToValidate, int mergedRegionNums) {
+        validateMergedRegions(fileToValidate, mergedRegionNums, 0);
+    }
+
+
+    /**
+     * adds merged regions check
+     */
+    public static void validateMergedRegions(String fileToValidate, int mergedRegionNums, int sheetNum) {
+
+//        int mergedRegionNums = (int) Math.ceil((double)sqlLimit / 100);
+
+        File file = new File(fileToValidate);
+
+        try (InputStream inp = new FileInputStream(file)) {
+
+            Workbook workbook = WorkbookFactory.create(inp);
+            Sheet sheet = workbook.getSheetAt(sheetNum);
+
+            List<CellRangeAddress> cellRangeAddresseList = sheet.getMergedRegions();
+            assertEquals("Merged regions numbers", mergedRegionNums, cellRangeAddresseList.size());
+
+            int caNameValueInd = 0;
+            int caCharValueInd = 0;
+            String expectedValue = "";
+            int module = -1;
+
+            for (int i=0; i<cellRangeAddresseList.size(); i++) {
+
+                CellRangeAddress ca = cellRangeAddresseList.get(i);
+
+                if (ca.getFirstColumn() == 6) {
+                    module = 80;
+                    expectedValue = TestHelper.MERGED_USEFUL_CHAR_VALUES[caCharValueInd++ % 3];
+                } else {
+                    module = 100;
+                    expectedValue = TestHelper.MERGED_NAME_VALUES[caNameValueInd++ % 2];
+                }
+
+                assertEquals("Merged region first row % " + module + " == 1 with i = " + i, 1, ca.getFirstRow() % module);
+                assertEquals("Merged region last row % " + module + " == 0 with i = " + i, 0, ca.getLastRow() % module);
+                assertEquals("Merged region value with i = " + i, expectedValue, sheet.getRow(ca.getFirstRow()).getCell(ca.getFirstColumn()).getStringCellValue());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

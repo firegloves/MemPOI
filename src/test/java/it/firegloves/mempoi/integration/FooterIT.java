@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class FooterTestIT extends IntegrationBaseTestIT {
+public class FooterIT extends IntegrationBaseIT {
 
 
     @Test
@@ -309,40 +309,4 @@ public class FooterTestIT extends IntegrationBaseTestIT {
             e.printStackTrace();
         }
     }
-
-
-
-//    public byte[] testWithFileAndMultipleSheetWithMultipleSubfooter() {
-//
-//        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "report_2019.xlsx");
-//
-//        try {
-//
-//            MempoiSheet sheet1 = MempoiSheetBuilder.aMempoiSheet()
-//                    .withSheetName("Mans")
-//                    .withPrepStmt(prepStmt)
-//                    .build();
-//
-//            MempoiSheet sheet2 = MempoiSheetBuilder.aMempoiSheet()
-//                    .withSheetName("Emps")
-//                    .withPrepStmt(prepStmt)
-//                    .build();
-//
-//            MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
-//                    .withFile(fileDest)
-//                    .withAdjustColumnWidth(true)
-//                    .addMempoiSheet(sheet1)
-//                    .addMempoiSheet(sheet2)
-//                    .withStyleTemplate(new SummerStyleTemplate())
-//                    .build()
-//                    .prepareMempoiReportToByteArray()
-//                    .get();
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }

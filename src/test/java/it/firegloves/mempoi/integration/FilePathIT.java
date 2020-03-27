@@ -3,16 +3,14 @@ package it.firegloves.mempoi.integration;
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.exception.MempoiException;
 import org.junit.Test;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class FilePathTestIT extends IntegrationBaseTestIT {
+public class FilePathIT extends IntegrationBaseIT {
 
     @Test
     public void testWithoutPath() throws Exception {

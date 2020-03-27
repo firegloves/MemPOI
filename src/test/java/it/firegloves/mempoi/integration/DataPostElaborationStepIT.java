@@ -9,6 +9,8 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -26,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
-public class DataPostElaborationStepTestIT extends IntegrationBaseMergedRegionsTestIT {
+public class DataPostElaborationStepIT extends IntegrationBaseMergedRegionsIT {
 
     /***********************************************************************
      *                               HSSF
@@ -56,7 +58,7 @@ public class DataPostElaborationStepTestIT extends IntegrationBaseMergedRegionsT
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(null, limit), fut.get(), COLUMNS, HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
 
         } catch (Exception e) {
             throw new MempoiException(e);

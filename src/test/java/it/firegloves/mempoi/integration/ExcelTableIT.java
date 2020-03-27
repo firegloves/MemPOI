@@ -3,7 +3,6 @@ package it.firegloves.mempoi.integration;
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
@@ -11,9 +10,7 @@ import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -22,15 +19,13 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class ExcelTableIT extends IntegrationBaseTestIT {
+public class ExcelTableIT extends IntegrationBaseIT {
 
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
@@ -57,7 +52,7 @@ public class ExcelTableIT extends IntegrationBaseTestIT {
         assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         // validates first sheet
-        super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+        AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         XSSFSheet sheet = ((XSSFWorkbook)(TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
         AssertionHelper.validateTable(sheet);
