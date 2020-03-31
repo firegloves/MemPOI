@@ -32,7 +32,7 @@ public class TestHelper {
 
     public static final String AREA_REFERENCE = "A1:F6";
     public static final String TABLE_NAME = "nice table";
-    public static final String DISPLAY_TABLE_NAME = "nice display table";
+    public static final String DISPLAY_TABLE_NAME = "nice_display_table";
 
     public static final String[] SUCCESSFUL_AREA_REFERENCES = {"A1:B5", "C1:C10", "C1:F1", "F10:A1"};
     public static final String[] FAILING_AREA_REFERENCES = {"A1:5B", "1A:B5", "A:B4", "A1:B", "A1B5", "A1:B5:C6", "", ":", "C1", "A-1:B5"};

@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
@@ -8,8 +9,10 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
+import org.apache.poi.xssf.usermodel.XSSFTableStyleInfo;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,15 +56,35 @@ public class TableStrategos {
      */
     private void addTable(MempoiSheet mempoiSheet, MempoiTable mempoiTable) {
 
-        XSSFTable table = ((XSSFSheet)mempoiSheet.getSheet()).createTable(new AreaReference(mempoiTable.getAreaReference(), this.workbookConfig.getWorkbook().getSpreadsheetVersion()));
+        AreaReference areaReference = this.workbookConfig.getWorkbook().getCreationHelper().createAreaReference(mempoiTable.getAreaReference());
+        XSSFTable table = ((XSSFSheet)mempoiSheet.getSheet()).createTable(areaReference);
         mempoiTable.setTable(table);
+
+        this.setTableColumns(table, mempoiSheet);
 
         table.getCTTable().addNewAutoFilter().setRef(table.getArea().formatAsString());
 
-        this.setColumnIds(table);
-
         table.setName(mempoiTable.getTableName());
-        table.setDisplayName(mempoiTable.getDisplayTableName());
+
+        if (null != mempoiTable.getDisplayTableName()) {
+            table.setDisplayName(mempoiTable.getDisplayTableName());
+        }
+
+        // TODO manage style
+
+//        // For now, create the initial style in a low-level way
+//        table.getCTTable().addNewTableStyleInfo();
+//        table.getCTTable().getTableStyleInfo().setName("TableStyleMedium2");
+//
+//        // Style the table
+//        XSSFTableStyleInfo style = (XSSFTableStyleInfo) table.getStyle();
+//        style.setName("TableStyleMedium2");
+//        style.setShowColumnStripes(false);
+//        style.setShowRowStripes(true);
+//        style.setFirstColumn(false);
+//        style.setLastColumn(false);
+//        style.setShowRowStripes(true);
+//        style.setShowColumnStripes(true);
     }
 
 
@@ -69,11 +92,12 @@ public class TableStrategos {
      * receives a XSSFTable and sets incremental ids to all its columns
      * @param table the XSSFTable on which sets ids
      */
-    private void setColumnIds(XSSFTable table) {
+    private void setTableColumns(XSSFTable table, MempoiSheet mempoiSheet) {
 
+        List<MempoiColumn> columnList = mempoiSheet.getColumnList();
         List<CTTableColumn> tableColumnList = table.getCTTable().getTableColumns().getTableColumnList();
         IntStream.range(0, tableColumnList.size())
-                .forEachOrdered(i -> tableColumnList.get(i).setId(i));
+                .forEachOrdered(i -> tableColumnList.get(i).setName(columnList.get(i).getColumnName()));
     }
 
 

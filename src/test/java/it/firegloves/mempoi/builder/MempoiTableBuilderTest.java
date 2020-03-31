@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.builder;
 
+import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.TestHelper;
@@ -24,9 +25,14 @@ public class MempoiTableBuilderTest {
 
     private final Workbook wb = new XSSFWorkbook();
 
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
+
     @Before
     public void prepare() {
         MockitoAnnotations.initMocks(this);
+
+        MempoiConfig.getInstance().setForceGeneration(false);
     }
 
     @Test
@@ -114,5 +120,27 @@ public class MempoiTableBuilderTest {
         assertNotNull(mempoiTable.getDisplayTableName());
         assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReference());
         assertEquals(wb, mempoiTable.getWorkbook());
+    }
+
+    @Test
+    public void addingExcelTableWithWitheSpacesInDisplayName_willFail() {
+
+        exceptionRule.expect(MempoiException.class);
+        exceptionRule.expectMessage(Errors.ERR_TABLE_DISPLAY_NAME);
+
+        TestHelper.getTestMempoiTableBuilder(wb)
+                .withDisplayTableName(TestHelper.DISPLAY_TABLE_NAME.replaceAll("_", " "))
+                .build();
+    }
+
+
+    @Test
+    public void addingExcelTableWithWitheSpacesInDisplayNameAndForceGeneration_willSuccedWithUnderScores() {
+        MempoiConfig.getInstance().setForceGeneration(true);
+        MempoiTable mempoiTable = TestHelper.getTestMempoiTableBuilder(wb)
+                .withDisplayTableName(TestHelper.DISPLAY_TABLE_NAME.replaceAll("_", " "))
+                .build();
+
+        assertEquals(TestHelper.DISPLAY_TABLE_NAME.replaceAll(" ", "_"), mempoiTable.getDisplayTableName());
     }
 }

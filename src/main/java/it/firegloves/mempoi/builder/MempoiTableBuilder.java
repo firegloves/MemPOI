@@ -1,8 +1,10 @@
 package it.firegloves.mempoi.builder;
 
+import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
+import it.firegloves.mempoi.util.ForceGenerationHelper;
 import it.firegloves.mempoi.validator.AreaReferenceValidator;
 import it.firegloves.mempoi.validator.WorkbookValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -89,11 +91,38 @@ public final class MempoiTableBuilder {
 
         this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
         this.areaReferenceValidator.validateAreaReferenceAndThrow(this.areaReference);
+        this.displayTableName = this.validateDisplayName(this.displayTableName);
 
         return new MempoiTable()
                 .setWorkbook(this.workbook)
                 .setTableName(StringUtils.isEmpty(this.tableName) ? "Table" : this.tableName)
                 .setDisplayTableName(StringUtils.isEmpty(this.displayTableName) ? "Table" : this.displayTableName)
                 .setAreaReference(this.areaReference);
+    }
+
+    /**
+     * checks display name consistency
+     * - spaces are not allowed
+     *
+     * if force generation is set to true => replace all illegal chars with underscore
+     *
+     * @throws MempoiException
+     */
+    private String validateDisplayName(String displayTableName) throws MempoiException {
+
+        if (null == this.displayTableName) return null;
+
+        this.displayTableName = this.displayTableName.trim();
+
+        if (this.displayTableName.contains(" ")) {
+
+            if (MempoiConfig.getInstance().isForceGeneration()) {
+                this.displayTableName = this.displayTableName.replaceAll(" ", "_");
+            } else {
+                throw new MempoiException(Errors.ERR_TABLE_DISPLAY_NAME);
+            }
+        }
+
+        return this.displayTableName;
     }
 }
