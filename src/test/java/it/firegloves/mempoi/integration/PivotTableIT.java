@@ -40,7 +40,7 @@ public class PivotTableIT extends IntegrationBaseIT {
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName(TestHelper.SHEET_NAME)
                 .withPrepStmt(prepStmt)
-                .withMempoiPivotTableBuilder(TestHelper.getTestMempoiPivotTableBuilder(wb, null))
+                .withMempoiPivotTableBuilder(TestHelper.getTestMempoiPivotTableBuilderForIT(wb, null))
                 .build();
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
@@ -66,10 +66,10 @@ public class PivotTableIT extends IntegrationBaseIT {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_pivot_table_and_position_and_table.xlsx");
 
         MempoiTable mempoiTable = TestHelper.getTestMempoiTableBuilder(wb)
-                .withAreaReference("A1:F101")
+                .withAreaReference(TestHelper.AREA_REFERENCE_TABLE_DB_DATA)
                 .build();
 
-        MempoiPivotTableBuilder mempoiPivotTableBuilder = TestHelper.getTestMempoiPivotTableBuilder(wb, null)
+        MempoiPivotTableBuilder mempoiPivotTableBuilder = TestHelper.getTestMempoiPivotTableBuilderForIT(wb, null)
                 .withAreaReferenceSource(null)
                 .withMempoiTableSource(mempoiTable);
 

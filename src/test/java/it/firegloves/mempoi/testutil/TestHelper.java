@@ -31,7 +31,9 @@ public class TestHelper {
     public static final String TABLE_PIVOT_TABLE = "`pivot_table_test`";
 
     public static final String AREA_REFERENCE = "A1:F6";
-    public static final String TABLE_NAME = "nice table";
+    public static final String AREA_REFERENCE_2 = "H1:M6";
+    public static final String AREA_REFERENCE_TABLE_DB_DATA = "A1:F101";
+    public static final String TABLE_NAME = "nicetable";
     public static final String DISPLAY_TABLE_NAME = "nice_display_table";
 
     public static final String[] SUCCESSFUL_AREA_REFERENCES = {"A1:B5", "C1:C10", "C1:F1", "F10:A1"};
@@ -46,6 +48,7 @@ public class TestHelper {
     public static final String[] MEMPOI_COLUMN_NAMES = { MEMPOI_COLUMN_NAME, MEMPOI_COLUMN_SURNAME, MEMPOI_COLUMN_AGE, MEMPOI_COLUMN_ADDRESS, MEMPOI_COLUMN_AMOUNT, MEMPOI_COLUMN_WITCHER };
 
     public static final CellReference POSITION = new CellReference("A7");
+    public static final CellReference POSITION_TABLE_DB_DATA = new CellReference("H1");
     public static final List<String> ROW_LABEL_COLUMNS = Arrays.asList(MEMPOI_COLUMN_NAME, MEMPOI_COLUMN_SURNAME);
     public static final List<String> SUM_COLS_LABEL_COLUMNS = Arrays.asList(MEMPOI_COLUMN_AMOUNT);
     public static final List<String> AVERAGE_COLS_LABEL_COLUMNS = Arrays.asList(MEMPOI_COLUMN_AGE);
@@ -116,6 +119,18 @@ public class TestHelper {
                 .withRowLabelColumns(ROW_LABEL_COLUMNS)
                 .withColumnLabelColumns(getColumnLabelColumns())
                 .withReportFilterColumns(REPORT_FILTER_COLUMNS);
+    }
+
+    /**
+     * craetes and returns a MempoiPivotTableBuilder populated with test data
+     *
+     * @return
+     */
+    public static MempoiPivotTableBuilder getTestMempoiPivotTableBuilderForIT(Workbook wb, MempoiSheet mempoiSheet) {
+
+        return getTestMempoiPivotTableBuilder(wb, mempoiSheet)
+                .withAreaReferenceSource(AREA_REFERENCE_TABLE_DB_DATA)
+                .withPosition(POSITION_TABLE_DB_DATA);
     }
 
     /**
