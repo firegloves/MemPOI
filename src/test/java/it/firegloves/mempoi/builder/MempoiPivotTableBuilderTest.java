@@ -24,6 +24,9 @@ import static org.junit.Assert.*;
 
 public final class MempoiPivotTableBuilderTest {
 
+    // TODO add assertions
+    // TODO review this tests
+
     private final Workbook wb = new XSSFWorkbook();
 
     @Test

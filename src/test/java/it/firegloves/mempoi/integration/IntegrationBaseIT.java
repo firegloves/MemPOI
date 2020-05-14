@@ -3,6 +3,7 @@ package it.firegloves.mempoi.integration;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.ConnectionManagerHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -31,7 +32,7 @@ public abstract class IntegrationBaseIT {
     @Before
     public void init() {
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
+            this.conn = ConnectionManagerHelper.getConnection();
             this.prepStmt = this.createStatement();
 
             if (!this.outReportFolder.exists() && !this.outReportFolder.mkdirs()) {

@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.testutil.ConnectionManagerHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -30,7 +31,7 @@ public abstract class IntegrationBaseMergedRegionsIT extends IntegrationBaseIT {
     @Before
     public void init() {
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
+            this.conn = ConnectionManagerHelper.getConnection();
 
             if (!this.outReportFolder.exists() && !this.outReportFolder.mkdirs()) {
                 throw new MempoiException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");

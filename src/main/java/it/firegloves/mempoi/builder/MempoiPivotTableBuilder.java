@@ -189,6 +189,11 @@ public final class MempoiPivotTableBuilder {
             throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS);
         }
 
+        // TODO test this code
+        if (null != mempoiSheet && null != mempoiTable) {
+            throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS);
+        }
+
         if (null == areaReference && null == mempoiTable) {
             throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_NOT_FOUND);
         }

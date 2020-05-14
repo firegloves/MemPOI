@@ -9,6 +9,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
+import it.firegloves.mempoi.testutil.ConnectionManagerHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -30,7 +31,7 @@ public class SpeedIT extends IntegrationBaseIT {
     @Before
     public void init() {
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
+            this.conn = ConnectionManagerHelper.getConnection();
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
                     "FROM " + TestHelper.TABLE_SPEED_TEST);
 
@@ -168,7 +169,7 @@ public class SpeedIT extends IntegrationBaseIT {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook_1.xlsx");
 
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
+            this.conn = ConnectionManagerHelper.getConnection();
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
                     "FROM "+ TestHelper.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
@@ -197,7 +198,7 @@ public class SpeedIT extends IntegrationBaseIT {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook_1.xlsx");
 
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
+            this.conn = ConnectionManagerHelper.getConnection();
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
                     "FROM " + TestHelper.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {

@@ -20,6 +20,6 @@ public class MempoiTable {
      * reference to the Table generated with the current MempoiTable
      * DON'T POPULATE IT MANUALLY
      */
-    private Table table;
+    private XSSFTable table;
 
 }

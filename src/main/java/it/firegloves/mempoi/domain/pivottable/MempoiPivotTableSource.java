@@ -14,9 +14,21 @@ import org.apache.poi.ss.util.AreaReference;
 @Accessors(chain = true)
 public class MempoiPivotTableSource {
 
-    // TODO capire se è meglio usare direttamente la table => non credo perché in fase di configurazione ancora non è stata creata
+    /**
+     * MemPOI table to use as source for the creating PivotTable
+     * Conflits if specified in combination with areaReference or mempoiSheet
+     */
     private final MempoiTable mempoiTable;
+
+    /**
+     * the Area reference to use as source for the creating PivotTable.
+     * Conflits if specified in combination with mempoiTable
+     */
     private final AreaReference areaReference;
+
+    /**
+     * the MempoiSheet to use as source for the creating PivotTable.
+     * Conflits if specified in combination with mempoiTable
+     */
     private final MempoiSheet mempoiSheet;
-//      mempoisheet sorgente. Se null => mempoi sheet in cui viene inserita la pivottable
 }

@@ -54,8 +54,8 @@ dependencies {
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackClassicVersion
 
-    // https://mvnrepository.com/artifact/com.aol.simplereact/cyclops-react
-//    compile group: 'com.aol.simplereact', name: 'cyclops-react', version: '2.1.1'
+    // https://mvnrepository.com/artifact/org.jeasy/easy-props
+    testCompile group: 'org.jeasy', name: 'easy-props', version: '3.0.0'
 }
 
 
