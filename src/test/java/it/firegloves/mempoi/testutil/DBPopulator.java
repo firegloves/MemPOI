@@ -32,7 +32,7 @@ public class DBPopulator {
 
     private void initConn() {
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mempoi", "root", "");
+            this.conn = ConnectionManagerHelper.getConnection();
         } catch (Exception e) {
             throw new MempoiException(e);
         }
