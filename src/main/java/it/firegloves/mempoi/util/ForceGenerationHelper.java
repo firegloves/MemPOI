@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 public class ForceGenerationHelper {
 
     /**
-     * if force generation is active => logs the received error, otherwise throws the received exception
+     * if force generation is active logs the received error, otherwise throws the received exception
      * @param e
      * @param error
      * @param logger

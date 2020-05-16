@@ -48,12 +48,12 @@ public class MempoiSheet {
     private CellStyle numberCellStyle;
 
     /**
-     * the footer to apply to the sheet. if null => no footer is appended to the report
+     * the footer to apply to the sheet. if null no footer is appended to the report
      */
     private Optional<MempoiFooter> mempoiFooter = Optional.empty();
 
     /**
-     * the sub footer to apply to the sheet. if null => no sub footer is appended to the report
+     * the sub footer to apply to the sheet. if null no sub footer is appended to the report
      */
     private Optional<MempoiSubFooter> mempoiSubFooter = Optional.empty();
 

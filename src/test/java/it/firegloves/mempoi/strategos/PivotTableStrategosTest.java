@@ -170,7 +170,7 @@ public class PivotTableStrategosTest {
      *                          addColumnsToPivotTable
      *****************************************************************************************************************/
 
-    // UNTESTABLE BECAUSE IT'S PRIVATE AND IT RECEIVES A FUNCTION => FUNCTION IS NOT CASTABLE TO OBJECT
+    // UNTESTABLE BECAUSE IT'S PRIVATE AND IT RECEIVES A FUNCTION -> FUNCTION IS NOT CASTABLE TO OBJECT
 
 //    @Test
 //    public void addColumnsToPivotTable() throws Exception {

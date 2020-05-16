@@ -58,7 +58,7 @@ public class MempoiColumnStyleManager {
 
         mempoiColumnList.stream().forEach(mc -> {
 
-            // if column name == 'id' => no style
+            // if column name == 'id' -> no style
             if (mc.getColumnName().equalsIgnoreCase("id")) {
                 mc.setCellStyle(this.reportStyler.getCommonDataCellStyle());
             } else {

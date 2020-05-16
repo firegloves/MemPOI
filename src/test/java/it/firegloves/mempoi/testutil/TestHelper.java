@@ -52,6 +52,8 @@ public class TestHelper {
     public static final List<String> ROW_LABEL_COLUMNS = Arrays.asList(MEMPOI_COLUMN_NAME, MEMPOI_COLUMN_SURNAME);
     public static final List<String> SUM_COLS_LABEL_COLUMNS = Arrays.asList(MEMPOI_COLUMN_AMOUNT);
     public static final List<String> AVERAGE_COLS_LABEL_COLUMNS = Arrays.asList(MEMPOI_COLUMN_AGE);
+    public static final List<String> SUM_COLS_LABEL_COLUMNS_2 = Arrays.asList(MEMPOI_COLUMN_ADDRESS, MEMPOI_COLUMN_WITCHER);
+    public static final List<String> AVERAGE_COLS_LABEL_COLUMNS_2 = Arrays.asList(MEMPOI_COLUMN_NAME, MEMPOI_COLUMN_SURNAME);
     public static final List<String> REPORT_FILTER_COLUMNS = Arrays.asList(MEMPOI_COLUMN_ADDRESS, MEMPOI_COLUMN_WITCHER);
 
     public static final int MAX_ROWS = 10;

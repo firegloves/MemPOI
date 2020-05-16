@@ -104,7 +104,7 @@ public final class MempoiTableBuilder {
      * checks display name consistency
      * - spaces are not allowed
      *
-     * if force generation is set to true => replace all illegal chars with underscore
+     * if force generation is set to true replace all illegal chars with underscore
      *
      * @throws MempoiException
      */

@@ -650,7 +650,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     }
 
 
-    // SXSSF multicolumn is not supported => multisheet and multicolumn also
+    // SXSSF multicolumn is not supported -> multisheet and multicolumn also
 
 
 
@@ -718,7 +718,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 //
 //        try {
 //            prepStmt = this.createStatement(null, limit);
-//// FIXME Problema: viene istanziato prima il mempoisheet e poi le config => al check in sheetbuilder forcegeneration è ancora null
+//// FIXME Problema: viene istanziato prima il mempoisheet e poi le config -> al check in sheetbuilder forcegeneration è ancora null
 ////            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, null);
 //
 //            MemPOI memPOI = MempoiBuilder.aMemPOI()

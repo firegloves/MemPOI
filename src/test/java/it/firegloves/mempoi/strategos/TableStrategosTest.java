@@ -42,6 +42,8 @@ public class TableStrategosTest {
 
     private XSSFWorkbook wb;
     private TableStrategos tableStrategos;
+    private XSSFSheet sheet;
+    private MempoiSheet mempoiSheet;
 
     @Mock
     private PreparedStatement prepStmt;
@@ -56,6 +58,11 @@ public class TableStrategosTest {
 
         this.wb = new XSSFWorkbook();
         this.tableStrategos = new TableStrategos(new WorkbookConfig().setWorkbook(wb));
+
+        this.sheet = wb.createSheet();
+        this.mempoiSheet = new MempoiSheet(prepStmt)
+                .setColumnList(TestHelper.getMempoiColumnList(wb))
+                .setSheet(sheet);
     }
 
 
@@ -68,11 +75,10 @@ public class TableStrategosTest {
     @Test
     public void tableColsIdsAreSettedSequentially() throws Exception {
 
-        XSSFSheet sheet = wb.createSheet();
         XSSFTable table = sheet.createTable(new AreaReference(TestHelper.AREA_REFERENCE, wb.getSpreadsheetVersion()));
 
-        Method setColumIdsMethod = PrivateAccessHelper.getAccessibleMethod(tableStrategos, "setColumnIds", XSSFTable.class);
-        setColumIdsMethod.invoke(tableStrategos, table);
+        Method setTableColumnsMethod = PrivateAccessHelper.getAccessibleMethod(tableStrategos, "setTableColumns", XSSFTable.class, MempoiSheet.class);
+        setTableColumnsMethod.invoke(tableStrategos, table, this.mempoiSheet);
 
         this.validateTableColumns(table);
     }
@@ -86,9 +92,7 @@ public class TableStrategosTest {
     @Test
     public void addsAnExcelTable() throws Exception {
 
-        XSSFSheet sheet = wb.createSheet();
-        MempoiSheet mempoiSheet = new MempoiSheet(prepStmt)
-                .setSheet(sheet);
+
 
         MempoiTable mempoiTable = TestHelper.getTestMempoiTable(wb);
 
@@ -119,6 +123,7 @@ public class TableStrategosTest {
                 .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
                 .build()
                 .setSheet(sheet);
+        mempoiSheet.setColumnList(TestHelper.getMempoiColumnList(wb));
 
         tableStrategos.manageMempoiTable(mempoiSheet);
 
@@ -186,6 +191,6 @@ public class TableStrategosTest {
         List<CTTableColumn> tableColumnList = table.getCTTable().getTableColumns().getTableColumnList();
 
         assertEquals(TestHelper.MEMPOI_COLUMN_NAMES.length, tableColumnList.size());
-        IntStream.range(0, tableColumnList.size()).forEachOrdered(i -> assertEquals(i, tableColumnList.get(i).getId()));
+        IntStream.range(0, tableColumnList.size()).forEachOrdered(i -> assertEquals(i + 1, tableColumnList.get(i).getId()));
     }
 }

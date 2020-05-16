@@ -145,6 +145,8 @@ public class AssertionHelper {
      */
     public static void validateColumnLabelColumns(List<String> expected, List<String> actual) {
 
+        assertEquals(expected.size(), actual.size());
+
         IntStream.range(0, expected.size())
                 .forEach(i -> assertEquals(expected.get(i), actual.get(i)));
     }
@@ -433,7 +435,7 @@ public class AssertionHelper {
             assertEquals(rs.getString(columns[6]), row.getCell(6).getStringCellValue());
             assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
 
-            if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style => skip these tests
+            if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
                 AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
@@ -468,7 +470,7 @@ public class AssertionHelper {
             assertEquals(rs.getFloat(columns[4]), row.getCell(4).getNumericCellValue(), 0.1);
             assertEquals(rs.getString(columns[5]), row.getCell(5).getStringCellValue());
 
-            if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style => skip these tests
+            if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
                 AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getNumberCellStyle(wb));

@@ -48,7 +48,7 @@ public abstract class IntegrationBaseMergedRegionsIT extends IntegrationBaseIT {
      *
      * @param columns  the String[] of the columns needed in the export query
      * @param headers  the String[] of the columns needed in the export query
-     * @param maxLimit the upper bound value of the limit statement, set it to -1 if limit is not desired => NO_LIMITS
+     * @param maxLimit the upper bound value of the limit statement, set it to -1 if limit is not desired -> NO_LIMITS
      * @return the resulting query
      */
     protected String createQuery(String[] columns, String[] headers, int maxLimit, String[] orderByCols) {

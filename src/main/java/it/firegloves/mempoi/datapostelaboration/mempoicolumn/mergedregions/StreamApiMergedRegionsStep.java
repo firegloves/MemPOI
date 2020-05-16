@@ -70,7 +70,7 @@ public class StreamApiMergedRegionsStep<T> extends StreamApiElaborationStep<T> {
     @Override
     public void execute(MempoiSheet mempoiSheet, Workbook workbook) {
 
-        // DO nothing => execution is done in performAnalysis() and in closeAnalysis()
+        // DO nothing -> execution is done in performAnalysis() and in closeAnalysis()
     }
 
 

@@ -16,12 +16,12 @@ import java.util.List;
 public class WorkbookConfig {
 
     /**
-     * the sub footer fallback to apply to the report. if null => no sub footer is appended to the report.  you could also specify a particular MempoiSubFooter for the singles sheets
+     * the sub footer fallback to apply to the report. if null no sub footer is appended to the report.  you could also specify a particular MempoiSubFooter for the singles sheets
      */
     private MempoiSubFooter mempoiSubFooter;
 
     /**
-     * the footer fallback to apply to the report. if null => no footer is appended to the report.  you could also specify a particular MempoiFooter for the singles sheets
+     * the footer fallback to apply to the report. if null no footer is appended to the report.  you could also specify a particular MempoiFooter for the singles sheets
      */
     private MempoiFooter mempoiFooter;
 
