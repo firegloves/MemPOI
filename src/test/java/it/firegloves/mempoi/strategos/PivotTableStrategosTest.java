@@ -152,7 +152,7 @@ public class PivotTableStrategosTest {
 
         MempoiPivotTable mempoiPivotTable = MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
-                .withMempoiSheetSource(mempoiSecondSheet)
+//                .withMempoiSheetSource(mempoiSecondSheet)
                 .withMempoiTableSource(mempoiTable)
                 .withPosition(TestHelper.POSITION)
                 .build();

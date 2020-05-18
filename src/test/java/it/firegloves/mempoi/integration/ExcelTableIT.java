@@ -16,6 +16,7 @@ import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.*;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -43,7 +44,8 @@ public class ExcelTableIT extends IntegrationBaseIT {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_table.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook();
 
-        MempoiTableBuilder mempoiTableBuilder = TestHelper.getTestMempoiTableBuilder(workbook).withAreaReference("A1:F101");
+        MempoiTableBuilder mempoiTableBuilder = TestHelper.getTestMempoiTableBuilder(workbook)
+                .withAreaReference(TestHelper.AREA_REFERENCE_TABLE_DB_DATA);
 
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withPrepStmt(prepStmt)
@@ -60,7 +62,7 @@ public class ExcelTableIT extends IntegrationBaseIT {
         assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         // validates first sheet
-        AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
+        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
         XSSFSheet sheet = ((XSSFWorkbook)(TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
         AssertionHelper.validateTable(sheet);

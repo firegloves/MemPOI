@@ -1,19 +1,12 @@
 package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.styles.template.StyleTemplate;
-import it.firegloves.mempoi.testutil.AssertionHelper;
-import it.firegloves.mempoi.testutil.ConnectionManagerHelper;
+import it.firegloves.mempoi.testutil.ConnectionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.junit.After;
 import org.junit.Before;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.*;
 
 import static org.junit.Assert.assertEquals;
@@ -32,7 +25,7 @@ public abstract class IntegrationBaseIT {
     @Before
     public void init() {
         try {
-            this.conn = ConnectionManagerHelper.getConnection();
+            this.conn = ConnectionHelper.getConnection();
             this.prepStmt = this.createStatement();
 
             if (!this.outReportFolder.exists() && !this.outReportFolder.mkdirs()) {

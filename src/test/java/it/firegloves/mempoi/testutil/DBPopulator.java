@@ -32,7 +32,7 @@ public class DBPopulator {
 
     private void initConn() {
         try {
-            this.conn = ConnectionManagerHelper.getConnection();
+            this.conn = ConnectionHelper.getConnection();
         } catch (Exception e) {
             throw new MempoiException(e);
         }

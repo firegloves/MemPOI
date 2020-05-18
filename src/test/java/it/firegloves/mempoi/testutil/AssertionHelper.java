@@ -90,15 +90,15 @@ public class AssertionHelper {
 
         XSSFTable table = sheet.getTables().get(0);
 
-        assertEquals(TestHelper.AREA_REFERENCE, table.getArea().formatAsString());
+        assertEquals(TestHelper.AREA_REFERENCE_TABLE_DB_DATA, table.getArea().formatAsString());
         assertEquals(TestHelper.TABLE_NAME, table.getName());
         assertEquals(TestHelper.DISPLAY_TABLE_NAME, table.getDisplayName());
-        assertEquals(5, table.getColumnCount());
+        assertEquals(TestHelper.MEMPOI_COLUMN_NAMES.length, table.getColumnCount());
         assertTrue(table.getCTTable().isSetAutoFilter());
         assertEquals(0, table.getStartColIndex());
-        assertEquals(4, table.getEndColIndex());
+        assertEquals(5, table.getEndColIndex());
         assertEquals(0, table.getStartRowIndex());
-        assertEquals(4, table.getEndRowIndex());
+        assertEquals(100, table.getEndRowIndex());
     }
 
 
@@ -307,7 +307,6 @@ public class AssertionHelper {
      * @param fileToValidate       the absolute filename of the xlsx file on which apply the generic asserts
      * @param columns              the array of columns name, useful to retrieve data from the ResultSet
      * @param headers              the array of headers name
-     * @param subfooterCellFormula if not null it defines the check to run against the last row. if null no check is required
      */
     public static void validateGeneratedFilePivotTable(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, StyleTemplate styleTemplate, int sheetNum) {
 

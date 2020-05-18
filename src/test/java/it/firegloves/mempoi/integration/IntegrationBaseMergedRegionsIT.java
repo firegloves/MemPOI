@@ -1,24 +1,15 @@
 package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.testutil.ConnectionManagerHelper;
+import it.firegloves.mempoi.testutil.ConnectionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.After;
 import org.junit.Before;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +22,7 @@ public abstract class IntegrationBaseMergedRegionsIT extends IntegrationBaseIT {
     @Before
     public void init() {
         try {
-            this.conn = ConnectionManagerHelper.getConnection();
+            this.conn = ConnectionHelper.getConnection();
 
             if (!this.outReportFolder.exists() && !this.outReportFolder.mkdirs()) {
                 throw new MempoiException("Error in creating out report file folder: " + this.outReportFolder.getAbsolutePath() + ". Maybe permissions problem?");

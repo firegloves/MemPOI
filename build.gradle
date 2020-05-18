@@ -53,9 +53,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackClassicVersion
-
-    // https://mvnrepository.com/artifact/org.jeasy/easy-props
-    testCompile group: 'org.jeasy', name: 'easy-props', version: '3.0.0'
 }
 
 

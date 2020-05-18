@@ -9,7 +9,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
-import it.firegloves.mempoi.testutil.ConnectionManagerHelper;
+import it.firegloves.mempoi.testutil.ConnectionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.sql.DriverManager;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +30,7 @@ public class SpeedIT extends IntegrationBaseIT {
     @Before
     public void init() {
         try {
-            this.conn = ConnectionManagerHelper.getConnection();
+            this.conn = ConnectionHelper.getConnection();
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
                     "FROM " + TestHelper.TABLE_SPEED_TEST);
 
@@ -169,7 +168,7 @@ public class SpeedIT extends IntegrationBaseIT {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook_1.xlsx");
 
         try {
-            this.conn = ConnectionManagerHelper.getConnection();
+            this.conn = ConnectionHelper.getConnection();
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
                     "FROM "+ TestHelper.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
@@ -198,7 +197,7 @@ public class SpeedIT extends IntegrationBaseIT {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook_1.xlsx");
 
         try {
-            this.conn = ConnectionManagerHelper.getConnection();
+            this.conn = ConnectionHelper.getConnection();
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
                     "FROM " + TestHelper.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
