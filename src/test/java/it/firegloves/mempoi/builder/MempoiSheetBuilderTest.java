@@ -1,6 +1,8 @@
 package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.config.MempoiConfig;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
@@ -11,6 +13,7 @@ import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.TestForceGenerationHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,6 +23,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.sql.PreparedStatement;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -77,8 +83,8 @@ public class MempoiSheetBuilderTest {
         assertArrayEquals("merged cols", mergedCols, mempoiSheet.getMergedRegionColumns());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
 
-       AssertionHelper.validateMempoiTable(wb, mempoiSheet.getMempoiTable().get());
-       AssertionHelper.validateMempoiPivotTable(wb, mempoiSheet.getMempoiPivotTable().get());
+        AssertionHelper.validateMempoiTable(wb, mempoiSheet.getMempoiTable().get());
+        AssertionHelper.validateMempoiPivotTable(wb, mempoiSheet.getMempoiPivotTable().get());
     }
 
 
@@ -146,37 +152,38 @@ public class MempoiSheetBuilderTest {
     @Test
     public void mempoiSheetBuilderForcingGenerationEmptyArray() {
 
-        MempoiConfig.getInstance().setForceGeneration(true);
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
 
-        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-                .withPrepStmt(prepStmt)
-                .withMergedRegionColumns(new String[0])
-                .build();
+            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withPrepStmt(prepStmt)
+                    .withMergedRegionColumns(new String[0])
+                    .build();
 
-        assertNotNull("Force generation empty array - mempoi sheet not null", mempoiSheet);
-        assertNull("Force generation empty array - merged regions array null", mempoiSheet.getMergedRegionColumns());
+            assertNotNull("Force generation empty array - mempoi sheet not null", mempoiSheet);
+            assertNull("Force generation empty array - merged regions array null", mempoiSheet.getMergedRegionColumns());
+
+        });
     }
 
     @Test
     public void mempoiSheetBuilderForcingGenerationNullArray() {
 
-        MempoiConfig.getInstance().setForceGeneration(true);
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
 
-        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-                .withPrepStmt(prepStmt)
-                .withMergedRegionColumns(null)
-                .build();
+            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withPrepStmt(prepStmt)
+                    .withMergedRegionColumns(null)
+                    .build();
 
-        assertNotNull("Force generation null array - mempoi sheet not null", mempoiSheet);
-        assertNull("Force generation null array - merged regions array null", mempoiSheet.getMergedRegionColumns());
+            assertNotNull("Force generation null array - mempoi sheet not null", mempoiSheet);
+            assertNull("Force generation null array - merged regions array null", mempoiSheet.getMergedRegionColumns());
+
+        });
     }
 
 
     @Test(expected = MempoiException.class)
     public void mempoiSheetBuilderNotForcingGenerationEmptyArray() {
-
-        // TODO eliminare quando sarà thread safe
-        MempoiConfig.getInstance().setForceGeneration(false);
 
         MempoiSheetBuilder.aMempoiSheet()
                 .withPrepStmt(prepStmt)
@@ -224,6 +231,69 @@ public class MempoiSheetBuilderTest {
 
         assertEquals(mempoiTable, mempoiSheet.getMempoiTable().get());
         assertEquals(mempoiPivotTable, mempoiSheet.getMempoiPivotTable().get());
+    }
+
+
+    @Test
+    public void mempoiSheetBuilder_withDataElaborationStepMap() {
+
+        Map<String, List<MempoiColumnElaborationStep>> postElaborationStepMap = new HashMap<>();
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .withDataElaborationStepMap(postElaborationStepMap)
+                .build();
+
+        assertEquals(postElaborationStepMap, mempoiSheet.getDataElaborationStepMap());
+    }
+
+
+    @Test
+    public void mempoiSheetBuilder_withDataElaborationStep() {
+
+        Workbook wb = new XSSFWorkbook();
+        NotStreamApiMergedRegionsStep step = TestHelper.getNotStreamApiMergedRegionsStep(wb);
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .withDataElaborationStep(TestHelper.MEMPOI_COLUMN_NAME, step)
+                .build();
+
+        Map<String, List<MempoiColumnElaborationStep>> actual = mempoiSheet.getDataElaborationStepMap();
+        assertEquals(1, actual.keySet().size());
+        assertEquals(1, actual.get(TestHelper.MEMPOI_COLUMN_NAME).size());
+        assertEquals(step, actual.get(TestHelper.MEMPOI_COLUMN_NAME).get(0));
+    }
+
+
+    @Test(expected = MempoiException.class)
+    public void withDataElaborationStepMapNullAndDataElaborationStepWillFail() {
+
+        Workbook wb = new XSSFWorkbook();
+        NotStreamApiMergedRegionsStep step = TestHelper.getNotStreamApiMergedRegionsStep(wb);
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .withDataElaborationStepMap(null)
+                .withDataElaborationStep(TestHelper.MEMPOI_COLUMN_NAME, step)
+                .build();
+    }
+
+
+    @Test
+    public void withDataElaborationStepMapNullAndDataElaborationStepAndForceGenerationShouldWork() {
+
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+
+            Workbook wb = new XSSFWorkbook();
+            NotStreamApiMergedRegionsStep step = TestHelper.getNotStreamApiMergedRegionsStep(wb);
+
+            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withPrepStmt(prepStmt)
+                    .withDataElaborationStepMap(null)
+                    .withDataElaborationStep(TestHelper.MEMPOI_COLUMN_NAME, step)
+                    .build();
+        });
     }
 
 }

@@ -43,8 +43,6 @@ public class PivotTableStrategos {
      */
     public void manageMempoiPivotTable(MempoiSheet mempoiSheet) {
 
-        // TODO check if I can unify the 2 ifpresent (here and in TableStrategos)
-
         if (mempoiSheet.getMempoiPivotTable().isPresent() && !(mempoiSheet.getSheet() instanceof XSSFSheet)) {
             throw new MempoiException(Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
         }
@@ -105,18 +103,6 @@ public class PivotTableStrategos {
         return null == pivotTableSource.getMempoiSheet() ?
                 sheet.createPivotTable(areaReference, mempoiPivotTable.getPosition()) :
                 sheet.createPivotTable(areaReference, mempoiPivotTable.getPosition(), pivotTableSource.getMempoiSheet().getSheet());
-
-//        Optional.ofNullable(pivotTableSource.getAreaReference())
-//                .map(areaReference -> {
-//
-//                    if (null == pivotTableSource.getMempoiSheet()) {
-//                        return sheet.createPivotTable(areaReference, mempoiPivotTable.getPosition());
-//                    } else {
-//                        return sheet.createPivotTable(areaReference, mempoiPivotTable.getPosition(), pivotTableSource.getMempoiSheet().getSheet());
-//                    }
-//                })
-//                .orElseGet(() -> sheet.createPivotTable(pivotTableSource.getMempoiTable().getTable().getArea(), mempoiPivotTable.getPosition(), pivotTableSource.getMempoiSheet().getSheet()));
-
 
     }
 }

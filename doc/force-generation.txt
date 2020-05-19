@@ -1,0 +1,3 @@
+- Specifying 2 sources for a PivotTable (one area reference and one table) the area reference take precedence and the table is ignored
+- Specifying 2 sheet sources for a PivotTable (one sheet and one table) the table take precedence and the sheet is ignored
+- If a post data elaboration step is added to a MempoiSheet after have setted a null step map, the map is instantiated and the step added

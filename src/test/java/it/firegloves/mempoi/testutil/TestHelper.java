@@ -3,6 +3,7 @@ package it.firegloves.mempoi.testutil;
 import it.firegloves.mempoi.builder.MempoiPivotTableBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.builder.MempoiTableBuilder;
+import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.EExportDataType;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
@@ -13,6 +14,7 @@ import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -290,5 +292,11 @@ public class TestHelper {
             e.printStackTrace();
             return null;
         }
+    }
+
+
+    public static NotStreamApiMergedRegionsStep getNotStreamApiMergedRegionsStep(Workbook wb) {
+        CellStyle cellStyle = wb.createCellStyle();
+        return new NotStreamApiMergedRegionsStep(cellStyle, 0);
     }
 }

@@ -7,6 +7,7 @@ package it.firegloves.mempoi.validator;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.util.AreaReference;
 
 import java.util.regex.Pattern;
 
@@ -37,4 +38,21 @@ public class AreaReferenceValidator {
             throw new MempoiException(Errors.ERR_AREA_REFERENCE_NOT_VALID);
         }
     }
+
+
+//    /**
+//     * return tru
+//     * @param areaRefOne
+//     * @param areaRefTwo
+//     * @return
+//     */
+//    public boolean areAreaOverlapping(AreaReference areaRefOne, AreaReference areaRefTwo) {
+//
+//        String[] areaOneFirstCellRefParts = areaRefOne.getFirstCell().getCellRefParts();
+//        String[] areaOneLastCellRefParts = areaRefOne.getLastCell().getCellRefParts();
+//        String[] areaTwoFirstCellRefParts = areaRefTwo.getFirstCell().getCellRefParts();
+//        String[] areaTwoLastCellRefParts = areaRefTwo.getLastCell().getCellRefParts();
+//
+//
+//    }
 }

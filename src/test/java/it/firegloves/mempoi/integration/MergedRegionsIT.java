@@ -8,6 +8,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.TestForceGenerationHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -237,7 +238,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             throw new MempoiException(e);
         }
     }
-
 
 
     /***********************************************************************
@@ -627,10 +627,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     }
 
 
-
-
-
-
     @Test(expected = ExecutionException.class)
     public void testWithFileAndMergedRegionsSXSSFAndLimitedFixedRowAccessWindowSize() throws SQLException, ExecutionException, InterruptedException {
 
@@ -651,7 +647,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
 
     // SXSSF multicolumn is not supported -> multisheet and multicolumn also
-
 
 
     /***********************************************************************
@@ -710,64 +705,65 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         }
     }
 
-//    @Test
-//    public void testWithFileAndMergedRegionsHSSFNullMergedRegionsForceGeneration() {
-//
-//        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
-//        int limit = 450;
-//
-//        try {
-//            prepStmt = this.createStatement(null, limit);
-//// FIXME Problema: viene istanziato prima il mempoisheet e poi le config -> al check in sheetbuilder forcegeneration è ancora null
-////            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, null);
-//
-//            MemPOI memPOI = MempoiBuilder.aMemPOI()
-////                    .withDebug(true)
-//                    .withForceGeneration(true)
-//                    .withFile(fileDest)
-//                    .withStyleTemplate(new ForestStyleTemplate())
-//                    .withWorkbook(new HSSFWorkbook())
-//                    .addMempoiSheet(this.createMempoiSheet1(prepStmt, null))
-//                    .build();
-//
-//            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-//            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-//
-//        } catch (Exception e) {
-//            throw new MempoiRuntimeException(e);
-//        }
-//    }
+    @Test
+    public void testWithFileAndMergedRegionsHSSFNullMergedRegionsForceGeneration() {
+
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+
+            File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+            int limit = 450;
+
+            try {
+                prepStmt = this.createStatement(null, limit);
+
+                MemPOI memPOI = MempoiBuilder.aMemPOI()
+                        .withFile(fileDest)
+                        .withStyleTemplate(new ForestStyleTemplate())
+                        .withWorkbook(new HSSFWorkbook())
+                        .addMempoiSheet(this.createMempoiSheet1(prepStmt, null))
+                        .build();
+
+                CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+                assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+                AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+
+            } catch (Exception e) {
+                throw new MempoiException(e);
+            }
+        });
+    }
 
 
-//    @Test
-//    public void testWithFileAndMergedRegionsHSSFEmptyMergedRegionsForceGeneration() {
-//
-//        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
-//        int limit = 450;
-//
-//        try {
-//            // TODO force generation deve essere impostato prima di invocare .withMergedRegionColumns(mergedColumns)
-//
-//            prepStmt = this.createStatement(null, limit);
-//
-//            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, new String[0]);
-//
-//            MemPOI memPOI = MempoiBuilder.aMemPOI()
-////                    .withDebug(true)
-//                    .withForceGeneration(true)
-//                    .withFile(fileDest)
-//                    .withStyleTemplate(new ForestStyleTemplate())
-//                    .withWorkbook(new HSSFWorkbook())
-//                    .addMempoiSheet(sheet)
-//                    .build();
-//
-//            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-//            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-//
-//        } catch (Exception e) {
-//            throw new MempoiRuntimeException(e);
-//        }
-//    }
+    @Test
+    public void testWithFileAndMergedRegionsHSSFEmptyMergedRegionsForceGeneration() {
+
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+
+            File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+            int limit = 450;
+
+            try {
+                prepStmt = this.createStatement(null, limit);
+
+                MempoiSheet sheet = this.createMempoiSheet1(prepStmt, new String[0]);
+
+                MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withDebug(true)
+                        .withFile(fileDest)
+                        .withStyleTemplate(new ForestStyleTemplate())
+                        .withWorkbook(new HSSFWorkbook())
+                        .addMempoiSheet(sheet)
+                        .build();
+
+                CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+                assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+                AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+
+            } catch (Exception e) {
+                throw new MempoiException(e);
+            }
+        });
+    }
 
 
     /***********************************************************************

@@ -11,6 +11,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.ForceGenerationHelper;
+import it.firegloves.mempoi.validator.AreaReferenceValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -238,9 +239,13 @@ public final class MempoiSheetBuilder {
      */
     public MempoiSheetBuilder withDataElaborationStep(String colName, MempoiColumnElaborationStep step) {
 
-        // TODO force generation here
         if (null == this.dataElaborationStepMap) {
-            throw new MempoiException(Errors.ERR_POST_DATA_ELABORATION_NULL);
+
+            ForceGenerationHelper.manageForceGeneration(
+                    new MempoiException(Errors.ERR_POST_DATA_ELABORATION_NULL),
+                    Errors.ERR_POST_DATA_ELABORATION_NULL_FORCE_GENERATION,
+                    logger,
+                    () -> { dataElaborationStepMap = new HashMap<>(); });
         }
 
         this.dataElaborationStepMap.putIfAbsent(colName, new ArrayList<>());
@@ -288,7 +293,7 @@ public final class MempoiSheetBuilder {
      */
     public MempoiSheetBuilder withMempoiPivotTable(MempoiPivotTable mempoiPivotTable) {
 
-        this.mempoiTable.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_PIVOT_TABLE));
+        this.mempoiPivotTable.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_PIVOT_TABLE));
 
         this.mempoiPivotTable = Optional.ofNullable(mempoiPivotTable);
         return this;
@@ -302,9 +307,7 @@ public final class MempoiSheetBuilder {
      */
     public MempoiSheetBuilder withMempoiPivotTableBuilder(MempoiPivotTableBuilder mempoiPivotTableBuilder) {
 
-        // TODO test what happens if build throws exception
-
-        this.mempoiTable.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_PIVOT_TABLE));
+        this.mempoiPivotTable.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_PIVOT_TABLE));
 
         this.mempoiPivotTable = Optional.ofNullable(mempoiPivotTableBuilder)
                 .map(MempoiPivotTableBuilder::build);
@@ -339,24 +342,12 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setDataElaborationStepMap(dataElaborationStepMap);
         mempoiSheet.setMergedRegionColumns(mergedRegionColumns);
 
-        this.mempoiTable.ifPresent(mempoiTable -> {
-            try {
-                mempoiSheet.setMempoiTable(mempoiTable);
-            } catch (MempoiException e) {
-                ForceGenerationHelper.manageForceGeneration(e, e.getMessage(), logger); // TODO check if the error is well managed
-//                ForceGenerationHelper.manageForceGeneration(e, Errors.ERR_AREA_REFERENCE_NOT_VALID + ". Forcing generation without Excel table", logger);
-            }
-        });
+        this.mempoiTable.ifPresent(mempoiSheet::setMempoiTable);
 
-        this.mempoiPivotTable.ifPresent(mempoiPivotTable -> {
-            try {
-                mempoiSheet.setMempoiPivotTable(mempoiPivotTable);
-            } catch (MempoiException e) {
-                ForceGenerationHelper.manageForceGeneration(e, e.getMessage(), logger);  // TODO check if the error is well managed
-            }
-        });
+        this.mempoiPivotTable.ifPresent(mempoiSheet::setMempoiPivotTable);
 
-        // TODO add check of overlapping area references?
+        // TODO add check of overlapping area references - method already exists
+//        AreaReferenceValidator.areAreaOverlapping();
 
         return mempoiSheet;
     }

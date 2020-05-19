@@ -1,11 +1,13 @@
 package it.firegloves.mempoi.builder;
 
+import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTableSource;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
+import it.firegloves.mempoi.util.ForceGenerationHelper;
 import it.firegloves.mempoi.validator.AreaReferenceValidator;
 import it.firegloves.mempoi.validator.WorkbookValidator;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
@@ -13,10 +15,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public final class MempoiPivotTableBuilder {
+
+    private static final Logger logger = LoggerFactory.getLogger(MempoiPivotTableBuilder.class);
 
     private Workbook workbook;
     private CellReference position;
@@ -26,7 +32,7 @@ public final class MempoiPivotTableBuilder {
 
     private MempoiTable mempoiTable;    // TODO make example in particular on how to bind table to pivot table
     private String areaReference;
-    private MempoiSheet mempoiSheet;
+    private MempoiSheet mempoiSheet;    // TODO rename to mempoiSheetSource?
 
     private AreaReferenceValidator areaReferenceValidator;
     private WorkbookValidator workbookValidator;
@@ -184,14 +190,20 @@ public final class MempoiPivotTableBuilder {
      */
     private void validate() {
 
-        // TODO add force generation supplying a default precedence order
         if (null != areaReference && null != mempoiTable) {
-            throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS);
+            ForceGenerationHelper.manageForceGeneration(
+                    new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS),
+                    Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS_FORCE_GENERATION,
+                    logger,
+                    () -> { mempoiTable = null; });
         }
 
-        // TODO test this code
         if (null != mempoiSheet && null != mempoiTable) {
-            throw new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS);
+            ForceGenerationHelper.manageForceGeneration(
+                    new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS),
+                    Errors.ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS_FORCE_GENERATION,
+                    logger,
+                    () -> { mempoiSheet = null; });
         }
 
         if (null == areaReference && null == mempoiTable) {

@@ -7,6 +7,7 @@ package it.firegloves.mempoi.validator;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -71,5 +72,11 @@ public class AreaReferenceValidatorTest {
     public void validateAreaReferenceTestAndThrow_withEmptyAreaReference_willFail() {
 
         this.areaReferenceValidator.validateAreaReferenceAndThrow("");
+    }
+
+
+    @Test
+    public void areAreaOverlapping() {
+        Assert.fail();
     }
 }

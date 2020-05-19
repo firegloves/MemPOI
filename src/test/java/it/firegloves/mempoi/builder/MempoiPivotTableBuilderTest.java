@@ -1,26 +1,25 @@
 package it.firegloves.mempoi.builder;
 
-import it.firegloves.mempoi.config.MempoiConfig;
+import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.TestForceGenerationHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public final class MempoiPivotTableBuilderTest {
 
@@ -59,11 +58,52 @@ public final class MempoiPivotTableBuilderTest {
 
         MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
-                .withAreaReferenceSource("A1:B2")
+                .withPosition(TestHelper.POSITION)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                 .withMempoiTableSource(new MempoiTable())
                 .build();
-
     }
+
+    @Test
+    public void withReferenceAreaAndTableAndForceGenerationShouldWork() {
+
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+
+            MempoiPivotTableBuilder.aMempoiPivotTable()
+                    .withWorkbook(wb)
+                    .withPosition(TestHelper.POSITION)
+                    .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
+                    .withMempoiTableSource(new MempoiTable())
+                    .build();
+        });
+    }
+
+
+    @Test(expected = MempoiException.class)
+    public void withSourceSheetAndSourceTableShouldThrowMempoiException() {
+
+        MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withPosition(TestHelper.POSITION)
+                .withMempoiSheetSource(new MempoiSheet(null))
+                .withMempoiTableSource(new MempoiTable())
+                .build();
+    }
+
+    @Test
+    public void withSourceSheetAndSourceTableAndForceGenerationShouldWork() {
+
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+
+            MempoiPivotTableBuilder.aMempoiPivotTable()
+                    .withWorkbook(wb)
+                    .withPosition(TestHelper.POSITION)
+                    .withMempoiSheetSource(new MempoiSheet(null))
+                    .withMempoiTableSource(new MempoiTable())
+                    .build();
+        });
+    }
+
 
     @Test
     public void withoutReferenceAreaButTable() {
