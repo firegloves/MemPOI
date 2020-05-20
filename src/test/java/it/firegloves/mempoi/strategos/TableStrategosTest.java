@@ -125,7 +125,7 @@ public class TableStrategosTest {
                 .setSheet(sheet);
         mempoiSheet.setColumnList(TestHelper.getMempoiColumnList(wb));
 
-        tableStrategos.manageMempoiTable(mempoiSheet);
+        tableStrategos.manageMempoiTable(mempoiSheet, TestHelper.getAreaReference(wb));
 
         XSSFTable table = sheet.getTables().get(0);
 
@@ -161,7 +161,7 @@ public class TableStrategosTest {
                             .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
                             .build();
 
-                    tableStrategos.manageMempoiTable(mempoiSheet);
+                    tableStrategos.manageMempoiTable(mempoiSheet, TestHelper.getAreaReference(wb));
                 });
     }
 
@@ -176,7 +176,7 @@ public class TableStrategosTest {
                 .build()
                 .setSheet(sheet);
 
-        this.tableStrategos.manageMempoiTable(mempoiSheet);
+        this.tableStrategos.manageMempoiTable(mempoiSheet,TestHelper.getAreaReference(wb));
 
         assertEquals(0, ((XSSFSheet)mempoiSheet.getSheet()).getTables().size());
     }

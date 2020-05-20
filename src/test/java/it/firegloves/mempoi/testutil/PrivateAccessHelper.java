@@ -23,6 +23,20 @@ public class PrivateAccessHelper {
         return f;
     }
 
+
+    /**
+     * sets a value into an inaccessible field of the received object
+     * @param o the object of which set accessible a field
+     * @param fieldName the name of the field to make accessible
+     * @param value the value to set into the field
+     * @throws Exception
+     */
+    public static void setPrivateField(Object o, String fieldName, Object value) throws Exception {
+        Field f = o.getClass().getDeclaredField(fieldName);
+        f.setAccessible(true);
+        f.set(o, value);
+    }
+
 //    /**
 //     * inject a value into the desired private field of the received object
 //     * @param obj the object from which get the field to set

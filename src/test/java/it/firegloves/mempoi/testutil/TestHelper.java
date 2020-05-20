@@ -4,7 +4,6 @@ import it.firegloves.mempoi.builder.MempoiPivotTableBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
-import it.firegloves.mempoi.domain.EExportDataType;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
@@ -13,12 +12,12 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
@@ -77,6 +76,8 @@ public class TestHelper {
     public static final String SHEET_NAME = "Nice Sheet";
     public static final String SHEET_NAME_2 = "Perfect Sheet";
 
+    public static final int ROW_COUNT = 6;
+
     /**********************************************************************************************************
      * MempoiTable
      *********************************************************************************************************/
@@ -92,7 +93,7 @@ public class TestHelper {
                 .withWorkbook(wb)
                 .withTableName(TABLE_NAME)
                 .withDisplayTableName(DISPLAY_TABLE_NAME)
-                .withAreaReference(AREA_REFERENCE);
+                .withAreaReferenceSource(AREA_REFERENCE);
     }
 
     /**
@@ -299,5 +300,10 @@ public class TestHelper {
     public static NotStreamApiMergedRegionsStep getNotStreamApiMergedRegionsStep(Workbook wb) {
         CellStyle cellStyle = wb.createCellStyle();
         return new NotStreamApiMergedRegionsStep(cellStyle, 0);
+    }
+
+    public static AreaReference getAreaReference(XSSFWorkbook wb) {
+
+        return new AreaReference(TestHelper.AREA_REFERENCE, wb.getSpreadsheetVersion());
     }
 }

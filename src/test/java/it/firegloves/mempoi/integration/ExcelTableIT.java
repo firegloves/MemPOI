@@ -16,7 +16,6 @@ import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.*;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -45,7 +44,39 @@ public class ExcelTableIT extends IntegrationBaseIT {
         XSSFWorkbook workbook = new XSSFWorkbook();
 
         MempoiTableBuilder mempoiTableBuilder = TestHelper.getTestMempoiTableBuilder(workbook)
-                .withAreaReference(TestHelper.AREA_REFERENCE_TABLE_DB_DATA);
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE_TABLE_DB_DATA);
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .withMempoiTableBuilder(mempoiTableBuilder)
+                .build();
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .addMempoiSheet(mempoiSheet)
+                .build();
+
+        CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        // validates first sheet
+        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
+
+        XSSFSheet sheet = ((XSSFWorkbook)(TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
+        AssertionHelper.validateTable(sheet);
+    }
+
+
+    @Test
+    public void addingExcelTableAllSheetData() throws Exception {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_table_all_sheet_data.xlsx");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        MempoiTableBuilder mempoiTableBuilder = TestHelper.getTestMempoiTableBuilder(workbook)
+                .withAreaReferenceSource(null)
+                .withAllSheetData(true);
 
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withPrepStmt(prepStmt)
@@ -102,64 +133,6 @@ public class ExcelTableIT extends IntegrationBaseIT {
                             .addMempoiSheet(mempoiSheet)
                             .build();
                 });
-    }
-
-
-    @Test
-    public void manualTest() throws IOException {
-
-        try (Workbook wb = new XSSFWorkbook()) {
-            XSSFSheet sheet = (XSSFSheet) wb.createSheet();
-
-            // Set which area the table should be placed in
-            AreaReference reference = wb.getCreationHelper().createAreaReference(
-                    new CellReference(0, 0), new CellReference(2, 2));
-
-            // Create
-            XSSFTable table = sheet.createTable(reference); //creates a table having 3 columns as of area reference
-            // but all of those have id 1, so we need repairing
-//            table.getCTTable().getTableColumns().getTableColumnArray(1).setId(2);
-//            table.getCTTable().getTableColumns().getTableColumnArray(2).setId(3);
-
-            table.setName("Test");
-            table.setDisplayName("Test_Table");
-
-            // For now, create the initial style in a low-level way
-            table.getCTTable().addNewTableStyleInfo();
-            table.getCTTable().getTableStyleInfo().setName("TableStyleMedium2");
-
-            // Style the table
-            XSSFTableStyleInfo style = (XSSFTableStyleInfo) table.getStyle();
-            style.setName("TableStyleMedium2");
-            style.setShowColumnStripes(false);
-            style.setShowRowStripes(true);
-            style.setFirstColumn(false);
-            style.setLastColumn(false);
-            style.setShowRowStripes(true);
-            style.setShowColumnStripes(true);
-
-            // Set the values for the table
-            XSSFRow row;
-            XSSFCell cell;
-            for (int i = 0; i < 50; i++) {
-                // Create row
-                row = sheet.createRow(i);
-                for (int j = 0; j < 3; j++) {
-                    // Create cell
-                    cell = row.createCell(j);
-                    if (i == 0) {
-                        cell.setCellValue("Column" + (j + 1));
-                    } else {
-                        cell.setCellValue((i + 1.0) * (j + 1.0));
-                    }
-                }
-            }
-
-            // Save
-            try (FileOutputStream fileOut = new FileOutputStream(new File(this.outReportFolder.getAbsolutePath(),"table-manuale.xlsx"))) {
-                wb.write(fileOut);
-            }
-        }
     }
 
 

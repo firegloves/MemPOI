@@ -3,6 +3,7 @@ package it.firegloves.mempoi.builder;
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.testutil.TestForceGenerationHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -18,8 +19,7 @@ import org.mockito.MockitoAnnotations;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class MempoiTableBuilderTest {
 
@@ -31,8 +31,6 @@ public class MempoiTableBuilderTest {
     @Before
     public void prepare() {
         MockitoAnnotations.initMocks(this);
-
-        MempoiConfig.getInstance().setForceGeneration(false);
     }
 
     @Test
@@ -42,7 +40,7 @@ public class MempoiTableBuilderTest {
 
         assertEquals(TestHelper.TABLE_NAME, mempoiTable.getTableName());
         assertEquals(TestHelper.DISPLAY_TABLE_NAME, mempoiTable.getDisplayTableName());
-        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReference());
+        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReferenceSource());
         assertEquals(wb, mempoiTable.getWorkbook());
     }
 
@@ -55,7 +53,7 @@ public class MempoiTableBuilderTest {
                     try {
                         MempoiTableBuilder.aMempoiTable()
                                 .withWorkbook(wb)
-                                .withAreaReference(areaRef)
+                                .withAreaReferenceSource(areaRef)
                                 .build();
                     } catch (MempoiException e) {
                         assertEquals(Errors.ERR_AREA_REFERENCE_NOT_VALID, e.getMessage());
@@ -82,7 +80,7 @@ public class MempoiTableBuilderTest {
                     try {
                         MempoiTableBuilder.aMempoiTable()
                                 .withWorkbook(workbook)
-                                .withAreaReference(TestHelper.AREA_REFERENCE)
+                                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                                 .build();
                     } catch (MempoiException e) {
                         assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
@@ -96,12 +94,12 @@ public class MempoiTableBuilderTest {
     public void withNullWorkbook_throwsMempoiException() {
 
         MempoiTableBuilder.aMempoiTable()
-                .withAreaReference(TestHelper.AREA_REFERENCE)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                 .build();
     }
 
     @Test(expected = MempoiException.class)
-    public void withNullAreaReference_throwsMempoiException() {
+    public void withNullAreaReferenceAndNoAllSheetData_throwsMempoiException() {
 
         MempoiTableBuilder.aMempoiTable()
                 .withWorkbook(wb)
@@ -109,16 +107,30 @@ public class MempoiTableBuilderTest {
     }
 
     @Test
+    public void withNullAreaReferenceAndNoAllSheetDataAndForceGenerationShouldUseAllSheetData() {
+
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+
+            MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
+                    .withWorkbook(wb)
+                    .build();
+
+            assertTrue(mempoiTable.isAllSheetData());
+            assertNull(mempoiTable.getAreaReferenceSource());
+        });
+    }
+
+    @Test
     public void minPopulated() {
 
         MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
                 .withWorkbook(wb)
-                .withAreaReference(TestHelper.AREA_REFERENCE)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                 .build();
 
         assertNotNull(mempoiTable.getTableName());
         assertNotNull(mempoiTable.getDisplayTableName());
-        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReference());
+        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReferenceSource());
         assertEquals(wb, mempoiTable.getWorkbook());
     }
 
@@ -136,11 +148,43 @@ public class MempoiTableBuilderTest {
 
     @Test
     public void addingExcelTableWithWitheSpacesInDisplayNameAndForceGeneration_willSuccedWithUnderScores() {
-        MempoiConfig.getInstance().setForceGeneration(true);
-        MempoiTable mempoiTable = TestHelper.getTestMempoiTableBuilder(wb)
-                .withDisplayTableName(TestHelper.DISPLAY_TABLE_NAME.replaceAll("_", " "))
-                .build();
 
-        assertEquals(TestHelper.DISPLAY_TABLE_NAME.replaceAll(" ", "_"), mempoiTable.getDisplayTableName());
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+
+            MempoiTable mempoiTable = TestHelper.getTestMempoiTableBuilder(wb)
+                    .withDisplayTableName(TestHelper.DISPLAY_TABLE_NAME.replaceAll("_", " "))
+                    .build();
+
+            assertEquals(TestHelper.DISPLAY_TABLE_NAME.replaceAll(" ", "_"), mempoiTable.getDisplayTableName());
+        });
+    }
+
+
+    @Test(expected = MempoiException.class)
+    public void testTableAreaReferenceValidation() {
+
+        MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
+                .withAllSheetData(true)
+                .build();
+    }
+
+    @Test
+    public void testTableAreaReferenceValidationWithForceGeneration() {
+
+        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+
+            MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
+                    .withWorkbook(wb)
+                    .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
+                    .withAllSheetData(true)
+                    .build();
+
+            assertNotNull(mempoiTable.getTableName());
+            assertNotNull(mempoiTable.getDisplayTableName());
+            assertNull(mempoiTable.getAreaReferenceSource());
+            assertEquals(wb, mempoiTable.getWorkbook());
+        });
     }
 }

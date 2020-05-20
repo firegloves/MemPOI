@@ -1,6 +1,5 @@
 package it.firegloves.mempoi.builder;
 
-import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
@@ -32,7 +31,7 @@ public final class MempoiPivotTableBuilder {
 
     private MempoiTable mempoiTable;    // TODO make example in particular on how to bind table to pivot table
     private String areaReference;
-    private MempoiSheet mempoiSheet;    // TODO rename to mempoiSheetSource?
+    private MempoiSheet mempoiSheetSource;
 
     private AreaReferenceValidator areaReferenceValidator;
     private WorkbookValidator workbookValidator;
@@ -157,7 +156,7 @@ public final class MempoiPivotTableBuilder {
      * @return this MempoiPivotTableBuilder
      */
     public MempoiPivotTableBuilder withMempoiSheetSource(MempoiSheet mempoiSheet) {
-        this.mempoiSheet = mempoiSheet;
+        this.mempoiSheetSource = mempoiSheet;
         return this;
     }
 
@@ -173,7 +172,7 @@ public final class MempoiPivotTableBuilder {
         MempoiPivotTableSource source = new MempoiPivotTableSource(
                 this.mempoiTable,
                 null != this.areaReference ? new AreaReference(this.areaReference, this.workbook.getSpreadsheetVersion()) : null,
-                this.mempoiSheet);
+                this.mempoiSheetSource);
 
         return new MempoiPivotTable(
                 this.workbook,
@@ -195,15 +194,15 @@ public final class MempoiPivotTableBuilder {
                     new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS),
                     Errors.ERR_PIVOTTABLE_SOURCE_AMBIGUOUS_FORCE_GENERATION,
                     logger,
-                    () -> { mempoiTable = null; });
+                    () -> mempoiTable = null);
         }
 
-        if (null != mempoiSheet && null != mempoiTable) {
+        if (null != mempoiSheetSource && null != mempoiTable) {
             ForceGenerationHelper.manageForceGeneration(
                     new MempoiException(Errors.ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS),
                     Errors.ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS_FORCE_GENERATION,
                     logger,
-                    () -> { mempoiSheet = null; });
+                    () -> mempoiSheetSource = null);
         }
 
         if (null == areaReference && null == mempoiTable) {
@@ -216,6 +215,7 @@ public final class MempoiPivotTableBuilder {
 
         this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
 
+        // TODO test if it can be null != areaReference
         if (null == mempoiTable) {
             this.areaReferenceValidator.validateAreaReferenceAndThrow(this.areaReference);
         }

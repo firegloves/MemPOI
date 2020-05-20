@@ -73,10 +73,4 @@ public class AreaReferenceValidatorTest {
 
         this.areaReferenceValidator.validateAreaReferenceAndThrow("");
     }
-
-
-    @Test
-    public void areAreaOverlapping() {
-        Assert.fail();
-    }
 }

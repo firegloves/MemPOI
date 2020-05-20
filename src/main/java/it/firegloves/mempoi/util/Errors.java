@@ -38,6 +38,11 @@ public class Errors {
     public static final String ERR_TABLE_DISPLAY_NAME = "Excel table display name does not support white spaces. Remove them or try to set ForceGeneration property to true to replace them with underscores";
     public static final String ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF = "Only XSSFWorkbook supports Excel Pivot Table and it seems you are using a different workbook type";
 
+    public static final String ERR_TABLE_SOURCE_AMBIGUOUS = "Ambiguous source specified for table. You can choose only one option between area reference and all sheet data";
+    public static final String ERR_TABLE_SOURCE_AMBIGUOUS_FORCE_GENERATION = ERR_TABLE_SOURCE_AMBIGUOUS + FORCE_GENERATION_ENABLED + "All sheet data takes precedence over area reference";
+    public static final String ERR_TABLE_SOURCE_NOT_FOUND = "Source for table not found";
+    public static final String ERR_TABLE_SOURCE_NOT_FOUND_FORCE_GENERATION = ERR_TABLE_SOURCE_AMBIGUOUS + FORCE_GENERATION_ENABLED + "All sheet data will be used";
+
     public static final String ERR_PIVOTTABLE_SOURCE_AMBIGUOUS = "Ambiguous source specified for pivot table. You can choose only one source between table and area reference";
     public static final String ERR_PIVOTTABLE_SOURCE_AMBIGUOUS_FORCE_GENERATION = ERR_PIVOTTABLE_SOURCE_AMBIGUOUS + FORCE_GENERATION_ENABLED + "AreaReference takes precedence over Table";
     public static final String ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS = "Ambiguous source sheet specified for pivot table. You can choose only one source between table and sheet";

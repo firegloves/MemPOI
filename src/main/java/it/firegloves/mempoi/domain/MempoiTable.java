@@ -12,9 +12,14 @@ import org.apache.poi.xssf.usermodel.XSSFTable;
 public class MempoiTable {
 
     private Workbook workbook;
-    private String areaReference;
+    private String areaReferenceSource;
     private String tableName;
     private String displayTableName;
+
+    /**
+     * if true the table will be built using all current (the one containing the table) sheet data
+     */
+    private boolean allSheetData;
 
     /**
      * reference to the Table generated with the current MempoiTable

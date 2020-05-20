@@ -1,10 +1,8 @@
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.builder.MempoiPivotTableBuilder;
-import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.config.WorkbookConfig;
-import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
@@ -12,13 +10,9 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import it.firegloves.mempoi.util.Errors;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.*;
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,17 +20,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
@@ -113,7 +100,7 @@ public class PivotTableStrategosTest {
         XSSFTable table = sheet.createTable(new AreaReference(TestHelper.AREA_REFERENCE, this.wb.getSpreadsheetVersion()));
         MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
                 .withWorkbook(wb)
-                .withAreaReference(TestHelper.AREA_REFERENCE)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                 .build()
                 .setTable(table);
 
@@ -146,7 +133,7 @@ public class PivotTableStrategosTest {
         XSSFTable table = sheet.createTable(new AreaReference(TestHelper.AREA_REFERENCE, this.wb.getSpreadsheetVersion()));
         MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
                 .withWorkbook(wb)
-                .withAreaReference(TestHelper.AREA_REFERENCE)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                 .build()
                 .setTable(table);
 

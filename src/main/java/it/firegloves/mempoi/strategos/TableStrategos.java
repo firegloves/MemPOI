@@ -4,15 +4,11 @@ import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
-import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
-import org.apache.poi.xssf.usermodel.XSSFTableStyleInfo;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +34,22 @@ public class TableStrategos {
     /**
      * if needed, adds the Excel Table to the current sheet
      */
-    public void manageMempoiTable(MempoiSheet mempoiSheet) {
+    public void manageMempoiTable(MempoiSheet mempoiSheet, AreaReference sheetDataAreaReference) {
 
         if (mempoiSheet.getMempoiTable().isPresent() && ! (mempoiSheet.getSheet() instanceof XSSFSheet)) {
             throw new MempoiException(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
         }
 
         mempoiSheet.getMempoiTable()
-                .ifPresent(mempoiTable -> this.addTable(mempoiSheet, mempoiTable));
+                .ifPresent(mempoiTable -> {
+
+                    // if isAllSheetData updates the area reference with the one received
+                    if (mempoiTable.isAllSheetData()) {
+                        mempoiTable.setAreaReferenceSource(sheetDataAreaReference.formatAsString());
+                    }
+
+                    this.addTable(mempoiSheet, mempoiTable);
+                });
     }
 
 
@@ -56,7 +60,7 @@ public class TableStrategos {
      */
     private void addTable(MempoiSheet mempoiSheet, MempoiTable mempoiTable) {
 
-        AreaReference areaReference = this.workbookConfig.getWorkbook().getCreationHelper().createAreaReference(mempoiTable.getAreaReference());
+        AreaReference areaReference = this.workbookConfig.getWorkbook().getCreationHelper().createAreaReference(mempoiTable.getAreaReferenceSource());
         XSSFTable table = ((XSSFSheet)mempoiSheet.getSheet()).createTable(areaReference);
         mempoiTable.setTable(table);
 
@@ -70,7 +74,7 @@ public class TableStrategos {
             table.setDisplayName(mempoiTable.getDisplayTableName());
         }
 
-        // TODO manage style
+        // TODO manage style (table style or directly per column style? maybe both)
 
 //        // For now, create the initial style in a low-level way
 //        table.getCTTable().addNewTableStyleInfo();

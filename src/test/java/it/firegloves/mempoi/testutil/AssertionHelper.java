@@ -112,7 +112,7 @@ public class AssertionHelper {
 
         assertEquals(TestHelper.TABLE_NAME, mempoiTable.getTableName());
         assertEquals(TestHelper.DISPLAY_TABLE_NAME, mempoiTable.getDisplayTableName());
-        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReference());
+        assertEquals(TestHelper.AREA_REFERENCE, mempoiTable.getAreaReferenceSource());
         assertEquals(wb, mempoiTable.getWorkbook());
     }
 
@@ -646,4 +646,5 @@ public class AssertionHelper {
             throw new RuntimeException(e);
         }
     }
+
 }

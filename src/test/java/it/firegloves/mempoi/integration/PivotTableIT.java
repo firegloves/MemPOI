@@ -4,7 +4,6 @@ import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiPivotTableBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
@@ -66,7 +65,7 @@ public class PivotTableIT extends IntegrationBaseIT {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_pivot_table_and_position_and_table.xlsx");
 
         MempoiTable mempoiTable = TestHelper.getTestMempoiTableBuilder(wb)
-                .withAreaReference(TestHelper.AREA_REFERENCE_TABLE_DB_DATA)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE_TABLE_DB_DATA)
                 .build();
 
         MempoiPivotTableBuilder mempoiPivotTableBuilder = TestHelper.getTestMempoiPivotTableBuilderForIT(wb, null)
@@ -105,7 +104,7 @@ public class PivotTableIT extends IntegrationBaseIT {
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_pivot_table_and_position_and_table_on_different_sheet.xlsx");
 
         MempoiTable mempoiTable = TestHelper.getTestMempoiTableBuilder(wb)
-                .withAreaReference(TestHelper.AREA_REFERENCE_TABLE_DB_DATA)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE_TABLE_DB_DATA)
                 .build();
 
         MempoiSheet mempoiSheet1 = MempoiSheetBuilder.aMempoiSheet()
@@ -120,7 +119,7 @@ public class PivotTableIT extends IntegrationBaseIT {
 
         MempoiSheet mempoiSheet2 = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName(TestHelper.SHEET_NAME_2)
-                .withPrepStmt(this.createStatement())             // TODO now sheet can be created with a pivot table but prepared statement
+                .withPrepStmt(this.createStatement())
                 .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
                 .build();
 
