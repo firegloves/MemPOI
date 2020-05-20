@@ -92,13 +92,18 @@ public class PivotTableStrategos {
      */
     private XSSFPivotTable createPivotTable(MempoiSheet mempoiSheet, MempoiPivotTable mempoiPivotTable) {
 
-        // TODO in order to use a table as source you need to place the table in a previously generated sheet (previous than the current)
-
         MempoiPivotTableSource pivotTableSource = mempoiPivotTable.getSource();
         XSSFSheet sheet = (XSSFSheet) mempoiSheet.getSheet();
 
         AreaReference areaReference = Optional.ofNullable(pivotTableSource.getAreaReference())
-                .orElseGet(() -> pivotTableSource.getMempoiTable().getTable().getArea());
+                .orElseGet(() -> {
+
+                    if (null == pivotTableSource.getMempoiTable().getTable()) {
+                        throw new MempoiException(Errors.ERR_PIVOTTABLE_TABLE_SOURCE_NULL);
+                    }
+
+                    return pivotTableSource.getMempoiTable().getTable().getArea();
+                });
 
         return null == pivotTableSource.getMempoiSheet() ?
                 sheet.createPivotTable(areaReference, mempoiPivotTable.getPosition()) :

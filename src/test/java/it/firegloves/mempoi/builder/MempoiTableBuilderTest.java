@@ -1,9 +1,8 @@
 package it.firegloves.mempoi.builder;
 
-import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.testutil.TestForceGenerationHelper;
+import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -109,7 +108,7 @@ public class MempoiTableBuilderTest {
     @Test
     public void withNullAreaReferenceAndNoAllSheetDataAndForceGenerationShouldUseAllSheetData() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
                     .withWorkbook(wb)
@@ -149,7 +148,7 @@ public class MempoiTableBuilderTest {
     @Test
     public void addingExcelTableWithWitheSpacesInDisplayNameAndForceGeneration_willSuccedWithUnderScores() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             MempoiTable mempoiTable = TestHelper.getTestMempoiTableBuilder(wb)
                     .withDisplayTableName(TestHelper.DISPLAY_TABLE_NAME.replaceAll("_", " "))
@@ -173,7 +172,7 @@ public class MempoiTableBuilderTest {
     @Test
     public void testTableAreaReferenceValidationWithForceGeneration() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
                     .withWorkbook(wb)

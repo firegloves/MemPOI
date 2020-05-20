@@ -2,7 +2,7 @@ package it.firegloves.mempoi.testutil;
 
 import it.firegloves.mempoi.config.MempoiConfig;
 
-public class TestForceGenerationHelper {
+public class ForceGenerationUtils {
 
     /**
      * executes a test enabling force execution for the single test

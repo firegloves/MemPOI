@@ -1,6 +1,5 @@
 package it.firegloves.mempoi.builder;
 
-import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
@@ -13,7 +12,7 @@ import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
-import it.firegloves.mempoi.testutil.TestForceGenerationHelper;
+import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -152,7 +151,7 @@ public class MempoiSheetBuilderTest {
     @Test
     public void mempoiSheetBuilderForcingGenerationEmptyArray() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                     .withPrepStmt(prepStmt)
@@ -168,7 +167,7 @@ public class MempoiSheetBuilderTest {
     @Test
     public void mempoiSheetBuilderForcingGenerationNullArray() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                     .withPrepStmt(prepStmt)
@@ -283,7 +282,7 @@ public class MempoiSheetBuilderTest {
     @Test
     public void withDataElaborationStepMapNullAndDataElaborationStepAndForceGenerationShouldWork() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             Workbook wb = new XSSFWorkbook();
             NotStreamApiMergedRegionsStep step = TestHelper.getNotStreamApiMergedRegionsStep(wb);

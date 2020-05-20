@@ -8,7 +8,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
-import it.firegloves.mempoi.testutil.TestForceGenerationHelper;
+import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -708,7 +708,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsHSSFNullMergedRegionsForceGeneration() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
             int limit = 450;
@@ -737,7 +737,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsHSSFEmptyMergedRegionsForceGeneration() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
             int limit = 450;

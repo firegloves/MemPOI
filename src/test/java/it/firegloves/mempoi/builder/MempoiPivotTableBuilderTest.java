@@ -5,7 +5,7 @@ import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.AssertionHelper;
-import it.firegloves.mempoi.testutil.TestForceGenerationHelper;
+import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -67,7 +67,7 @@ public final class MempoiPivotTableBuilderTest {
     @Test
     public void withReferenceAreaAndTableAndForceGenerationShouldWork() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             MempoiPivotTableBuilder.aMempoiPivotTable()
                     .withWorkbook(wb)
@@ -93,7 +93,7 @@ public final class MempoiPivotTableBuilderTest {
     @Test
     public void withSourceSheetAndSourceTableAndForceGenerationShouldWork() {
 
-        TestForceGenerationHelper.executeTestWithForceGeneration(() -> {
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
             MempoiPivotTableBuilder.aMempoiPivotTable()
                     .withWorkbook(wb)

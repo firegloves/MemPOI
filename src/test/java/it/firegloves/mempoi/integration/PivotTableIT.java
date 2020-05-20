@@ -6,6 +6,7 @@ import it.firegloves.mempoi.builder.MempoiPivotTableBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
@@ -14,13 +15,18 @@ import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class PivotTableIT extends IntegrationBaseIT {
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     private XSSFWorkbook wb = new XSSFWorkbook();
 
@@ -96,8 +102,6 @@ public class PivotTableIT extends IntegrationBaseIT {
     }
 
 
-
-
     @Test
     public void addPivotTableWithPositionAndTableSourceOnDifferentSheet() throws Exception {
 
@@ -138,6 +142,44 @@ public class PivotTableIT extends IntegrationBaseIT {
         Workbook loadedWb = TestHelper.openFile(fileName);
         XSSFPivotTable pivotTable = ((XSSFSheet) loadedWb.getSheet(TestHelper.SHEET_NAME_2)).getPivotTables().get(0);
         AssertionHelper.assertPivotTable(pivotTable, mempoiSheet2.getMempoiPivotTable().get(), mempoiSheet2.getColumnList());
+    }
+
+
+    @Test(expected = MempoiException.class)
+    public void addPivotTableWithTableAsSourceContainedInNotStillGeneratedSheetWillThrowMempoiException() throws Throwable {
+
+        MempoiTable mempoiTable = TestHelper.getTestMempoiTableBuilder(wb)
+                .withAreaReferenceSource(TestHelper.AREA_REFERENCE_TABLE_DB_DATA)
+                .build();
+
+        MempoiSheet mempoiSheet1 = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName(TestHelper.SHEET_NAME)
+                .withPrepStmt(prepStmt)
+                .withMempoiTable(mempoiTable)
+                .build();
+
+        MempoiPivotTableBuilder mempoiPivotTableBuilder = TestHelper.getTestMempoiPivotTableBuilderForIT(wb, null)
+                .withAreaReferenceSource(null)
+                .withMempoiTableSource(mempoiTable);
+
+        MempoiSheet mempoiSheet2 = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName(TestHelper.SHEET_NAME_2)
+                .withPrepStmt(this.createStatement())
+                .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
+                .build();
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(wb)
+                .withFile(new File("temp"))
+                .withStyleTemplate(new StandardStyleTemplate())
+                .addMempoiSheet(mempoiSheet2)
+                .addMempoiSheet(mempoiSheet1)
+                .build();
+        try {
+            memPOI.prepareMempoiReportToFile().get();
+        } catch (Exception e) {
+            throw e.getCause();
+        }
     }
 
 

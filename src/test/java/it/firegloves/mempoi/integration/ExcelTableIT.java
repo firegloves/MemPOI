@@ -12,17 +12,14 @@ import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -30,12 +27,9 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ExcelTableIT extends IntegrationBaseIT {
-
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-
 
     @Test
     public void addingExcelTable() throws Exception {
@@ -63,7 +57,7 @@ public class ExcelTableIT extends IntegrationBaseIT {
         // validates first sheet
         AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
-        XSSFSheet sheet = ((XSSFWorkbook)(TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
+        XSSFSheet sheet = ((XSSFWorkbook) (TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
         AssertionHelper.validateTable(sheet);
     }
 
@@ -95,7 +89,7 @@ public class ExcelTableIT extends IntegrationBaseIT {
         // validates first sheet
         AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
-        XSSFSheet sheet = ((XSSFWorkbook)(TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
+        XSSFSheet sheet = ((XSSFWorkbook) (TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
         AssertionHelper.validateTable(sheet);
     }
 
@@ -103,13 +97,8 @@ public class ExcelTableIT extends IntegrationBaseIT {
     @Test
     public void addingExcelTableToNonXSSFWorkbook_willFail() {
 
-        // TODO check if all iterations are executed
-
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
-
-                    exceptionRule.expect(MempoiException.class);
-                    exceptionRule.expectMessage(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
 
                     File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_table.xlsx");
 
@@ -122,16 +111,18 @@ public class ExcelTableIT extends IntegrationBaseIT {
                         throw new RuntimeException();
                     }
 
-                    MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-                            .withPrepStmt(prepStmt)
-                            .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(workbook))
-                            .build();
 
-                    MempoiBuilder.aMemPOI()
-                            .withWorkbook(workbook)
-                            .withFile(fileDest)
-                            .addMempoiSheet(mempoiSheet)
-                            .build();
+                    try {
+
+                        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                                .withPrepStmt(prepStmt)
+                                .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(workbook))
+                                .build();
+
+                    } catch (Exception e) {
+                        assertTrue(e instanceof MempoiException);
+                        assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
+                    }
                 });
     }
 

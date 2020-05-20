@@ -253,8 +253,6 @@ public class StrategosTest {
         assertEquals(TestHelper.AREA_REFERENCE, areaReference.formatAsString());
     }
 
-    // TODO write test, also testing that returned area reference is correct
-
 
 //
 //

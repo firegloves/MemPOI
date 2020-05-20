@@ -48,10 +48,6 @@ public class TableStrategosTest {
     @Mock
     private PreparedStatement prepStmt;
 
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-
-
     @Before
     public void prepare() {
         MockitoAnnotations.initMocks(this);
@@ -142,9 +138,6 @@ public class TableStrategosTest {
 
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
-// TODO check che vengano eseguite le varie iterazioni
-                    exceptionRule.expect(MempoiException.class);
-                    exceptionRule.expectMessage(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
 
                     Constructor<? extends Workbook> constructor;
                     Workbook workbook;
@@ -161,7 +154,12 @@ public class TableStrategosTest {
                             .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
                             .build();
 
-                    tableStrategos.manageMempoiTable(mempoiSheet, TestHelper.getAreaReference(wb));
+                    try {
+                        tableStrategos.manageMempoiTable(mempoiSheet, TestHelper.getAreaReference(wb));
+                    } catch (Exception e) {
+                        assertTrue(e instanceof MempoiException);
+                        assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
+                    }
                 });
     }
 

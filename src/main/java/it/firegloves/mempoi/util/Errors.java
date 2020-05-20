@@ -49,6 +49,7 @@ public class Errors {
     public static final String ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS_FORCE_GENERATION = ERR_PIVOTTABLE_SOURCE_SHEET_AMBIGUOUS + FORCE_GENERATION_ENABLED + "Table source takes precedence over sheet";
     public static final String ERR_PIVOTTABLE_SOURCE_NOT_FOUND = "Source for pivot table not found";
     public static final String ERR_PIVOTTABLE_POSITION_NOT_FOUND = "Position for pivot table not found";
+    public static final String ERR_PIVOTTABLE_TABLE_SOURCE_NULL = "MemPOI is trying to create a pivot table using a null table as source. Maybe the selected sheets order is wrong and the desired table is not still generated?";
 
 
 
