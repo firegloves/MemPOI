@@ -75,6 +75,7 @@ public class TestHelper {
     public static final String[] MERGED_USEFUL_CHAR_VALUES = { "C", "B", "Z" };
 
     public static final String SHEET_NAME = "Nice Sheet";
+    public static final String SHEET_NAME_2 = "Perfect Sheet";
 
     /**********************************************************************************************************
      * MempoiTable
