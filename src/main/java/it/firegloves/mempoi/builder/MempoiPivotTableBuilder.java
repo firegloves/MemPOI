@@ -29,7 +29,7 @@ public final class MempoiPivotTableBuilder {
     private EnumMap<DataConsolidateFunction, List<String>> columnLabelColumns;
     private List<String> reportFilterColumns;
 
-    private MempoiTable mempoiTable;    // TODO make example in particular on how to bind table to pivot table
+    private MempoiTable mempoiTable;
     private String areaReference;
     private MempoiSheet mempoiSheetSource;
 

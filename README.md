@@ -27,11 +27,10 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 
 ```
 
-### What's new in 1.2.0
+### What's new in 1.3.0
 
-- [Data elaboration pipeline](#data-elaboration-pipeline)
-    - [Merged regions](#merged-regions)
-- [Force generation (experimental)](#force-generation)
+- [Excel Table](#excel-table)
+- [Excel Pivot Table](#excel-pivot-table)
   
     
 ### Basic usage
@@ -326,6 +325,150 @@ Also this approach may fail because of that not using a `SXSSFWorkbook` will cre
 To solve this issue you could extend your JVM heap memory with the option `-Xmx2048m`
 
 So actually the best solution for huge dataset is to force Excel to evaluate cell formulas when the report is open.
+
+---
+
+### Excel Table
+
+You can ask MemPOI to create an Excel Table by using the same builder pattern. Keep in mind that only XSSF supports Excel Table.
+An Excel Table is related to a sheet, so you have to create the MempoiTable object and then set it into the desired MempoiSheet as follows:
+
+```
+MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(wb)
+                .withTableName("My table")
+                .withDisplayTableName("My table name")
+                .withAreaReferenceSource("A1:F100");
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                            .withPrepStmt(prepStmt)
+                            .withMempoiTableBuilder(mempoiTableBuilder)
+                            .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .addMempoiSheet(mempoiSheet)
+                .build();
+```
+
+You can also ask MemPOI to manage Excel Table area reference for you, adding all sheet data to the table by setting to true the variable `allSheetData` as follows:
+
+```
+MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(wb)
+                .withTableName("My table")
+                .withDisplayTableName("My table name")
+                .withAllSheetData(true);
+```
+
+Auto filters will be automatically enabled.
+
+---
+
+### Excel Pivot Table
+
+MemPOI also supports Excel Pivot Table.  Keep in mind that only XSSF supports Excel Pivot Table.
+Here is a basic example:
+
+```
+MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource("A1:F100")
+                .withPosition(new CellReference("H1"));
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName("Nice sheet")
+                .withPrepStmt(prepStmt)
+                .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
+                .build();
+```
+
+#### Pivot Table source
+
+You can specify one source for the pivot table choosing from:
+- explicit area reference (in this case you can also specify a source sheet if different from the one in which place the pivot table)
+- a previously generated table (the table's sheet will be used as source sheet)
+
+Unfortunately Apache POI actually doesn't support table as source for a pivot table.
+MemPOI makes an abstraction that is only able to extract the table area reference and use it as source for the upcoming pivot table. 
+This means that if you open the generated excel file, you move the source table and update the pivot table, it will not be able to keep data consistency
+
+Here an example with area reference source on different sheet:
+
+```
+MempoiSheet mempoiSheet1 = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName("Oh sheet!")
+                .withPrepStmt(prepStmt)
+                .build();
+
+MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withMempoiSheetSource(mempoiSheet1)
+                .withAreaReferenceSource("A1:F100")
+                .withPosition(new CellReference("H1"));
+
+MempoiSheet mempoiSheet2 = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName("Second sheet")
+                .withPrepStmt(prepStmt2)
+                .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
+                .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(wb)
+                .withFile(fileDest)
+                .addMempoiSheet(mempoiSheet1)       // NOTE THAT SHEET ORDER IS IMPORTANT
+                .addMempoiSheet(mempoiSheet2)
+                .build();
+```
+
+Here an example with table source:
+
+```
+MempoiTable mempoiTable = return MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(wb)
+                .withTableName("My table")
+                .withDisplayTableName("My table name")
+                .withAreaReferenceSource("A1:F100")
+                .build();
+
+MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withMempoiTableSource(mempoiTable);
+                .withPosition(new CellReference("H1"));
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName(TestHelper.SHEET_NAME)
+                .withPrepStmt(prepStmt)
+                .withMempoiTable(mempoiTable)
+                .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
+                .build();
+```
+
+#### Pivot Table filters and labels
+
+You can specify row labels, column labels and report filters by passing the list of relative column names (in case of db queries that use AS clause you should use AS clause values):
+
+```
+EnumMap<DataConsolidateFunction, List<String>> columnLabelColumnsMap = new EnumMap<>(DataConsolidateFunction.class);
+        map.put(DataConsolidateFunction.SUM, Arrays.asList("sum"));
+        map.put(DataConsolidateFunction.AVERAGE, Arrays.asList("average")");
+        return map;
+
+List<String> rowLabelColumnList = Arrays.asList("name", "surname")
+
+List<String> reportFilterColumnList = Arrays.asList("address", "city")
+
+MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource("A1:F100")
+                .withPosition(new CellReference("H1"))
+                .withRowLabelColumns(rowLabelColumnList)
+                .withColumnLabelColumns(columnLabelColumnsMap)
+                .withReportFilterColumns(reportFilterColumnList);
+```
+
+You can
 
 ---
 

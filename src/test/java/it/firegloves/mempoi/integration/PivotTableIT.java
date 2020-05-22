@@ -30,7 +30,7 @@ public class PivotTableIT extends IntegrationBaseIT {
 
     private XSSFWorkbook wb = new XSSFWorkbook();
 
-    // TODO  add check se aree delle table si sovrappongono?
+    // TODO  add check if table area are ovelapping?
 
     @Before
     public void setup() throws SQLException {
@@ -63,6 +63,42 @@ public class PivotTableIT extends IntegrationBaseIT {
         XSSFPivotTable pivotTable = ((XSSFSheet) loadedWb.getSheet(TestHelper.SHEET_NAME)).getPivotTables().get(0);
         AssertionHelper.assertPivotTable(pivotTable, mempoiSheet.getMempoiPivotTable().get(), mempoiSheet.getColumnList());
     }
+
+    @Test
+    public void addPivotTableWithAreaReferenceSourceOnDifferentSheet() throws Exception {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_pivot_table_and_area_referencce_on_different_sheet.xlsx");
+
+        MempoiSheet mempoiSheet1 = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName(TestHelper.SHEET_NAME)
+                .withPrepStmt(prepStmt)
+                .build();
+
+        MempoiPivotTableBuilder mempoiPivotTableBuilder = TestHelper.getTestMempoiPivotTableBuilderForIT(wb, mempoiSheet1);
+
+        MempoiSheet mempoiSheet2 = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName(TestHelper.SHEET_NAME_2)
+                .withPrepStmt(this.createStatement())
+                .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
+                .build();
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(wb)
+                .withFile(fileDest)
+                .withStyleTemplate(new StandardStyleTemplate())
+                .addMempoiSheet(mempoiSheet1)
+                .addMempoiSheet(mempoiSheet2)
+                .build();
+
+        String fileName = memPOI.prepareMempoiReportToFile().get();
+
+        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
+
+        Workbook loadedWb = TestHelper.openFile(fileName);
+        XSSFPivotTable pivotTable = ((XSSFSheet) loadedWb.getSheet(TestHelper.SHEET_NAME_2)).getPivotTables().get(0);
+        AssertionHelper.assertPivotTable(pivotTable, mempoiSheet2.getMempoiPivotTable().get(), mempoiSheet2.getColumnList());
+    }
+
 
 
     @Test
