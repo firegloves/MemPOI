@@ -417,7 +417,7 @@ MempoiSheet mempoiSheet2 = MempoiSheetBuilder.aMempoiSheet()
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                 .withWorkbook(wb)
                 .withFile(fileDest)
-                .addMempoiSheet(mempoiSheet1)       // NOTE THAT SHEET ORDER IS IMPORTANT
+                .addMempoiSheet(mempoiSheet1)       // NOTE THAT SHEETS ORDER IS IMPORTANT
                 .addMempoiSheet(mempoiSheet2)
                 .build();
 ```
@@ -438,7 +438,7 @@ MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempo
                 .withPosition(new CellReference("H1"));
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-                .withSheetName(TestHelper.SHEET_NAME)
+                .withSheetName("Pets")
                 .withPrepStmt(prepStmt)
                 .withMempoiTable(mempoiTable)
                 .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
