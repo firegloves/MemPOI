@@ -151,6 +151,10 @@ public class MempoiColumnTest {
         this.assertMempoiColumn("column_BOOLEAN", Types.BOOLEAN, EExportDataType.BOOLEAN);
     }
 
+    @Test
+    public void column_UUID() throws NoSuchMethodException {
+        this.assertMempoiColumn("column_UUID", TypesExtended.UUID, EExportDataType.TEXT);
+    }
 
     /**
      * parametrized method to test MempoiColumn
