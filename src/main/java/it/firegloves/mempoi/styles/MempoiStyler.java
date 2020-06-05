@@ -24,8 +24,11 @@ public class MempoiStyler {
     // date time
     private CellStyle datetimeCellStyle;
 
-    // number
-    private CellStyle numberCellStyle;
+    // integer number
+    private CellStyle integerCellStyle;
+
+    // floating point number
+    private CellStyle floatingPointCellStyle;
 
     // sub footer
     private CellStyle subFooterCellStyle;

@@ -46,7 +46,7 @@ public class CommonIT extends IntegrationBaseIT {
 
 
     @Test
-    public void testWithByteArrayAndNumberStyler() {
+    public void testWithByteArrayAndIntegerStyler() {
 
         try {
 
@@ -59,7 +59,7 @@ public class CommonIT extends IntegrationBaseIT {
                     .withDebug(true)
                     .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .withNumberCellStyle(numberCellStyle)
+                    .withIntegerCellStyle(numberCellStyle)
                     .build();
 
             CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
@@ -166,6 +166,10 @@ public class CommonIT extends IntegrationBaseIT {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
+            CellStyle floatingPointCellStyle = workbook.createCellStyle();
+            floatingPointCellStyle.setFillForegroundColor(IndexedColors.BLACK1.getIndex());
+            floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
+
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
                     .withWorkbook(workbook)
@@ -173,10 +177,11 @@ public class CommonIT extends IntegrationBaseIT {
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .withHeaderCellStyle(headerCellStyle)
-                    .withNumberCellStyle(workbook.createCellStyle())
+                    .withIntegerCellStyle(workbook.createCellStyle())
+                    .withFloatingPointCellStyle(floatingPointCellStyle)
                     .withDateCellStyle(dateCellStyle)
                     .withDatetimeCellStyle(datetimeCellStyle)
-                    .withCommonDataCellStyle(commonDataCellStyle)
+                    .withCommonDataCellStyle(floatingPointCellStyle)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

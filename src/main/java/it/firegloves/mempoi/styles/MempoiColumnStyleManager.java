@@ -14,8 +14,9 @@ public class MempoiColumnStyleManager {
 
     private static final Set<EExportDataType> dateStylerTypes = EnumSet.of(EExportDataType.DATE);
     private static final Set<EExportDataType> datetimeStylerTypes = EnumSet.of(EExportDataType.TIME, EExportDataType.TIMESTAMP);
-    private static final Set<EExportDataType> numberStylerTypes = EnumSet.of(EExportDataType.INT, EExportDataType.DOUBLE, EExportDataType.FLOAT);
-    private final List<Set<EExportDataType>> stylerTypesSet = Arrays.asList(dateStylerTypes, datetimeStylerTypes, numberStylerTypes);
+    private static final Set<EExportDataType> integerStylerTypes = EnumSet.of(EExportDataType.INT);
+    private static final Set<EExportDataType> floatingPointStylerTypes = EnumSet.of(EExportDataType.DOUBLE, EExportDataType.FLOAT);
+    private final List<Set<EExportDataType>> stylerTypesSet = Arrays.asList(dateStylerTypes, datetimeStylerTypes, integerStylerTypes, floatingPointStylerTypes);
 
     private HashMap<Set<EExportDataType>, CellStyle> cellStylerMap;
 
@@ -34,7 +35,8 @@ public class MempoiColumnStyleManager {
         this.cellStylerMap = new HashMap<>();
         this.cellStylerMap.put(dateStylerTypes, this.reportStyler.getDateCellStyle());
         this.cellStylerMap.put(datetimeStylerTypes, this.reportStyler.getDatetimeCellStyle());
-        this.cellStylerMap.put(numberStylerTypes, this.reportStyler.getNumberCellStyle());
+        this.cellStylerMap.put(floatingPointStylerTypes, this.reportStyler.getFloatingPointCellStyle());
+        this.cellStylerMap.put(integerStylerTypes, this.reportStyler.getIntegerCellStyle());
     }
 
 
@@ -55,11 +57,11 @@ public class MempoiColumnStyleManager {
      */
     public void setMempoiColumnListStyler(List<MempoiColumn> mempoiColumnList) {
 
-        mempoiColumnList.stream().forEach(mc -> {
+        mempoiColumnList.forEach(mc -> {
 
             // if column name == 'id' -> no style
             if (mc.getColumnName().equalsIgnoreCase("id")) {
-                mc.setCellStyle(this.reportStyler.getCommonDataCellStyle());
+                mc.setCellStyle(this.reportStyler.getIntegerCellStyle());
             } else {
                 // else default style
                 mc.setCellStyle(this.cellStylerMap.getOrDefault(this.getEExportDataTypeEnumSet(mc.getType()), this.reportStyler.getCommonDataCellStyle()));
@@ -74,6 +76,6 @@ public class MempoiColumnStyleManager {
      * @return true if the received EExportDataType belongs to the numeric list, false otherwise
      */
     public static boolean isNumericType(EExportDataType type) {
-        return numberStylerTypes.contains(type);
+        return floatingPointStylerTypes.contains(type) || integerStylerTypes.contains(type);
     }
 }

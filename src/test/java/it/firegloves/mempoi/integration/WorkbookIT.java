@@ -142,6 +142,10 @@ public class WorkbookIT extends IntegrationBaseIT {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
+            CellStyle floatingPointCellStyle = workbook.createCellStyle();
+            floatingPointCellStyle.setFillForegroundColor(IndexedColors.BLACK1.getIndex());
+            floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
+
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
                     .withWorkbook(workbook)
@@ -150,8 +154,10 @@ public class WorkbookIT extends IntegrationBaseIT {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     // custom header cell style
                     .withHeaderCellStyle(headerCellStyle)
-                    // no style for number fields
-                    .withNumberCellStyle(workbook.createCellStyle())
+                    // no style for integer fields
+                    .withIntegerCellStyle(workbook.createCellStyle())
+                    // no style for integer fields
+                    .withFloatingPointCellStyle(floatingPointCellStyle)
                     // custom date cell style
                     .withDateCellStyle(dateCellStyle)
                     // custom datetime cell style
@@ -293,6 +299,10 @@ public class WorkbookIT extends IntegrationBaseIT {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
+            CellStyle floatingPointCellStyle = workbook.createCellStyle();
+            floatingPointCellStyle.setFillForegroundColor(IndexedColors.BLACK1.getIndex());
+            floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
+
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
                     .withWorkbook(workbook)
@@ -301,8 +311,10 @@ public class WorkbookIT extends IntegrationBaseIT {
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     // custom header cell style
                     .withHeaderCellStyle(headerCellStyle)
-                    // no style for number fields
-                    .withNumberCellStyle(workbook.createCellStyle())
+                    // no style for integer fields
+                    .withIntegerCellStyle(workbook.createCellStyle())
+                    // floating point cell style
+                    .withFloatingPointCellStyle(floatingPointCellStyle)
                     // custom date cell style
                     .withDateCellStyle(dateCellStyle)
                     // custom datetime cell style
@@ -444,6 +456,10 @@ public class WorkbookIT extends IntegrationBaseIT {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
+            CellStyle floatingPointCellStyle = workbook.createCellStyle();
+            floatingPointCellStyle.setFillForegroundColor(IndexedColors.BLACK1.getIndex());
+            floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
+
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
                     .withWorkbook(workbook)
@@ -453,9 +469,11 @@ public class WorkbookIT extends IntegrationBaseIT {
                     // custom header cell style
                     .withHeaderCellStyle(headerCellStyle)
                     // no style for number fields
-                    .withNumberCellStyle(workbook.createCellStyle())
+                    .withIntegerCellStyle(workbook.createCellStyle())
                     // custom date cell style
                     .withDateCellStyle(dateCellStyle)
+                    // no style for integer fields
+                    .withFloatingPointCellStyle(floatingPointCellStyle)
                     // custom datetime cell style
                     .withDatetimeCellStyle(datetimeCellStyle)
                     // custom common data cell style

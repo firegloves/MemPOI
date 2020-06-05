@@ -22,7 +22,8 @@ public class MempoiStylerTest {
               template.getCommonDataCellStyle(wb),
               template.getDateCellStyle(wb),
               template.getDatetimeCellStyle(wb),
-              template.getNumberCellStyle(wb),
+              template.getIntegerCellStyle(wb),
+              template.getFloatingPointCellStyle(wb),
               template.getSubfooterCellStyle(wb)
       );
 
@@ -30,7 +31,8 @@ public class MempoiStylerTest {
       AssertionHelper.validateCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
       AssertionHelper.validateCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
       AssertionHelper.validateCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
-      AssertionHelper.validateCellStyle(styler.getNumberCellStyle(), styler.getNumberCellStyle());
+      AssertionHelper.validateCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
+      AssertionHelper.validateCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
       AssertionHelper.validateCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
    }
 }

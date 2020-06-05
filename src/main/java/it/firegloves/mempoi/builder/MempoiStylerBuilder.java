@@ -19,7 +19,8 @@ public class MempoiStylerBuilder {
     private CellStyle commonDataCellStyle;
     private CellStyle dateCellStyle;
     private CellStyle datetimeCellStyle;
-    private CellStyle numberCellStyle;
+    private CellStyle integerCellStyle;
+    private CellStyle floatingPointCellStyle;
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -107,13 +108,24 @@ public class MempoiStylerBuilder {
     }
 
     /**
-     * add the received CellStyle as NumberCell styler to the builder instance
+     * add the received CellStyle as IntegerCell styler to the builder instance
      *
-     * @param numberCellStyle the CellStyle to set as NumberCell styler
+     * @param integerCellStyle the CellStyle to set as IntegerCell styler
      * @return the current MempoiStylerBuilder
      */
-    public MempoiStylerBuilder withNumberCellStyle(CellStyle numberCellStyle) {
-        this.numberCellStyle = null != numberCellStyle ? numberCellStyle : this.styleTemplate.getNumberCellStyle(this.workbook);
+    public MempoiStylerBuilder withIntegerCellStyle(CellStyle integerCellStyle) {
+        this.integerCellStyle = null != integerCellStyle ? integerCellStyle : this.styleTemplate.getIntegerCellStyle(this.workbook);
+        return this;
+    }
+
+    /**
+     * add the received CellStyle as FloatingPointCell styler to the builder instance
+     *
+     * @param floatingPointCellStyle the CellStyle to set as FloatingPointCell styler
+     * @return the current MempoiStylerBuilder
+     */
+    public MempoiStylerBuilder withFloatingPointCellStyle(CellStyle floatingPointCellStyle) {
+        this.floatingPointCellStyle = null != floatingPointCellStyle ? floatingPointCellStyle : this.styleTemplate.getFloatingPointCellStyle(this.workbook);
         return this;
     }
 
@@ -138,7 +150,8 @@ public class MempoiStylerBuilder {
             styler.setHeaderCellStyle(Optional.ofNullable(this.headerCellStyle).orElseGet(() -> this.styleTemplate.getHeaderCellStyle(this.workbook)));
             styler.setDateCellStyle(Optional.ofNullable(this.dateCellStyle).orElseGet(() -> this.styleTemplate.getDateCellStyle(this.workbook)));
             styler.setDatetimeCellStyle(Optional.ofNullable(this.datetimeCellStyle).orElseGet(() -> this.styleTemplate.getDatetimeCellStyle(this.workbook)));
-            styler.setNumberCellStyle(Optional.ofNullable(this.numberCellStyle).orElseGet(() -> this.styleTemplate.getNumberCellStyle(this.workbook)));
+            styler.setIntegerCellStyle(Optional.ofNullable(this.integerCellStyle).orElseGet(() -> this.styleTemplate.getIntegerCellStyle(this.workbook)));
+            styler.setFloatingPointCellStyle(Optional.ofNullable(this.floatingPointCellStyle).orElseGet(() -> this.styleTemplate.getFloatingPointCellStyle(this.workbook)));
             styler.setCommonDataCellStyle(Optional.ofNullable(this.commonDataCellStyle).orElseGet(() -> this.styleTemplate.getCommonDataCellStyle(this.workbook)));
             styler.setSubFooterCellStyle(Optional.ofNullable(this.subFooterCellStyle).orElseGet(() -> this.styleTemplate.getSubfooterCellStyle(this.workbook)));
 
@@ -207,13 +220,23 @@ public class MempoiStylerBuilder {
     }
 
     /**
-     * @param numberCellStyle the CellStyle to set as NumberCell styler
+     * @param integerCellStyle the CellStyle to set as IntegerCell styler
      * @return the current MempoiStylerBuilder
-     * @deprecated Replaced by {@link #withNumberCellStyle(CellStyle)}
+     * @deprecated Replaced by {@link #withIntegerCellStyle(CellStyle)}
      */
     @Deprecated
-    public MempoiStylerBuilder setNumberCellStyle(CellStyle numberCellStyle) {
-        return this.withNumberCellStyle(numberCellStyle);
+    public MempoiStylerBuilder setIntegerCellStyle(CellStyle integerCellStyle) {
+        return this.withIntegerCellStyle(integerCellStyle);
+    }
+
+    /**
+     * @param floatingPointCellStyle the CellStyle to set as FloatingPointCell styler
+     * @return the current MempoiStylerBuilder
+     * @deprecated Replaced by {@link #withFloatingPointCellStyle(CellStyle)}
+     */
+    @Deprecated
+    public MempoiStylerBuilder setFloatingPointCellStyle(CellStyle floatingPointCellStyle) {
+        return this.withFloatingPointCellStyle(floatingPointCellStyle);
     }
 
 }

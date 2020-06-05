@@ -16,7 +16,7 @@ public abstract class NumberFormulaSubFooter extends FormulaSubFooter {
     protected void customizeSubFooterCellStyle(Workbook workbook, CellStyle subFooterCellStyle) {
 
         subFooterCellStyle.setAlignment(HorizontalAlignment.RIGHT);
-        subFooterCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_NUMBER_FORMAT.getFormat()));
+        subFooterCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_FLOATING_NUMBER_FORMAT.getFormat()));
     }
 
 

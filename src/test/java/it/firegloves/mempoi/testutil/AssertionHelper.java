@@ -74,7 +74,8 @@ public class AssertionHelper {
     public static void validateTemplateAndStyler(MempoiStyler mempoiStyler, StyleTemplate template, Workbook wb) {
 
         AssertionHelper.validateCellStyle(template.getCommonDataCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
-        AssertionHelper.validateCellStyle(template.getNumberCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
+        AssertionHelper.validateCellStyle(template.getIntegerCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
+        AssertionHelper.validateCellStyle(template.getFloatingPointCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
         AssertionHelper.validateCellStyle(template.getDateCellStyle(wb), mempoiStyler.getDateCellStyle());
         AssertionHelper.validateCellStyle(template.getDatetimeCellStyle(wb), mempoiStyler.getDatetimeCellStyle());
         AssertionHelper.validateCellStyle(template.getHeaderCellStyle(wb), mempoiStyler.getHeaderCellStyle());
@@ -435,14 +436,14 @@ public class AssertionHelper {
             assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
-                AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -472,9 +473,9 @@ public class AssertionHelper {
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
                 AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getNumberCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
             }
         } catch (Exception e) {

@@ -13,7 +13,7 @@ public class ConnectionHelper {
     private static final String dbPort = "3306";
     private static final String dbName = "mempoi";
     private static final String dbUser = "root";
-    private static final String dbPassword = "";
+    private static final String dbPassword = "Fr4nt010;";
 
     public static ConnectionHelper INSTANCE = new ConnectionHelper();
 

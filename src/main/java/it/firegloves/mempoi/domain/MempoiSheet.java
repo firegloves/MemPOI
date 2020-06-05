@@ -45,7 +45,8 @@ public class MempoiSheet {
     private CellStyle commonDataCellStyle;
     private CellStyle dateCellStyle;
     private CellStyle datetimeCellStyle;
-    private CellStyle numberCellStyle;
+    private CellStyle integerCellStyle;
+    private CellStyle floatingPointCellStyle;
 
     /**
      * the footer to apply to the sheet. if null no footer is appended to the report

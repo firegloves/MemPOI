@@ -98,7 +98,6 @@ public class Strategos {
 
         // if needed generate a tempfile
         if ((this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate())) {
-            this.fileManager.writeTempFile();
             this.manageFormulaToEvaluate();
         }
     }

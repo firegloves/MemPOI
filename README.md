@@ -31,7 +31,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 
 - [Excel Table](#excel-table)
 - [Excel Pivot Table](#excel-pivot-table)
-  
+- [Numeric data types](#numeric-cell-styles)
     
 ### Basic usage
 
@@ -185,7 +185,8 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 MemPOI comes with a preset of default data formatting styles for
 
 - header cells
-- number data types cells
+- integer data types cells
+- floating-point data types cells
 - date data types cells
 - datetime data types cells
 
@@ -196,7 +197,7 @@ If you want to reset the default styles you need to use an empty `CellStyle` whe
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .withNumberCellStyle(workbook.createCellStyle())     // no default style for number fields
+                    .withIntegerCellStyle(workbook.createCellStyle())     // no default style for integer fields
                     .build();
 ```
 
@@ -236,15 +237,15 @@ MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creati
 dogsSheet.setStyleTemplate(new SummerStyleTemplate());
 
 // Customized ForestStyleTemplate for catsSheet
-CellStyle numberCellStyle = workbook.createCellStyle();
-numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+CellStyle floatingPointCellStyle = workbook.createCellStyle();
+floatingPointCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+floatingPointCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
 MempoiSheet catsheet = MempoiSheetBuilder.aMempoiSheet()
                                             .withSheetName("Cats")
                                             .withPrepStmt(prepStmt)
                                             .withStyleTemplate(new ForestStyleTemplate())
-                                            .withNumberCellStyle(numberCellStyle)           // overrides ForestStyleTemplate's numeric cell style
+                                            .withFloatingPointCellStyle(floatingPointCellStyle)           // overrides ForestStyleTemplate's floating-point cell style
                                             .build();
                                             
 List<MempoiSheet> sheetList = Arrays.asList(dogsSheet, catsheet);
@@ -275,6 +276,22 @@ List of available templates:
 | StandardStyleTemplate     |![](img/template/standard.jpg)
 | StoneStyleTemplate        |![](img/template/stone.jpg)
 | SummerStyleTemplate       |![](img/template/summer.jpg)
+
+
+#### Numeric cell styles
+
+Numeric data types (and the corresponding cell styles) are now split between integer and floating-point data types. This means that from version 1.3.0 database integer data types will be exported without numbers after comma. You can still specify a custom cell style or explicitly use one of the available ones.
+For example in order use pre v1.3.0 integer cell style you can do something like this:
+
+
+```
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withWorkbook(workbook)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .withIntegerCellStyle(new StandardStyleTemplate().getFloatingPointCellStyle())     // no default style for integer fields
+                    .build();
+```
+
 
 ---
 

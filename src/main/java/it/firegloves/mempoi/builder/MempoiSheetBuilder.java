@@ -37,7 +37,8 @@ public final class MempoiSheetBuilder {
     private CellStyle commonDataCellStyle;
     private CellStyle dateCellStyle;
     private CellStyle datetimeCellStyle;
-    private CellStyle numberCellStyle;
+    private CellStyle integerCellStyle;
+    private CellStyle floatingPointCellStyle;
     private MempoiFooter mempoiFooter;
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
@@ -155,13 +156,24 @@ public final class MempoiSheetBuilder {
     }
 
     /**
-     * add the received CellStyle as numeric cell's styler to the builder instance
+     * add the received CellStyle as integer cell's styler to the builder instance
      *
-     * @param numberCellStyle the CellStyle to use as numeric cell's styler
+     * @param integerCellStyle the CellStyle to use as integer cell's styler
      * @return the current MempoiSheetBuilder
      */
-    public MempoiSheetBuilder withNumberCellStyle(CellStyle numberCellStyle) {
-        this.numberCellStyle = numberCellStyle;
+    public MempoiSheetBuilder withIntegerCellStyle(CellStyle integerCellStyle) {
+        this.integerCellStyle = integerCellStyle;
+        return this;
+    }
+
+    /**
+     * add the received CellStyle as floating point cell's styler to the builder instance
+     *
+     * @param floatingPointCellStyle the CellStyle to use as floating point cell's styler
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withFloatingPointCellStyle(CellStyle floatingPointCellStyle) {
+        this.floatingPointCellStyle = floatingPointCellStyle;
         return this;
     }
 
@@ -336,7 +348,8 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setCommonDataCellStyle(commonDataCellStyle);
         mempoiSheet.setDateCellStyle(dateCellStyle);
         mempoiSheet.setDatetimeCellStyle(datetimeCellStyle);
-        mempoiSheet.setNumberCellStyle(numberCellStyle);
+        mempoiSheet.setIntegerCellStyle(integerCellStyle);
+        mempoiSheet.setFloatingPointCellStyle(floatingPointCellStyle);
         mempoiSheet.setMempoiFooter(mempoiFooter);
         mempoiSheet.setMempoiSubFooter(mempoiSubFooter);
         mempoiSheet.setDataElaborationStepMap(dataElaborationStepMap);

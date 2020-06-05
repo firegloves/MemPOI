@@ -76,7 +76,8 @@ public class MempoiStylerBuilderTest {
         AssertionHelper.validateCellStyle(optStyler.get().getCommonDataCellStyle(), this.template.getCommonDataCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDateCellStyle(), this.template.getDateCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDatetimeCellStyle(), this.template.getDatetimeCellStyle(this.workbook));
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.template.getNumberCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.template.getIntegerCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.template.getFloatingPointCellStyle(this.workbook));
     }
 
 
@@ -117,7 +118,8 @@ public class MempoiStylerBuilderTest {
         AssertionHelper.validateCellStyle(optStyler.get().getCommonDataCellStyle(), this.cellStyle);
         AssertionHelper.validateCellStyle(optStyler.get().getDateCellStyle(), this.template.getDateCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDatetimeCellStyle(), this.template.getDatetimeCellStyle(this.workbook));
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.template.getNumberCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.template.getIntegerCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.template.getFloatingPointCellStyle(this.workbook));
     }
 
 
@@ -158,7 +160,8 @@ public class MempoiStylerBuilderTest {
         AssertionHelper.validateCellStyle(optStyler.get().getCommonDataCellStyle(), this.template.getCommonDataCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDateCellStyle(), this.cellStyle);
         AssertionHelper.validateCellStyle(optStyler.get().getDatetimeCellStyle(), this.template.getDatetimeCellStyle(this.workbook));
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.template.getNumberCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.template.getIntegerCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.template.getFloatingPointCellStyle(this.workbook));
     }
 
 
@@ -199,40 +202,41 @@ public class MempoiStylerBuilderTest {
         AssertionHelper.validateCellStyle(optStyler.get().getCommonDataCellStyle(), this.template.getCommonDataCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDateCellStyle(), this.template.getDateCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDatetimeCellStyle(), this.cellStyle);
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.template.getNumberCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.template.getIntegerCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.template.getFloatingPointCellStyle(this.workbook));
     }
 
 
     /*************************************************************************************
-     * withNumberCellStyle
+     * withIntegerCellStyle
      *************************************************************************************/
 
     @Test
-    public void withNumberCellStyle() {
+    public void withIntegerCellStyle() {
 
         Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
-                .withNumberCellStyle(this.cellStyle)
+                .withIntegerCellStyle(this.cellStyle)
                 .build();
 
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.cellStyle);
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.cellStyle);
     }
 
     @Test
-    public void withNullNumberCellStyle() {
+    public void withNullIntegerCellStyle() {
 
         Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
-                .withNumberCellStyle(null)
+                .withIntegerCellStyle(null)
                 .build();
 
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.standardTemplate.getNumberCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.standardTemplate.getIntegerCellStyle(this.workbook));
     }
 
     @Test
-    public void withNumberCellStyleAndTemplate() {
+    public void withIntegerCellStyleAndTemplate() {
 
         Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
                 .withStyleTemplate(this.template)
-                .withNumberCellStyle(this.cellStyle)
+                .withIntegerCellStyle(this.cellStyle)
                 .build();
 
         AssertionHelper.validateCellStyle(optStyler.get().getHeaderCellStyle(), this.template.getHeaderCellStyle(this.workbook));
@@ -240,8 +244,52 @@ public class MempoiStylerBuilderTest {
         AssertionHelper.validateCellStyle(optStyler.get().getCommonDataCellStyle(), this.template.getCommonDataCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDateCellStyle(), this.template.getDateCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDatetimeCellStyle(), this.template.getDatetimeCellStyle(this.workbook));
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.cellStyle);
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.cellStyle);
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.template.getFloatingPointCellStyle(this.workbook));
     }
+
+    /*************************************************************************************
+     * withFloatingPointCellStyle
+     *************************************************************************************/
+
+    @Test
+    public void withFloatingPointCellStyle() {
+
+        Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
+                .withFloatingPointCellStyle(this.cellStyle)
+                .build();
+
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.cellStyle);
+    }
+
+    @Test
+    public void withNullFloatingPointCellStyle() {
+
+        Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
+                .withFloatingPointCellStyle(null)
+                .build();
+
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.standardTemplate.getFloatingPointCellStyle(this.workbook));
+    }
+
+    @Test
+    public void withFloatingPointCellStyleAndTemplate() {
+
+        Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
+                .withStyleTemplate(this.template)
+                .withFloatingPointCellStyle(this.cellStyle)
+                .build();
+
+        AssertionHelper.validateCellStyle(optStyler.get().getHeaderCellStyle(), this.template.getHeaderCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getSubFooterCellStyle(), this.template.getSubfooterCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getCommonDataCellStyle(), this.template.getCommonDataCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getDateCellStyle(), this.template.getDateCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getDatetimeCellStyle(), this.template.getDatetimeCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.template.getIntegerCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.cellStyle);
+    }
+
+
 
 
     /*************************************************************************************
@@ -281,7 +329,8 @@ public class MempoiStylerBuilderTest {
         AssertionHelper.validateCellStyle(optStyler.get().getCommonDataCellStyle(), this.template.getCommonDataCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDateCellStyle(), this.template.getDateCellStyle(this.workbook));
         AssertionHelper.validateCellStyle(optStyler.get().getDatetimeCellStyle(), this.template.getDatetimeCellStyle(this.workbook));
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.template.getNumberCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.template.getIntegerCellStyle(this.workbook));
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.template.getFloatingPointCellStyle(this.workbook));
     }
 
 
@@ -330,13 +379,23 @@ public class MempoiStylerBuilderTest {
     }
 
     @Test
-    public void setNumberCellStyle() {
+    public void setIntegerCellStyle() {
 
         Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
-                .setNumberCellStyle(this.cellStyle)
+                .setIntegerCellStyle(this.cellStyle)
                 .build();
 
-        AssertionHelper.validateCellStyle(optStyler.get().getNumberCellStyle(), this.cellStyle);
+        AssertionHelper.validateCellStyle(optStyler.get().getIntegerCellStyle(), this.cellStyle);
+    }
+
+    @Test
+    public void setFloatingPointCellStyle() {
+
+        Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
+                .setFloatingPointCellStyle(this.cellStyle)
+                .build();
+
+        AssertionHelper.validateCellStyle(optStyler.get().getFloatingPointCellStyle(), this.cellStyle);
     }
 
     @Test

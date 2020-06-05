@@ -8,7 +8,7 @@ public enum StandardDataFormat {
 
     STANDARD_DATE_FORMAT("yyyy/mm/dd"),
     STANDARD_DATETIME_FORMAT("yyyy/mm/dd h:mm"),
-    STANDARD_NUMBER_FORMAT("#,##0.00");
+    STANDARD_FLOATING_NUMBER_FORMAT("#,##0.00");
 
     private String format;
 
