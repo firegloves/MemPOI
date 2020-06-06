@@ -41,7 +41,7 @@ You can use `MempoiBuilder` to correctly populate your MemPOI instance, like fol
 
 ```
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .addMempoiSheet (new MempoiSheet(prepStmt))
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
                         
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
@@ -358,9 +358,9 @@ MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
                 .withAreaReferenceSource("A1:F100");
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-                            .withPrepStmt(prepStmt)
-                            .withMempoiTableBuilder(mempoiTableBuilder)
-                            .build();
+                 .withPrepStmt(prepStmt)
+                 .withMempoiTableBuilder(mempoiTableBuilder)
+                 .build();
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                 .withWorkbook(workbook)
@@ -468,9 +468,8 @@ You can specify row labels, column labels and report filters by passing the list
 
 ```
 EnumMap<DataConsolidateFunction, List<String>> columnLabelColumnsMap = new EnumMap<>(DataConsolidateFunction.class);
-        map.put(DataConsolidateFunction.SUM, Arrays.asList("sum"));
-        map.put(DataConsolidateFunction.AVERAGE, Arrays.asList("average")");
-        return map;
+columnLabelColumnsMap.put(DataConsolidateFunction.SUM, Arrays.asList("sum"));
+columnLabelColumnsMap.put(DataConsolidateFunction.AVERAGE, Arrays.asList("average")");
 
 List<String> rowLabelColumnList = Arrays.asList("name", "surname")
 
@@ -648,7 +647,7 @@ According to `CompletableFuture` you'll receive an `ExecutionException` if you c
 
 ### Apache POI version
 
-MemPOI comes with Apache POI 4.1.1 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+MemPOI comes with Apache POI 4.1.2 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
 #### This is an example using Gradle:
 
