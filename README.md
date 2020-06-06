@@ -485,7 +485,6 @@ MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempo
                 .withReportFilterColumns(reportFilterColumnList);
 ```
 
-You can
 
 ---
 
