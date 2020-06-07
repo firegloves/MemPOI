@@ -124,7 +124,7 @@ byte[] bytes = fut.get();
 - TIME
 - BIT
 - BOOLEAN
-- UUID (Postgres) (thanks to nanshakov)
+- UUID (Postgres) (thanks to [nanshakov](https://github.com/nanshakov))
 ---            
 
 **You have to take care to manage your database connection, meanwhile `PreparedStatement` and `ResultSet` are managed and closed internally by MemPOI**
