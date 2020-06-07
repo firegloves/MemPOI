@@ -3,6 +3,7 @@ package it.firegloves.mempoi.manager;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
+import lombok.AllArgsConstructor;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,19 +13,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+@AllArgsConstructor
 public class FileManager {
 
     private static final Logger logger = LoggerFactory.getLogger(FileManager.class);
+
+    private final String fileSep = File.separator;
 
     /**
      * contains the workbook configurations
      */
     private WorkbookConfig workbookConfig;
-
-
-    public FileManager(WorkbookConfig workbookConfig) {
-        this.workbookConfig = workbookConfig;
-    }
 
 
     /**
@@ -34,7 +33,7 @@ public class FileManager {
      */
     public File writeTempFile() {
 
-        File tmpFile = new File(System.getProperty("java.io.tmpdir") + "mempoi_temp_" + System.currentTimeMillis() + ".xlsx");
+        File tmpFile = new File(System.getProperty("java.io.tmpdir") + fileSep + "mempoi_temp_" + System.currentTimeMillis() + ".xlsx");
 
         this.writeFile(tmpFile);
         logger.debug("MemPOI temp file created: {}", tmpFile.getAbsolutePath());

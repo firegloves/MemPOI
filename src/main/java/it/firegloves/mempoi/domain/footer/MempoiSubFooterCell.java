@@ -1,7 +1,11 @@
 package it.firegloves.mempoi.domain.footer;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.CellStyle;
 
+@Data
+@Accessors(chain = true)
 public class MempoiSubFooterCell {
 
     protected String colLetter;
@@ -22,35 +26,4 @@ public class MempoiSubFooterCell {
         this.style = style;
     }
 
-    public String getColLetter() {
-        return colLetter;
-    }
-
-    public void setColLetter(String colLetter) {
-        this.colLetter = colLetter;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public boolean isCellFormula() {
-        return cellFormula;
-    }
-
-    public void setCellFormula(boolean cellFormula) {
-        this.cellFormula = cellFormula;
-    }
-
-    public CellStyle getStyle() {
-        return style;
-    }
-
-    public void setStyle(CellStyle style) {
-        this.style = style;
-    }
 }

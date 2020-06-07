@@ -3,6 +3,8 @@ package it.firegloves.mempoi.domain;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -14,11 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Data
+@Accessors(chain = true)
 public class MempoiColumn {
 
     private EExportDataType type;
     private CellStyle cellStyle;
     private String columnName;
+    private int colIndex;
 
     /**
      * contains the ResultSet's method to
@@ -39,41 +44,16 @@ public class MempoiColumn {
         this.columnName = columnName;
     }
 
-    public MempoiColumn(int sqlObjType, String columnName) {
+    public MempoiColumn(int sqlObjType, String columnName, int colIndex) {
         this.columnName = columnName;
         this.setType(sqlObjType);
-    }
-
-
-    public EExportDataType getType() {
-        return type;
+        this.colIndex = colIndex;
     }
 
     public void setType(int sqlObjType) {
         this.type = this.getFieldTypeName(sqlObjType);
         this.setResultSetAccessMethod(this.type);
         this.setCellSetValueMethod(this.type);
-    }
-
-
-    public CellStyle getCellStyle() {
-        return cellStyle;
-    }
-
-    public void setCellStyle(CellStyle cellStyle) {
-        this.cellStyle = cellStyle;
-    }
-
-    public String getColumnName() {
-        return columnName;
-    }
-
-    public MempoiSubFooterCell getSubFooterCell() {
-        return subFooterCell;
-    }
-
-    public void setSubFooterCell(MempoiSubFooterCell subFooterCell) {
-        this.subFooterCell = subFooterCell;
     }
 
     /**
@@ -110,7 +90,6 @@ public class MempoiColumn {
 
         switch (sqlObjType) {
 
-            case Types.BIGINT:
             case Types.DOUBLE:
                 return EExportDataType.DOUBLE;
             case Types.DECIMAL:
@@ -121,6 +100,7 @@ public class MempoiColumn {
             case Types.INTEGER:
             case Types.SMALLINT:
             case Types.TINYINT:
+            case Types.BIGINT:
                 return EExportDataType.INT;
             case Types.CHAR:
             case Types.NCHAR:
@@ -141,18 +121,6 @@ public class MempoiColumn {
             default:
                 throw new MempoiException("SQL TYPE NOT RECOGNIZED: " + sqlObjType);
         }
-    }
-
-    public Method getRsAccessDataMethod() {
-        return rsAccessDataMethod;
-    }
-
-    public Method getCellSetValueMethod() {
-        return cellSetValueMethod;
-    }
-
-    public void setElaborationStepList(List<MempoiColumnElaborationStep> elaborationStepList) {
-        this.elaborationStepList = elaborationStepList;
     }
 
     public void addElaborationStep(MempoiColumnElaborationStep step) {

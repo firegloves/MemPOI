@@ -27,12 +27,11 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 
 ```
 
-### What's new in 1.2.0
+### What's new in 1.3.0
 
-- [Data elaboration pipeline](#data-elaboration-pipeline)
-    - [Merged regions](#merged-regions)
-- [Force generation (experimental)](#force-generation)
-  
+- [Excel Table](#excel-table)
+- [Excel Pivot Table](#excel-pivot-table)
+- [Numeric data types](#numeric-cell-styles)
     
 ### Basic usage
 
@@ -42,7 +41,7 @@ You can use `MempoiBuilder` to correctly populate your MemPOI instance, like fol
 
 ```
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .addMempoiSheet (new MempoiSheet(prepStmt))
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
                         
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
@@ -186,7 +185,8 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 MemPOI comes with a preset of default data formatting styles for
 
 - header cells
-- number data types cells
+- integer data types cells
+- floating-point data types cells
 - date data types cells
 - datetime data types cells
 
@@ -197,7 +197,7 @@ If you want to reset the default styles you need to use an empty `CellStyle` whe
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .withNumberCellStyle(workbook.createCellStyle())     // no default style for number fields
+                    .withIntegerCellStyle(workbook.createCellStyle())     // no default style for integer fields
                     .build();
 ```
 
@@ -237,15 +237,15 @@ MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creati
 dogsSheet.setStyleTemplate(new SummerStyleTemplate());
 
 // Customized ForestStyleTemplate for catsSheet
-CellStyle numberCellStyle = workbook.createCellStyle();
-numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+CellStyle floatingPointCellStyle = workbook.createCellStyle();
+floatingPointCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+floatingPointCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
 MempoiSheet catsheet = MempoiSheetBuilder.aMempoiSheet()
                                             .withSheetName("Cats")
                                             .withPrepStmt(prepStmt)
                                             .withStyleTemplate(new ForestStyleTemplate())
-                                            .withNumberCellStyle(numberCellStyle)           // overrides ForestStyleTemplate's numeric cell style
+                                            .withFloatingPointCellStyle(floatingPointCellStyle)           // overrides ForestStyleTemplate's floating-point cell style
                                             .build();
                                             
 List<MempoiSheet> sheetList = Arrays.asList(dogsSheet, catsheet);
@@ -276,6 +276,22 @@ List of available templates:
 | StandardStyleTemplate     |![](img/template/standard.jpg)
 | StoneStyleTemplate        |![](img/template/stone.jpg)
 | SummerStyleTemplate       |![](img/template/summer.jpg)
+
+
+#### Numeric cell styles
+
+Numeric data types (and the corresponding cell styles) are now split between integer and floating-point data types. This means that from version 1.3.0 database integer data types will be exported without numbers after comma. You can still specify a custom cell style or explicitly use one of the available ones.
+For example in order use pre v1.3.0 integer cell style you can do something like this:
+
+
+```
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withWorkbook(workbook)
+                    .addMempoiSheet(new MempoiSheet(prepStmt))
+                    .withIntegerCellStyle(new StandardStyleTemplate().getFloatingPointCellStyle())     // no default style for integer fields
+                    .build();
+```
+
 
 ---
 
@@ -326,6 +342,148 @@ Also this approach may fail because of that not using a `SXSSFWorkbook` will cre
 To solve this issue you could extend your JVM heap memory with the option `-Xmx2048m`
 
 So actually the best solution for huge dataset is to force Excel to evaluate cell formulas when the report is open.
+
+---
+
+### Excel Table
+
+You can ask MemPOI to create an Excel Table by using the same builder pattern. Keep in mind that only XSSF supports Excel Table.
+An Excel Table is related to a sheet, so you have to create the MempoiTable object and then set it into the desired MempoiSheet as follows:
+
+```
+MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(wb)
+                .withTableName("My table")
+                .withDisplayTableName("My table name")
+                .withAreaReferenceSource("A1:F100");
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                 .withPrepStmt(prepStmt)
+                 .withMempoiTableBuilder(mempoiTableBuilder)
+                 .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .addMempoiSheet(mempoiSheet)
+                .build();
+```
+
+You can also ask MemPOI to manage Excel Table area reference for you, adding all sheet data to the table by setting to true the variable `allSheetData` as follows:
+
+```
+MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(wb)
+                .withTableName("My table")
+                .withDisplayTableName("My table name")
+                .withAllSheetData(true);
+```
+
+Auto filters will be automatically enabled.
+
+---
+
+### Excel Pivot Table
+
+MemPOI also supports Excel Pivot Table.  Keep in mind that only XSSF supports Excel Pivot Table.
+Here is a basic example:
+
+```
+MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource("A1:F100")
+                .withPosition(new CellReference("H1"));
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName("Nice sheet")
+                .withPrepStmt(prepStmt)
+                .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
+                .build();
+```
+
+#### Pivot Table source
+
+You can specify one source for the pivot table choosing from:
+- explicit area reference (in this case you can also specify a source sheet if different from the one in which place the pivot table)
+- a previously generated table (the table's sheet will be used as source sheet)
+
+Unfortunately Apache POI actually doesn't support table as source for a pivot table.
+MemPOI makes an abstraction that is only able to extract the table area reference and use it as source for the upcoming pivot table. 
+This means that if you open the generated excel file, you move the source table and update the pivot table, it will not be able to keep data consistency
+
+Here an example with area reference source on different sheet:
+
+```
+MempoiSheet mempoiSheet1 = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName("Oh sheet!")
+                .withPrepStmt(prepStmt)
+                .build();
+
+MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withMempoiSheetSource(mempoiSheet1)
+                .withAreaReferenceSource("A1:F100")
+                .withPosition(new CellReference("H1"));
+
+MempoiSheet mempoiSheet2 = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName("Second sheet")
+                .withPrepStmt(prepStmt2)
+                .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
+                .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(wb)
+                .withFile(fileDest)
+                .addMempoiSheet(mempoiSheet1)       // NOTE THAT SHEETS ORDER IS IMPORTANT
+                .addMempoiSheet(mempoiSheet2)
+                .build();
+```
+
+Here an example with table source:
+
+```
+MempoiTable mempoiTable = return MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(wb)
+                .withTableName("My table")
+                .withDisplayTableName("My table name")
+                .withAreaReferenceSource("A1:F100")
+                .build();
+
+MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withMempoiTableSource(mempoiTable);
+                .withPosition(new CellReference("H1"));
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSheetName("Pets")
+                .withPrepStmt(prepStmt)
+                .withMempoiTable(mempoiTable)
+                .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
+                .build();
+```
+
+#### Pivot Table filters and labels
+
+You can specify row labels, column labels and report filters by passing the list of relative column names (in case of db queries that use AS clause you should use AS clause values):
+
+```
+EnumMap<DataConsolidateFunction, List<String>> columnLabelColumnsMap = new EnumMap<>(DataConsolidateFunction.class);
+columnLabelColumnsMap.put(DataConsolidateFunction.SUM, Arrays.asList("sum"));
+columnLabelColumnsMap.put(DataConsolidateFunction.AVERAGE, Arrays.asList("average")");
+
+List<String> rowLabelColumnList = Arrays.asList("name", "surname")
+
+List<String> reportFilterColumnList = Arrays.asList("address", "city")
+
+MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
+                .withWorkbook(wb)
+                .withAreaReferenceSource("A1:F100")
+                .withPosition(new CellReference("H1"))
+                .withRowLabelColumns(rowLabelColumnList)
+                .withColumnLabelColumns(columnLabelColumnsMap)
+                .withReportFilterColumns(reportFilterColumnList);
+```
+
 
 ---
 
@@ -489,7 +647,7 @@ According to `CompletableFuture` you'll receive an `ExecutionException` if you c
 
 ### Apache POI version
 
-MemPOI comes with Apache POI 4.1.1 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+MemPOI comes with Apache POI 4.1.2 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
 #### This is an example using Gradle:
 
@@ -527,6 +685,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 ### Contributing
 
 Feel free to contribute. The easiest way could be adding new templates, sub footers or data post elaboration steps.
+If you want to directly open a pull request, please target dev branch.
 
 ---
 

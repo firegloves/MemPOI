@@ -44,7 +44,7 @@ public abstract class StreamApiElaborationStep<T> implements MempoiColumnElabora
         if (this.maxRowsNum == -1) {
 
             try {
-                sheet.flushRows(1);     // 1 remaining because of analysis => previous row is the last one, the current one belongs to the new set
+                sheet.flushRows(1);     // 1 remaining because of analysis -> previous row is the last one, the current one belongs to the new set
                 logger.debug("SXSSFSheet in memory rows flushed");
                 return true;
             } catch (IOException e) {

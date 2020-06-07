@@ -3,9 +3,13 @@ package it.firegloves.mempoi.domain;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
+import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.sql.PreparedStatement;
@@ -14,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Data
+@Accessors(chain = true)
 public class MempoiSheet {
 
     /**
@@ -39,17 +45,18 @@ public class MempoiSheet {
     private CellStyle commonDataCellStyle;
     private CellStyle dateCellStyle;
     private CellStyle datetimeCellStyle;
-    private CellStyle numberCellStyle;
+    private CellStyle integerCellStyle;
+    private CellStyle floatingPointCellStyle;
 
     /**
-     * the footer to apply to the sheet. if null => no footer is appended to the report
+     * the footer to apply to the sheet. if null no footer is appended to the report
      */
-    private MempoiFooter mempoiFooter;
+    private Optional<MempoiFooter> mempoiFooter = Optional.empty();
 
     /**
-     * the sub footer to apply to the sheet. if null => no sub footer is appended to the report
+     * the sub footer to apply to the sheet. if null no sub footer is appended to the report
      */
-    private MempoiSubFooter mempoiSubFooter;
+    private Optional<MempoiSubFooter> mempoiSubFooter = Optional.empty();
 
     /**
      * list of MempoiColumns belonging to the current MempoiSheet
@@ -67,6 +74,22 @@ public class MempoiSheet {
      */
     private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
 
+    /**
+     * a MempoTable containing data to build an optional Excel Table inside the current sheet
+     */
+    private Optional<MempoiTable> mempoiTable = Optional.empty();
+
+    /**
+     * a MempoPivotTable containing data to build an optional Excel PivotTable inside the current sheet
+     */
+    private Optional<MempoiPivotTable> mempoiPivotTable = Optional.empty();
+
+    /**
+     * reference to the Sheet generated with the current MempoiSheet
+     * DON'T POPULATE IT MANUALLY
+     */
+    private Sheet sheet;
+
 
     public MempoiSheet(PreparedStatement prepStmt) {
         this.prepStmt = prepStmt;
@@ -77,131 +100,19 @@ public class MempoiSheet {
         this.sheetName = sheetName;
     }
 
-    public PreparedStatement getPrepStmt() {
-        return prepStmt;
-    }
-
-    public void setPrepStmt(PreparedStatement prepStmt) {
-        this.prepStmt = prepStmt;
-    }
-
-    public String getSheetName() {
-        return sheetName;
-    }
-
-    public void setSheetName(String sheetName) {
-        this.sheetName = sheetName;
-    }
-
-    public Workbook getWorkbook() {
-        return workbook;
-    }
-
-    public void setWorkbook(Workbook workbook) {
-        this.workbook = workbook;
-    }
-
-    public StyleTemplate getStyleTemplate() {
-        return styleTemplate;
-    }
-
-    public void setStyleTemplate(StyleTemplate styleTemplate) {
-        this.styleTemplate = styleTemplate;
-    }
-
-    public CellStyle getHeaderCellStyle() {
-        return headerCellStyle;
-    }
-
-    public void setHeaderCellStyle(CellStyle headerCellStyle) {
-        this.headerCellStyle = headerCellStyle;
-    }
-
-    public CellStyle getSubFooterCellStyle() {
-        return subFooterCellStyle;
-    }
-
-    public void setSubFooterCellStyle(CellStyle subFooterCellStyle) {
-        this.subFooterCellStyle = subFooterCellStyle;
-    }
-
-    public CellStyle getCommonDataCellStyle() {
-        return commonDataCellStyle;
-    }
-
-    public void setCommonDataCellStyle(CellStyle commonDataCellStyle) {
-        this.commonDataCellStyle = commonDataCellStyle;
-    }
-
-    public CellStyle getDateCellStyle() {
-        return dateCellStyle;
-    }
-
-    public void setDateCellStyle(CellStyle dateCellStyle) {
-        this.dateCellStyle = dateCellStyle;
-    }
-
-    public CellStyle getDatetimeCellStyle() {
-        return datetimeCellStyle;
-    }
-
-    public void setDatetimeCellStyle(CellStyle datetimeCellStyle) {
-        this.datetimeCellStyle = datetimeCellStyle;
-    }
-
-    public CellStyle getNumberCellStyle() {
-        return numberCellStyle;
-    }
-
-    public void setNumberCellStyle(CellStyle numberCellStyle) {
-        this.numberCellStyle = numberCellStyle;
-    }
-
-    public Optional<MempoiFooter> getMempoiFooter() {
-        return Optional.ofNullable(mempoiFooter);
-    }
-
     public void setMempoiFooter(MempoiFooter mempoiFooter) {
-        this.mempoiFooter = mempoiFooter;
-    }
-
-    public Optional<MempoiSubFooter> getMempoiSubFooter() {
-        return Optional.ofNullable(mempoiSubFooter);
+        this.mempoiFooter = Optional.ofNullable(mempoiFooter);
     }
 
     public void setMempoiSubFooter(MempoiSubFooter mempoiSubFooter) {
-        this.mempoiSubFooter = mempoiSubFooter;
+        this.mempoiSubFooter = Optional.ofNullable(mempoiSubFooter);
     }
 
-    public MempoiStyler getSheetStyler() {
-        return sheetStyler;
+    public void setMempoiTable(MempoiTable mempoiTable) {
+        this.mempoiTable = Optional.ofNullable(mempoiTable);
     }
 
-    public void setSheetStyler(MempoiStyler sheetStyler) {
-        this.sheetStyler = sheetStyler;
-    }
-
-    public String[] getMergedRegionColumns() {
-        return mergedRegionColumns;
-    }
-
-    public void setMergedRegionColumns(String[] mergedRegionColumns) {
-        this.mergedRegionColumns = mergedRegionColumns;
-    }
-
-    public List<MempoiColumn> getColumnList() {
-        return columnList;
-    }
-
-    public void setColumnList(List<MempoiColumn> columnList) {
-        this.columnList = columnList;
-    }
-
-    public Map<String, List<MempoiColumnElaborationStep>> getDataElaborationStepMap() {
-        return dataElaborationStepMap;
-    }
-
-    public void setDataElaborationStepMap(Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap) {
-        this.dataElaborationStepMap = dataElaborationStepMap;
+    public void setMempoiPivotTable(MempoiPivotTable mempoiPivotTable) {
+        this.mempoiPivotTable = Optional.ofNullable(mempoiPivotTable);
     }
 }

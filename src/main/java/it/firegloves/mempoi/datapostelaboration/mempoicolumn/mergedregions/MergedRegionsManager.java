@@ -38,7 +38,6 @@ public class MergedRegionsManager<T> {
             throw new MempoiException(Errors.ERR_MERGED_REGIONS_CELL_OR_VALUE_NULL);
         }
 
-        // TODO move into init?
         // first iteration
         if (null == this.lastValue) {
             this.lastValue = value;

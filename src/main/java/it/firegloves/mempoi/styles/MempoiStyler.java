@@ -1,7 +1,15 @@
 package it.firegloves.mempoi.styles;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.CellStyle;
 
+@Data
+@Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class MempoiStyler {
 
     // header
@@ -16,92 +24,12 @@ public class MempoiStyler {
     // date time
     private CellStyle datetimeCellStyle;
 
-    // number
-    private CellStyle numberCellStyle;
+    // integer number
+    private CellStyle integerCellStyle;
+
+    // floating point number
+    private CellStyle floatingPointCellStyle;
 
     // sub footer
     private CellStyle subFooterCellStyle;
-
-    public MempoiStyler() {
-    }
-
-    public MempoiStyler(CellStyle headerCellStyle, CellStyle commonDataCellStyle, CellStyle dateCellStyle, CellStyle datetimeCellStyle, CellStyle numberCellStyle, CellStyle subFooterCellStyle) {
-        this.headerCellStyle = headerCellStyle;
-        this.commonDataCellStyle = commonDataCellStyle;
-        this.dateCellStyle = dateCellStyle;
-        this.datetimeCellStyle = datetimeCellStyle;
-        this.numberCellStyle = numberCellStyle;
-        this.subFooterCellStyle = subFooterCellStyle;
-    }
-
-    /***********************************************************************************************************
-     * GETTERS AND SETTERS
-     **********************************************************************************************************/
-
-    /**
-     * @return HeaderCellStyle
-     */
-    public CellStyle getHeaderCellStyle() {
-        return headerCellStyle;
-    }
-
-
-    public void setHeaderCellStyle(CellStyle headerCellStyle) {
-        this.headerCellStyle = headerCellStyle;
-    }
-
-    /**
-     * @return CommonDataCellStyle
-     */
-    public CellStyle getCommonDataCellStyle() {
-        return commonDataCellStyle;
-    }
-
-    public void setCommonDataCellStyle(CellStyle commonDataCellStyle) {
-        this.commonDataCellStyle = commonDataCellStyle;
-    }
-
-    /**
-     * @return DateCellStyle
-     */
-    public CellStyle getDateCellStyle() {
-        return dateCellStyle;
-    }
-
-    public void setDateCellStyle(CellStyle dateCellStyle) {
-        this.dateCellStyle = dateCellStyle;
-    }
-
-    /**
-     * @return NumberCellStyle
-     */
-    public CellStyle getNumberCellStyle() {
-        return numberCellStyle;
-    }
-
-    public void setNumberCellStyle(CellStyle numberCellStyle) {
-        this.numberCellStyle = numberCellStyle;
-    }
-
-    /**
-     * @return DatetimeCellStyle
-     */
-    public CellStyle getDatetimeCellStyle() {
-        return datetimeCellStyle;
-    }
-
-    public void setDatetimeCellStyle(CellStyle datetimeCellStyle) {
-        this.datetimeCellStyle = datetimeCellStyle;
-    }
-
-    /**
-     * @return SubFooterCellStyle
-     */
-    public CellStyle getSubFooterCellStyle() {
-        return subFooterCellStyle;
-    }
-
-    public void setSubFooterCellStyle(CellStyle subFooterCellStyle) {
-        this.subFooterCellStyle = subFooterCellStyle;
-    }
 }

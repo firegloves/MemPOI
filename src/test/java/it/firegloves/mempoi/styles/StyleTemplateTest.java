@@ -1,7 +1,7 @@
 package it.firegloves.mempoi.styles;
 
 import it.firegloves.mempoi.styles.template.*;
-import it.firegloves.mempoi.testutil.AssertHelper;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -77,9 +77,15 @@ public class StyleTemplateTest {
     }
 
     @Test
-    public void getNumberCellStyleTest() {
+    public void getIntegerCellStyleTest() {
 
-        assertNull(new DummyStyleTemplate().getNumberCellStyle(new SXSSFWorkbook()));
+        assertNull(new DummyStyleTemplate().getIntegerCellStyle(new SXSSFWorkbook()));
+    }
+
+    @Test
+    public void getFloatingPointCellStyleTest() {
+
+        assertNull(new DummyStyleTemplate().getFloatingPointCellStyle(new SXSSFWorkbook()));
     }
 
     @Test
@@ -93,12 +99,13 @@ public class StyleTemplateTest {
 
         MempoiStyler styler = new DummyStyleTemplate().toMempoiStyler(new SXSSFWorkbook());
 
-        AssertHelper.validateCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
-        AssertHelper.validateCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
-        AssertHelper.validateCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
-        AssertHelper.validateCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
-        AssertHelper.validateCellStyle(styler.getNumberCellStyle(), styler.getNumberCellStyle());
-        AssertHelper.validateCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
+        AssertionHelper.validateCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
+        AssertionHelper.validateCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
+        AssertionHelper.validateCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
+        AssertionHelper.validateCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
+        AssertionHelper.validateCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
+        AssertionHelper.validateCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
+        AssertionHelper.validateCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
     }
 
 
@@ -131,7 +138,8 @@ public class StyleTemplateTest {
         assertNotNull("template " + template.getClass().getName() + " date cell style not null", template.getDateCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " datetime cell style not null", template.getDatetimeCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " header cell style not null", template.getHeaderCellStyle(workbook));
-        assertNotNull("template " + template.getClass().getName() + " number cell style not null", template.getNumberCellStyle(workbook));
+        assertNotNull("template " + template.getClass().getName() + " integer cell style not null", template.getIntegerCellStyle(workbook));
+        assertNotNull("template " + template.getClass().getName() + " floating cell style not null", template.getFloatingPointCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " footer cell style not null", template.getSubfooterCellStyle(workbook));
     }
 }

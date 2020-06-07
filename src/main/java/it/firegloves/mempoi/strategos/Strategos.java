@@ -16,6 +16,9 @@ import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
@@ -38,6 +41,8 @@ public class Strategos {
      */
     private WorkbookConfig workbookConfig;
 
+    private TableStrategos tableStrategos;
+    private PivotTableStrategos pivotTableStrategos;
     private DataStrategos dataStrategos;
     private FooterStrategos footerStrategos;
     private FileManager fileManager;
@@ -45,6 +50,8 @@ public class Strategos {
 
     public Strategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
+        this.tableStrategos = new TableStrategos(workbookConfig);
+        this.pivotTableStrategos = new PivotTableStrategos(workbookConfig);
         this.dataStrategos = new DataStrategos(workbookConfig);
         this.footerStrategos = new FooterStrategos(workbookConfig);
         this.fileManager = new FileManager(workbookConfig);
@@ -91,7 +98,6 @@ public class Strategos {
 
         // if needed generate a tempfile
         if ((this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate())) {
-            this.fileManager.writeTempFile();
             this.manageFormulaToEvaluate();
         }
     }
@@ -129,6 +135,7 @@ public class Strategos {
 
         // create sheet
         Sheet sheet = this.createSheet(mempoiSheet.getSheetName());
+        mempoiSheet.setSheet(sheet);
 
         // track columns for autosizing
         if (this.workbookConfig.isAdjustColSize() && sheet instanceof SXSSFSheet) {
@@ -142,7 +149,13 @@ public class Strategos {
         List<MempoiColumn> columnList = new MempoiColumnStrategos().prepareMempoiColumn(mempoiSheet, rs, this.workbookConfig.getWorkbook());
 
         try {
-            this.createSheetData(sheet, rs, columnList, mempoiSheet);
+            AreaReference sheetDataAreaReference = this.createSheetData(rs, columnList, mempoiSheet);
+
+            // adds optional excel table
+            this.tableStrategos.manageMempoiTable(mempoiSheet, sheetDataAreaReference);
+
+            // adds optional pivot table
+            this.pivotTableStrategos.manageMempoiPivotTable(mempoiSheet);
 
             // apply mempoi column strategies
             this.applyMempoiColumnStrategies(mempoiSheet);
@@ -158,29 +171,36 @@ public class Strategos {
     }
 
 
+
     /**
      * generates sheet data
      *
-     * @param sheet the Sheet where generate data
      * @param rs the ResultSet from which read data
      * @param columnList the list of MempoiColumn from which read data configuration
      * @param mempoiSheet the MempoiSheet from which read configuration
+     *
+     * @return the AreaReference representing all created data area in the sheet
      */
-    private void createSheetData(Sheet sheet, ResultSet rs, List<MempoiColumn> columnList, MempoiSheet mempoiSheet) {
+    private AreaReference createSheetData(ResultSet rs, List<MempoiColumn> columnList, MempoiSheet mempoiSheet) {
 
         int rowCounter = 0;
 
-        // create header
-        rowCounter = this.dataStrategos.createHeaderRow(sheet, columnList, rowCounter, mempoiSheet.getSheetStyler());
+        // creates header
+        rowCounter = this.dataStrategos.createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, mempoiSheet.getSheetStyler());
 
-        // keep track of the first data row index (no header and subheaders)
+        // keeps track of the first data row index (no header and subheaders)
         int firstDataRowIndex = rowCounter + 1;
 
-        // create rows
-        rowCounter = this.dataStrategos.createDataRows(sheet, rs, columnList, rowCounter);
+        // creates rows
+        rowCounter = this.dataStrategos.createDataRows(mempoiSheet.getSheet(), rs, columnList, rowCounter);
 
         // footer
-        this.footerStrategos.createFooterAndSubfooter(sheet, columnList, mempoiSheet, firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler());
+        this.footerStrategos.createFooterAndSubfooter(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler());
+
+        // returns the AreaReference representing all created data area in the sheet
+        return new AreaReference(
+                "A1:" + CellReference.convertNumToColString(columnList.size()-1) + rowCounter,
+                this.workbookConfig.getWorkbook().getSpreadsheetVersion());
     }
 
     /**
@@ -192,7 +212,7 @@ public class Strategos {
     private Sheet createSheet(String sheetName) {
 
         return ! StringUtils.isEmpty(sheetName) ?
-                this.workbookConfig.getWorkbook().createSheet(sheetName) :
+                this.workbookConfig.getWorkbook().createSheet(WorkbookUtil.createSafeSheetName(sheetName)) :
                 this.workbookConfig.getWorkbook().createSheet();
     }
 

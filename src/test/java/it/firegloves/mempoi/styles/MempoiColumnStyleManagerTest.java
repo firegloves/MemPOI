@@ -21,7 +21,9 @@ public class MempoiColumnStyleManagerTest {
    @Mock
    private CellStyle commonDataCellStyle;
    @Mock
-   private CellStyle numericCellStyle;
+   private CellStyle integerCellStyle;
+   @Mock
+   private CellStyle floatingPointCellStyle;
    @Mock
    private CellStyle headerCellStyle;
    @Mock
@@ -39,31 +41,32 @@ public class MempoiColumnStyleManagerTest {
       MockitoAnnotations.initMocks(this);
 
       columnList = new ArrayList<>();
-      columnList.add(new MempoiColumn(Types.BIGINT, "id"));
-      columnList.add(new MempoiColumn(Types.BIGINT, "col"));
-      columnList.add(new MempoiColumn(Types.DOUBLE, "col"));
-      columnList.add(new MempoiColumn(Types.DECIMAL, "col"));
-      columnList.add(new MempoiColumn(Types.FLOAT, "col"));
-      columnList.add(new MempoiColumn(Types.NUMERIC, "col"));
-      columnList.add(new MempoiColumn(Types.REAL, "col"));
-      columnList.add(new MempoiColumn(Types.INTEGER, "col"));
-      columnList.add(new MempoiColumn(Types.SMALLINT, "col"));
-      columnList.add(new MempoiColumn(Types.TINYINT, "col"));
-      columnList.add(new MempoiColumn(Types.CHAR, "col"));
-      columnList.add(new MempoiColumn(Types.NCHAR, "col"));
-      columnList.add(new MempoiColumn(Types.VARCHAR, "col"));
-      columnList.add(new MempoiColumn(Types.LONGVARCHAR, "col"));
-      columnList.add(new MempoiColumn(Types.TIMESTAMP, "col"));
-      columnList.add(new MempoiColumn(Types.DATE, "col"));
-      columnList.add(new MempoiColumn(Types.TIME, "col"));
-      columnList.add(new MempoiColumn(Types.BIT, "col"));
-      columnList.add(new MempoiColumn(Types.BOOLEAN, "col"));
+      columnList.add(new MempoiColumn(Types.BIGINT, "id", 0));
+      columnList.add(new MempoiColumn(Types.BIGINT, "col", 1));
+      columnList.add(new MempoiColumn(Types.DOUBLE, "col", 2));
+      columnList.add(new MempoiColumn(Types.DECIMAL, "col", 3));
+      columnList.add(new MempoiColumn(Types.FLOAT, "col", 4));
+      columnList.add(new MempoiColumn(Types.NUMERIC, "col", 5));
+      columnList.add(new MempoiColumn(Types.REAL, "col", 6));
+      columnList.add(new MempoiColumn(Types.INTEGER, "col", 7));
+      columnList.add(new MempoiColumn(Types.SMALLINT, "col", 8));
+      columnList.add(new MempoiColumn(Types.TINYINT, "col", 9));
+      columnList.add(new MempoiColumn(Types.CHAR, "col", 10));
+      columnList.add(new MempoiColumn(Types.NCHAR, "col", 11));
+      columnList.add(new MempoiColumn(Types.VARCHAR, "col", 12));
+      columnList.add(new MempoiColumn(Types.LONGVARCHAR, "col", 13));
+      columnList.add(new MempoiColumn(Types.TIMESTAMP, "col", 14));
+      columnList.add(new MempoiColumn(Types.DATE, "col", 15));
+      columnList.add(new MempoiColumn(Types.TIME, "col", 15));
+      columnList.add(new MempoiColumn(Types.BIT, "col", 16));
+      columnList.add(new MempoiColumn(Types.BOOLEAN, "col", 17));
 
       when(reportStyler.getCommonDataCellStyle()).thenReturn(commonDataCellStyle);
       when(reportStyler.getDateCellStyle()).thenReturn(dateCellStyle);
       when(reportStyler.getDatetimeCellStyle()).thenReturn(datetimeCellStyle);
       when(reportStyler.getHeaderCellStyle()).thenReturn(headerCellStyle);
-      when(reportStyler.getNumberCellStyle()).thenReturn(numericCellStyle);
+      when(reportStyler.getIntegerCellStyle()).thenReturn(integerCellStyle);
+      when(reportStyler.getFloatingPointCellStyle()).thenReturn(floatingPointCellStyle);
       when(reportStyler.getSubFooterCellStyle()).thenReturn(subFooterCellStyle);
 
       new MempoiColumnStyleManager(reportStyler).setMempoiColumnListStyler(columnList);
@@ -73,16 +76,16 @@ public class MempoiColumnStyleManagerTest {
 
    @Test
    public void testMempoiColumnAssignedCellStyle() {
-      assertEquals("mc col id EExportDataType", commonDataCellStyle, columnList.get(0).getCellStyle());
-      assertEquals("mc col 1 EExportDataType", numericCellStyle, columnList.get(1).getCellStyle());
-      assertEquals("mc col 2 EExportDataType", numericCellStyle, columnList.get(2).getCellStyle());
-      assertEquals("mc col 3 EExportDataType", numericCellStyle, columnList.get(3).getCellStyle());
-      assertEquals("mc col 4 EExportDataType", numericCellStyle, columnList.get(4).getCellStyle());
-      assertEquals("mc col 5 EExportDataType", numericCellStyle, columnList.get(5).getCellStyle());
-      assertEquals("mc col 6 EExportDataType", numericCellStyle, columnList.get(6).getCellStyle());
-      assertEquals("mc col 7 EExportDataType", numericCellStyle, columnList.get(7).getCellStyle());
-      assertEquals("mc col 8 EExportDataType", numericCellStyle, columnList.get(8).getCellStyle());
-      assertEquals("mc col 9 EExportDataType", numericCellStyle, columnList.get(9).getCellStyle());
+      assertEquals("mc col id EExportDataType", integerCellStyle, columnList.get(0).getCellStyle());
+      assertEquals("mc col 1 EExportDataType", integerCellStyle, columnList.get(1).getCellStyle());
+      assertEquals("mc col 2 EExportDataType", floatingPointCellStyle, columnList.get(2).getCellStyle());
+      assertEquals("mc col 3 EExportDataType", floatingPointCellStyle, columnList.get(3).getCellStyle());
+      assertEquals("mc col 4 EExportDataType", floatingPointCellStyle, columnList.get(4).getCellStyle());
+      assertEquals("mc col 5 EExportDataType", floatingPointCellStyle, columnList.get(5).getCellStyle());
+      assertEquals("mc col 6 EExportDataType", floatingPointCellStyle, columnList.get(6).getCellStyle());
+      assertEquals("mc col 7 EExportDataType", integerCellStyle, columnList.get(7).getCellStyle());
+      assertEquals("mc col 8 EExportDataType", integerCellStyle, columnList.get(8).getCellStyle());
+      assertEquals("mc col 9 EExportDataType", integerCellStyle, columnList.get(9).getCellStyle());
       assertEquals("mc col 10 EExportDataType", commonDataCellStyle, columnList.get(10).getCellStyle());
       assertEquals("mc col 11 EExportDataType", commonDataCellStyle, columnList.get(11).getCellStyle());
       assertEquals("mc col 12 EExportDataType", commonDataCellStyle, columnList.get(12).getCellStyle());

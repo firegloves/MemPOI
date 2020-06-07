@@ -58,7 +58,8 @@ public class MempoiBuilder {
     private CellStyle commonDataCellStyle;
     private CellStyle dateCellStyle;
     private CellStyle datetimeCellStyle;
-    private CellStyle numberCellStyle;
+    private CellStyle integerCellStyle;
+    private CellStyle floatingPointCellStyle;
 
     /**
      * by default MemPOI forces Excel to evaluate cell formulas when it opens the report
@@ -249,11 +250,20 @@ public class MempoiBuilder {
     }
 
     /**
-     * @param numberCellStyle the CellStyle to apply to numeric cells
+     * @param integerCellStyle the CellStyle to apply to integer cells
      * @return the current MempoiBuilder
      */
-    public MempoiBuilder withNumberCellStyle(CellStyle numberCellStyle) {
-        this.numberCellStyle = numberCellStyle;
+    public MempoiBuilder withIntegerCellStyle(CellStyle integerCellStyle) {
+        this.integerCellStyle = integerCellStyle;
+        return this;
+    }
+
+    /**
+     * @param floatingPointCellStyle the CellStyle to apply to floating point cells
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withFloatingPointCellStyle(CellStyle floatingPointCellStyle) {
+        this.floatingPointCellStyle = floatingPointCellStyle;
         return this;
     }
 
@@ -340,7 +350,8 @@ public class MempoiBuilder {
                 .withDateCellStyle(null != s.getDateCellStyle() ? s.getDateCellStyle() : this.dateCellStyle)
                 .withDatetimeCellStyle(null != s.getDatetimeCellStyle() ? s.getDatetimeCellStyle() : this.datetimeCellStyle)
                 .withHeaderCellStyle(null != s.getHeaderCellStyle() ? s.getHeaderCellStyle() : this.headerCellStyle)
-                .withNumberCellStyle(null != s.getNumberCellStyle() ? s.getNumberCellStyle() : this.numberCellStyle)
+                .withIntegerCellStyle(null != s.getIntegerCellStyle() ? s.getIntegerCellStyle() : this.integerCellStyle)
+                .withFloatingPointCellStyle(null != s.getFloatingPointCellStyle() ? s.getFloatingPointCellStyle() : this.integerCellStyle)
                 .withSubFooterCellStyle(null != s.getSubFooterCellStyle() ? s.getSubFooterCellStyle() : this.subFooterCellStyle)
                 .build();
 
@@ -494,12 +505,23 @@ public class MempoiBuilder {
     }
 
     /**
-     * @param numberCellStyle the CellStyle to apply to numeric cells
+     * @param integerCellStyle the CellStyle to apply to integer cells
      * @return the current MempoiBuilder
-     * @deprecated Replaced by {@link #withNumberCellStyle(CellStyle)}
+     * @deprecated Replaced by {@link #withIntegerCellStyle(CellStyle)}
      */
     @Deprecated
-    public MempoiBuilder setNumberCellStyle(CellStyle numberCellStyle) {
-        return this.withNumberCellStyle(numberCellStyle);
+    public MempoiBuilder setIntegerCellStyle(CellStyle integerCellStyle) {
+        return this.withIntegerCellStyle(integerCellStyle);
+    }
+
+
+    /**
+     * @param floatingPointCellStyle the CellStyle to apply to floating point cells
+     * @return the current MempoiBuilder
+     * @deprecated Replaced by {@link #withFloatingPointCellStyle(CellStyle)}
+     */
+    @Deprecated
+    public MempoiBuilder setFloatingPointCellStyle(CellStyle floatingPointCellStyle) {
+        return this.withFloatingPointCellStyle(floatingPointCellStyle);
     }
 }

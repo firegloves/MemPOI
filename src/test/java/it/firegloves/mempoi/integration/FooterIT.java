@@ -6,7 +6,7 @@ import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.*;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
-import it.firegloves.mempoi.testutil.TestConstants;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class FooterTestIT extends IntegrationBaseTestIT {
+public class FooterIT extends IntegrationBaseIT {
 
 
     @Test
@@ -200,7 +200,7 @@ public class FooterTestIT extends IntegrationBaseTestIT {
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
-                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM " + TestConstants.TABLE_EXPORT_TEST + " LIMIT 0, 10"), "Cats sheet"))
+                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM " + TestHelper.TABLE_EXPORT_TEST + " LIMIT 0, 10"), "Cats sheet"))
                     .withMempoiSubFooter(new NumberSumSubFooter())
                     .withStyleTemplate(new SummerStyleTemplate())
                     .build();
@@ -255,7 +255,7 @@ public class FooterTestIT extends IntegrationBaseTestIT {
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
-                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM " + TestConstants.TABLE_EXPORT_TEST + " LIMIT 0, 10"), "Cats sheet"))
+                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM " + TestHelper.TABLE_EXPORT_TEST + " LIMIT 0, 10"), "Cats sheet"))
                     .withMempoiSubFooter(new NumberSumSubFooter())
                     .withMempoiFooter(new StandardMempoiFooter(workbook, "My Poor Company"))
                     .withStyleTemplate(new SummerStyleTemplate())
@@ -309,40 +309,4 @@ public class FooterTestIT extends IntegrationBaseTestIT {
             e.printStackTrace();
         }
     }
-
-
-
-//    public byte[] testWithFileAndMultipleSheetWithMultipleSubfooter() {
-//
-//        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "report_2019.xlsx");
-//
-//        try {
-//
-//            MempoiSheet sheet1 = MempoiSheetBuilder.aMempoiSheet()
-//                    .withSheetName("Mans")
-//                    .withPrepStmt(prepStmt)
-//                    .build();
-//
-//            MempoiSheet sheet2 = MempoiSheetBuilder.aMempoiSheet()
-//                    .withSheetName("Emps")
-//                    .withPrepStmt(prepStmt)
-//                    .build();
-//
-//            MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
-//                    .withFile(fileDest)
-//                    .withAdjustColumnWidth(true)
-//                    .addMempoiSheet(sheet1)
-//                    .addMempoiSheet(sheet2)
-//                    .withStyleTemplate(new SummerStyleTemplate())
-//                    .build()
-//                    .prepareMempoiReportToByteArray()
-//                    .get();
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }

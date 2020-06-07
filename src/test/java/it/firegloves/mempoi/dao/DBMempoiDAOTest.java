@@ -50,8 +50,8 @@ public class DBMempoiDAOTest {
     @Test
     public void givenAResultSetReadMetadata() {
 
-        MempoiColumn id = new MempoiColumn(Types.INTEGER, "id");
-        MempoiColumn name = new MempoiColumn(Types.VARCHAR, "name");
+        MempoiColumn id = new MempoiColumn(Types.INTEGER, "id", 0);
+        MempoiColumn name = new MempoiColumn(Types.VARCHAR, "name", 1);
 
         try {
             when(resultSet.getMetaData()).thenReturn(resultSetMetaData);
@@ -69,7 +69,9 @@ public class DBMempoiDAOTest {
         assertNotNull("DBMempoiDAO executing readMetadata list not null", columnList);
         assertEquals("DBMempoiDAO executing readMetadata list size == 2", 2, columnList.size() );
         assertEquals("DBMempoiDAO executing readMetadata column 1", id, columnList.get(0));
+        assertEquals("DBMempoiDAO index column 1", 0, columnList.get(0).getColIndex());
         assertEquals("DBMempoiDAO executing readMetadata column 2", name, columnList.get(1));
+        assertEquals("DBMempoiDAO index column 2", 1, columnList.get(1).getColIndex());
     }
 
     @Test(expected = MempoiException.class)

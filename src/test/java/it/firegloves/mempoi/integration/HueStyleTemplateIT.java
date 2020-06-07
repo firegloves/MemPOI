@@ -5,6 +5,8 @@ import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.styles.template.*;
+import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
@@ -20,19 +22,17 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
-public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
+public class HueStyleTemplateIT extends IntegrationBaseIT {
 
     @Mock
     StyleTemplate styleTemplate;
 
 
     @Test
-    public void testWithFileAndStandardTemplate() {
+    public void testWithFileAndStandardTemplate() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_standard_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
-
-        try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -48,21 +48,16 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new StandardStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new StandardStyleTemplate());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
     @Test
-    public void testWithFileAndSummerTemplate() {
+    public void testWithFileAndSummerTemplate() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_summer_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
-
-        try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -78,22 +73,16 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new SummerStyleTemplate());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new SummerStyleTemplate());
     }
 
     @Test
-    public void testWithFileAndAquaTemplate() {
+    public void testWithFileAndAquaTemplate() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_aqua_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        try {
-
-            MemPOI memPOI = MempoiBuilder.aMemPOI()
+    MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
@@ -107,20 +96,15 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new AquaStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new AquaStyleTemplate());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
-    public void testWithFileAndForestTemplate() {
+    public void testWithFileAndForestTemplate() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_forest_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
-
-        try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -136,15 +120,12 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new ForestStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
-    public void testWithFileAndForestTemplateOverriden() {
+    public void testWithFileAndForestTemplateOverriden() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_file_and_forest_template_overriden.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -152,8 +133,6 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
         CellStyle headerCellStyle = workbook.createCellStyle();
         headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
         headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-
-        try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -170,17 +149,14 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, null);
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, null);
             // TODO add header overriden style check
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
     @Test
-    public void testWithFileAndForestTemplateOverridenOnSheetstyler() {
+    public void testWithFileAndForestTemplateOverridenOnSheetstyler() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_forest_template_overriden_on_sheetstyler.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -189,13 +165,11 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
         headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
         headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-        CellStyle numberCellStyle = workbook.createCellStyle();
-        numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-        numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        CellStyle floatingPointCellStyle = workbook.createCellStyle();
+        floatingPointCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        floatingPointCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         MempoiSheet sheet = new MempoiSheet(prepStmt);
-        sheet.setNumberCellStyle(numberCellStyle);
-
-        try {
+        sheet.setFloatingPointCellStyle(floatingPointCellStyle);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -212,22 +186,17 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, null);
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, null);
             // TODO add header overriden style check
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
     @Test
-    public void testWithFileAndStoneTemplate() {
+    public void testWithFileAndStoneTemplate() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_stone_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
-
-        try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -243,50 +212,38 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new StoneStyleTemplate());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new StoneStyleTemplate());
     }
 
     @Test
-    public void testWithFileAndRoseTemplate() {
+    public void testWithFileAndRoseTemplate() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_rose_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        try {
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withDebug(true)
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .withAdjustColumnWidth(true)
+                .addMempoiSheet(new MempoiSheet(prepStmt))
+                .withStyleTemplate(new RoseStyleTemplate())
+                .withMempoiSubFooter(new NumberSumSubFooter())
+                .withEvaluateCellFormulas(true)
+                .build();
 
-            MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
-                    .withWorkbook(workbook)
-                    .withFile(fileDest)
-                    .withAdjustColumnWidth(true)
-                    .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .withStyleTemplate(new RoseStyleTemplate())
-                    .withMempoiSubFooter(new NumberSumSubFooter())
-                    .withEvaluateCellFormulas(true)
-                    .build();
+        CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new RoseStyleTemplate());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new RoseStyleTemplate());
     }
 
 
     @Test
-    public void testWithFileAndPurpleTemplate() {
+    public void testWithFileAndPurpleTemplate() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_purple_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
-
-        try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -302,21 +259,15 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new PurpleStyleTemplate());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new PurpleStyleTemplate());
     }
 
 
     @Test
-    public void testWithFileAndPanegiriconTemplate() {
+    public void testWithFileAndPanegiriconTemplate() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_panegiricon_template.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
-
-        try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
@@ -332,34 +283,28 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, new PanegiriconStyleTemplate());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new PanegiriconStyleTemplate());
     }
 
     @Test
-    public void testWithFileAndMultipleSheetTemplates() throws SQLException {
+    public void testWithFileAndMultipleSheetTemplates() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_multiple_sheet_templates.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
-        CellStyle numberCellStyle = workbook.createCellStyle();
-        numberCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-        numberCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        CellStyle integerCellStyle = workbook.createCellStyle();
+        integerCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        integerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         MempoiSheet catsheet = new MempoiSheet(prepStmt, "Cats");
         catsheet.setStyleTemplate(new ForestStyleTemplate());
-        catsheet.setNumberCellStyle(numberCellStyle);
+        catsheet.setIntegerCellStyle(integerCellStyle);
 
 
-        MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), "Dogs");
+        MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement(super.createQuery(TestHelper.COLUMNS_2, TestHelper.HEADERS_2, TestHelper.NO_LIMITS)), "Dogs");
         dogsSheet.setStyleTemplate(new SummerStyleTemplate());
 
         List<MempoiSheet> sheetList = Arrays.asList(catsheet, dogsSheet);
-
-        try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
 //                    .withDebug(true)
@@ -376,26 +321,22 @@ public class HueStyleTemplateTestIT extends IntegrationBaseTestIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validates first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, SUM_CELL_FORMULA, null);
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, null);
 
             try (InputStream inp = new FileInputStream(fut.get())) {
                 Workbook wb = WorkbookFactory.create(inp);
                 Sheet sheet = wb.getSheetAt(0);
 
                 // validates first sheet's header
-                super.validateHeaderRow(sheet.getRow(0), HEADERS, new ForestStyleTemplate().getHeaderCellStyle(workbook));
+                AssertionHelper.validateHeaderRow(sheet.getRow(0), TestHelper.HEADERS, new ForestStyleTemplate().getHeaderCellStyle(workbook));
 
                 // validate custom numerCellStyle
-                CellStyle actual = sheet.getRow(1).getCell(7).getCellStyle();
-                assertEquals(numberCellStyle.getFillForegroundColor(), actual.getFillForegroundColor());
-                assertEquals(numberCellStyle.getFillPattern(), actual.getFillPattern());
+                CellStyle actual = sheet.getRow(1).getCell(0).getCellStyle();
+                assertEquals(integerCellStyle.getFillForegroundColor(), actual.getFillForegroundColor());
+                assertEquals(integerCellStyle.getFillPattern(), actual.getFillPattern());
             }
 
             // validates second sheet
-            super.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), fut.get(), 1, HEADERS_2, true, new SummerStyleTemplate());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            AssertionHelper.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(TestHelper.COLUMNS_2, TestHelper.HEADERS_2, TestHelper.NO_LIMITS)), fut.get(), 1, TestHelper.HEADERS_2, true, new SummerStyleTemplate());
     }
 }

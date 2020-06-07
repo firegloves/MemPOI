@@ -18,7 +18,7 @@ import java.util.List;
 public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(DBMempoiDAO.class);
-    Marker marker = MarkerFactory.getMarker("test");
+    private Marker marker = MarkerFactory.getMarker("test");
 
     private static DBMempoiDAO instance = new DBMempoiDAO();
 
@@ -55,7 +55,7 @@ public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
 
             int columnsNumber = rsmd.getColumnCount();
             for (int i = 1; i <= columnsNumber; i++) {
-                columnList.add(new MempoiColumn(rsmd.getColumnType(i), rsmd.getColumnLabel(i)));
+                columnList.add(new MempoiColumn(rsmd.getColumnType(i), rsmd.getColumnLabel(i), i-1));
             }
 
             return columnList;

@@ -4,6 +4,8 @@ import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
+import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -16,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.*;
 
-public class CommonTestIT extends IntegrationBaseTestIT {
+public class CommonIT extends IntegrationBaseIT {
 
     @Test
     public void testWithoutStyler() {
@@ -35,7 +37,7 @@ public class CommonTestIT extends IntegrationBaseTestIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,7 +46,7 @@ public class CommonTestIT extends IntegrationBaseTestIT {
 
 
     @Test
-    public void testWithByteArrayAndNumberStyler() {
+    public void testWithByteArrayAndIntegerStyler() {
 
         try {
 
@@ -57,7 +59,7 @@ public class CommonTestIT extends IntegrationBaseTestIT {
                     .withDebug(true)
                     .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .withNumberCellStyle(numberCellStyle)
+                    .withIntegerCellStyle(numberCellStyle)
                     .build();
 
             CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
@@ -69,7 +71,7 @@ public class CommonTestIT extends IntegrationBaseTestIT {
                 fos.write(fut.get());
             }
 
-            super.validateGeneratedFile(this.createStatement(), destFile.getAbsolutePath(), COLUMNS, HEADERS, null, null);
+            AssertionHelper.validateGeneratedFile(this.createStatement(), destFile.getAbsolutePath(), TestHelper.COLUMNS, TestHelper.HEADERS, null, null);
 
             // TODO add header overriden style check
 
@@ -99,7 +101,7 @@ public class CommonTestIT extends IntegrationBaseTestIT {
                 fos.write(fut.get());
             }
 
-            super.validateGeneratedFile(this.createStatement(), destFile.getAbsolutePath(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), destFile.getAbsolutePath(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,16 +122,16 @@ public class CommonTestIT extends IntegrationBaseTestIT {
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
-                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), "Cats sheet"))
+                    .addMempoiSheet(new MempoiSheet(conn.prepareStatement(super.createQuery(TestHelper.COLUMNS_2, TestHelper.HEADERS_2, TestHelper.NO_LIMITS)), "Cats sheet"))
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             // validate first sheet
-            super.validateGeneratedFile(this.createStatement(), fut.get(), COLUMNS, HEADERS, null, new StandardStyleTemplate());
+            AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
             // validate second sheet
-            super.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(COLUMNS_2, HEADERS_2, NO_LIMITS)), fut.get(), 1, HEADERS_2, true, new StandardStyleTemplate());
+            AssertionHelper.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(TestHelper.COLUMNS_2, TestHelper.HEADERS_2, TestHelper.NO_LIMITS)), fut.get(), 1, TestHelper.HEADERS_2, true, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,6 +166,10 @@ public class CommonTestIT extends IntegrationBaseTestIT {
             commonDataCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
+            CellStyle floatingPointCellStyle = workbook.createCellStyle();
+            floatingPointCellStyle.setFillForegroundColor(IndexedColors.BLACK1.getIndex());
+            floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
+
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
                     .withWorkbook(workbook)
@@ -171,10 +177,11 @@ public class CommonTestIT extends IntegrationBaseTestIT {
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .withHeaderCellStyle(headerCellStyle)
-                    .withNumberCellStyle(workbook.createCellStyle())
+                    .withIntegerCellStyle(workbook.createCellStyle())
+                    .withFloatingPointCellStyle(floatingPointCellStyle)
                     .withDateCellStyle(dateCellStyle)
                     .withDatetimeCellStyle(datetimeCellStyle)
-                    .withCommonDataCellStyle(commonDataCellStyle)
+                    .withCommonDataCellStyle(floatingPointCellStyle)
                     .build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();

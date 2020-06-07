@@ -49,12 +49,22 @@ public interface StyleTemplate {
     }
 
     /**
-     * screate and returns the number data types' cell style
+     * create and returns the integer data types' cell style
      * @param workbook the workbook used to generate CellStyle
      *
-     * @return the NumberCellStyle of the StyleTemplate
+     * @return the IntegerCellStyle of the StyleTemplate
      */
-    default CellStyle getNumberCellStyle(Workbook workbook) {
+    default CellStyle getIntegerCellStyle(Workbook workbook) {
+        return null;
+    }
+
+    /**
+     * create and returns the floating point data types' cell style
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the FloatingPointCellStyle of the StyleTemplate
+     */
+    default CellStyle getFloatingPointCellStyle(Workbook workbook) {
         return null;
     }
 
@@ -81,7 +91,8 @@ public interface StyleTemplate {
                 this.getCommonDataCellStyle(workbook),
                 this.getDateCellStyle(workbook),
                 this.getDatetimeCellStyle(workbook),
-                this.getNumberCellStyle(workbook),
+                this.getIntegerCellStyle(workbook),
+                this.getFloatingPointCellStyle(workbook),
                 this.getSubfooterCellStyle(workbook));
     }
 

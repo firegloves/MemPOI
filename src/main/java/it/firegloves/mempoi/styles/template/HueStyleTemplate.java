@@ -1,6 +1,8 @@
 package it.firegloves.mempoi.styles.template;
 
 import it.firegloves.mempoi.styles.StandardDataFormat;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -8,6 +10,8 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
+@Data
+@Accessors(chain = true)
 public abstract class HueStyleTemplate implements StyleTemplate {
 
     private short headerCellBgColorIndex = IndexedColors.CORAL.getIndex();
@@ -19,61 +23,6 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     private short subFooterCellBgColorIndex = IndexedColors.CORAL.getIndex();
     private short subFooterFontColorIndex = IndexedColors.WHITE.getIndex();
 
-    public short getHeaderCellBgColorIndex() {
-        return headerCellBgColorIndex;
-    }
-
-    public void setHeaderCellBgColorIndex(short headerCellBgColorIndex) {
-        this.headerCellBgColorIndex = headerCellBgColorIndex;
-    }
-
-    public short getCommonCellBgColorIndex() {
-        return commonCellBgColorIndex;
-    }
-
-    public void setCommonCellBgColorIndex(short commonCellBgColorIndex) {
-        this.commonCellBgColorIndex = commonCellBgColorIndex;
-    }
-
-    public short getHeaderFontColorIndex() {
-        return headerFontColorIndex;
-    }
-
-    public void setHeaderFontColorIndex(short headerFontColorIndex) {
-        this.headerFontColorIndex = headerFontColorIndex;
-    }
-
-    public short getCommonFontColorIndex() {
-        return commonFontColorIndex;
-    }
-
-    public void setCommonFontColorIndex(short commonFontColorIndex) {
-        this.commonFontColorIndex = commonFontColorIndex;
-    }
-
-    public short getSubFooterCellBgColorIndex() {
-        return subFooterCellBgColorIndex;
-    }
-
-    public void setSubFooterCellBgColorIndex(short subFooterCellBgColorIndex) {
-        this.subFooterCellBgColorIndex = subFooterCellBgColorIndex;
-    }
-
-    public short getSubFooterFontColorIndex() {
-        return subFooterFontColorIndex;
-    }
-
-    public void setSubFooterFontColorIndex(short subFooterFontColorIndex) {
-        this.subFooterFontColorIndex = subFooterFontColorIndex;
-    }
-
-    public short getBorderColorIndex() {
-        return borderColorIndex;
-    }
-
-    public void setBorderColorIndex(short borderColorIndex) {
-        this.borderColorIndex = borderColorIndex;
-    }
 
     @Override
     public CellStyle getHeaderCellStyle(Workbook workbook) {
@@ -114,10 +63,18 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     }
 
     @Override
-    public CellStyle getNumberCellStyle(Workbook workbook) {
+    public CellStyle getIntegerCellStyle(Workbook workbook) {
 
         CellStyle cellStyle = this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
-        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_NUMBER_FORMAT.getFormat()));
+//        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_NUMBER_FORMAT.getFormat()));
+        return cellStyle;
+    }
+
+    @Override
+    public CellStyle getFloatingPointCellStyle(Workbook workbook) {
+
+        CellStyle cellStyle = this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
+        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_FLOATING_NUMBER_FORMAT.getFormat()));
         return cellStyle;
     }
 

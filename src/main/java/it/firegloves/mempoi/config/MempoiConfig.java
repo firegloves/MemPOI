@@ -2,8 +2,12 @@ package it.firegloves.mempoi.config;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.slf4j.LoggerFactory;
 
+@Data
+@Accessors(chain = true)
 public class MempoiConfig {
 
     private static MempoiConfig instance = new MempoiConfig();
@@ -27,16 +31,6 @@ public class MempoiConfig {
         this.debug = debug;
         this.setLogLevel();
         return this;
-    }
-
-    public MempoiConfig setForceGeneration(boolean forceGeneration) {
-        this.forceGeneration = forceGeneration;
-        return this;
-    }
-
-
-    public boolean isForceGeneration() {
-        return this.forceGeneration;
     }
 
     private void setLogLevel() {
