@@ -32,6 +32,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.3.0'
 - [Excel Table](#excel-table)
 - [Excel Pivot Table](#excel-pivot-table)
 - [Numeric data types](#numeric-cell-styles)
+- Postgres UUID data type
     
 ### Basic usage
 
