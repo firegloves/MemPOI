@@ -14,7 +14,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 
 #### With Gradle
 ```
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.3.0'
 ```
 
 #### With Maven
@@ -22,7 +22,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 
 ```
@@ -65,7 +65,7 @@ You can choose to write directly to a file or to obtain the byte array of the ge
 #### File:
 
 ```
-File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file.xlsx");
+File fileDest = new File("test_with_file.xlsx");
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -351,10 +351,10 @@ You can ask MemPOI to create an Excel Table by using the same builder pattern. K
 An Excel Table is related to a sheet, so you have to create the MempoiTable object and then set it into the desired MempoiSheet as follows:
 
 ```
-MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
-                .withWorkbook(wb)
-                .withTableName("My table")
-                .withDisplayTableName("My table name")
+MempoiTableBuilder mempoiTableBuilder = MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(workbook)
+                .withTableName("MyTable")
+                .withDisplayTableName("MyTableName")
                 .withAreaReferenceSource("A1:F100");
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
@@ -372,10 +372,10 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 You can also ask MemPOI to manage Excel Table area reference for you, adding all sheet data to the table by setting to true the variable `allSheetData` as follows:
 
 ```
-MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
-                .withWorkbook(wb)
-                .withTableName("My table")
-                .withDisplayTableName("My table name")
+MempoiTableBuilder mempoiTableBuilder = MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(workbook)
+                .withTableName("MyTable")
+                .withDisplayTableName("MyTableName")
                 .withAllSheetData(true);
 ```
 
@@ -390,7 +390,7 @@ Here is a basic example:
 
 ```
 MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
-                .withWorkbook(wb)
+                .withWorkbook(workbook)
                 .withAreaReferenceSource("A1:F100")
                 .withPosition(new CellReference("H1"));
 
@@ -420,7 +420,7 @@ MempoiSheet mempoiSheet1 = MempoiSheetBuilder.aMempoiSheet()
                 .build();
 
 MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
-                .withWorkbook(wb)
+                .withWorkbook(workbook)
                 .withMempoiSheetSource(mempoiSheet1)
                 .withAreaReferenceSource("A1:F100")
                 .withPosition(new CellReference("H1"));
@@ -432,7 +432,7 @@ MempoiSheet mempoiSheet2 = MempoiSheetBuilder.aMempoiSheet()
                 .build();
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                .withWorkbook(wb)
+                .withWorkbook(workbook)
                 .withFile(fileDest)
                 .addMempoiSheet(mempoiSheet1)       // NOTE THAT SHEETS ORDER IS IMPORTANT
                 .addMempoiSheet(mempoiSheet2)
@@ -442,16 +442,16 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 Here an example with table source:
 
 ```
-MempoiTable mempoiTable = return MempoiTableBuilder.aMempoiTable()
-                .withWorkbook(wb)
-                .withTableName("My table")
-                .withDisplayTableName("My table name")
+MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(workbook)
+                .withTableName("MyTable")
+                .withDisplayTableName("MyTableName")
                 .withAreaReferenceSource("A1:F100")
                 .build();
 
 MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
-                .withWorkbook(wb)
-                .withMempoiTableSource(mempoiTable);
+                .withWorkbook(workbook)
+                .withMempoiTableSource(mempoiTable)
                 .withPosition(new CellReference("H1"));
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
@@ -469,19 +469,19 @@ You can specify row labels, column labels and report filters by passing the list
 ```
 EnumMap<DataConsolidateFunction, List<String>> columnLabelColumnsMap = new EnumMap<>(DataConsolidateFunction.class);
 columnLabelColumnsMap.put(DataConsolidateFunction.SUM, Arrays.asList("sum"));
-columnLabelColumnsMap.put(DataConsolidateFunction.AVERAGE, Arrays.asList("average")");
+columnLabelColumnsMap.put(DataConsolidateFunction.AVERAGE, Arrays.asList("average"));
 
-List<String> rowLabelColumnList = Arrays.asList("name", "surname")
+List<String> rowLabelColumnList = Arrays.asList("name", "surname");
 
-List<String> reportFilterColumnList = Arrays.asList("address", "city")
+List<String> reportFilterColumnList = Arrays.asList("address", "city");
 
 MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
-                .withWorkbook(wb)
-                .withAreaReferenceSource("A1:F100")
-                .withPosition(new CellReference("H1"))
-                .withRowLabelColumns(rowLabelColumnList)
-                .withColumnLabelColumns(columnLabelColumnsMap)
-                .withReportFilterColumns(reportFilterColumnList);
+                 .withWorkbook(workbook)
+                 .withAreaReferenceSource("A1:F100")
+                 .withPosition(new CellReference("H1"))
+                 .withRowLabelColumns(rowLabelColumnList)
+                 .withColumnLabelColumns(columnLabelColumnsMap)
+                 .withReportFilterColumns(reportFilterColumnList);
 ```
 
 
@@ -537,12 +537,12 @@ However we could list some behaviors:
 You can add as many steps as you want as follows:
 
 ```
-return MempoiSheetBuilder.aMempoiSheet()
+MempoiSheetBuilder.aMempoiSheet()
            .withSheetName("Multiple steps")
            .withPrepStmt(prepStmt)
            .withDataElaborationStep("name", step1)
            .withDataElaborationStep("usefulChar", step2)
-           .withDataElaborationStep("name", step3)
+           .withDataElaborationStep("name", step3);
 ```
 
 Note that you can add more than one step on each column. Keep in mind that order matters: for each column, steps will be executed in the added order so be careful.
@@ -551,29 +551,29 @@ Built-in steps (like Merged Regions) will be added firstly. If you want to chang
 For example both the following codes will result in executing merged regions step and then the custom one:
 
 ```
-return MempoiSheetBuilder.aMempoiSheet()
+MempoiSheetBuilder.aMempoiSheet()
            .withSheetName("Multiple steps")
            .withPrepStmt(prepStmt)
            .withMergedRegionColumns(new String[]{"name"})
-           .withDataElaborationStep("name", customStep)
+           .withDataElaborationStep("name", customStep);
 ```
 
 ```
-return MempoiSheetBuilder.aMempoiSheet()
+MempoiSheetBuilder.aMempoiSheet()
            .withSheetName("Multiple steps")
            .withPrepStmt(prepStmt)
            .withDataElaborationStep("name", customStep)
-           .withMergedRegionColumns(new String[]{"name"})
+           .withMergedRegionColumns(new String[]{"name"});
 ```
 
 But this one will execute firstly the custom step and then the merged regions one:
 
 ```
-return MempoiSheetBuilder.aMempoiSheet()
+MempoiSheetBuilder.aMempoiSheet()
            .withSheetName("Multiple steps")
            .withPrepStmt(prepStmt)
            .withDataElaborationStep("name", customStep)
-           .withDataElaborationStep("name", new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex))
+           .withDataElaborationStep("name", new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex));
 ```
 
 #### Merged Regions
@@ -582,7 +582,7 @@ Currently MemPOI supplies only one `Data post elaboration system`'s step in orde
 All you have to do is to pass a String array to the `MempoiSheetBuilder` representing the list of columns to merge.
 
 ```
-String[] mergedColumns = new String[]{"name"}
+String[] mergedColumns = new String[]{"name"};
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
     .withSheetName("Merged regions name column 2")
@@ -605,8 +605,14 @@ memPOI.prepareMempoiReportToFile().get();
 
 ### Force Generation
 
-MemPOI 1.2 introduces the `forceGeneration` property that helps you to ignore some possible errors, if possible.
-Force Generation is still experimental, a list of all supported errors to ignore will be available in future releases.
+MemPOI 1.2 introduces the `forceGeneration` property that helps you to ignore some errors, if possible.
+Force Generation is still experimental, here a temp list of the managed errors:
+
+- Specifying as sources for a Table an area reference and all sheet data, all sheet data takes precedence and the area reference will be ignored
+- Specifying no source for a Table will force the table to use all sheet data as a source
+- Specifying 2 sources for a PivotTable (one area reference and one table) the area reference takes precedence and the table is ignored
+- Specifying 2 sheet sources for a PivotTable (one sheet and one table) the table takes precedence and the sheet is ignored
+- If a post data elaboration step is added to a MempoiSheet after have set a null step map, the map is instantiated and the step added
 
 ---
 
@@ -652,7 +658,7 @@ MemPOI comes with Apache POI 4.1.2 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.2.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.3.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -665,7 +671,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>
