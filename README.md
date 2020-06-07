@@ -10,6 +10,8 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 - Apache POI 4.0.0+
 - Java 8+
 
+---
+
 ### Import
 
 #### With Gradle
@@ -29,6 +31,8 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.3.0'
 
 ```
 
+---
+
 ### What's new in 1.3.0
 
 - [Excel Table](#excel-table)
@@ -36,9 +40,13 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.3.0'
 - [Numeric data types](#numeric-cell-styles)
 - Postgres UUID data type
     
+---
+
 ### MemPOI survey
 
 In order to better trace MemPOI usages and decide the next features, I created a [survey](https://lucorset.typeform.com/to/bDIRbY). No subscription is required.
+
+---
     
 ### Basic usage
 
