@@ -123,7 +123,9 @@ byte[] bytes = fut.get();
 
 Column headers are generated taking export query column names. If you want to choose column headers you need to speficy them with `AS` clause. For example:
 
-`SELECT id, name AS first_name FROM Foo`
+```SQL
+SELECT id, name AS first_name FROM Foo
+```
 
 will result in a sheet with 2 columns: id and first_name (containing db's name column data)
 
