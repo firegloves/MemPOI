@@ -36,6 +36,10 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.3.0'
 - [Numeric data types](#numeric-cell-styles)
 - Postgres UUID data type
     
+### MemPOI survey
+
+In order to better trace MemPOI usages and decide the next features, I created a [survey](https://lucorset.typeform.com/to/bDIRbY). No subscription is required.
+    
 ### Basic usage
 
 All you need is to instantiate a MemPOI passing it the List of your exporting queries. MemPOI will do all the stuff for you generating a .xlsx file containing resulting data.
