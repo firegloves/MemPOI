@@ -65,7 +65,7 @@ You can choose to write directly to a file or to obtain the byte array of the ge
 
 #### File:
 
-```
+```Java
 File fileDest = new File("test_with_file.xlsx");
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
