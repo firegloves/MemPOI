@@ -1,4 +1,4 @@
-# MemPOI :green_book: &nbsp; :arrow_right: :japanese_goblin: :arrow_right: :tropical_drink:
+# MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
