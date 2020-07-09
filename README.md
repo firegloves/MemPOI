@@ -1,4 +1,4 @@
-# MemPOI :green_book: :arrow_right: :japanese_goblin: :arrow_right: :tropical_drink:
+# MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
@@ -10,28 +10,43 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 - Apache POI 4.0.0+
 - Java 8+
 
+---
+
 ### Import
 
 #### With Gradle
-```
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.2.0'
+
+```Groovy
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.3.0'
 ```
 
 #### With Maven
-```
+
+```XML
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 
 ```
+
+---
 
 ### What's new in 1.3.0
 
 - [Excel Table](#excel-table)
 - [Excel Pivot Table](#excel-pivot-table)
 - [Numeric data types](#numeric-cell-styles)
+- Postgres UUID data type
+    
+---
+
+### MemPOI survey
+
+In order to better trace MemPOI usages and decide the next features, I created a [survey](https://lucorset.typeform.com/to/bDIRbY). No subscription is required.
+
+---
     
 ### Basic usage
 
@@ -39,7 +54,7 @@ All you need is to instantiate a MemPOI passing it the List of your exporting qu
 You need to pass your export queries as a List of `MempoiSheet` (`PreparedStatement` + sheet name).
 You can use `MempoiBuilder` to correctly populate your MemPOI instance, like follows:
 
-```
+```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
@@ -64,8 +79,8 @@ You can choose to write directly to a file or to obtain the byte array of the ge
 
 #### File:
 
-```
-File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file.xlsx");
+```Java
+File fileDest = new File("test_with_file.xlsx");
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -78,7 +93,7 @@ String absoluteFileName = fut.get();
 
 #### Byte array:
 
-```
+```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .addMempoiSheet (new MempoiSheet(prepStmt))
                     .build();
@@ -109,7 +124,7 @@ byte[] bytes = fut.get();
 - TIME
 - BIT
 - BOOLEAN
-          
+- UUID (Postgres) (thanks to [nanshakov](https://github.com/nanshakov))
 ---            
 
 **You have to take care to manage your database connection, meanwhile `PreparedStatement` and `ResultSet` are managed and closed internally by MemPOI**
@@ -120,7 +135,9 @@ byte[] bytes = fut.get();
 
 Column headers are generated taking export query column names. If you want to choose column headers you need to speficy them with `AS` clause. For example:
 
-`SELECT id, name AS first_name FROM Foo`
+```SQL
+SELECT id, name AS first_name FROM Foo
+```
 
 will result in a sheet with 2 columns: id and first_name (containing db's name column data)
 
@@ -131,7 +148,7 @@ will result in a sheet with 2 columns: id and first_name (containing db's name c
 Multiple sheets in the same document are supported: `MempoiBuilder` accepts a list of `MempoiSheet`.
 Look at this example and at the result above:
 
-```
+```Java
 MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
                             .withSheetName("Dogs sheet")
                             .withPrepStmt(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"))
@@ -169,7 +186,7 @@ String absoluteFileName = fut.get();
 
 MemPOI can adjust columns width to fit the longest content by setting to `true` the property `MempoiBuilder.adjustColumnWidth` as follows:
 
-```
+```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
@@ -193,7 +210,7 @@ MemPOI comes with a preset of default data formatting styles for
 The default styles are automatically applied. You can inspect them looking at the end of `MempoiReportStyler` class 
 If you want to reset the default styles you need to use an empty `CellStyle` when you use `MempoiBuilder`, for example:
 
-```
+```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
@@ -203,7 +220,7 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 This is an example setting a custom CellStyle for header's cells:
 
-```
+```Java
 CellStyle headerCellStyle = workbook.createCellStyle();
 headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
 headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -219,7 +236,7 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 MemPOI comes with a set of templates ready to use. You can use them as follows:
 
-```
+```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
@@ -231,7 +248,7 @@ Actually you can:
 * provide different styles for different sheets
 * granularly override bundled styles' cell styles
 
-```
+```Java
 // SummerStyleTemplate for dogsSheet
 MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT id, creation_date, dateTime, timeStamp AS STAMPONE, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio FROM " + TestConstants.TABLE_EXPORT_TEST), "Dogs");
 dogsSheet.setStyleTemplate(new SummerStyleTemplate());
@@ -284,7 +301,7 @@ Numeric data types (and the corresponding cell styles) are now split between int
 For example in order use pre v1.3.0 integer cell style you can do something like this:
 
 
-```
+```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
@@ -301,7 +318,7 @@ MemPOI supports standard .xlsx footers and sub footers.
 Whereas footers are a simple wrapper of the Excel ones, subfooters are a MemPOI extension that allows you add some nice features to your report.
 For example, you could choose to add the `NumberSumSubFooter` to your MemPOI report. It will result in an additional line at the end of the sheet containing the sum of the numeric columns. This is an example:
 
-```
+```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withDebug(true)
                     .withWorkbook(workbook)
@@ -350,11 +367,11 @@ So actually the best solution for huge dataset is to force Excel to evaluate cel
 You can ask MemPOI to create an Excel Table by using the same builder pattern. Keep in mind that only XSSF supports Excel Table.
 An Excel Table is related to a sheet, so you have to create the MempoiTable object and then set it into the desired MempoiSheet as follows:
 
-```
-MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
-                .withWorkbook(wb)
-                .withTableName("My table")
-                .withDisplayTableName("My table name")
+```Java
+MempoiTableBuilder mempoiTableBuilder = MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(workbook)
+                .withTableName("MyTable")
+                .withDisplayTableName("MyTableName")
                 .withAreaReferenceSource("A1:F100");
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
@@ -371,11 +388,11 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 You can also ask MemPOI to manage Excel Table area reference for you, adding all sheet data to the table by setting to true the variable `allSheetData` as follows:
 
-```
-MempoiTableBuilder mempoiTableBuilder = return MempoiTableBuilder.aMempoiTable()
-                .withWorkbook(wb)
-                .withTableName("My table")
-                .withDisplayTableName("My table name")
+```Java
+MempoiTableBuilder mempoiTableBuilder = MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(workbook)
+                .withTableName("MyTable")
+                .withDisplayTableName("MyTableName")
                 .withAllSheetData(true);
 ```
 
@@ -388,9 +405,9 @@ Auto filters will be automatically enabled.
 MemPOI also supports Excel Pivot Table.  Keep in mind that only XSSF supports Excel Pivot Table.
 Here is a basic example:
 
-```
+```Java
 MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
-                .withWorkbook(wb)
+                .withWorkbook(workbook)
                 .withAreaReferenceSource("A1:F100")
                 .withPosition(new CellReference("H1"));
 
@@ -413,14 +430,14 @@ This means that if you open the generated excel file, you move the source table 
 
 Here an example with area reference source on different sheet:
 
-```
+```Java
 MempoiSheet mempoiSheet1 = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName("Oh sheet!")
                 .withPrepStmt(prepStmt)
                 .build();
 
 MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
-                .withWorkbook(wb)
+                .withWorkbook(workbook)
                 .withMempoiSheetSource(mempoiSheet1)
                 .withAreaReferenceSource("A1:F100")
                 .withPosition(new CellReference("H1"));
@@ -432,7 +449,7 @@ MempoiSheet mempoiSheet2 = MempoiSheetBuilder.aMempoiSheet()
                 .build();
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                .withWorkbook(wb)
+                .withWorkbook(workbook)
                 .withFile(fileDest)
                 .addMempoiSheet(mempoiSheet1)       // NOTE THAT SHEETS ORDER IS IMPORTANT
                 .addMempoiSheet(mempoiSheet2)
@@ -441,17 +458,17 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 Here an example with table source:
 
-```
-MempoiTable mempoiTable = return MempoiTableBuilder.aMempoiTable()
-                .withWorkbook(wb)
-                .withTableName("My table")
-                .withDisplayTableName("My table name")
+```Java
+MempoiTable mempoiTable = MempoiTableBuilder.aMempoiTable()
+                .withWorkbook(workbook)
+                .withTableName("MyTable")
+                .withDisplayTableName("MyTableName")
                 .withAreaReferenceSource("A1:F100")
                 .build();
 
 MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
-                .withWorkbook(wb)
-                .withMempoiTableSource(mempoiTable);
+                .withWorkbook(workbook)
+                .withMempoiTableSource(mempoiTable)
                 .withPosition(new CellReference("H1"));
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
@@ -466,22 +483,22 @@ MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
 
 You can specify row labels, column labels and report filters by passing the list of relative column names (in case of db queries that use AS clause you should use AS clause values):
 
-```
+```Java
 EnumMap<DataConsolidateFunction, List<String>> columnLabelColumnsMap = new EnumMap<>(DataConsolidateFunction.class);
 columnLabelColumnsMap.put(DataConsolidateFunction.SUM, Arrays.asList("sum"));
-columnLabelColumnsMap.put(DataConsolidateFunction.AVERAGE, Arrays.asList("average")");
+columnLabelColumnsMap.put(DataConsolidateFunction.AVERAGE, Arrays.asList("average"));
 
-List<String> rowLabelColumnList = Arrays.asList("name", "surname")
+List<String> rowLabelColumnList = Arrays.asList("name", "surname");
 
-List<String> reportFilterColumnList = Arrays.asList("address", "city")
+List<String> reportFilterColumnList = Arrays.asList("address", "city");
 
 MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempoiPivotTable()
-                .withWorkbook(wb)
-                .withAreaReferenceSource("A1:F100")
-                .withPosition(new CellReference("H1"))
-                .withRowLabelColumns(rowLabelColumnList)
-                .withColumnLabelColumns(columnLabelColumnsMap)
-                .withReportFilterColumns(reportFilterColumnList);
+                 .withWorkbook(workbook)
+                 .withAreaReferenceSource("A1:F100")
+                 .withPosition(new CellReference("H1"))
+                 .withRowLabelColumns(rowLabelColumnList)
+                 .withColumnLabelColumns(columnLabelColumnsMap)
+                 .withReportFilterColumns(reportFilterColumnList);
 ```
 
 
@@ -536,13 +553,13 @@ However we could list some behaviors:
 
 You can add as many steps as you want as follows:
 
-```
-return MempoiSheetBuilder.aMempoiSheet()
+```Java
+MempoiSheetBuilder.aMempoiSheet()
            .withSheetName("Multiple steps")
            .withPrepStmt(prepStmt)
            .withDataElaborationStep("name", step1)
            .withDataElaborationStep("usefulChar", step2)
-           .withDataElaborationStep("name", step3)
+           .withDataElaborationStep("name", step3);
 ```
 
 Note that you can add more than one step on each column. Keep in mind that order matters: for each column, steps will be executed in the added order so be careful.
@@ -550,30 +567,30 @@ Built-in steps (like Merged Regions) will be added firstly. If you want to chang
 
 For example both the following codes will result in executing merged regions step and then the custom one:
 
-```
-return MempoiSheetBuilder.aMempoiSheet()
+```Java
+MempoiSheetBuilder.aMempoiSheet()
            .withSheetName("Multiple steps")
            .withPrepStmt(prepStmt)
            .withMergedRegionColumns(new String[]{"name"})
-           .withDataElaborationStep("name", customStep)
+           .withDataElaborationStep("name", customStep);
 ```
 
-```
-return MempoiSheetBuilder.aMempoiSheet()
+```Java
+MempoiSheetBuilder.aMempoiSheet()
            .withSheetName("Multiple steps")
            .withPrepStmt(prepStmt)
            .withDataElaborationStep("name", customStep)
-           .withMergedRegionColumns(new String[]{"name"})
+           .withMergedRegionColumns(new String[]{"name"});
 ```
 
 But this one will execute firstly the custom step and then the merged regions one:
 
-```
-return MempoiSheetBuilder.aMempoiSheet()
+```Java
+MempoiSheetBuilder.aMempoiSheet()
            .withSheetName("Multiple steps")
            .withPrepStmt(prepStmt)
            .withDataElaborationStep("name", customStep)
-           .withDataElaborationStep("name", new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex))
+           .withDataElaborationStep("name", new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex));
 ```
 
 #### Merged Regions
@@ -581,8 +598,8 @@ return MempoiSheetBuilder.aMempoiSheet()
 Currently MemPOI supplies only one `Data post elaboration system`'s step in order to ease merged regions management.
 All you have to do is to pass a String array to the `MempoiSheetBuilder` representing the list of columns to merge.
 
-```
-String[] mergedColumns = new String[]{"name"}
+```Java
+String[] mergedColumns = new String[]{"name"};
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
     .withSheetName("Merged regions name column 2")
@@ -605,8 +622,14 @@ memPOI.prepareMempoiReportToFile().get();
 
 ### Force Generation
 
-MemPOI 1.2 introduces the `forceGeneration` property that helps you to ignore some possible errors, if possible.
-Force Generation is still experimental, a list of all supported errors to ignore will be available in future releases.
+MemPOI 1.2 introduces the `forceGeneration` property that helps you to ignore some errors, if possible.
+Force Generation is still experimental, here a temp list of the managed errors:
+
+- Specifying as sources for a Table an area reference and all sheet data, all sheet data takes precedence and the area reference will be ignored
+- Specifying no source for a Table will force the table to use all sheet data as a source
+- Specifying 2 sources for a PivotTable (one area reference and one table) the area reference takes precedence and the table is ignored
+- Specifying 2 sheet sources for a PivotTable (one sheet and one table) the table takes precedence and the sheet is ignored
+- If a post data elaboration step is added to a MempoiSheet after have set a null step map, the map is instantiated and the step added
 
 ---
 
@@ -651,8 +674,8 @@ MemPOI comes with Apache POI 4.1.2 bundled. If you need to use a different versi
 
 #### This is an example using Gradle:
 
-```
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.2.0') {
+```Groovy
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.3.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -661,11 +684,11 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 
 #### This is an example using Maven:
 
-```
+```XML
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>
@@ -689,10 +712,7 @@ If you want to directly open a pull request, please target dev branch.
 
 ---
 
-### Coming soon
-
-- Per column index style
-- R2DBC support
+### Updates
 
 :soon: If you have any request, feel free to ask for new features.
 
@@ -703,5 +723,3 @@ If you want to directly open a pull request, please target dev branch.
 Special thanks to <a href="http://www.collederfomento.net/" target="_blank">Colle der Fomento</a> that inspired MemPOI name with their new, fantastic, yearned LP, in particular with their song <a href="https://youtu.be/xy05iaknmcY" target="_blank">Mempo</a>.
 
 Don't you know what I'm talking about? Discover what a <a href="https://en.wikipedia.org/wiki/Men-yoroi" target="_blank">mempo</a> is!
-
-**If you like MemPOI please add a star to the project helping MemPOI to grow up. MemPOI in exchange will export for you allowing you to sip a good mojito on the beach :tropical_drink:**

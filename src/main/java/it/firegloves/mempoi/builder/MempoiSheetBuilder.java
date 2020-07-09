@@ -233,6 +233,7 @@ public final class MempoiSheetBuilder {
 
     /**
      * add the received map of column name - DataPostElaborationStep to the builder and then to the mempoisheet
+     * @param dataElaborationStepMap map of the DataElaborationStep (column name, step to process)
      *
      * @return the current MempoiSheetBuilder
      */
@@ -269,7 +270,7 @@ public final class MempoiSheetBuilder {
     /**
      * adds a MempoiTable object containing data to build an optional Excel Table inside the current sheet
      *
-     * @param mempoiTable
+     * @param mempoiTable the MempoiTable containing data to generate the desired Excel table
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMempoiTable(MempoiTable mempoiTable) {
@@ -283,7 +284,7 @@ public final class MempoiSheetBuilder {
     /**
      * adds a MempoiTableBuilder object containing data to build an optional Excel Table inside the current sheet
      *
-     * @param mempoiTableBuilder
+     * @param mempoiTableBuilder the MempoiTableBuilder containing data to generate the desired Excel table
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMempoiTableBuilder(MempoiTableBuilder mempoiTableBuilder) {
@@ -300,7 +301,7 @@ public final class MempoiSheetBuilder {
     /**
      * adds a MempoiPivotTable object containing data to build an optional Excel PivotTable inside the current sheet
      *
-     * @param mempoiPivotTable
+     * @param mempoiPivotTable the MempoiPivotTable containing data to generate the desired Excel Pivot table
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMempoiPivotTable(MempoiPivotTable mempoiPivotTable) {
@@ -314,7 +315,7 @@ public final class MempoiSheetBuilder {
     /**
      * adds a MempoiPivotTableBuilder object containing data to build an optional Excel PivotTable inside the current sheet
      *
-     * @param mempoiPivotTableBuilder
+     * @param mempoiPivotTableBuilder the MempoiPivotTableBuilder containing data to generate the desired Excel Pivot table
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withMempoiPivotTableBuilder(MempoiPivotTableBuilder mempoiPivotTableBuilder) {

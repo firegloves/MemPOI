@@ -107,6 +107,7 @@ public class MempoiColumn {
             case Types.VARCHAR:
             case Types.NVARCHAR:
             case Types.LONGVARCHAR:
+            case TypesExtended.UUID:
                 return EExportDataType.TEXT;
             case Types.TIMESTAMP:
                 return EExportDataType.TIMESTAMP;
