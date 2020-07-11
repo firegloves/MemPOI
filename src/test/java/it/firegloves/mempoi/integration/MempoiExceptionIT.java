@@ -20,7 +20,6 @@ public class MempoiExceptionIT extends IntegrationBaseIT {
         MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-                .withDebug(true)
                 .withAdjustColumnWidth(true)
                 .addMempoiSheet(dogsSheet)
                 .build();
@@ -35,7 +34,6 @@ public class MempoiExceptionIT extends IntegrationBaseIT {
         MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-                .withDebug(true)
                 .withAdjustColumnWidth(true)
                 .addMempoiSheet(dogsSheet)
                 .build();
@@ -50,7 +48,6 @@ public class MempoiExceptionIT extends IntegrationBaseIT {
         MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-                .withDebug(true)
                 .withAdjustColumnWidth(true)
                 .addMempoiSheet(dogsSheet)
                 .build();
@@ -74,7 +71,6 @@ public class MempoiExceptionIT extends IntegrationBaseIT {
         MempoiSheet dogsSheet = new MempoiSheet(conn.prepareStatement("SELECT pet_name AS DOG_NAME, pet_race AS DOG_RACE FROM pets WHERE pet_type = 'dog'"), "Dogs sheet");
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-                .withDebug(true)
                 .withAdjustColumnWidth(true)
                 .addMempoiSheet(dogsSheet)
                 .build();

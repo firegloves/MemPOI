@@ -25,9 +25,6 @@ import java.util.stream.Collectors;
 
 public class MempoiBuilder {
 
-    // debug
-    private boolean debug = false;
-
     // force generation when possible
     private boolean forceGeneration;
 
@@ -117,14 +114,6 @@ public class MempoiBuilder {
         return this;
     }
 
-    /**
-     * @param debug if true enables log printing during exports
-     * @return the current MempoiBuilder
-     */
-    public MempoiBuilder withDebug(boolean debug) {
-        this.debug = debug;
-        return this;
-    }
 
     /**
      * THIS HAS TO BE USED WITH CAUTION: THE RESULT OF THE EXPORT COULD NOT REFLECT THE EXPECTED RESULT
@@ -304,7 +293,6 @@ public class MempoiBuilder {
     public MemPOI build() {
 
         MempoiConfig.getInstance()
-                .setDebug(debug)
                 .setForceGeneration(forceGeneration);
 
         if (null == workbook) {
@@ -368,16 +356,6 @@ public class MempoiBuilder {
     @Deprecated
     public MempoiBuilder setMempoiSheetList(List<MempoiSheet> mempoiSheetList) {
         return this.withMempoiSheetList(mempoiSheetList);
-    }
-
-    /**
-     * @param debug if true enables log printing during exports
-     * @return the current MempoiBuilder
-     * @deprecated Replaced by {@link #withDebug(boolean)}
-     */
-    @Deprecated
-    public MempoiBuilder setDebug(boolean debug) {
-        return this.withDebug(debug);
     }
 
     /**

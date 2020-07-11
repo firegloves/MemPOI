@@ -35,7 +35,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -60,7 +59,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -83,7 +81,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
     MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -107,7 +104,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -135,7 +131,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -172,7 +167,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         sheet.setFloatingPointCellStyle(floatingPointCellStyle);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -199,7 +193,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -222,7 +215,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-                .withDebug(true)
                 .withWorkbook(workbook)
                 .withFile(fileDest)
                 .withAdjustColumnWidth(true)
@@ -246,7 +238,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -270,7 +261,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -307,7 +297,6 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         List<MempoiSheet> sheetList = Arrays.asList(catsheet, dogsSheet);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)

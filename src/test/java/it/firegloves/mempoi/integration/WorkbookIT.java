@@ -63,7 +63,6 @@ public class WorkbookIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -93,7 +92,6 @@ public class WorkbookIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -147,7 +145,6 @@ public class WorkbookIT extends IntegrationBaseIT {
             floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -220,7 +217,6 @@ public class WorkbookIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -250,7 +246,6 @@ public class WorkbookIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -304,7 +299,6 @@ public class WorkbookIT extends IntegrationBaseIT {
             floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -377,7 +371,6 @@ public class WorkbookIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -407,7 +400,6 @@ public class WorkbookIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -461,7 +453,6 @@ public class WorkbookIT extends IntegrationBaseIT {
             floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)

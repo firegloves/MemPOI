@@ -11,16 +11,6 @@ import static junit.framework.TestCase.assertTrue;
 
 public class MempoiConfigTest {
 
-    @Test
-    public void debugTestTrue() {
-        MempoiConfig.getInstance().setDebug(true);
-        assertTrue(MempoiConfig.getInstance().isDebug());
-    }
-
-    @Test
-    public void debugTestFlase() {
-        assertFalse(MempoiConfig.getInstance().isDebug());
-    }
 
     @Test
     public void forceGenerationTestTrue() {

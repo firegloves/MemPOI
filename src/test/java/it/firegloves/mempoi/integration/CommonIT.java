@@ -28,7 +28,6 @@ public class CommonIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
@@ -56,7 +55,6 @@ public class CommonIT extends IntegrationBaseIT {
             numberCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("#.##0,00"));
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .withIntegerCellStyle(numberCellStyle)
@@ -87,7 +85,6 @@ public class CommonIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
@@ -118,7 +115,6 @@ public class CommonIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt, "Dogs sheet"))
@@ -171,7 +167,6 @@ public class CommonIT extends IntegrationBaseIT {
             floatingPointCellStyle.setFillPattern(FillPatternType.DIAMONDS);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)

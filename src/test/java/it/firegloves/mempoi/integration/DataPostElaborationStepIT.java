@@ -48,7 +48,6 @@ public class DataPostElaborationStepIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet(prepStmt, wb).build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(wb)
@@ -80,7 +79,6 @@ public class DataPostElaborationStepIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheetMultipleStep(prepStmt, wb).build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(wb)
@@ -118,7 +116,6 @@ public class DataPostElaborationStepIT extends IntegrationBaseMergedRegionsIT {
                     .build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(wb)

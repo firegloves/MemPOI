@@ -27,7 +27,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -52,7 +51,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -79,7 +77,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -107,7 +104,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -135,7 +131,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -162,7 +157,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -195,7 +189,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -223,7 +216,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -250,7 +242,6 @@ public class FooterIT extends IntegrationBaseIT {
         try {
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -291,7 +282,6 @@ public class FooterIT extends IntegrationBaseIT {
                     .build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withEvaluateCellFormulas(true)

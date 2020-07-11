@@ -158,7 +158,6 @@ public class MempoiBuilderTest {
         MempoiBuilder
                 .aMemPOI()
                 .addMempoiSheet(new MempoiSheet(prepStmt))
-                .withDebug(true)
                 .build();
 
         assertTrue("debug", MempoiConfig.getInstance().isDebug());
@@ -553,16 +552,6 @@ public class MempoiBuilderTest {
         assertNotNull("mempoi sheet 2 prepStmt", mempoi.getWorkbookConfig().getSheetList().get(1).getPrepStmt());
     }
 
-    @Test
-    public void setDebugTest() {
-
-        MempoiBuilder.aMemPOI()
-                .setDebug(true)
-                .addMempoiSheet(new MempoiSheet(prepStmt))
-                .build();
-
-        assertTrue("set debug", MempoiConfig.getInstance().isDebug());
-    }
 
     @Test
     public void setWorkbookTest() {

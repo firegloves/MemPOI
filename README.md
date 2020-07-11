@@ -17,7 +17,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.3.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.4.0'
 ```
 
 #### With Maven
@@ -26,20 +26,20 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.3.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
 </dependency>
 
 ```
 
 ---
 
-### What's new in 1.3.0
+### What's new in 1.4.0
 
-- [Excel Table](#excel-table)
-- [Excel Pivot Table](#excel-pivot-table)
-- [Numeric data types](#numeric-cell-styles)
-- Postgres UUID data type
-    
+Debug mode has been replaced by SLF4J. Logback dependency has been removed leaving the logging configuration to the user, ensuring the maximum flexibility.
+Using version 1.4.0 will result in a compilation error for `setDebug()` and `withDebug()` statements.
+This MemPOI update contains only this new feature, if you don't need SLF4J you can still use the previous version.
+Thanks to [zaplatynski](https://github.com/zaplatynski)
+   
 ---
 
 ### MemPOI survey
@@ -165,7 +165,6 @@ MempoiSheet birdsSheet = MempoiSheetBuilder.aMempoiSheet()
                             .build();
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                            .withDebug(true)
                             .withFile(fileDest)
                             .withAdjustColumnWidth(true)
                             .addMempoiSheet(dogsSheet)
@@ -226,7 +225,6 @@ headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
 headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .withHeaderCellStyle(headerCellStyle)
@@ -268,7 +266,6 @@ MempoiSheet catsheet = MempoiSheetBuilder.aMempoiSheet()
 List<MempoiSheet> sheetList = Arrays.asList(dogsSheet, catsheet);
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
@@ -320,7 +317,6 @@ For example, you could choose to add the `NumberSumSubFooter` to your MemPOI rep
 
 ```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withDebug(true)
                     .withWorkbook(workbook)
                     .withFile(fileDest)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
@@ -662,9 +658,11 @@ According to `CompletableFuture` you'll receive an `ExecutionException` if you c
 
 ---
 
-### Debug
+### Logging 
 
-`MempoiBuilder` exposes a `setDebug()` method which, if it receives a `true` value, will print a lot of debug messages. Set it to false to prevent MemPOI printing its logs.
+Logging is served through [SLF4J](http://www.slf4j.org/), leaving the logging configuration to the user and ensuring maximum flexibility.
+
+Thanks to [zaplatynski](https://github.com/zaplatynski)
 
 ---
 
@@ -675,7 +673,7 @@ MemPOI comes with Apache POI 4.1.2 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.3.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.4.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -688,7 +686,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>

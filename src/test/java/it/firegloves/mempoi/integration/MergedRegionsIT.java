@@ -44,7 +44,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new HSSFWorkbook())
@@ -75,7 +74,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new HSSFWorkbook())
@@ -109,7 +107,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new HSSFWorkbook())
@@ -140,7 +137,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                 .withStyleTemplate(new ForestStyleTemplate())
                 .withWorkbook(new HSSFWorkbook())
                 .addMempoiSheet(sheet)
@@ -168,7 +164,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet2 = this.createMempoiSheet2(prepStmt2);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new HSSFWorkbook())
@@ -213,7 +208,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet2 = this.createMempoiSheet2MultiColumn(prepStmt2);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new HSSFWorkbook())
@@ -258,7 +252,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new XSSFWorkbook())
@@ -297,7 +290,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet2 = this.createMempoiSheet2(prepStmt2);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new XSSFWorkbook())
@@ -337,7 +329,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new XSSFWorkbook())
@@ -376,7 +367,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet2 = this.createMempoiSheet2MultiColumn(prepStmt2);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new XSSFWorkbook())
@@ -421,7 +411,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new SXSSFWorkbook(200))
@@ -460,7 +449,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet2 = this.createMempoiSheet2(prepStmt2);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new SXSSFWorkbook(200))
@@ -499,7 +487,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new SXSSFWorkbook(200))
@@ -533,7 +520,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new SXSSFWorkbook(-1))
@@ -566,7 +552,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                 .withFile(fileDest)
                 .withStyleTemplate(new ForestStyleTemplate())
                 .withWorkbook(new SXSSFWorkbook(-1))
@@ -601,7 +586,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet2 = this.createMempoiSheet2(prepStmt2);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new SXSSFWorkbook(-1))
@@ -636,7 +620,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                 .withStyleTemplate(new ForestStyleTemplate())
                 .withWorkbook(new SXSSFWorkbook(50))
                 .addMempoiSheet(sheet)
@@ -665,7 +648,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1(prepStmt, null);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new HSSFWorkbook())
@@ -691,7 +673,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             MempoiSheet sheet = this.createMempoiSheet1(prepStmt, new String[0]);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                     .withFile(fileDest)
                     .withStyleTemplate(new ForestStyleTemplate())
                     .withWorkbook(new HSSFWorkbook())
@@ -748,7 +729,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
                 MempoiSheet sheet = this.createMempoiSheet1(prepStmt, new String[0]);
 
                 MemPOI memPOI = MempoiBuilder.aMemPOI()
-//                    .withDebug(true)
                         .withFile(fileDest)
                         .withStyleTemplate(new ForestStyleTemplate())
                         .withWorkbook(new HSSFWorkbook())

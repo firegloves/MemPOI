@@ -50,7 +50,6 @@ public class ArticleIT extends IntegrationBaseIT {
                 .build();
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
-                .withDebug(true)
                 .withFile(fileDest)
                 .withAdjustColumnWidth(true)
                 .addMempoiSheet(dogsSheet)
