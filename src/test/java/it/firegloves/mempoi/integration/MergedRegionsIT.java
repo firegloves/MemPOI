@@ -412,7 +412,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     public void testWithFileAndMergedRegionsSXSSFAndFixedRowAccessWindowSize() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size.xlsx");
-        int limit = 200_000;
+        int limit = 50_000;
 
         try {
             prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
@@ -490,7 +490,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     public void testWithFileAndMergedRegionsSXSSFAndFixedRowAccessWindowSizeMultiColumn() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size_multicolumn.xlsx");
-        int limit = 200_000;
+        int limit = 50_000;
 
         try {
             prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
@@ -524,7 +524,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     public void testWithFileAndMergedRegionsSXSSFAndVariableRowAccessWindowSize() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size.xlsx");
-        int limit = 200_000;
+        int limit = 50_000;
 
         try {
             prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
@@ -630,7 +630,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test(expected = ExecutionException.class)
     public void testWithFileAndMergedRegionsSXSSFAndLimitedFixedRowAccessWindowSize() throws SQLException, ExecutionException, InterruptedException {
 
-        prepStmt = this.createStatement(null, 200_000);    // TODO create tests that exceed HSSF limits and try to manage it
+        prepStmt = this.createStatement(null, 50_000);    // TODO create tests that exceed HSSF limits and try to manage it
 
         // sheet
         MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
