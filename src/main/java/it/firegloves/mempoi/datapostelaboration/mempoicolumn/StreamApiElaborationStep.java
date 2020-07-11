@@ -5,7 +5,6 @@
 package it.firegloves.mempoi.datapostelaboration.mempoicolumn;
 
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.strategos.Strategos;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;

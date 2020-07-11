@@ -11,7 +11,6 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.ForceGenerationHelper;
-import it.firegloves.mempoi.validator.AreaReferenceValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -24,8 +23,8 @@ import java.util.*;
 public final class MempoiSheetBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(MempoiSheetBuilder.class);
-    private final String OVERRIDING_MEMPOI_TABLE = "A previously setted value of Excel Table is about to be replaced";
-    private final String OVERRIDING_MEMPOI_PIVOT_TABLE = "A previously setted value of Excel Pivot Table is about to be replaced";
+    private static final String OVERRIDING_MEMPOI_TABLE = "A previously setted value of Excel Table is about to be replaced";
+    private static final String OVERRIDING_MEMPOI_PIVOT_TABLE = "A previously setted value of Excel Pivot Table is about to be replaced";
 
     private String sheetName;
 
@@ -258,7 +257,7 @@ public final class MempoiSheetBuilder {
                     new MempoiException(Errors.ERR_POST_DATA_ELABORATION_NULL),
                     Errors.ERR_POST_DATA_ELABORATION_NULL_FORCE_GENERATION,
                     logger,
-                    () -> { dataElaborationStepMap = new HashMap<>(); });
+                    () -> dataElaborationStepMap = new HashMap<>());
         }
 
         this.dataElaborationStepMap.putIfAbsent(colName, new ArrayList<>());

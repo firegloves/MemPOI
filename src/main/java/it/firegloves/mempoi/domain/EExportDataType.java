@@ -1,9 +1,7 @@
 package it.firegloves.mempoi.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -22,6 +20,6 @@ public enum EExportDataType {
     BOOLEAN("getBoolean", String.class, boolean.class);
 
     private String rsAccessDataMethodName;
-    private Class rsAccessParamClass;
-    private Class rsReturnClass;
+    private Class<?> rsAccessParamClass;
+    private Class<?> rsReturnClass;
 }

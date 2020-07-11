@@ -2,8 +2,6 @@ package it.firegloves.mempoi.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Table;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFTable;
 

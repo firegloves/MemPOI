@@ -1,6 +1,9 @@
 package it.firegloves.mempoi.domain;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 class TypesExtended {
 
-    public final static int UUID = 1111;
+    public final int UUID = 1111;
 }

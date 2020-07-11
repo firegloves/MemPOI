@@ -7,7 +7,6 @@ package it.firegloves.mempoi.validator;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.util.AreaReference;
 
 import java.util.regex.Pattern;
 

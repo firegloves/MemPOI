@@ -127,20 +127,20 @@ public final class MempoiTableBuilder {
      */
     private String validateDisplayName(String displayTableName) throws MempoiException {
 
-        if (null == this.displayTableName) return null;
+        if (null == displayTableName) return null;
 
-        this.displayTableName = this.displayTableName.trim();
+        displayTableName = displayTableName.trim();
 
-        if (this.displayTableName.contains(" ")) {
+        if (displayTableName.contains(" ")) {
 
             if (MempoiConfig.getInstance().isForceGeneration()) {
-                this.displayTableName = this.displayTableName.replaceAll(" ", "_");
+                displayTableName = displayTableName.replaceAll("\\s", "_");
             } else {
                 throw new MempoiException(Errors.ERR_TABLE_DISPLAY_NAME);
             }
         }
 
-        return this.displayTableName;
+        return displayTableName;
     }
 
 
@@ -152,7 +152,7 @@ public final class MempoiTableBuilder {
         this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
         this.displayTableName = this.validateDisplayName(this.displayTableName);
 
-        if (null == areaReferenceSource && false == allSheetData) {
+        if (null == areaReferenceSource && ! allSheetData) {
             ForceGenerationHelper.manageForceGeneration(
                     new MempoiException(Errors.ERR_TABLE_SOURCE_AMBIGUOUS),
                     Errors.ERR_TABLE_SOURCE_AMBIGUOUS_FORCE_GENERATION,
@@ -160,7 +160,7 @@ public final class MempoiTableBuilder {
                     () -> allSheetData = true);
         }
 
-        if (null != areaReferenceSource && false != allSheetData) {
+        if (null != areaReferenceSource && allSheetData) {
             ForceGenerationHelper.manageForceGeneration(
                     new MempoiException(Errors.ERR_TABLE_SOURCE_AMBIGUOUS),
                     Errors.ERR_TABLE_SOURCE_AMBIGUOUS_FORCE_GENERATION,

@@ -32,7 +32,7 @@ public class MergedRegionsManager<T> {
      */
     public Optional<ImmutablePair<Integer, Integer>> performAnalysis(Cell cell, T value) {
 
-        ImmutablePair pair = null;
+        ImmutablePair<Integer, Integer> pair = null;
 
         if (null == cell || null == value) {
             throw new MempoiException(Errors.ERR_MERGED_REGIONS_CELL_OR_VALUE_NULL);

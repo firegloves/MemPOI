@@ -65,9 +65,7 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     @Override
     public CellStyle getIntegerCellStyle(Workbook workbook) {
 
-        CellStyle cellStyle = this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
-//        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(StandardDataFormat.STANDARD_NUMBER_FORMAT.getFormat()));
-        return cellStyle;
+        return this.setGenericCellStyle(workbook, this.commonCellBgColorIndex, this.commonFontColorIndex, false, this.borderColorIndex);
     }
 
     @Override

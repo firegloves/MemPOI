@@ -18,12 +18,10 @@ public class FileManager {
 
     private static final Logger logger = LoggerFactory.getLogger(FileManager.class);
 
-    private final String fileSep = File.separator;
-
     /**
      * contains the workbook configurations
      */
-    private WorkbookConfig workbookConfig;
+    private final WorkbookConfig workbookConfig;
 
 
     /**
@@ -33,7 +31,7 @@ public class FileManager {
      */
     public File writeTempFile() {
 
-        File tmpFile = new File(System.getProperty("java.io.tmpdir") + fileSep + "mempoi_temp_" + System.currentTimeMillis() + ".xlsx");
+        File tmpFile = new File(System.getProperty("java.io.tmpdir") + File.separator + "mempoi_temp_" + System.currentTimeMillis() + ".xlsx");
 
         this.writeFile(tmpFile);
         logger.debug("MemPOI temp file created: {}", tmpFile.getAbsolutePath());

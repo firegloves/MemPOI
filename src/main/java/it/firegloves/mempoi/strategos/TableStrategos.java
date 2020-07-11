@@ -73,22 +73,6 @@ public class TableStrategos {
         if (null != mempoiTable.getDisplayTableName()) {
             table.setDisplayName(mempoiTable.getDisplayTableName());
         }
-
-        // TODO manage style (table style or directly per column style? maybe both)
-
-//        // For now, create the initial style in a low-level way
-//        table.getCTTable().addNewTableStyleInfo();
-//        table.getCTTable().getTableStyleInfo().setName("TableStyleMedium2");
-//
-//        // Style the table
-//        XSSFTableStyleInfo style = (XSSFTableStyleInfo) table.getStyle();
-//        style.setName("TableStyleMedium2");
-//        style.setShowColumnStripes(false);
-//        style.setShowRowStripes(true);
-//        style.setFirstColumn(false);
-//        style.setLastColumn(false);
-//        style.setShowRowStripes(true);
-//        style.setShowColumnStripes(true);
     }
 
 

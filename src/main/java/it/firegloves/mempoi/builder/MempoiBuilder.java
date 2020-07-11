@@ -351,7 +351,7 @@ public class MempoiBuilder {
                 .withDatetimeCellStyle(null != s.getDatetimeCellStyle() ? s.getDatetimeCellStyle() : this.datetimeCellStyle)
                 .withHeaderCellStyle(null != s.getHeaderCellStyle() ? s.getHeaderCellStyle() : this.headerCellStyle)
                 .withIntegerCellStyle(null != s.getIntegerCellStyle() ? s.getIntegerCellStyle() : this.integerCellStyle)
-                .withFloatingPointCellStyle(null != s.getFloatingPointCellStyle() ? s.getFloatingPointCellStyle() : this.integerCellStyle)
+                .withFloatingPointCellStyle(null != s.getFloatingPointCellStyle() ? s.getFloatingPointCellStyle() : this.floatingPointCellStyle)
                 .withSubFooterCellStyle(null != s.getSubFooterCellStyle() ? s.getSubFooterCellStyle() : this.subFooterCellStyle)
                 .build();
 
