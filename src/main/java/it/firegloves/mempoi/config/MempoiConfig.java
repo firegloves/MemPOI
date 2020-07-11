@@ -9,7 +9,6 @@ public final class MempoiConfig {
 
 	private static MempoiConfig instance = new MempoiConfig();
 
-	private boolean debug;
 	private boolean forceGeneration;
 
 	private MempoiConfig() {

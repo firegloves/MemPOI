@@ -152,16 +152,6 @@ public class MempoiBuilderTest {
                 .build();
     }
 
-    @Test
-    public void withDebug() {
-
-        MempoiBuilder
-                .aMemPOI()
-                .addMempoiSheet(new MempoiSheet(prepStmt))
-                .build();
-
-        assertTrue("debug", MempoiConfig.getInstance().isDebug());
-    }
 
 
     /******************************************************************************************************************
