@@ -1,3 +1,6 @@
+/**
+ * Contains the logic to fill export document cells' data (headers and data cells)
+ */
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;

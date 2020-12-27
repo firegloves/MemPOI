@@ -1,12 +1,15 @@
 /**
- * library entry point
+ * Library entry point
+ * A MemPOI represents the report you want to generate
+ * You can create it using the relative builder, that will place every required setting in its workbookConfig variable
+ * After creating the desired MemPOI you can ask for the report using its 2 methods
+ * Those methods ask both to {@link it.firegloves.mempoi.strategos.Strategos}  to coordinate the export process
  */
 package it.firegloves.mempoi;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.strategos.Strategos;
-
 import java.util.concurrent.CompletableFuture;
 
 

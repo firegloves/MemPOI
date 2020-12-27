@@ -1,3 +1,7 @@
+/**
+ * represents a column of the export report
+ * it contains every info required to accomplish the export
+ */
 package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
@@ -20,17 +24,34 @@ import java.util.Objects;
 @Accessors(chain = true)
 public class MempoiColumn {
 
+    /**
+     * the enum mapping ResultSet actions to the column data
+     */
     private EExportDataType type;
+    /**
+     * the style to apply to every cell of the column
+     */
     private CellStyle cellStyle;
+    /**
+     * the name of the column. will be used as column header value
+     */
     private String columnName;
+    /**
+     * the column index in the report
+     */
     private int colIndex;
 
     /**
-     * contains the ResultSet's method to
+     * the method to call on the ResultSet to extract the desired data
      */
     private Method rsAccessDataMethod;
+    /**
+     * the setter method to invoke on the Cell to set its value using the reflection
+     */
     private Method cellSetValueMethod;
-
+    /**
+     * data needed to manage the subfooter of this column
+     */
     private MempoiSubFooterCell subFooterCell;
 
 

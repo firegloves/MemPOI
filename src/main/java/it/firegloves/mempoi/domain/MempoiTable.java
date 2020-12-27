@@ -1,3 +1,6 @@
+/**
+ * contains the information required to generate an Excel table
+ */
 package it.firegloves.mempoi.domain;
 
 import lombok.Data;

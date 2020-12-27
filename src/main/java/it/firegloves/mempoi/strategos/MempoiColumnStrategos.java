@@ -1,3 +1,9 @@
+/**
+ * Contains the logic to manage MempoiColumns. It includes:
+ * - the creation of the MempoiColumns from the ResultSet
+ * - management of the Data post elaboration pipeline setting into the MempoiColumns
+ * - management of the MergedRegions settings into the MempoiColumns
+ */
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
@@ -56,7 +62,7 @@ public class MempoiColumnStrategos {
      * @param mempoiSheet the MempoiSheet related to the merged regions to create
      * @param columnList  the list of MempoiColumn to configure
      *                    @param workbook the workbook where generate the export
-     * @return the configured List<MempoiColumn> 
+     * @return the configured List<MempoiColumn>
      */
     private List<MempoiColumn> prepareMergedRegions(MempoiSheet mempoiSheet, List<MempoiColumn> columnList, Workbook workbook) {
 
