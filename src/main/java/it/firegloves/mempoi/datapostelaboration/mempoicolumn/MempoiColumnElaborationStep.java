@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 public interface MempoiColumnElaborationStep<T> {
 
     /**
-     * receives a value of type Cell, analyzes it and collects informations
+     * receives a value of type Cell, analyzes it and collects information
      *
      * @param cell  the Cell from which gain informations
      * @param value cell value of type T
@@ -28,7 +28,7 @@ public interface MempoiColumnElaborationStep<T> {
     /**
      * applies step logic to the Workbook modifying it
      *
-     * @param mempoiSheet the MempoiSheet from which gain informations
+     * @param mempoiSheet the MempoiSheet from which gain information
      * @param workbook the Workbook from which get Sheet
      */
     void execute(MempoiSheet mempoiSheet, Workbook workbook);

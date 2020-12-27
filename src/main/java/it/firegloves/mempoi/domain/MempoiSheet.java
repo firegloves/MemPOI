@@ -1,3 +1,6 @@
+/**
+ * contains the information required to generate an Excel doc sheet
+ */
 package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
@@ -26,33 +29,58 @@ public class MempoiSheet {
      * the prepared statement to execute to take export data
      */
     private PreparedStatement prepStmt;
-
     /**
      * the sheet name
      */
     private String sheetName;
-
     /**
      * the styler containing desired output styles for the current sheet
      */
     private MempoiStyler sheetStyler;
-
-    // style variables
+    /**
+     * the workbook to which add the sheet to generate
+     */
     private Workbook workbook;
+    /**
+     * generic style template to apply to the sheet
+     */
     private StyleTemplate styleTemplate;
+    /**
+     * header cells style that, if present, overrides the general styleTemplate
+     */
     private CellStyle headerCellStyle;
+    /**
+     * subfooter cells style that, if present, overrides the general styleTemplate
+     */
     private CellStyle subFooterCellStyle;
+    /**
+     * common data type cells style that, if present, overrides the general styleTemplate
+     */
     private CellStyle commonDataCellStyle;
+    /**
+     * date cells style that, if present, overrides the general styleTemplate
+     */
     private CellStyle dateCellStyle;
+    /**
+     * datetime cells style that, if present, overrides the general styleTemplate
+     */
     private CellStyle datetimeCellStyle;
+    /**
+     * integer cells style that, if present, overrides the general styleTemplate
+     */
     private CellStyle integerCellStyle;
+    /**
+     * floating point number cells style that, if present, overrides the general styleTemplate
+     */
     private CellStyle floatingPointCellStyle;
 
+    // TODO remove Optional from variable => they should only be returned
     /**
      * the footer to apply to the sheet. if null no footer is appended to the report
      */
     private Optional<MempoiFooter> mempoiFooter = Optional.empty();
 
+    // TODO remove Optional from variable => they should only be returned
     /**
      * the sub footer to apply to the sheet. if null no sub footer is appended to the report
      */
@@ -74,11 +102,13 @@ public class MempoiSheet {
      */
     private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
 
+    // TODO remove Optional from variable => they should only be returned
     /**
      * a MempoTable containing data to build an optional Excel Table inside the current sheet
      */
     private Optional<MempoiTable> mempoiTable = Optional.empty();
 
+    // TODO remove Optional from variable => they should only be returned
     /**
      * a MempoPivotTable containing data to build an optional Excel PivotTable inside the current sheet
      */

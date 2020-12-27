@@ -1,3 +1,6 @@
+/**
+ * Contains the logic to generate export document footer
+ */
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;

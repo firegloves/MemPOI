@@ -1,3 +1,6 @@
+/**
+ * contains the information required to generate the desired excel report (footer settings, adjust column size option, etc.)
+ */
 package it.firegloves.mempoi.config;
 
 import it.firegloves.mempoi.domain.MempoiSheet;

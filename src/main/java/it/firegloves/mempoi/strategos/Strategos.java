@@ -1,3 +1,7 @@
+/**
+ * Contains the main export logic
+ * It acts as the coordinator between subcomponents
+ */
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.MempoiConfig;
@@ -199,7 +203,7 @@ public class Strategos {
      * creates and returns a Sheet with the received name or default if empty
      *
      * @param sheetName the name of the sheet (can be null or empty)
-     * @return the newly created Sheet 
+     * @return the newly created Sheet
      */
     private Sheet createSheet(String sheetName) {
 

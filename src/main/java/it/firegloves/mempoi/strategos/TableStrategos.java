@@ -1,3 +1,6 @@
+/**
+ * Contains the logic to generate and manage Excel tables
+ */
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
