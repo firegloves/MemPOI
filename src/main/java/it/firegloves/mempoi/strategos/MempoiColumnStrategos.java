@@ -11,6 +11,7 @@ import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElabora
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -41,6 +42,8 @@ public class MempoiColumnStrategos {
         // populates MempoiColumn list with export metadata list
         List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
 
+        this.loadMempoiColumnConfig(mempoiSheet, columnList);
+
         // assigns cell styles to MempoiColumns
         new MempoiColumnStyleManager(mempoiSheet.getSheetStyler()).setMempoiColumnListStyler(columnList);
 
@@ -56,15 +59,33 @@ public class MempoiColumnStrategos {
         return columnList;
     }
 
+
+    /**
+     * get the MempoiColumngConfig list from the MempoiSheet and bind them to the relative MempoiColumns
+     *
+     * @param mempoiSheet the MempoiSheet from which read the MempoiColumngConfig
+     * @param columnList  the list of MempoiColumn to which bind the MempoiColumnConfiguration
+     */
+    private void loadMempoiColumnConfig(MempoiSheet mempoiSheet, List<MempoiColumn> columnList) {
+
+        Map<String, MempoiColumnConfig> columnConfigMap = mempoiSheet.getColumnConfigMap();
+
+        // if a config exist in the map => set it in the relative mempoi column, otherwise set null
+        columnList.forEach(mempoiColumn ->
+            mempoiColumn.setMempoiColumnConfig(columnConfigMap.getOrDefault(mempoiColumn.getColumnName(), null))
+        );
+    }
+
     /**
      * if needed adds merged regions configurations to the received list of MempoiColumn
      *
      * @param mempoiSheet the MempoiSheet related to the merged regions to create
      * @param columnList  the list of MempoiColumn to configure
-     *                    @param workbook the workbook where generate the export
+     * @param workbook    the workbook where generate the export
      * @return the configured List<MempoiColumn>
      */
-    private List<MempoiColumn> prepareMergedRegions(MempoiSheet mempoiSheet, List<MempoiColumn> columnList, Workbook workbook) {
+    private List<MempoiColumn> prepareMergedRegions(MempoiSheet mempoiSheet, List<MempoiColumn> columnList,
+            Workbook workbook) {
 
         // manages merged regions
         if (null != mempoiSheet.getMergedRegionColumns()) {

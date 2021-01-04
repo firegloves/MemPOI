@@ -330,7 +330,7 @@ public class AssertionHelper {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
@@ -370,7 +370,7 @@ public class AssertionHelper {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
@@ -408,7 +408,7 @@ public class AssertionHelper {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
@@ -446,7 +446,7 @@ public class AssertionHelper {
                 AssertionHelper.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
@@ -479,7 +479,7 @@ public class AssertionHelper {
                 AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
@@ -518,13 +518,15 @@ public class AssertionHelper {
                     i++;
 
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    failAssertion(e);
                 }
             }
 
             return i;
 
         } catch (Exception e) {
+            e.printStackTrace();
+            fail();
             throw new RuntimeException(e);
         }
     }
@@ -644,8 +646,14 @@ public class AssertionHelper {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
+
+    private static void failAssertion(Exception e) {
+        e.printStackTrace();
+        fail();
+        throw new RuntimeException(e);
+    }
 }

@@ -2,6 +2,7 @@ package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
@@ -11,6 +12,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.ForceGenerationHelper;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -46,10 +48,16 @@ public final class MempoiSheetBuilder {
     private Optional<MempoiPivotTable> mempoiPivotTable = Optional.empty();
 
     /**
-     * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
-     * it defines the post data elaboration processes to apply
+     * maps a column name to a desired implementation of MempoiColumnElaborationStep interface it defines the post data
+     * elaboration processes to apply
      */
     private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
+
+    /**
+     * the list of the MempoiColumnConfig to set to the relative MempoiColumn
+     */
+    private List<MempoiColumnConfig> mempoiColumnConfigList;
+
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -327,6 +335,31 @@ public final class MempoiSheetBuilder {
         return this;
     }
 
+    /**
+     * sets the list of MempoiColumnConfig to set to the relative MempoiColumns
+     *
+     * @param mempoiColumnConfigList the list of MempoiColumnConfig to set to the relative MempoiColumns
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withMempoiColumnConfigList(List<MempoiColumnConfig> mempoiColumnConfigList) {
+        this.mempoiColumnConfigList = mempoiColumnConfigList;
+        return this;
+    }
+
+    /**
+     * sets the MempoiColumnConfig to add to the list of mempoiColumnConfig
+     *
+     * @param mempoiColumnConfig the MempoiColumnConfig to add to the list of mempoiColumnConfig
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder addMempoiColumnConfig(MempoiColumnConfig mempoiColumnConfig) {
+        if (null == this.mempoiColumnConfigList) {
+            this.mempoiColumnConfigList = new ArrayList<>();
+        }
+        this.mempoiColumnConfigList.add(mempoiColumnConfig);
+        return this;
+    }
+
 
     /**
      * builds the MempoiSheet and returns it
@@ -361,6 +394,14 @@ public final class MempoiSheetBuilder {
 
         // TODO add check of overlapping area references - method already exists
 //        AreaReferenceValidator.areAreaOverlapping();
+
+        if (null != this.mempoiColumnConfigList) {
+            Map<String, MempoiColumnConfig> mempoiColumnConfigMap = this.mempoiColumnConfigList.stream()
+                    .collect(Collectors.toMap(
+                            MempoiColumnConfig::getColumnName,
+                            mempoiColumnConfig -> mempoiColumnConfig));
+            mempoiSheet.setColumnConfigMap(mempoiColumnConfigMap);
+        }
 
         return mempoiSheet;
     }

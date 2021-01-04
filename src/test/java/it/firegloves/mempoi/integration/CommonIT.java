@@ -2,6 +2,8 @@ package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
+import it.firegloves.mempoi.builder.MempoiSheetBuilder;
+import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
@@ -19,6 +21,41 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.Assert.*;
 
 public class CommonIT extends IntegrationBaseIT {
+
+    // TODO refine this test: what is testing? for now is only a quick try to check MempoiColumnConfig is debug mode
+    @Test
+    public void testWithoutMempoiColumnConfig() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_mempoi_column_config.xlsx");
+
+        try {
+
+            MempoiColumnConfig creationDateConfig = MempoiColumnConfig.builder().withColumnName("WONDERFUL DATE").build();
+            MempoiColumnConfig validConfig = MempoiColumnConfig.builder().withColumnName("valid").build();
+            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withPrepStmt(prepStmt)
+                    .addMempoiColumnConfig(creationDateConfig)
+                    .addMempoiColumnConfig(validConfig)
+                    .build();
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI()
+                    .withFile(fileDest)
+                    .withAdjustColumnWidth(true)
+                    .addMempoiSheet(mempoiSheet)
+                    .build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            AssertionHelper
+                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
+                            null, new StandardStyleTemplate());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Test
     public void testWithoutStyler() {
@@ -127,7 +164,7 @@ public class CommonIT extends IntegrationBaseIT {
             // validate first sheet
             AssertionHelper.validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
             // validate second sheet
-            AssertionHelper.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(TestHelper.COLUMNS_2, TestHelper.HEADERS_2, TestHelper.NO_LIMITS)), fut.get(), 1, TestHelper.HEADERS_2, true, new StandardStyleTemplate());
+            AssertionHelper.validateSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(TestHelper.COLUMNS_2, TestHelper.HEADERS_2, TestHelper.NO_LIMITS)), fut.get(), 1, TestHelper.HEADERS_2, false, new StandardStyleTemplate());
 
         } catch (Exception e) {
             e.printStackTrace();
