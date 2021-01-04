@@ -30,6 +30,7 @@ public class TestHelper {
     public static final String TABLE_SPEED_TEST = "`speed_test`";
     public static final String TABLE_MERGED_REGIONS = "`merged_regions_test`";
     public static final String TABLE_PIVOT_TABLE = "`pivot_table_test`";
+    public static final String TABLE_NULL_VALUES = "`null_values_test`";
 
     public static final String AREA_REFERENCE = "A1:F6";
     public static final String AREA_REFERENCE_2 = "H1:M6";

@@ -105,7 +105,9 @@ public class DataStrategos {
                     Object value = col.getRsAccessDataMethod().invoke(rs, col.getColumnName());
 
                     // sets value in the cell
-                    col.getCellSetValueMethod().invoke(cell, value);
+                    if (! rs.wasNull()) {
+                        col.getCellSetValueMethod().invoke(cell, value);
+                    }
 
                     // analyze data for mempoi column's strategy
                     col.elaborationStepListAnalyze(cell, value);
