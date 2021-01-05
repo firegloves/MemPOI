@@ -94,6 +94,7 @@ public class DataStrategos {
 
                 for (int i = 0; i < colListLen; i++) {
                     MempoiColumn col = columnList.get(i);
+
                     Cell cell = row.createCell(i);
 
                     if (!(sheet instanceof XSSFSheet)) {

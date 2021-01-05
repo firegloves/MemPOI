@@ -53,6 +53,10 @@ public class MempoiColumn {
      * data needed to manage the subfooter of this column
      */
     private MempoiSubFooterCell subFooterCell;
+    /**
+     * contains the configuration of the current MempoiColumn
+     */
+    private MempoiColumnConfig mempoiColumnConfig;
 
 
     /**
