@@ -86,6 +86,8 @@ public class MempoiSheetBuilderTest {
 
         AssertionHelper.validateMempoiTable(wb, mempoiSheet.getMempoiTable().get());
         AssertionHelper.validateMempoiPivotTable(wb, mempoiSheet.getMempoiPivotTable().get());
+
+        fail("add mempoicolumnconfig and add dedicated test?");
     }
 
 

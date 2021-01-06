@@ -7,6 +7,7 @@ package it.firegloves.mempoi.domain;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
+import java.util.Optional;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.Cell;
@@ -53,6 +54,11 @@ public class MempoiColumn {
      * data needed to manage the subfooter of this column
      */
     private MempoiSubFooterCell subFooterCell;
+
+    public Optional<MempoiColumnConfig> getMempoiColumnConfig() {
+        return Optional.ofNullable(mempoiColumnConfig);
+    }
+
     /**
      * contains the configuration of the current MempoiColumn
      */

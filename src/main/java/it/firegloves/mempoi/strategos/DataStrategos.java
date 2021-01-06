@@ -4,9 +4,12 @@
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.domain.DataTransformationFunction;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
+import java.util.ArrayList;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -104,6 +107,13 @@ public class DataStrategos {
                     logger.debug("SETTING CELL FOR COLUMN {}", col.getColumnName());
 
                     Object value = col.getRsAccessDataMethod().invoke(rs, col.getColumnName());
+
+                    List<DataTransformationFunction<?>> dataTransformationFunctionList = col.getMempoiColumnConfig()
+                            .map(MempoiColumnConfig::getDataTransformationFunctionList)
+                            .orElseGet(ArrayList::new);
+                    for (DataTransformationFunction<?> dataTransformationFunction : dataTransformationFunctionList) {
+                        value = dataTransformationFunction.apply(value);
+                    }
 
                     // sets value in the cell
                     if (! rs.wasNull()) {

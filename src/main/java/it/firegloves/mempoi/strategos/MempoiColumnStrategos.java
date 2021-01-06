@@ -98,7 +98,7 @@ public class MempoiColumnStrategos {
                                 .findFirst()
                                 .ifPresent(colIndex -> {
 
-                                    MempoiColumnElaborationStep<?>step = workbook instanceof SXSSFWorkbook ?
+                                    MempoiColumnElaborationStep<?> step = workbook instanceof SXSSFWorkbook ?
                                             new StreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex, (SXSSFWorkbook) workbook, mempoiSheet) :
                                             new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex);
 
