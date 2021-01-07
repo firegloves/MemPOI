@@ -706,7 +706,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 ### Contributing
 
 Feel free to contribute. The easiest way could be adding new templates, sub footers or data post elaboration steps.
-If you want to directly open a pull request, please target dev branch.
+Look at the [contributing file](docs/CONTRIBUTING.md) to go deeper!
 
 ---
 
