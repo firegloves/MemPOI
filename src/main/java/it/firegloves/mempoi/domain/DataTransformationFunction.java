@@ -3,8 +3,16 @@
  */
 package it.firegloves.mempoi.domain;
 
-@FunctionalInterface
-public interface DataTransformationFunction<T> {
+import it.firegloves.mempoi.exception.MempoiException;
 
-    T apply(Object value);
+@FunctionalInterface
+public interface DataTransformationFunction<I, O> {
+
+    String TRANSFORM_METHOD_NAME = "transform";
+
+    O transform(I value) throws MempoiException;
+
+//    default O getOutputType() {
+//        return O.;sd
+//    }
 }

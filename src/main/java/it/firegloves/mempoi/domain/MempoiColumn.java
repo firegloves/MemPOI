@@ -7,9 +7,15 @@ package it.firegloves.mempoi.domain;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.util.Errors;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -55,8 +61,8 @@ public class MempoiColumn {
      */
     private MempoiSubFooterCell subFooterCell;
 
-    public Optional<MempoiColumnConfig> getMempoiColumnConfig() {
-        return Optional.ofNullable(mempoiColumnConfig);
+    public MempoiColumnConfig getMempoiColumnConfig() {
+        return mempoiColumnConfig;
     }
 
     /**
@@ -154,6 +160,54 @@ public class MempoiColumn {
         }
     }
 
+
+    /**
+     * basing on the received class type, returns the relative EExportDataType
+     */
+    private Optional<EExportDataType> getEExportDataTypeByParameterValue(Class<?> cellSetValueMethodParamClass) {
+
+        String simpleName = cellSetValueMethodParamClass.getSimpleName();
+
+        switch (simpleName) {
+
+            case "Integer":
+                return Optional.ofNullable(EExportDataType.INT);
+
+            default:
+                return Optional.empty();
+//            case Types.DOUBLE:
+//                return EExportDataType.DOUBLE;
+//            case Types.DECIMAL:
+//            case Types.FLOAT:
+//            case Types.NUMERIC:
+//            case Types.REAL:
+//                return EExportDataType.FLOAT;
+//            case Types.INTEGER:
+//            case Types.SMALLINT:
+//            case Types.TINYINT:
+//            case Types.BIGINT:
+//                return EExportDataType.INT;
+//            case Types.CHAR:
+//            case Types.NCHAR:
+//            case Types.VARCHAR:
+//            case Types.NVARCHAR:
+//            case Types.LONGVARCHAR:
+//            case TypesExtended.UUID:
+//                return EExportDataType.TEXT;
+//            case Types.TIMESTAMP:
+//                return EExportDataType.TIMESTAMP;
+//            case Types.DATE:
+//                return EExportDataType.DATE;
+//            case Types.TIME:
+//                return EExportDataType.TIME;
+//            case Types.BIT:
+//            case Types.BOOLEAN:
+//                return EExportDataType.BOOLEAN;
+//            default:
+//                throw new MempoiException("SQL TYPE NOT RECOGNIZED: " + sqlObjType);
+        }
+    }
+
     public void addElaborationStep(MempoiColumnElaborationStep step) {
         if (null != step) {
             this.elaborationStepList.add(step);
@@ -180,10 +234,47 @@ public class MempoiColumn {
     }
 
     /**
+     * sets and configure the required data to process the MempoiColumnConfig
+     *
+     * @param mempoiColumnConfig
+     * @return
+     */
+    public MempoiColumn setMempoiColumnConfig(MempoiColumnConfig mempoiColumnConfig) {
+        this.mempoiColumnConfig = mempoiColumnConfig;
+
+        if (null != this.mempoiColumnConfig) {
+            this.mempoiColumnConfig.getDataTransformationFunctionList()
+                    .ifPresent(tranformationFunctionsList -> {
+                        int tranformationFunctionsSize = tranformationFunctionsList.size();
+                        DataTransformationFunction<?, ?> dataTransformationFunction =
+                                tranformationFunctionsList.get(tranformationFunctionsSize - 1);
+
+                        Method functionMethod = Arrays
+                                .stream(dataTransformationFunction.getClass().getDeclaredMethods())
+                                .filter(method ->
+                                        DataTransformationFunction.TRANSFORM_METHOD_NAME.equals(method.getName()) &&
+                                                !method.getReturnType().getSimpleName().equals("Object"))
+                                .findFirst()
+                                .orElseThrow(() -> new MempoiException(
+                                        Errors.ERR_DATA_TRANSFORMATION_FUNCTION_METHOD_NOT_FOUND));
+
+                        EExportDataType eExportDataType = this
+                                .getEExportDataTypeByParameterValue(functionMethod.getReturnType())
+                                .orElseThrow(() -> new MempoiException(
+                                        Errors.ERR_DATA_TRANSFORMATION_FUNCTION_EEXPORTDATATYPE_NOT_FOUND));
+
+                        this.setCellSetValueMethod(eExportDataType);
+                    });
+        }
+
+        return this;
+    }
+
+    /**
      * applies pipeline elaboration steps (NOT SXSSF - after workbook creation)
      *
      * @param mempoiSheet the MempoiSheet from which gain informations
-     * @param workbook the Workbook from which get Sheet
+     * @param workbook    the Workbook from which get Sheet
      */
     public void elaborationStepListExecute(MempoiSheet mempoiSheet, Workbook workbook) {
         this.elaborationStepList.forEach(step -> step.execute(mempoiSheet, workbook));

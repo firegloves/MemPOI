@@ -63,16 +63,20 @@ public class MempoiColumnStrategos {
     /**
      * get the MempoiColumngConfig list from the MempoiSheet and bind them to the relative MempoiColumns
      *
-     * @param mempoiSheet the MempoiSheet from which read the MempoiColumngConfig
-     * @param columnList  the list of MempoiColumn to which bind the MempoiColumnConfiguration
+     * @param mempoiSheet      the MempoiSheet from which read the MempoiColumngConfig
+     * @param mempoiColumnList the list of MempoiColumn to which bind the MempoiColumnConfiguration
      */
-    private void loadMempoiColumnConfig(MempoiSheet mempoiSheet, List<MempoiColumn> columnList) {
+    private void loadMempoiColumnConfig(MempoiSheet mempoiSheet, List<MempoiColumn> mempoiColumnList) {
 
         Map<String, MempoiColumnConfig> columnConfigMap = mempoiSheet.getColumnConfigMap();
 
         // if a config exist in the map => set it in the relative mempoi column, otherwise set null
-        columnList.forEach(mempoiColumn ->
-            mempoiColumn.setMempoiColumnConfig(columnConfigMap.getOrDefault(mempoiColumn.getColumnName(), null))
+        mempoiColumnList.forEach(mempoiColumn ->
+                mempoiColumn.setMempoiColumnConfig(
+                        // get the one specified by the user
+                        columnConfigMap.getOrDefault(mempoiColumn.getColumnName(),
+                                //otherwise create an empty one
+                                MempoiColumnConfig.builder().withColumnName(mempoiColumn.getColumnName()).build()))
         );
     }
 

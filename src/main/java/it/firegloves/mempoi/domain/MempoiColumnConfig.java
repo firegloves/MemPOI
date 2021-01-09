@@ -4,7 +4,10 @@
 package it.firegloves.mempoi.domain;
 
 import java.util.List;
+import java.util.Optional;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Singular;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -20,5 +23,11 @@ public class MempoiColumnConfig {
     String columnName;
 
     @Singular("dataTransformationFunction")
-    List<DataTransformationFunction<?>> dataTransformationFunctionList;
+    @Getter(AccessLevel.NONE)
+    List<DataTransformationFunction<?, ?>> dataTransformationFunctionList;
+
+
+    public Optional<List<DataTransformationFunction<?, ?>>> getDataTransformationFunctionList() {
+        return Optional.ofNullable(dataTransformationFunctionList);
+    }
 }

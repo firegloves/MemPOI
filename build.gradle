@@ -23,6 +23,7 @@ sourceCompatibility = 1.8
 
 def poiVersion = '4.1.2'
 def comonsLang3Version = '3.10'
+def comonsCollectionsVersion = '4.4'
 def comonsMath3Version = '3.6.1'
 def slf4jVersion = '1.7.30'
 
@@ -50,6 +51,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-math3
     compile group: 'org.apache.commons', name: 'commons-math3', version: comonsMath3Version
+
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: comonsCollectionsVersion
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 	compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion

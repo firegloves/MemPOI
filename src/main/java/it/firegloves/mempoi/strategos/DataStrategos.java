@@ -96,32 +96,33 @@ public class DataStrategos {
                 Row row = sheet.createRow(rowCounter++);
 
                 for (int i = 0; i < colListLen; i++) {
-                    MempoiColumn col = columnList.get(i);
+                    MempoiColumn mempoiColumn = columnList.get(i);
 
                     Cell cell = row.createCell(i);
 
                     if (!(sheet instanceof XSSFSheet)) {
-                        cell.setCellStyle(col.getCellStyle());
+                        cell.setCellStyle(mempoiColumn.getCellStyle());
                     }
 
-                    logger.debug("SETTING CELL FOR COLUMN {}", col.getColumnName());
+                    logger.debug("SETTING CELL FOR COLUMN {}", mempoiColumn.getColumnName());
 
-                    Object value = col.getRsAccessDataMethod().invoke(rs, col.getColumnName());
+                    Object value = mempoiColumn.getRsAccessDataMethod().invoke(rs, mempoiColumn.getColumnName());
 
-                    List<DataTransformationFunction<?>> dataTransformationFunctionList = col.getMempoiColumnConfig()
-                            .map(MempoiColumnConfig::getDataTransformationFunctionList)
+                    List<DataTransformationFunction<?, ?>> dataTransformationFunctionList = mempoiColumn.getMempoiColumnConfig()
+                            .getDataTransformationFunctionList()
                             .orElseGet(ArrayList::new);
-                    for (DataTransformationFunction<?> dataTransformationFunction : dataTransformationFunctionList) {
-                        value = dataTransformationFunction.apply(value);
+
+                    for (DataTransformationFunction<?, ?> dataTransformationFunction : dataTransformationFunctionList) {
+                        value = dataTransformationFunction.transform(value);
                     }
 
                     // sets value in the cell
                     if (! rs.wasNull()) {
-                        col.getCellSetValueMethod().invoke(cell, value);
+                        mempoiColumn.getCellSetValueMethod().invoke(cell, value);
                     }
 
                     // analyze data for mempoi column's strategy
-                    col.elaborationStepListAnalyze(cell, value);
+                    mempoiColumn.elaborationStepListAnalyze(cell, value);
                 }
             }
 
