@@ -27,6 +27,8 @@ import static org.junit.Assert.assertNotNull;
 
 public class FileManagerTest {
 
+    // TODO test encryption
+
     private FileManager fileManager;
     private WorkbookConfig wbConfig;
 

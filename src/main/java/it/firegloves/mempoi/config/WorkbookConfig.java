@@ -3,6 +3,7 @@
  */
 package it.firegloves.mempoi.config;
 
+import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.FormulaSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
@@ -66,12 +67,19 @@ public class WorkbookConfig {
      */
     private List<MempoiSheet> sheetList;
 
+    /**
+     * the encryption configuration for the report to generate
+     */
+    private MempoiEncryption mempoiEncryption;
+
 
     public WorkbookConfig() {
     }
 
 
-    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList, File file) {
+    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook,
+            boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList, File file,
+            MempoiEncryption mempoiEncryption) {
         this.mempoiSubFooter = mempoiSubFooter;
         this.mempoiFooter = mempoiFooter;
         this.workbook = workbook;
@@ -79,6 +87,7 @@ public class WorkbookConfig {
         this.setEvaluateCellFormulas(evaluateCellFormulas);
         this.sheetList = sheetList;
         this.file = file;
+        this.mempoiEncryption = mempoiEncryption;
     }
 
     /**

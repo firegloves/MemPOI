@@ -4,6 +4,7 @@ package it.firegloves.mempoi.builder;
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
@@ -59,10 +60,15 @@ public class MempoiBuilder {
     private CellStyle floatingPointCellStyle;
 
     /**
-     * by default MemPOI forces Excel to evaluate cell formulas when it opens the report
-     * but if this var is true MemPOI tries to evaluate cell formulas at runtime instead
+     * by default MemPOI forces Excel to evaluate cell formulas when it opens the report but if this var is true MemPOI
+     * tries to evaluate cell formulas at runtime instead
      */
     private boolean evaluateCellFormulas;
+
+    /**
+     * the encryption configuration for the report to generate
+     */
+    private MempoiEncryption mempoiEncryption;
 
 
     /**
@@ -284,6 +290,17 @@ public class MempoiBuilder {
         return this;
     }
 
+    // TODO add only withPassword => will use default settings => force generation if password and MempoiEncryption are available
+
+    /**
+     * @param mempoiEncryption the Encryption configuration to apply to the generating document
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withMempoiEncryption(MempoiEncryption mempoiEncryption) {
+        this.mempoiEncryption = mempoiEncryption;
+        return this;
+    }
+
 
     /**
      * build the MemPOI with the desired preferences
@@ -318,7 +335,8 @@ public class MempoiBuilder {
                 this.adjustColumnWidth,
                 this.evaluateCellFormulas,
                 this.mempoiSheetList,
-                this.file);
+                this.file,
+                this.mempoiEncryption);
 
         return new MemPOI(workbookConfig);
     }

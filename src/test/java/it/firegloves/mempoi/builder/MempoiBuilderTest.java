@@ -103,6 +103,8 @@ public class MempoiBuilderTest {
         assertEquals("MemPOI footer text", footerText, memPOI.getWorkbookConfig().getMempoiFooter().getCenterText());
         assertTrue("MemPOI evaluateCellFormulas true", memPOI.getWorkbookConfig().isEvaluateCellFormulas());
         assertTrue("MemPOI evaluateCellFormulas true", memPOI.getWorkbookConfig().isHasFormulasToEvaluate());
+
+        fail("add encryption");
     }
 
 

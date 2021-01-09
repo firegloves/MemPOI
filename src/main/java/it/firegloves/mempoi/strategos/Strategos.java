@@ -8,12 +8,21 @@ import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.manager.FileManager;
 import it.firegloves.mempoi.util.Errors;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.poifs.crypt.EncryptionInfo;
+import org.apache.poi.poifs.crypt.EncryptionMode;
+import org.apache.poi.poifs.crypt.Encryptor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.AreaReference;
@@ -90,7 +99,7 @@ public class Strategos {
      */
     private void generateMempoiReport(List<MempoiSheet> mempoiSheetList) {
 
-        this.generateReport(mempoiSheetList);
+        this.generateSheets(mempoiSheetList);
 
         // if needed generate a tempfile
         if ((this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate())) {
@@ -116,7 +125,7 @@ public class Strategos {
      *
      * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
      */
-    private void generateReport(List<MempoiSheet> mempoiSheetList) {
+    private void generateSheets(List<MempoiSheet> mempoiSheetList) {
 
         mempoiSheetList.forEach(this::generateSheet);
     }
@@ -271,4 +280,7 @@ public class Strategos {
             }
         }
     }
+
+
+
 }

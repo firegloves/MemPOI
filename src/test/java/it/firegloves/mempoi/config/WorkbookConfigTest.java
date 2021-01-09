@@ -21,6 +21,7 @@ import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class WorkbookConfigTest {
 
@@ -44,8 +45,9 @@ public class WorkbookConfigTest {
     public void workbookConfigConstructor() {
 
         MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet().withSheetName("test").withPrepStmt(prepStmt).build();
-        WorkbookConfig config = new WorkbookConfig(this.subFooter, this.footer, this.wb, true, true, Collections.singletonList(sheet), new File(fileName));
+        WorkbookConfig config = new WorkbookConfig(this.subFooter, this.footer, this.wb, true, true, Collections.singletonList(sheet), new File(fileName), null);
         this.assertWorkbookConfig(config);
+        fail("assert on mempoiEncryption");
     }
 
     @Test
@@ -63,6 +65,8 @@ public class WorkbookConfigTest {
 //                .setSxssfRowManager(new SXSSFRowManager(50));
 
         this.assertWorkbookConfig(config);
+
+        fail("add encryption");
     }
 
 
