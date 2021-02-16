@@ -4,12 +4,14 @@
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
-import it.firegloves.mempoi.domain.DataTransformationFunction;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationChain;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.domain.MempoiColumn;
-import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
+
 import java.util.ArrayList;
+
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Optional;
 
 public class DataStrategos {
 
@@ -33,7 +36,6 @@ public class DataStrategos {
      */
     private WorkbookConfig workbookConfig;
 
-
     public DataStrategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
     }
@@ -44,7 +46,8 @@ public class DataStrategos {
      * @param sheet
      * @return the row couter updated
      */
-    protected int createHeaderRow(Sheet sheet, List<MempoiColumn> columnList, int rowCounter, MempoiStyler sheetReportStyler) {
+    protected int createHeaderRow(Sheet sheet, List<MempoiColumn> columnList, int rowCounter,
+            MempoiStyler sheetReportStyler) {
 
         Row row = sheet.createRow(rowCounter++);
 
@@ -68,19 +71,21 @@ public class DataStrategos {
 
         // adjust row height
         if (sheetReportStyler.getHeaderCellStyle() instanceof XSSFCellStyle) {
-            row.setHeightInPoints((float) ((XSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont().getFontHeightInPoints() + ROW_HEIGHT_PLUS);
+            row.setHeightInPoints((float) ((XSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont()
+                    .getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         } else {
-            row.setHeightInPoints((float) ((HSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
+            row.setHeightInPoints((float) ((HSSFCellStyle) sheetReportStyler.getHeaderCellStyle())
+                    .getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         }
 
         return rowCounter;
     }
 
-
     /**
      * creates data rows for the received Sheet and populates them with ResultSet data
-     * @param sheet the sheet to which add data rows
-     * @param rs the ResultSet from which read data to write in the Sheet
+     *
+     * @param sheet      the sheet to which add data rows
+     * @param rs         the ResultSet from which read data to write in the Sheet
      * @param columnList the List of MempoiColumn from which read the data configuration (data type, format, etc)
      * @param rowCounter the counter of the row to create/populate
      * @return the incremented row couter
@@ -106,23 +111,25 @@ public class DataStrategos {
 
                     logger.debug("SETTING CELL FOR COLUMN {}", mempoiColumn.getColumnName());
 
-                    Object value = mempoiColumn.getRsAccessDataMethod().invoke(rs, mempoiColumn.getColumnName());
+                    final Object value = mempoiColumn.getRsAccessDataMethod().invoke(rs, mempoiColumn.getColumnName());
 
-                    List<DataTransformationFunction<?, ?>> dataTransformationFunctionList = mempoiColumn.getMempoiColumnConfig()
-                            .getDataTransformationFunctionList()
-                            .orElseGet(ArrayList::new);
+                    Optional<DataTransformationChain<Object, ?>> optionalDataTransformationChain = mempoiColumn
+                            .getMempoiColumnConfig().getDataTransformationChain();
 
-                    for (DataTransformationFunction<?, ?> dataTransformationFunction : dataTransformationFunctionList) {
-                        value = dataTransformationFunction.transform(value);
+                    Object cellValue;
+                    if (optionalDataTransformationChain.isPresent()) {
+                        cellValue = optionalDataTransformationChain.get().execute(value);
+                    } else {
+                        cellValue = value;
                     }
 
                     // sets value in the cell
-                    if (! rs.wasNull()) {
-                        mempoiColumn.getCellSetValueMethod().invoke(cell, value);
+                    if (!rs.wasNull() && !optionalDataTransformationChain.isPresent()) {
+                        mempoiColumn.getCellSetValueMethod().invoke(cell, cellValue);
                     }
 
                     // analyze data for mempoi column's strategy
-                    mempoiColumn.elaborationStepListAnalyze(cell, value);
+                    mempoiColumn.elaborationStepListAnalyze(cell, cellValue);
                 }
             }
 

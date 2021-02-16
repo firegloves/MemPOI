@@ -5,17 +5,16 @@
 package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -99,7 +98,8 @@ public class MempoiColumn {
     private void setResultSetAccessMethod(EExportDataType type) {
 
         try {
-            this.rsAccessDataMethod = ResultSet.class.getMethod(type.getRsAccessDataMethodName(), type.getRsAccessParamClass());
+            this.rsAccessDataMethod = ResultSet.class
+                    .getMethod(type.getRsAccessDataMethodName(), type.getRsAccessParamClass());
         } catch (NoSuchMethodException e) {
             throw new MempoiException(e);
         }
@@ -244,11 +244,15 @@ public class MempoiColumn {
 
         if (null != this.mempoiColumnConfig) {
             this.mempoiColumnConfig.getDataTransformationFunctionList()
+                    //if user has supplied a list of transformation functions then apply configurations
                     .ifPresent(tranformationFunctionsList -> {
+                        // get the last transformation function
                         int tranformationFunctionsSize = tranformationFunctionsList.size();
                         DataTransformationFunction<?, ?> dataTransformationFunction =
                                 tranformationFunctionsList.get(tranformationFunctionsSize - 1);
 
+                        // get transform method of the DataTransformationFunction selecting the one typed by the type
+                        // erasure. This is meant to avoid the Object function return type.
                         Method functionMethod = Arrays
                                 .stream(dataTransformationFunction.getClass().getDeclaredMethods())
                                 .filter(method ->
@@ -258,11 +262,12 @@ public class MempoiColumn {
                                 .orElseThrow(() -> new MempoiException(
                                         Errors.ERR_DATA_TRANSFORMATION_FUNCTION_METHOD_NOT_FOUND));
 
+                        // get the final step return data type
                         EExportDataType eExportDataType = this
                                 .getEExportDataTypeByParameterValue(functionMethod.getReturnType())
                                 .orElseThrow(() -> new MempoiException(
                                         Errors.ERR_DATA_TRANSFORMATION_FUNCTION_EEXPORTDATATYPE_NOT_FOUND));
-
+                        // set the export data type to be used to set the final cell value
                         this.setCellSetValueMethod(eExportDataType);
                     });
         }

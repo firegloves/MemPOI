@@ -6,21 +6,20 @@ import static org.junit.Assert.assertNotNull;
 
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
+import it.firegloves.mempoi.builder.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.domain.DataTransformationFunction;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationChain;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.concurrent.CompletableFuture;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+
 import org.junit.Test;
 
 public class DataTransformationFunctionsIT extends IntegrationBaseIT {
@@ -33,24 +32,14 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
 
         try {
 
-            MempoiColumnConfig nameConfig = MempoiColumnConfig.builder()
-                    .withColumnName("name")
-                    .withDataTransformationFunction(new DataTransformationFunction<String, Integer>() {
-                        @Override
-                        public Integer transform(String value) throws MempoiException {
-                            return 5;
-                        }
-                    })
-                    .build();
-            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-                    .withPrepStmt(prepStmt)
-                    .addMempoiColumnConfig(nameConfig)
-                    .build();
+            DataTransformationChain<Object, Integer> dataTransformationChain = new DataTransformationChain<>(
+                    (Object o) -> "ciao").chainUp((String s) -> 5);
+            MempoiColumnConfig nameConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName("name")
+                    .withDataTransformationChain(dataTransformationChain).build();
+            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt)
+                    .addMempoiColumnConfig(nameConfig).build();
 
-            MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withFile(fileDest)
-                    .addMempoiSheet(mempoiSheet)
-                    .build();
+            MemPOI memPOI = MempoiBuilder.aMemPOI().withFile(fileDest).addMempoiSheet(mempoiSheet).build();
 
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
@@ -63,7 +52,5 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
             e.printStackTrace();
         }
     }
-
-
 
 }
