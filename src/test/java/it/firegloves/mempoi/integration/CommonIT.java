@@ -26,34 +26,36 @@ public class CommonIT extends IntegrationBaseIT {
     @Test
     public void testWithoutMempoiColumnConfig() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_mempoi_column_config.xlsx");
+//        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_mempoi_column_config.xlsx");
+//
+//        try {
+//
+//            MempoiColumnConfig creationDateConfig = MempoiColumnConfig.builder().withColumnName("WONDERFUL DATE").build();
+//            MempoiColumnConfig validConfig = MempoiColumnConfig.builder().withColumnName("valid").build();
+//            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+//                    .withPrepStmt(prepStmt)
+//                    .addMempoiColumnConfig(creationDateConfig)
+//                    .addMempoiColumnConfig(validConfig)
+//                    .build();
+//
+//            MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withFile(fileDest)
+//                    .withAdjustColumnWidth(true)
+//                    .addMempoiSheet(mempoiSheet)
+//                    .build();
+//
+//            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+//            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+//
+//            AssertionHelper
+//                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
+//                            null, new StandardStyleTemplate());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
-        try {
-
-            MempoiColumnConfig creationDateConfig = MempoiColumnConfig.builder().withColumnName("WONDERFUL DATE").build();
-            MempoiColumnConfig validConfig = MempoiColumnConfig.builder().withColumnName("valid").build();
-            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-                    .withPrepStmt(prepStmt)
-                    .addMempoiColumnConfig(creationDateConfig)
-                    .addMempoiColumnConfig(validConfig)
-                    .build();
-
-            MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withFile(fileDest)
-                    .withAdjustColumnWidth(true)
-                    .addMempoiSheet(mempoiSheet)
-                    .build();
-
-            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-
-            AssertionHelper
-                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
-                            null, new StandardStyleTemplate());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        fail();
     }
 
 

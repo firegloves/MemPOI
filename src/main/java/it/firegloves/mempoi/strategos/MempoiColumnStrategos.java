@@ -6,6 +6,7 @@
  */
 package it.firegloves.mempoi.strategos;
 
+import it.firegloves.mempoi.builder.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
@@ -76,7 +77,7 @@ public class MempoiColumnStrategos {
                         // get the one specified by the user
                         columnConfigMap.getOrDefault(mempoiColumn.getColumnName(),
                                 //otherwise create an empty one
-                                MempoiColumnConfig.builder().withColumnName(mempoiColumn.getColumnName()).build()))
+                                MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName(mempoiColumn.getColumnName()).build()))
         );
     }
 
