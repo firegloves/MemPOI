@@ -53,8 +53,11 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 	compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
-}
 
+    // https://mvnrepository.com/artifact/net.snowflake/snowflake-jdbc
+    implementation group: 'net.snowflake', name: 'snowflake-jdbc', version: '3.13.0'
+
+}
 
 modifyPom {
     project {

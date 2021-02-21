@@ -22,6 +22,7 @@ public class ConnectionHelper {
 
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:" + dbDriver + "://" + dbHost + ":" + dbPort + "/" + dbName, dbUser, dbPassword);
+//        return DriverManager.getConnection("jdbc:" + dbDriver + "://" + dbHost + ":" + dbPort + "/" + dbName, dbUser, dbPassword);
+        return DriverManager.getConnection("jdbc:snowflake://<account>.snowflakecomputing.com/?warehouse=<warehouse>&db=<db_name>&schema=<schema>", "<user>", "<password>");
     }
 }
