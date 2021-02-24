@@ -1,14 +1,11 @@
 package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.domain.MempoiColumnConfig;
-import it.firegloves.mempoi.domain.datatransformation.DataTransformationChain;
 import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
-
-import java.util.List;
 
 public class MempoiColumnConfigBuilder {
     String columnName;
-    DataTransformationChain<Object, ?> dataTransformationChain;
+    DataTransformationFunction<Object, ?> dataTransformationFunction;
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -30,15 +27,15 @@ public class MempoiColumnConfigBuilder {
         return this;
     }
 
-    public MempoiColumnConfigBuilder withDataTransformationChain(
-            DataTransformationChain<Object, ?> dataTransformationChain) {
-        this.dataTransformationChain = dataTransformationChain;
+    public MempoiColumnConfigBuilder withDataTransformationFunction(
+            DataTransformationFunction<Object, ?> dataTransformationFunction) {
+        this.dataTransformationFunction = dataTransformationFunction;
         return this;
     }
 
 
     public MempoiColumnConfig build() {
-        return new MempoiColumnConfig(columnName, dataTransformationChain);
+        return new MempoiColumnConfig(columnName, dataTransformationFunction);
 
     }
 }

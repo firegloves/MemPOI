@@ -11,15 +11,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.math.BigInteger;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -30,9 +22,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Data
 @Accessors(chain = true)
@@ -240,41 +229,25 @@ public class MempoiColumn {
         this.mempoiColumnConfig = mempoiColumnConfig;
 
         if (null != this.mempoiColumnConfig) {
-            this.mempoiColumnConfig.getDataTransformationChain()
+            this.mempoiColumnConfig.getDataTransformationFunction()
                     //if user has supplied a list of transformation functions then apply configurations
-                    .ifPresent(dataTransformationChain -> {
+                    .ifPresent(dataTransformationFunction -> {
 
-//                        List<DataTransformationFunction> tranformationFunctionsList = new ArrayList<>();
-//                        // get the last transformation function
-//                        int tranformationFunctionsSize = tranformationFunctionsList.size();
-//                        DataTransformationFunction<?, ?> dataTransformationFunction =
-//                                tranformationFunctionsList.get(tranformationFunctionsSize - 1);
-//
-//                        // get transform method of the DataTransformationFunction selecting the one typed by the type
-//                        // erasure. This is meant to avoid the Object function return type.
-//                        Method functionMethod = Arrays
-//                                .stream(dataTransformationFunction.getClass().getDeclaredMethods())
-//                                .filter(method ->
-//                                        DataTransformationFunction.TRANSFORM_METHOD_NAME.equals(method.getName()) &&
-//                                                !method.getReturnType().getSimpleName().equals("Object"))
-//                                .findFirst()
-//                                .orElseThrow(() -> new MempoiException(
-//                                        Errors.ERR_DATA_TRANSFORMATION_FUNCTION_METHOD_NOT_FOUND));
-//
-//                        // get the final step return data type
-//                        EExportDataType eExportDataType = this
-//                                .getEExportDataTypeByParameterValue(functionMethod.getReturnType())
-//                                .orElseThrow(() -> new MempoiException(
-//                                        Errors.ERR_DATA_TRANSFORMATION_FUNCTION_EEXPORTDATATYPE_NOT_FOUND));
-//                        // set the export data type to be used to set the final cell value
-//                        this.setCellSetValueMethod(eExportDataType);
 
-                        Class<?> clazz = (Class<?>)((ParameterizedType)dataTransformationChain.getClass().getGenericSuperclass())
-                                        .getActualTypeArguments()[1];
+                        // get transform method of the DataTransformationFunction selecting the one typed by the type
+                        // erasure. This is meant to avoid the Object function return type.
+                        Method functionMethod = Arrays
+                                .stream(dataTransformationFunction.getClass().getDeclaredMethods())
+                                .filter(method ->
+                                        DataTransformationFunction.TRANSFORM_METHOD_NAME.equals(method.getName()) &&
+                                                !method.getReturnType().getSimpleName().equals("Object"))
+                                .findFirst()
+                                .orElseThrow(() -> new MempoiException(
+                                        Errors.ERR_DATA_TRANSFORMATION_FUNCTION_METHOD_NOT_FOUND));
 
                         // get the final step return data type
                         EExportDataType eExportDataType = this
-                                .getEExportDataTypeByParameterValue(clazz)
+                                .getEExportDataTypeByParameterValue(functionMethod.getReturnType())
                                 .orElseThrow(() -> new MempoiException(
                                         Errors.ERR_DATA_TRANSFORMATION_FUNCTION_EEXPORTDATATYPE_NOT_FOUND));
                         // set the export data type to be used to set the final cell value

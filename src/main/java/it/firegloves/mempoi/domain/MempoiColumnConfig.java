@@ -3,17 +3,11 @@
  */
 package it.firegloves.mempoi.domain;
 
-import java.util.List;
-import java.util.Optional;
-
-import it.firegloves.mempoi.domain.datatransformation.DataTransformationChain;
 import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Singular;
 import lombok.Value;
-import lombok.experimental.Accessors;
+
+import java.util.Optional;
 
 @Value
 public class MempoiColumnConfig {
@@ -23,16 +17,16 @@ public class MempoiColumnConfig {
      */
     @Getter
     String columnName;
-    DataTransformationChain<Object,?> dataTransformationChain;
+    DataTransformationFunction<Object,?> dataTransformationFunction;
 
     public MempoiColumnConfig(String columnName,
-                              DataTransformationChain<Object, ?> dataTransformationChain) {
+                              DataTransformationFunction<Object, ?> dataTransformationChain) {
         this.columnName = columnName;
-        this.dataTransformationChain = dataTransformationChain;
+        this.dataTransformationFunction = dataTransformationChain;
     }
 
 
-    public Optional<DataTransformationChain<Object, ?>> getDataTransformationChain() {
-        return Optional.ofNullable(dataTransformationChain);
+    public Optional<DataTransformationFunction<Object, ?>> getDataTransformationFunction() {
+        return Optional.ofNullable(dataTransformationFunction);
     }
 }

@@ -4,14 +4,10 @@
 package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
-import it.firegloves.mempoi.domain.datatransformation.DataTransformationChain;
-import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
-
-import java.util.ArrayList;
-
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -113,18 +109,18 @@ public class DataStrategos {
 
                     final Object value = mempoiColumn.getRsAccessDataMethod().invoke(rs, mempoiColumn.getColumnName());
 
-                    Optional<DataTransformationChain<Object, ?>> optionalDataTransformationChain = mempoiColumn
-                            .getMempoiColumnConfig().getDataTransformationChain();
+                    Optional<DataTransformationFunction<Object, ?>> optDataTransformationFunction = mempoiColumn
+                            .getMempoiColumnConfig().getDataTransformationFunction();
 
                     Object cellValue;
-                    if (optionalDataTransformationChain.isPresent()) {
-                        cellValue = optionalDataTransformationChain.get().execute(value);
+                    if (optDataTransformationFunction.isPresent()) {
+                        cellValue = optDataTransformationFunction.get().transform(value);
                     } else {
                         cellValue = value;
                     }
 
                     // sets value in the cell
-                    if (!rs.wasNull() && !optionalDataTransformationChain.isPresent()) {
+                    if (!rs.wasNull() || optDataTransformationFunction.isPresent()) {
                         mempoiColumn.getCellSetValueMethod().invoke(cell, cellValue);
                     }
 
