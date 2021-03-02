@@ -11,8 +11,4 @@ public interface DataTransformationFunction<I, O> {
     String TRANSFORM_METHOD_NAME = "transform";
 
     O transform(final I value) throws MempoiException;
-
-//    default O getOutputType() {
-//        return O.;sd
-//    }
 }

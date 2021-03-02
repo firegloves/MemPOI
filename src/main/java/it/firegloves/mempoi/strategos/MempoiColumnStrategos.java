@@ -6,25 +6,24 @@
  */
 package it.firegloves.mempoi.strategos;
 
-import it.firegloves.mempoi.builder.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiColumnConfig;
+import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MempoiColumnStrategos {
 

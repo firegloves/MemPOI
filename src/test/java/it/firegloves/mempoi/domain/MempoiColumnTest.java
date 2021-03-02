@@ -1,14 +1,23 @@
 package it.firegloves.mempoi.domain;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.doNothing;
+
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
-import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.MergedRegionsManager;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
+import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Types;
+import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -19,16 +28,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Types;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.doNothing;
-
 public class MempoiColumnTest {
 
     private Workbook wb;
@@ -36,8 +35,8 @@ public class MempoiColumnTest {
 
     @Mock
     private PreparedStatement prepStmt;
-    @Mock
-    private MergedRegionsManager<String> mergedRegionsManager;
+//    @Mock
+//    private MergedRegionsManager<String> mergedRegionsManager;
     @Mock
     private MempoiColumnElaborationStep mockedStep;
 
@@ -303,4 +302,14 @@ public class MempoiColumnTest {
         mc.elaborationStepListExecute(this.mempoiSheet, this.wb);
     }
 
+
+    @Test
+    public void shouldSetTheReceivedMempoiColumnConfig() {
+
+        MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigTestHelper.getTestMempoiColumnConfig();
+        this.mc.setMempoiColumnConfig(mempoiColumnConfig);
+        MempoiColumnConfig current = this.mc.getMempoiColumnConfig();
+
+        assertEquals(mempoiColumnConfig, current);
+    }
 }
