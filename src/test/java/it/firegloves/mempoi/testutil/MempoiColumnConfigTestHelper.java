@@ -9,7 +9,7 @@ public class MempoiColumnConfigTestHelper {
 
     public static final String COLUMN_NAME = "name";
     public static final int CELL_VALUE = 5;
-    public static final DataTransformationFunction<Object, Integer> DATA_TRANFORMATION_FUNCTION = new DataTransformationFunction<Object, Integer>() {
+    public static final DataTransformationFunction<Integer> DATA_TRANFORMATION_FUNCTION = new DataTransformationFunction<Integer>() {
         @Override
         public Integer transform(Object value) throws MempoiException {
             return CELL_VALUE;

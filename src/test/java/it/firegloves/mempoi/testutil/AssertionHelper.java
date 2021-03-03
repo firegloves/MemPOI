@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
@@ -760,6 +761,12 @@ public class AssertionHelper {
         }
     }
 
+
+    public static void validateMempoiColumnConfig(MempoiColumnConfig expected, MempoiColumnConfig current) {
+
+        assertEquals(expected.getColumnName(), current.getColumnName());
+        assertEquals(expected.getDataTransformationFunction().get(), current.getDataTransformationFunction().get());
+    }
 
     public static void failAssertion(Exception e) {
         e.printStackTrace();

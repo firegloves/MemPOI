@@ -2,8 +2,11 @@ package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
+import it.firegloves.mempoi.domain.MempoiColumnConfig;
+import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
@@ -13,7 +16,11 @@ import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
+import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+import java.util.Arrays;
+import java.util.Date;
+import lombok.Data;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
@@ -67,6 +74,7 @@ public class MempoiSheetBuilderTest {
                 .withWorkbook(wb)
                 .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
                 .withMempoiPivotTableBuilder(TestHelper.getTestMempoiPivotTableBuilder(wb))
+                .addMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig())
                 .build();
 
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
@@ -78,7 +86,8 @@ public class MempoiSheetBuilderTest {
         AssertionHelper.validateCellStyle(styleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
         AssertionHelper.validateCellStyle(styleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
         AssertionHelper.validateCellStyle(styleTemplate.getIntegerCellStyle(wb), mempoiSheet.getIntegerCellStyle());
-        AssertionHelper.validateCellStyle(styleTemplate.getFloatingPointCellStyle(wb), mempoiSheet.getFloatingPointCellStyle());
+        AssertionHelper.validateCellStyle(styleTemplate.getFloatingPointCellStyle(wb),
+                mempoiSheet.getFloatingPointCellStyle());
         AssertionHelper.validateCellStyle(styleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
         assertEquals("footer text", footerName, mempoiSheet.getMempoiFooter().get().getCenterText());
         assertArrayEquals("merged cols", mergedCols, mempoiSheet.getMergedRegionColumns());
@@ -87,7 +96,9 @@ public class MempoiSheetBuilderTest {
         AssertionHelper.validateMempoiTable(wb, mempoiSheet.getMempoiTable().get());
         AssertionHelper.validateMempoiPivotTable(wb, mempoiSheet.getMempoiPivotTable().get());
 
-        fail("add mempoicolumnconfig and add dedicated test?");
+        assertEquals(1, mempoiSheet.getColumnConfigMap().size());
+        AssertionHelper.validateMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
+                mempoiSheet.getColumnConfigMap().get(MempoiColumnConfigTestHelper.COLUMN_NAME));
     }
 
 
@@ -277,7 +288,7 @@ public class MempoiSheetBuilderTest {
         Workbook wb = new XSSFWorkbook();
         NotStreamApiMergedRegionsStep step = TestHelper.getNotStreamApiMergedRegionsStep(wb);
 
-        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+        MempoiSheetBuilder.aMempoiSheet()
                 .withPrepStmt(prepStmt)
                 .withDataElaborationStepMap(null)
                 .withDataElaborationStep(TestHelper.MEMPOI_COLUMN_NAME, step)
@@ -293,12 +304,39 @@ public class MempoiSheetBuilderTest {
             Workbook wb = new XSSFWorkbook();
             NotStreamApiMergedRegionsStep step = TestHelper.getNotStreamApiMergedRegionsStep(wb);
 
-            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+            MempoiSheetBuilder.aMempoiSheet()
                     .withPrepStmt(prepStmt)
                     .withDataElaborationStepMap(null)
                     .withDataElaborationStep(TestHelper.MEMPOI_COLUMN_NAME, step)
                     .build();
         });
+    }
+
+    @Test
+    public void withMultipleMempoiColumnConfigShouldReturnTheEntireMempoiColumnConfigSet() {
+
+        MempoiColumnConfig mempoiColumnConfig1 = MempoiColumnConfigTestHelper.getTestMempoiColumnConfig();
+
+        String colName = "test";
+        DataTransformationFunction<Date> dataTransformationFunction = new DataTransformationFunction<Date>() {
+            @Override
+            public Date transform(Object value) throws MempoiException {
+                return new Date();
+            }
+        };
+        MempoiColumnConfig mempoiColumnConfig2 = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                .withColumnName(colName)
+                .withDataTransformationFunction(dataTransformationFunction)
+                .build();
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .withMempoiColumnConfigList(Arrays.asList(mempoiColumnConfig1, mempoiColumnConfig2))
+                .build();
+
+        AssertionHelper.validateMempoiColumnConfig(mempoiColumnConfig1,
+                mempoiSheet.getColumnConfigMap().get(MempoiColumnConfigTestHelper.COLUMN_NAME));
+        AssertionHelper.validateMempoiColumnConfig(mempoiColumnConfig2, mempoiSheet.getColumnConfigMap().get(colName));
     }
 
 }

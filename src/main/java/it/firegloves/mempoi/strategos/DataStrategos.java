@@ -109,7 +109,7 @@ public class DataStrategos {
 
                     final Object value = mempoiColumn.getRsAccessDataMethod().invoke(rs, mempoiColumn.getColumnName());
 
-                    Optional<DataTransformationFunction<Object, ?>> optDataTransformationFunction = mempoiColumn
+                    Optional<DataTransformationFunction<?>> optDataTransformationFunction = mempoiColumn
                             .getMempoiColumnConfig().getDataTransformationFunction();
 
                     Object cellValue;

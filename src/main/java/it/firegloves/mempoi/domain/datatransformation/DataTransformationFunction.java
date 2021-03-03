@@ -6,9 +6,9 @@ package it.firegloves.mempoi.domain.datatransformation;
 import it.firegloves.mempoi.exception.MempoiException;
 
 @FunctionalInterface
-public interface DataTransformationFunction<I, O> {
+public interface DataTransformationFunction<O> {
 
     String TRANSFORM_METHOD_NAME = "transform";
 
-    O transform(final I value) throws MempoiException;
+    O transform(final Object value) throws MempoiException;
 }

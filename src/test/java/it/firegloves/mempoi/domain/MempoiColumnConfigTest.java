@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import org.junit.Test;
 
@@ -18,9 +19,8 @@ public class MempoiColumnConfigTest {
                 .withDataTransformationFunction(MempoiColumnConfigTestHelper.DATA_TRANFORMATION_FUNCTION)
                 .build();
 
-        assertEquals(MempoiColumnConfigTestHelper.COLUMN_NAME, mempoiColumnConfig.getColumnName());
-        assertEquals(MempoiColumnConfigTestHelper.DATA_TRANFORMATION_FUNCTION,
-                mempoiColumnConfig.getDataTransformationFunction().get());
+        AssertionHelper.validateMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
+                mempoiColumnConfig);
     }
 
     @Test
