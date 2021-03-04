@@ -651,7 +651,7 @@ public class AssertionHelper {
     }
 
 
-    private static void failAssertion(Exception e) {
+    public static void failAssertion(Exception e) {
         e.printStackTrace();
         fail();
         throw new RuntimeException(e);
