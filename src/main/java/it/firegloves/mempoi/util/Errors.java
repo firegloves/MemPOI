@@ -51,6 +51,10 @@ public class Errors {
     public static final String ERR_PIVOTTABLE_POSITION_NOT_FOUND = "Position for pivot table not found";
     public static final String ERR_PIVOTTABLE_TABLE_SOURCE_NULL = "MemPOI is trying to create a pivot table using a null table as source. Maybe the selected sheets order is wrong and the desired table is not still generated?";
 
+    public static final String ERR_DATA_TRANSFORMATION_FUNCTION_METHOD_NOT_FOUND = "Error during the data transformation function configuration: method not found";
+    public static final String ERR_DATA_TRANSFORMATION_FUNCTION_EEXPORTDATATYPE_NOT_FOUND = "Error during the data transformation function configuration: EExportDataType not recognized";
+
+    public static final String ERR_MEMPOI_COL_CONFIG_COLNAME_NOT_VALID = "An invalid column name has been set for a MempoiColumnConfig";
 
 
     /*********************************************************************************************************************

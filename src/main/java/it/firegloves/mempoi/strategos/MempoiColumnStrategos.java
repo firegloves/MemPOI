@@ -12,18 +12,18 @@ import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotSt
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiColumnConfig;
+import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MempoiColumnStrategos {
 
@@ -63,16 +63,20 @@ public class MempoiColumnStrategos {
     /**
      * get the MempoiColumngConfig list from the MempoiSheet and bind them to the relative MempoiColumns
      *
-     * @param mempoiSheet the MempoiSheet from which read the MempoiColumngConfig
-     * @param columnList  the list of MempoiColumn to which bind the MempoiColumnConfiguration
+     * @param mempoiSheet      the MempoiSheet from which read the MempoiColumngConfig
+     * @param mempoiColumnList the list of MempoiColumn to which bind the MempoiColumnConfiguration
      */
-    private void loadMempoiColumnConfig(MempoiSheet mempoiSheet, List<MempoiColumn> columnList) {
+    private void loadMempoiColumnConfig(MempoiSheet mempoiSheet, List<MempoiColumn> mempoiColumnList) {
 
         Map<String, MempoiColumnConfig> columnConfigMap = mempoiSheet.getColumnConfigMap();
 
         // if a config exist in the map => set it in the relative mempoi column, otherwise set null
-        columnList.forEach(mempoiColumn ->
-            mempoiColumn.setMempoiColumnConfig(columnConfigMap.getOrDefault(mempoiColumn.getColumnName(), null))
+        mempoiColumnList.forEach(mempoiColumn ->
+                mempoiColumn.setMempoiColumnConfig(
+                        // get the one specified by the user
+                        columnConfigMap.getOrDefault(mempoiColumn.getColumnName(),
+                                //otherwise create an empty one
+                                MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName(mempoiColumn.getColumnName()).build()))
         );
     }
 
@@ -98,7 +102,7 @@ public class MempoiColumnStrategos {
                                 .findFirst()
                                 .ifPresent(colIndex -> {
 
-                                    MempoiColumnElaborationStep<?>step = workbook instanceof SXSSFWorkbook ?
+                                    MempoiColumnElaborationStep<?> step = workbook instanceof SXSSFWorkbook ?
                                             new StreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex, (SXSSFWorkbook) workbook, mempoiSheet) :
                                             new NotStreamApiMergedRegionsStep<>(columnList.get(colIndex).getCellStyle(), colIndex);
 

@@ -100,7 +100,7 @@ public class MempoiSheet {
      * maps a column name to a desired implementation of MempoiColumnElaborationStep interface
      * it defines the post data elaboration processes to apply
      */
-    private Map<String, List<MempoiColumnElaborationStep<?>>> dataElaborationStepMap = new HashMap<>();
+    private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
 
     // TODO remove Optional from variable => they should only be returned
     /**

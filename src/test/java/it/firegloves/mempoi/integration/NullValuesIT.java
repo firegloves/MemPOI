@@ -23,7 +23,6 @@ public class NullValuesIT extends IntegrationBaseIT {
     public void shouldSetNothingWhenReceivingNullValuesFromResultSet() throws Exception {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "null_values.xlsx");
-        PreparedStatement statement = this.createStatement();
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
                 .withFile(fileDest)

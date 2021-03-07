@@ -11,3 +11,4 @@
 .gradle/gradle.properties
 /todo/
 /mempoi.iml
+lombok.config
