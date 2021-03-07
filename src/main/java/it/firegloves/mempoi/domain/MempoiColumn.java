@@ -125,6 +125,7 @@ public class MempoiColumn {
         switch (sqlObjType) {
 
             case Types.DOUBLE:
+            case Types.BIGINT:
                 return EExportDataType.DOUBLE;
             case Types.DECIMAL:
             case Types.FLOAT:
@@ -134,7 +135,6 @@ public class MempoiColumn {
             case Types.INTEGER:
             case Types.SMALLINT:
             case Types.TINYINT:
-            case Types.BIGINT:
                 return EExportDataType.INT;
             case Types.CHAR:
             case Types.NCHAR:
