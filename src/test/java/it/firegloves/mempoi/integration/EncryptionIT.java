@@ -34,6 +34,8 @@ import org.junit.Test;
 
 public class EncryptionIT extends IntegrationBaseIT {
 
+    private final String password = "mempassword";
+
 //    @Test
 //    public void shouldEncryptWhenEncryptionConfigIsAvailable() {
 //
@@ -67,37 +69,37 @@ public class EncryptionIT extends IntegrationBaseIT {
 //    }
 
 
-    @Test
-    public void shouldEncryptBinaryWorkbook() {
-
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "encryption_binary_file.xls");
-
-        try {
-
-            MempoiEncryption mempoiEncryption = MempoiEncryption.builder()
-                    .withPassword("faciolo")
-                    .build();
-
-            MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withFile(fileDest)
-                    .withWorkbook(new HSSFWorkbook())
-                    .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .withMempoiEncryption(mempoiEncryption)
-                    .build();
-
-            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-
-            // TODO open the encrypted doc to validate using password
-
-            AssertionHelper
-                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
-                            null, new StandardStyleTemplate());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Test
+//    public void shouldEncryptBinaryWorkbook() {
+//
+//        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "encryption_binary_file.xls");
+//
+//        try {
+//
+//            MempoiEncryption mempoiEncryption = MempoiEncryption.builder()
+//                    .withPassword("faciolo")
+//                    .build();
+//
+//            MemPOI memPOI = MempoiBuilder.aMemPOI()
+//                    .withFile(fileDest)
+//                    .withWorkbook(new HSSFWorkbook())
+//                    .addMempoiSheet(new MempoiSheet(prepStmt))
+//                    .withMempoiEncryption(mempoiEncryption)
+//                    .build();
+//
+//            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+//            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+//
+//            // TODO open the encrypted doc to validate using password
+//
+//            AssertionHelper
+//                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
+//                            null, new StandardStyleTemplate());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     @Test
@@ -108,7 +110,7 @@ public class EncryptionIT extends IntegrationBaseIT {
         try {
 
             MempoiEncryption mempoiEncryption = MempoiEncryption.builder()
-                    .withPassword("faciolo")
+                    .withPassword(password)
                     .build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
@@ -133,19 +135,19 @@ public class EncryptionIT extends IntegrationBaseIT {
     }
 
 
-    @Test
-    public void fakeTest() throws IOException {
-        String fname = "out/report-files/test_with_HSSFWorkbook.xls";
-
-        Biff8EncryptionKey.setCurrentUserPassword("pass");
-        POIFSFileSystem fs = new POIFSFileSystem(new File(fname),true);
-        HSSFWorkbook hwb = new HSSFWorkbook(fs.getRoot(), true);
-
-        try (FileOutputStream outputStream = new FileOutputStream("out/report-files/ENCRYPTED_HSSFWorkbook.xls")) {
-            hwb.write(outputStream);
-        }
-        Biff8EncryptionKey.setCurrentUserPassword(null);
-    }
+//    @Test
+//    public void fakeTest() throws IOException {
+//        String fname = "out/report-files/test_with_HSSFWorkbook.xls";
+//
+//        Biff8EncryptionKey.setCurrentUserPassword("pass");
+//        POIFSFileSystem fs = new POIFSFileSystem(new File(fname),true);
+//        HSSFWorkbook hwb = new HSSFWorkbook(fs.getRoot(), true);
+//
+//        try (FileOutputStream outputStream = new FileOutputStream("out/report-files/ENCRYPTED_HSSFWorkbook.xls")) {
+//            hwb.write(outputStream);
+//        }
+//        Biff8EncryptionKey.setCurrentUserPassword(null);
+//    }
 
 
 }

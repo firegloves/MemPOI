@@ -56,6 +56,9 @@ public class Errors {
 
     public static final String ERR_MEMPOI_COL_CONFIG_COLNAME_NOT_VALID = "An invalid column name has been set for a MempoiColumnConfig";
 
+    public static final String ERR_ENCRYPTION_NOT_SUPPORTED = "HSSFWorkbook detected. MemPOI does not support binary file encryption. Please use XSSFWorkbook or SXSSFWorkbook";
+
+
 
     /*********************************************************************************************************************
      * WARNINGS
