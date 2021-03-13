@@ -64,6 +64,7 @@ public class MempoiColumnConfig {
         public MempoiColumnConfigBuilder withDataTransformationFunction(
                 DataTransformationFunction<?> dataTransformationFunction) {
             this.dataTransformationFunction = dataTransformationFunction;
+            this.dataTransformationFunction.setColumnName(this.columnName);
             return this;
         }
 

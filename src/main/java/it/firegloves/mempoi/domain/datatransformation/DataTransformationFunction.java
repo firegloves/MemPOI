@@ -4,11 +4,28 @@
 package it.firegloves.mempoi.domain.datatransformation;
 
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.util.Errors;
+import lombok.Setter;
 
-@FunctionalInterface
-public interface DataTransformationFunction<O> {
 
-    String TRANSFORM_METHOD_NAME = "transform";
+@Setter
+public abstract class DataTransformationFunction<O> {
 
-    O transform(final Object value) throws MempoiException;
+    public static final String TRANSFORM_METHOD_NAME = "transform";
+
+    /**
+     * the name of the column against which apply the value transformation
+     */
+    private String columnName;
+
+    protected final <T> T cast(Object obj, Class<T> toType) throws MempoiException {
+        try {
+            return toType.cast(obj);
+        } catch (Exception e) {
+            throw new MempoiException(String.format(Errors.ERR_DATA_TRANSFORMATION_FUNCTION_CAST_EXCEPTION,
+                    columnName, toType, obj.getClass()));
+        }
+    }
+
+    public abstract O transform(final Object value) throws MempoiException;
 }
