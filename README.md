@@ -33,6 +33,15 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.4.0'
 
 ---
 
+### What's new in 1.5.0
+
+Fixed issue [12](https://github.com/firegloves/MemPOI/issues/12) related to the mapping of large numbers.
+
+NEW FUNCTIONALITY - DataTransformationFunction: 
+
+
+---
+
 ### What's new in 1.4.0
 
 Debug mode has been replaced by SLF4J. Logback dependency has been removed leaving the logging configuration to the user, ensuring the maximum flexibility.
