@@ -16,7 +16,7 @@ public class MempoiColumnConfigTest {
 
         MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
                 .withColumnName(MempoiColumnConfigTestHelper.COLUMN_NAME)
-                .withDataTransformationFunction(MempoiColumnConfigTestHelper.DATA_TRANFORMATION_FUNCTION)
+                .withDataTransformationFunction(MempoiColumnConfigTestHelper.STRING_DATA_TRANFORMATION_FUNCTION)
                 .build();
 
         AssertionHelper.validateMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),

@@ -9,7 +9,7 @@ import lombok.Setter;
 
 
 @Setter
-public abstract class DataTransformationFunction<O> {
+public abstract class DataTransformationFunction<I, O> {
 
     public static final String TRANSFORM_METHOD_NAME = "transform";
 
@@ -27,5 +27,7 @@ public abstract class DataTransformationFunction<O> {
         }
     }
 
-    public abstract O transform(final Object value) throws MempoiException;
+    public abstract O applyTransformation(final Object value);
+
+    protected abstract O transform(final I value) throws MempoiException;
 }

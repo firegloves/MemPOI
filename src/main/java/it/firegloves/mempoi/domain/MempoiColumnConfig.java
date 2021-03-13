@@ -19,16 +19,16 @@ public class MempoiColumnConfig {
      */
     @Getter
     String columnName;
-    DataTransformationFunction<?> dataTransformationFunction;
+    DataTransformationFunction<?, ?> dataTransformationFunction;
 
     private MempoiColumnConfig(String columnName,
-                              DataTransformationFunction<?> dataTransformationFunction) {
+                              DataTransformationFunction<?, ?> dataTransformationFunction) {
         this.columnName = columnName;
         this.dataTransformationFunction = dataTransformationFunction;
     }
 
 
-    public Optional<DataTransformationFunction<?>> getDataTransformationFunction() {
+    public Optional<DataTransformationFunction<?, ?>> getDataTransformationFunction() {
         return Optional.ofNullable(dataTransformationFunction);
     }
 
@@ -39,7 +39,7 @@ public class MempoiColumnConfig {
     public static class MempoiColumnConfigBuilder {
 
         String columnName;
-        DataTransformationFunction<?> dataTransformationFunction;
+        DataTransformationFunction<?, ?> dataTransformationFunction;
 
         /**
          * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -62,7 +62,7 @@ public class MempoiColumnConfig {
         }
 
         public MempoiColumnConfigBuilder withDataTransformationFunction(
-                DataTransformationFunction<?> dataTransformationFunction) {
+                DataTransformationFunction<?, ?> dataTransformationFunction) {
             this.dataTransformationFunction = dataTransformationFunction;
             this.dataTransformationFunction.setColumnName(this.columnName);
             return this;

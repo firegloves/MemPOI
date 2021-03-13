@@ -403,9 +403,10 @@ public class AssertionHelper {
      * @param subfooterCellFormula if not null it defines the check to run against the last row. if null no check is
      *                             required
      */
-    public static void validateGeneratedFileDataTransformationFunction(PreparedStatement prepStmt, String fileToValidate,
+    public static void validateGeneratedFileDataTransformationFunction(PreparedStatement prepStmt,
+            String fileToValidate,
             String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate,
-            int sheetNum, int transformedValue) {
+            int sheetNum, Object transformedValue, Class transformedValueCastClass) {
 
         File file = new File(fileToValidate);
 
@@ -423,7 +424,8 @@ public class AssertionHelper {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowDataTransformationFUnction(rs, sheet.getRow(r), columns, styleTemplate, wb, transformedValue);
+                validateGeneratedFileDataRowDataTransformationFUnction(rs, sheet.getRow(r), columns, styleTemplate, wb,
+                        transformedValue, transformedValueCastClass);
             }
 
             // validate subfooter cell formula
@@ -529,14 +531,14 @@ public class AssertionHelper {
      * @param wb            the curret Workbook
      */
     public static void validateGeneratedFileDataRowDataTransformationFUnction(ResultSet rs, Row row, String[] columns,
-            StyleTemplate styleTemplate, Workbook wb, int transformedValue) {
+            StyleTemplate styleTemplate, Workbook wb, Object transformedValue, Class transformedValueCastClass) {
 
         try {
             assertEquals(rs.getInt(columns[0]), (int) row.getCell(0).getNumericCellValue());
             assertEquals(rs.getDate(columns[1]), row.getCell(1).getDateCellValue());
             assertEquals(rs.getDate(columns[2]), row.getCell(2).getDateCellValue());
             assertEquals(rs.getDate(columns[3]), row.getCell(3).getDateCellValue());
-            assertEquals(transformedValue, (int) row.getCell(4).getNumericCellValue());
+            assertEquals(transformedValueCastClass.cast(transformedValue), row.getCell(4).getNumericCellValue());
             assertEquals(rs.getBoolean(columns[5]), row.getCell(5).getBooleanCellValue());
             assertEquals(rs.getString(columns[6]), row.getCell(6).getStringCellValue());
             assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
