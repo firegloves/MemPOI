@@ -113,7 +113,7 @@ public class DataStrategos {
 
                     Object cellValue;
                     if (optDataTransformationFunction.isPresent()) {
-                        cellValue = optDataTransformationFunction.get().applyTransformation(value);
+                        cellValue = optDataTransformationFunction.get().execute(value);
                     } else {
                         cellValue = value;
                     }

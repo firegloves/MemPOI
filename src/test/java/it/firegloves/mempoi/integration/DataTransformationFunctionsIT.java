@@ -8,8 +8,8 @@ import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.domain.datatransformation.BooleanDataTransformationFunction;
-import it.firegloves.mempoi.domain.datatransformation.DoubleDataTransformationFunction;
+/*import it.firegloves.mempoi.domain.datatransformation.BooleanDataTransformationFunction;
+import it.firegloves.mempoi.domain.datatransformation.DoubleDataTransformationFunction;*/
 import it.firegloves.mempoi.domain.datatransformation.StringDataTransformationFunction;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
@@ -126,7 +126,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         }
     }
 
-    @Test(expected = MempoiException.class)
+/*    @Test(expected = MempoiException.class)
     public void shouldThrowExceptionIfTheDataTransformationFunctionSuppliedAcceptATypeNotEqualsToTheOneReturnedByDB() {
 
         MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
@@ -144,5 +144,5 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         MemPOI memPOI = MempoiBuilder.aMemPOI().addMempoiSheet(mempoiSheet).build();
 
         memPOI.prepareMempoiReportToByteArray().join();
-    }
+    }*/
 }
