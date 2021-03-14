@@ -343,7 +343,7 @@ public class AssertionHelper {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowPivotTable(rs, sheet.getRow(r), columns, styleTemplate, wb);
+                validateGeneratedFileDataRowPivotTable(rs, sheet.getRow(r), headers, styleTemplate, wb);
             }
 
         } catch (Exception e) {
@@ -378,7 +378,7 @@ public class AssertionHelper {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRow(rs, sheet.getRow(r), columns, styleTemplate, wb);
+                validateGeneratedFileDataRow(rs, sheet.getRow(r), headers, styleTemplate, wb);
             }
 
             // validate subfooter cell formula
@@ -424,7 +424,7 @@ public class AssertionHelper {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowDataTransformationFUnction(rs, sheet.getRow(r), columns, styleTemplate, wb,
+                validateGeneratedFileDataRowDataTransformationFUnction(rs, sheet.getRow(r), headers, styleTemplate, wb,
                         transformedValue, transformedValueCastClass);
             }
 
@@ -484,21 +484,21 @@ public class AssertionHelper {
      *
      * @param rs            the ResultSet against which validate the Row
      * @param row           the Row to validate against the ResultSet
-     * @param columns       the array of columns name, useful to retrieve data from the ResultSet
+     * @param headers       the array of columns name, useful to retrieve data from the ResultSet
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    public static void validateGeneratedFileDataRow(ResultSet rs, Row row, String[] columns, StyleTemplate styleTemplate, Workbook wb) {
+    public static void validateGeneratedFileDataRow(ResultSet rs, Row row, String[] headers, StyleTemplate styleTemplate, Workbook wb) {
 
         try {
-            assertEquals(rs.getInt(columns[0]), (int) row.getCell(0).getNumericCellValue());
-            assertEquals(rs.getDate(columns[1]), row.getCell(1).getDateCellValue());
-            assertEquals(rs.getDate(columns[2]), row.getCell(2).getDateCellValue());
-            assertEquals(rs.getDate(columns[3]), row.getCell(3).getDateCellValue());
-            assertEquals(rs.getString(columns[4]), row.getCell(4).getStringCellValue());
-            assertEquals(rs.getBoolean(columns[5]), row.getCell(5).getBooleanCellValue());
-            assertEquals(rs.getString(columns[6]), row.getCell(6).getStringCellValue());
-            assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
+            assertEquals(rs.getInt(headers[0]), (int) row.getCell(0).getNumericCellValue());
+            assertEquals(rs.getDate(headers[1]), row.getCell(1).getDateCellValue());
+            assertEquals(rs.getDate(headers[2]), row.getCell(2).getDateCellValue());
+            assertEquals(rs.getDate(headers[3]), row.getCell(3).getDateCellValue());
+            assertEquals(rs.getString(headers[4]), row.getCell(4).getStringCellValue());
+            assertEquals(rs.getBoolean(headers[5]), row.getCell(5).getBooleanCellValue());
+            assertEquals(rs.getString(headers[6]), row.getCell(6).getStringCellValue());
+            assertEquals(rs.getDouble(headers[7]), row.getCell(7).getNumericCellValue(), 0);
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
                 AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
@@ -526,22 +526,22 @@ public class AssertionHelper {
      *
      * @param rs            the ResultSet against which validate the Row
      * @param row           the Row to validate against the ResultSet
-     * @param columns       the array of columns name, useful to retrieve data from the ResultSet
+     * @param headers       the array of columns name, useful to retrieve data from the ResultSet
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    public static void validateGeneratedFileDataRowDataTransformationFUnction(ResultSet rs, Row row, String[] columns,
+    public static void validateGeneratedFileDataRowDataTransformationFUnction(ResultSet rs, Row row, String[] headers,
             StyleTemplate styleTemplate, Workbook wb, Object transformedValue, Class transformedValueCastClass) {
 
         try {
-            assertEquals(rs.getInt(columns[0]), (int) row.getCell(0).getNumericCellValue());
-            assertEquals(rs.getDate(columns[1]), row.getCell(1).getDateCellValue());
-            assertEquals(rs.getDate(columns[2]), row.getCell(2).getDateCellValue());
-            assertEquals(rs.getDate(columns[3]), row.getCell(3).getDateCellValue());
+            assertEquals(rs.getInt(headers[0]), (int) row.getCell(0).getNumericCellValue());
+            assertEquals(rs.getDate(headers[1]), row.getCell(1).getDateCellValue());
+            assertEquals(rs.getDate(headers[2]), row.getCell(2).getDateCellValue());
+            assertEquals(rs.getDate(headers[3]), row.getCell(3).getDateCellValue());
             assertEquals(transformedValueCastClass.cast(transformedValue), row.getCell(4).getNumericCellValue());
-            assertEquals(rs.getBoolean(columns[5]), row.getCell(5).getBooleanCellValue());
-            assertEquals(rs.getString(columns[6]), row.getCell(6).getStringCellValue());
-            assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
+            assertEquals(rs.getBoolean(headers[5]), row.getCell(5).getBooleanCellValue());
+            assertEquals(rs.getString(headers[6]), row.getCell(6).getStringCellValue());
+            assertEquals(rs.getDouble(headers[7]), row.getCell(7).getNumericCellValue(), 0);
 
             if (null != styleTemplate
                     && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
@@ -569,19 +569,19 @@ public class AssertionHelper {
      *
      * @param rs            the ResultSet against which validate the Row
      * @param row           the Row to validate against the ResultSet
-     * @param columns       the array of columns name, useful to retrieve data from the ResultSet
+     * @param headers       the array of columns name, useful to retrieve data from the ResultSet
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    public static void validateGeneratedFileDataRowPivotTable(ResultSet rs, Row row, String[] columns, StyleTemplate styleTemplate, Workbook wb) {
+    public static void validateGeneratedFileDataRowPivotTable(ResultSet rs, Row row, String[] headers, StyleTemplate styleTemplate, Workbook wb) {
 
         try {
-            assertEquals(rs.getString(columns[0]), row.getCell(0).getStringCellValue());
-            assertEquals(rs.getString(columns[1]), row.getCell(1).getStringCellValue());
-            assertEquals(rs.getInt(columns[2]), row.getCell(2).getNumericCellValue(), 0.1);
-            assertEquals(rs.getString(columns[3]), row.getCell(3).getStringCellValue());
-            assertEquals(rs.getFloat(columns[4]), row.getCell(4).getNumericCellValue(), 0.1);
-            assertEquals(rs.getString(columns[5]), row.getCell(5).getStringCellValue());
+            assertEquals(rs.getString(headers[0]), row.getCell(0).getStringCellValue());
+            assertEquals(rs.getString(headers[1]), row.getCell(1).getStringCellValue());
+            assertEquals(rs.getInt(headers[2]), row.getCell(2).getNumericCellValue(), 0.1);
+            assertEquals(rs.getString(headers[3]), row.getCell(3).getStringCellValue());
+            assertEquals(rs.getFloat(headers[4]), row.getCell(4).getNumericCellValue(), 0.1);
+            assertEquals(rs.getString(headers[5]), row.getCell(5).getStringCellValue());
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
                 AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
