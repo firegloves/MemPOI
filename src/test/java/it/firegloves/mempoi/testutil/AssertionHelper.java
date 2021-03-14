@@ -492,9 +492,9 @@ public class AssertionHelper {
 
         try {
             assertEquals(rs.getInt(headers[0]), (int) row.getCell(0).getNumericCellValue());
-            assertEquals(rs.getDate(headers[1]), row.getCell(1).getDateCellValue());
-            assertEquals(rs.getDate(headers[2]), row.getCell(2).getDateCellValue());
-            assertEquals(rs.getDate(headers[3]), row.getCell(3).getDateCellValue());
+            assertEquals(rs.getDate(headers[1]).getTime(), row.getCell(1).getDateCellValue().getTime());
+            assertEquals(rs.getTimestamp(headers[2]).getTime(), row.getCell(2).getDateCellValue().getTime());
+            assertEquals(rs.getTimestamp(headers[3]).getTime(), row.getCell(3).getDateCellValue().getTime());
             assertEquals(rs.getString(headers[4]), row.getCell(4).getStringCellValue());
             assertEquals(rs.getBoolean(headers[5]), row.getCell(5).getBooleanCellValue());
             assertEquals(rs.getString(headers[6]), row.getCell(6).getStringCellValue());
@@ -536,8 +536,8 @@ public class AssertionHelper {
         try {
             assertEquals(rs.getInt(headers[0]), (int) row.getCell(0).getNumericCellValue());
             assertEquals(rs.getDate(headers[1]), row.getCell(1).getDateCellValue());
-            assertEquals(rs.getDate(headers[2]), row.getCell(2).getDateCellValue());
-            assertEquals(rs.getDate(headers[3]), row.getCell(3).getDateCellValue());
+            assertEquals(rs.getTimestamp(headers[2]).getTime(), row.getCell(2).getDateCellValue().getTime());
+            assertEquals(rs.getTimestamp(headers[3]).getTime(), row.getCell(3).getDateCellValue().getTime());
             assertEquals(transformedValueCastClass.cast(transformedValue), row.getCell(4).getNumericCellValue());
             assertEquals(rs.getBoolean(headers[5]), row.getCell(5).getBooleanCellValue());
             assertEquals(rs.getString(headers[6]), row.getCell(6).getStringCellValue());
@@ -614,7 +614,7 @@ public class AssertionHelper {
                     Row row = s.getRow(i);
                     assertEquals(rs.getInt(TestHelper.COLUMNS_2[0]), (int) row.getCell(0).getNumericCellValue());
                     assertEquals(rs.getDate(TestHelper.COLUMNS_2[1]), row.getCell(1).getDateCellValue());
-                    assertEquals(rs.getDate(TestHelper.COLUMNS_2[2]), row.getCell(2).getDateCellValue());
+                    assertEquals(rs.getTimestamp(TestHelper.COLUMNS_2[2]).getTime(), row.getCell(2).getDateCellValue().getTime());
                     assertEquals(rs.getDate(TestHelper.COLUMNS_2[3]), row.getCell(3).getDateCellValue());
                     assertEquals(rs.getString(TestHelper.COLUMNS_2[4]), row.getCell(4).getStringCellValue());
                     assertEquals(rs.getBoolean(TestHelper.COLUMNS_2[5]), row.getCell(5).getBooleanCellValue());
