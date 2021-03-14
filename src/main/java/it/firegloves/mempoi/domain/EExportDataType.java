@@ -22,6 +22,7 @@ public enum EExportDataType {
     TEXT("getString", String.class, String.class),
     INT("getInt", String.class, double.class),
     DOUBLE("getDouble", String.class, double.class),
+    BIG_INTEGER("getDouble", String.class, double.class),
     FLOAT("getDouble", String.class, double.class),
     CURRENCY("getBigDecimal", String.class, double.class),
     DATE("getDate", String.class, Date.class),

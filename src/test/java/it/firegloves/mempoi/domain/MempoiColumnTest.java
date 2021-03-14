@@ -60,7 +60,7 @@ public class MempoiColumnTest {
 
     @Test
     public void column_BIGINT() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_BIGINT", Types.BIGINT, EExportDataType.INT);
+        this.assertMempoiColumn("column_BIGINT", Types.BIGINT, EExportDataType.BIG_INTEGER);
     }
 
     @Test

@@ -14,7 +14,7 @@ public class MempoiColumnStyleManager {
 
     private static final Set<EExportDataType> dateStylerTypes = EnumSet.of(EExportDataType.DATE);
     private static final Set<EExportDataType> datetimeStylerTypes = EnumSet.of(EExportDataType.TIME, EExportDataType.TIMESTAMP);
-    private static final Set<EExportDataType> integerStylerTypes = EnumSet.of(EExportDataType.INT);
+    private static final Set<EExportDataType> integerStylerTypes = EnumSet.of(EExportDataType.INT, EExportDataType.BIG_INTEGER);
     private static final Set<EExportDataType> floatingPointStylerTypes = EnumSet.of(EExportDataType.DOUBLE, EExportDataType.FLOAT);
     private final List<Set<EExportDataType>> stylerTypesSet = Arrays.asList(dateStylerTypes, datetimeStylerTypes, integerStylerTypes, floatingPointStylerTypes);
 
