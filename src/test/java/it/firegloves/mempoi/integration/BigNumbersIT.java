@@ -67,10 +67,17 @@ public class BigNumbersIT extends IntegrationBaseIT {
                 assertEquals(rs.getInt(TestHelper.COLUMNS_BIG_NUMBERS[0]),(int) row.getCell(0).getNumericCellValue());
                 assertEquals(rs.getDouble(TestHelper.COLUMNS_BIG_NUMBERS[1]), row.getCell(1).getNumericCellValue(), 0);
                 assertEquals(rs.getDouble(TestHelper.COLUMNS_BIG_NUMBERS[2]), row.getCell(2).getNumericCellValue(), 0);
+                assertEquals(rs.getDouble(TestHelper.COLUMNS_BIG_NUMBERS[3]), row.getCell(3).getNumericCellValue(), 0);
+                assertEquals(rs.getDouble(TestHelper.COLUMNS_BIG_NUMBERS[4]), row.getCell(4).getNumericCellValue(), 0);
+                assertEquals(rs.getDouble(TestHelper.COLUMNS_BIG_NUMBERS[5]), row.getCell(5).getNumericCellValue(), 0);
+                assertEquals(rs.getDouble(TestHelper.COLUMNS_BIG_NUMBERS[6]), row.getCell(6).getNumericCellValue(), 0);
 
                 AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
             }
         } catch (Exception e) {
             AssertionHelper.failAssertion(e);

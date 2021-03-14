@@ -67,7 +67,7 @@ public class TestHelper {
     public static final String[] COLUMNS_2 = {"id", "creation_date", "dateTime", "timeStamp", "name", "valid", "usefulChar", "decimalOne", "bitTwo", "doublone", "floattone", "interao", "mediano", "attempato", "interuccio"};
     public static final String[] HEADERS_2 = {"id", "creation_date", "dateTime", "STAMPONE", "name", "valid", "usefulChar", "decimalOne", "bitTwo", "doublone", "floattone", "interao", "mediano", "attempato", "interuccio"};
 
-    public static final String[] COLUMNS_BIG_NUMBERS = {"id", "big_number", "big_decimal"};
+    public static final String[] COLUMNS_BIG_NUMBERS = {"id", "big_number", "big_decimal", "max_big_int", "double", "double_precision", "numeric"};
 
     public static final String SUM_CELL_FORMULA = "SUM(H2:H11)";
     public static final String MAX_CELL_FORMULA = "MAX(H2:H11)";
