@@ -13,17 +13,15 @@ import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 public class MempoiBuilder {
 
@@ -315,11 +313,6 @@ public class MempoiBuilder {
 
         if (null == workbook) {
             this.workbook = new SXSSFWorkbook();
-        }
-
-        // encryption support check
-        if (this.workbook instanceof HSSFWorkbook && null != this.mempoiEncryption) {
-            throw new MempoiException(Errors.ERR_ENCRYPTION_NOT_SUPPORTED);
         }
 
         if (null == this.styleTemplate) {
