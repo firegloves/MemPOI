@@ -35,7 +35,7 @@ public class EncryptionIT extends IntegrationBaseIT {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "encryption_binary_file.xls");
 
-        MempoiEncryption mempoiEncryption = MempoiEncryption.builder()
+        MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
                 .withPassword(password)
                 .build();
 
@@ -74,7 +74,7 @@ public class EncryptionIT extends IntegrationBaseIT {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "encryption_xml_based.xlsx");
 
-        MempoiEncryption mempoiEncryption = MempoiEncryption.builder()
+        MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
                 .withPassword(password)
                 .build();
 

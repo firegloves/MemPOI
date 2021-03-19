@@ -3,18 +3,19 @@
  */
 package it.firegloves.mempoi.domain;
 
-import lombok.Builder;
-import lombok.Builder.Default;
+import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.util.Errors;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.apache.poi.poifs.crypt.ChainingMode;
-import org.apache.poi.poifs.crypt.CipherAlgorithm;
+import org.apache.poi.poifs.crypt.EncryptionInfo;
 import org.apache.poi.poifs.crypt.EncryptionMode;
-import org.apache.poi.poifs.crypt.HashAlgorithm;
 
 @Data
+@Setter(AccessLevel.PRIVATE)
 @Accessors(chain = true)
-@Builder(setterPrefix = "with")
+//@Builder(setterPrefix = "with")
 public class MempoiEncryption {
 
     /**
@@ -22,22 +23,52 @@ public class MempoiEncryption {
      */
     private String password;
     /**
-     * the encryption mode to use
+     * the encryption info to use to encrypt the file
      */
-    @Default
-    private EncryptionMode encryptionMode = EncryptionMode.agile;
-    /**
-     * the cipher algorithm to use
-     */
-    private CipherAlgorithm cipherAlgorithm;
-    /**
-     * the hash algorithm to use
-     */
-    private HashAlgorithm hashAlgorithm;
-    private int keyBits;
-    private int blockSize;
-    /**
-     * the chaining mode to use
-     */
-    private ChainingMode chainingMode;
+    private EncryptionInfo encryptionInfo;
+
+    private MempoiEncryption() {}
+
+    /****************************************************
+     * BUILDER CLASS
+     ***************************************************/
+    public static class MempoiEncryptionBuilder {
+
+        private String password;
+        private EncryptionInfo encryptionInfo;
+
+        private MempoiEncryptionBuilder() {
+        }
+
+        public static MempoiEncryptionBuilder aMempoiEncryption() {
+            return new MempoiEncryptionBuilder();
+        }
+
+        public MempoiEncryptionBuilder withPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public MempoiEncryptionBuilder withEncryptionInfo(EncryptionInfo encryptionInfo) {
+            this.encryptionInfo = encryptionInfo;
+            return this;
+        }
+
+        public MempoiEncryption build() {
+
+            if (null == password) {
+                throw new MempoiException(Errors.ERR_ENCRYPTION_WITH_NO_PWD);
+            }
+
+            if (null == encryptionInfo) {
+                encryptionInfo = new EncryptionInfo(EncryptionMode.agile);
+            }
+
+            MempoiEncryption mempoiEncryption = new MempoiEncryption();
+            mempoiEncryption.setPassword(password);
+            mempoiEncryption.setEncryptionInfo(encryptionInfo);
+
+            return mempoiEncryption;
+        }
+    }
 }
