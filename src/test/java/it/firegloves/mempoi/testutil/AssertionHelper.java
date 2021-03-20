@@ -393,52 +393,6 @@ public class AssertionHelper {
     }
 
 
-    /**
-     * opens the received generated xlsx file and applies generic asserts
-     *
-     * @param prepStmt             the PreparedStatement to execute to validate data
-     * @param fileToValidate       the absolute filename of the xlsx file on which apply the generic asserts
-     * @param columns              the array of columns name, useful to retrieve data from the ResultSet
-     * @param headers              the array of headers name
-     * @param subfooterCellFormula if not null it defines the check to run against the last row. if null no check is
-     *                             required
-     */
-    public static void validateGeneratedFileDataTransformationFunction(PreparedStatement prepStmt,
-            String fileToValidate,
-            String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate,
-            int sheetNum, Object transformedValue, Class transformedValueCastClass) {
-
-        File file = new File(fileToValidate);
-
-        try (InputStream inp = new FileInputStream(file)) {
-
-            ResultSet rs = prepStmt.executeQuery();
-
-            Workbook wb = WorkbookFactory.create(inp);
-
-            Sheet sheet = wb.getSheetAt(sheetNum);
-
-            // validates header row
-            validateHeaderRow(sheet.getRow(0), headers,
-                    null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
-
-            // validates data rows
-            for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowDataTransformationFUnction(rs, sheet.getRow(r), headers, styleTemplate, wb,
-                        transformedValue, transformedValueCastClass);
-            }
-
-            // validate subfooter cell formula
-            if (!StringUtils.isEmpty(subfooterCellFormula)) {
-                validateSubfooterFormula(sheet.getRow(TestHelper.MAX_ROWS + 1), TestHelper.COLUMNS.length - 1,
-                        subfooterCellFormula);
-            }
-
-        } catch (Exception e) {
-            failAssertion(e);
-        }
-    }
-
 
     /**
      * opens the received generated xlsx file and applies generic asserts
@@ -519,49 +473,6 @@ public class AssertionHelper {
         }
     }
 
-
-    /**
-     * validate one Row of the generic export (created with createStatement()) against the resulting ResultSet generated
-     * by the execution of the same method
-     *
-     * @param rs            the ResultSet against which validate the Row
-     * @param row           the Row to validate against the ResultSet
-     * @param headers       the array of columns name, useful to retrieve data from the ResultSet
-     * @param styleTemplate StyleTemplate to get styles to validate
-     * @param wb            the curret Workbook
-     */
-    public static void validateGeneratedFileDataRowDataTransformationFUnction(ResultSet rs, Row row, String[] headers,
-            StyleTemplate styleTemplate, Workbook wb, Object transformedValue, Class transformedValueCastClass) {
-
-        try {
-            assertEquals(rs.getInt(headers[0]), (int) row.getCell(0).getNumericCellValue());
-            assertEquals(rs.getDate(headers[1]), row.getCell(1).getDateCellValue());
-            assertEquals(rs.getTimestamp(headers[2]).getTime(), row.getCell(2).getDateCellValue().getTime());
-            assertEquals(rs.getTimestamp(headers[3]).getTime(), row.getCell(3).getDateCellValue().getTime());
-            assertEquals(transformedValueCastClass.cast(transformedValue), row.getCell(4).getNumericCellValue());
-            assertEquals(rs.getBoolean(headers[5]), row.getCell(5).getBooleanCellValue());
-            assertEquals(rs.getString(headers[6]), row.getCell(6).getStringCellValue());
-            assertEquals(rs.getDouble(headers[7]), row.getCell(7).getNumericCellValue(), 0);
-
-            if (null != styleTemplate
-                    && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
-                AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertionHelper
-                        .validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper
-                        .validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper
-                        .validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper
-                        .validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
-            }
-        } catch (Exception e) {
-            failAssertion(e);
-        }
-    }
 
 
     /**

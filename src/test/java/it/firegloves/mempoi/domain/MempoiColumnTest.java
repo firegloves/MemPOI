@@ -9,6 +9,8 @@ import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElabora
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
+import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
@@ -17,6 +19,7 @@ import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -307,7 +310,7 @@ public class MempoiColumnTest {
     public void shouldSetTheReceivedMempoiColumnConfig() {
 
         MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigTestHelper.getTestMempoiColumnConfig();
-        this.mc.setMempoiColumnConfig(mempoiColumnConfig);
+        this.mc.setMempoiColumnConfig(mempoiColumnConfig, new MempoiColumnStyleManager(new MempoiStyler()));
         MempoiColumnConfig current = this.mc.getMempoiColumnConfig();
 
         assertEquals(mempoiColumnConfig, current);

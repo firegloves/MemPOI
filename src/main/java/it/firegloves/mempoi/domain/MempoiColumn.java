@@ -8,20 +8,21 @@ import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElabora
 import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.util.Errors;
-
-import java.lang.reflect.ParameterizedType;
-import java.util.*;
-
+import java.lang.reflect.Method;
+import java.sql.ResultSet;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
-
-import java.lang.reflect.Method;
-import java.sql.ResultSet;
-import java.sql.Types;
 
 @Data
 @Accessors(chain = true)
@@ -224,9 +225,10 @@ public class MempoiColumn {
      * sets and configure the required data to process the MempoiColumnConfig
      *
      * @param mempoiColumnConfig
+     * @param mempoiColumnStyleManager
      * @return
      */
-    public MempoiColumn setMempoiColumnConfig(MempoiColumnConfig mempoiColumnConfig) {
+    public MempoiColumn setMempoiColumnConfig(MempoiColumnConfig mempoiColumnConfig, MempoiColumnStyleManager mempoiColumnStyleManager) {
         this.mempoiColumnConfig = mempoiColumnConfig;
 
         if (null != this.mempoiColumnConfig) {
@@ -251,8 +253,11 @@ public class MempoiColumn {
                                 .getEExportDataTypeByParameterValue(functionMethod.getReturnType())
                                 .orElseThrow(() -> new MempoiException(
                                         Errors.ERR_DATA_TRANSFORMATION_FUNCTION_EEXPORTDATATYPE_NOT_FOUND));
+
                         // set the export data type to be used to set the final cell value
                         this.setCellSetValueMethod(eExportDataType);
+                        // set cell style basing of the new identified EExportDataType
+                        mempoiColumnStyleManager.setMempoiColumnCellStyle(this, eExportDataType);
                     });
         }
 

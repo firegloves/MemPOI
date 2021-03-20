@@ -42,10 +42,11 @@ public class MempoiColumnStrategos {
         // populates MempoiColumn list with export metadata list
         List<MempoiColumn> columnList = DBMempoiDAO.getInstance().readMetadata(rs);
 
-        this.loadMempoiColumnConfig(mempoiSheet, columnList);
-
         // assigns cell styles to MempoiColumns
-        new MempoiColumnStyleManager(mempoiSheet.getSheetStyler()).setMempoiColumnListStyler(columnList);
+        MempoiColumnStyleManager columnStyleManager = new MempoiColumnStyleManager(mempoiSheet.getSheetStyler())
+                .setMempoiColumnListStyler(columnList);
+
+        this.loadMempoiColumnConfig(mempoiSheet, columnList, columnStyleManager);
 
         // merged regions
         this.prepareMergedRegions(mempoiSheet, columnList, workbook);
@@ -65,8 +66,10 @@ public class MempoiColumnStrategos {
      *
      * @param mempoiSheet      the MempoiSheet from which read the MempoiColumngConfig
      * @param mempoiColumnList the list of MempoiColumn to which bind the MempoiColumnConfiguration
+     * @param columnStyleManager the MempoiColumnStyleManager responsible of the style management
      */
-    private void loadMempoiColumnConfig(MempoiSheet mempoiSheet, List<MempoiColumn> mempoiColumnList) {
+    private void loadMempoiColumnConfig(MempoiSheet mempoiSheet, List<MempoiColumn> mempoiColumnList,
+            MempoiColumnStyleManager columnStyleManager) {
 
         Map<String, MempoiColumnConfig> columnConfigMap = mempoiSheet.getColumnConfigMap();
 
@@ -74,9 +77,12 @@ public class MempoiColumnStrategos {
         mempoiColumnList.forEach(mempoiColumn ->
                 mempoiColumn.setMempoiColumnConfig(
                         // get the one specified by the user
-                        columnConfigMap.getOrDefault(mempoiColumn.getColumnName(),
+                        columnConfigMap.getOrDefault(
+                                mempoiColumn.getColumnName(),
                                 //otherwise create an empty one
-                                MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName(mempoiColumn.getColumnName()).build()))
+                                MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                                        .withColumnName(mempoiColumn.getColumnName()).build()),
+                        columnStyleManager)
         );
     }
 

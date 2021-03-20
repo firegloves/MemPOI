@@ -27,7 +27,13 @@ public abstract class DataTransformationFunction<I, O> {
 
     protected final <T> T cast(Object obj, Class<T> toType) throws MempoiException {
         try {
-            return toType.cast(obj);
+            if (obj instanceof Integer && toType.equals(Double.class)) {
+                return (T) new Double(((Integer) obj).intValue());
+            } else if (obj instanceof Float && toType.equals(Double.class)) {
+                return (T) new Double(((Float) obj).floatValue());
+            } else {
+                return toType.cast(obj);
+            }
         } catch (Exception e) {
             throw new MempoiException(
                     String.format(Errors.ERR_DATA_TRANSFORMATION_FUNCTION_CAST_EXCEPTION, columnName, toType,
