@@ -88,6 +88,7 @@ public class DataStrategos {
     protected int createDataRows(Sheet sheet, ResultSet rs, List<MempoiColumn> columnList, int rowCounter) {
 
         int colListLen = columnList.size();
+        int rowIndex = 0;
 
         try {
             while (rs.next()) {
@@ -125,11 +126,13 @@ public class DataStrategos {
 
                     // analyze data for mempoi column's strategy
                     mempoiColumn.elaborationStepListAnalyze(cell, cellValue);
+
+                    rowIndex++;
                 }
             }
 
             // close analysis on each MempoiColumn
-            int lastRowNum = rs.getRow() - 1;
+            int lastRowNum = rowIndex;
             columnList.forEach(mc -> mc.elaborationStepListCloseAnalysis(lastRowNum));
 
         } catch (Exception e) {

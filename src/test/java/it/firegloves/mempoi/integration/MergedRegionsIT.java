@@ -41,7 +41,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // sheet
-            MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -71,7 +71,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             prepStmt = this.createStatement(null, limit);
 
             // sheet
-            MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -104,7 +104,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             prepStmt = this.createStatement(null, limit);
 
             // sheet
-            MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegionsMultiColumn(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -134,7 +134,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         prepStmt = this.createStatement(null, 100_000);
 
         // sheet
-        MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
+        MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
                 .withStyleTemplate(new ForestStyleTemplate())
@@ -158,7 +158,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             PreparedStatement prepStmt2 = this.createStatement(null, limit2);
 
             // sheet 1
-            MempoiSheet sheet1 = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet1 = this.createMempoiSheetMergedRegions(prepStmt);
 
             // sheet 2
             MempoiSheet sheet2 = this.createMempoiSheet2(prepStmt2);
@@ -202,7 +202,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             PreparedStatement prepStmt2 = this.createStatement(null, limit2);
 
             // sheet 1
-            MempoiSheet sheet1 = this.createMempoiSheet1MultiColumn(prepStmt);
+            MempoiSheet sheet1 = this.createMempoiSheetMergedRegionsMultiColumn(prepStmt);
 
             // sheet 2
             MempoiSheet sheet2 = this.createMempoiSheet2MultiColumn(prepStmt2);
@@ -249,7 +249,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             prepStmt = this.createStatement(null, limit);
 
             // sheet
-            MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -284,7 +284,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             PreparedStatement prepStmt2 = this.createStatement(null, limit2);
 
             // sheet 1
-            MempoiSheet sheet1 = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet1 = this.createMempoiSheetMergedRegions(prepStmt);
 
             // sheet 2
             MempoiSheet sheet2 = this.createMempoiSheet2(prepStmt2);
@@ -326,7 +326,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             prepStmt = this.createStatement(null, limit);
 
             // sheet
-            MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegionsMultiColumn(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -361,7 +361,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             PreparedStatement prepStmt2 = this.createStatement(null, limit2);
 
             // sheet 1
-            MempoiSheet sheet1 = this.createMempoiSheet1MultiColumn(prepStmt);
+            MempoiSheet sheet1 = this.createMempoiSheetMergedRegionsMultiColumn(prepStmt);
 
             // sheet 2
             MempoiSheet sheet2 = this.createMempoiSheet2MultiColumn(prepStmt2);
@@ -408,7 +408,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // sheet
-            MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -443,7 +443,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             PreparedStatement prepStmt2 = this.createStatement(null, limit2);
 
             // sheet 1
-            MempoiSheet sheet1 = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet1 = this.createMempoiSheetMergedRegions(prepStmt);
 
             // sheet 2
             MempoiSheet sheet2 = this.createMempoiSheet2(prepStmt2);
@@ -484,7 +484,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // sheet
-            MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegionsMultiColumn(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -517,7 +517,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // sheet
-            MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -549,7 +549,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         prepStmt = this.createStatement(null, limit);
 
         // sheet
-        MempoiSheet sheet = this.createMempoiSheet1MultiColumn(prepStmt);
+        MempoiSheet sheet = this.createMempoiSheetMergedRegionsMultiColumn(prepStmt);
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
                 .withFile(fileDest)
@@ -580,7 +580,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             PreparedStatement prepStmt2 = this.createStatement(null, limit2);
 
             // sheet 1
-            MempoiSheet sheet1 = this.createMempoiSheet1(prepStmt);
+            MempoiSheet sheet1 = this.createMempoiSheetMergedRegions(prepStmt);
 
             // sheet 2
             MempoiSheet sheet2 = this.createMempoiSheet2(prepStmt2);
@@ -617,7 +617,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         prepStmt = this.createStatement(null, 50_000);    // TODO create tests that exceed HSSF limits and try to manage it
 
         // sheet
-        MempoiSheet sheet = this.createMempoiSheet1(prepStmt);
+        MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
                 .withStyleTemplate(new ForestStyleTemplate())
@@ -645,7 +645,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         try {
             prepStmt = this.createStatement(null, limit);
 
-            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, null);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt, null);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -670,7 +670,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         try {
             prepStmt = this.createStatement(null, limit);
 
-            MempoiSheet sheet = this.createMempoiSheet1(prepStmt, new String[0]);
+            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt, new String[0]);
 
             MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withFile(fileDest)
@@ -701,7 +701,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
                         .withFile(fileDest)
                         .withStyleTemplate(new ForestStyleTemplate())
                         .withWorkbook(new HSSFWorkbook())
-                        .addMempoiSheet(this.createMempoiSheet1(prepStmt, null))
+                        .addMempoiSheet(this.createMempoiSheetMergedRegions(prepStmt, null))
                         .build();
 
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
@@ -726,7 +726,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             try {
                 prepStmt = this.createStatement(null, limit);
 
-                MempoiSheet sheet = this.createMempoiSheet1(prepStmt, new String[0]);
+                MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt, new String[0]);
 
                 MemPOI memPOI = MempoiBuilder.aMemPOI()
                         .withFile(fileDest)
@@ -756,8 +756,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
      * @param prepStmt
      * @return
      */
-    private MempoiSheet createMempoiSheet1(PreparedStatement prepStmt) {
-        return this.createMempoiSheet1(prepStmt, new String[]{"name"});
+    private MempoiSheet createMempoiSheetMergedRegions(PreparedStatement prepStmt) {
+        return this.createMempoiSheetMergedRegions(prepStmt, new String[]{"name"});
     }
 
     /**
@@ -766,15 +766,15 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
      * @param prepStmt
      * @return
      */
-    private MempoiSheet createMempoiSheet1MultiColumn(PreparedStatement prepStmt) {
-        return this.createMempoiSheet1(prepStmt, new String[]{"name", "usefulChar"});
+    private MempoiSheet createMempoiSheetMergedRegionsMultiColumn(PreparedStatement prepStmt) {
+        return this.createMempoiSheetMergedRegions(prepStmt, new String[]{"name", "usefulChar"});
     }
 
     /**
      * @param prepStmt
      * @return
      */
-    private MempoiSheet createMempoiSheet1(PreparedStatement prepStmt, String[] mergedColumns) {
+    private MempoiSheet createMempoiSheetMergedRegions(PreparedStatement prepStmt, String[] mergedColumns) {
 
         return MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName("Merged regions name column")
