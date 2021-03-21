@@ -232,6 +232,7 @@ public class MempoiColumn {
         this.mempoiColumnConfig = mempoiColumnConfig;
 
         if (null != this.mempoiColumnConfig) {
+
             this.mempoiColumnConfig.getDataTransformationFunction()
                     //if user has supplied a list of transformation functions then apply configurations
                     .ifPresent(dataTransformationFunction -> {
@@ -259,6 +260,11 @@ public class MempoiColumn {
                         // set cell style basing of the new identified EExportDataType
                         mempoiColumnStyleManager.setMempoiColumnCellStyle(this, eExportDataType);
                     });
+
+            // TODO TEST THIS
+            if (null != mempoiColumnConfig.getCellStyle()) {
+                this.setCellStyle(mempoiColumnConfig.getCellStyle());
+            }
         }
 
         return this;

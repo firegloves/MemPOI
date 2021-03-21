@@ -10,6 +10,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.CellStyle;
 
 @Value
 public class MempoiColumnConfig {
@@ -19,12 +20,24 @@ public class MempoiColumnConfig {
      */
     @Getter
     String columnName;
+
+    /**
+     * DataTransformationFunction to apply to every value read by the DB for column identified by the columnName
+     * property
+     */
     DataTransformationFunction<?, ?> dataTransformationFunction;
 
+    /**
+     * CellStyle to apply to the column identified by the columnName property
+     */
+    CellStyle cellStyle;
+
     private MempoiColumnConfig(String columnName,
-                              DataTransformationFunction<?, ?> dataTransformationFunction) {
+            DataTransformationFunction<?, ?> dataTransformationFunction,
+            CellStyle cellStyle) {
         this.columnName = columnName;
         this.dataTransformationFunction = dataTransformationFunction;
+        this.cellStyle = cellStyle;
     }
 
 
@@ -38,8 +51,9 @@ public class MempoiColumnConfig {
      */
     public static class MempoiColumnConfigBuilder {
 
-        String columnName;
-        DataTransformationFunction<?, ?> dataTransformationFunction;
+        private String columnName;
+        private DataTransformationFunction<?, ?> dataTransformationFunction;
+        private CellStyle cellStyle;
 
         /**
          * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -68,6 +82,10 @@ public class MempoiColumnConfig {
             return this;
         }
 
+        public MempoiColumnConfigBuilder withCellStyle(CellStyle cellStyle) {
+            this.cellStyle = cellStyle;
+            return this;
+        }
 
         public MempoiColumnConfig build() {
 
@@ -75,7 +93,7 @@ public class MempoiColumnConfig {
                 throw new MempoiException(Errors.ERR_MEMPOI_COL_CONFIG_COLNAME_NOT_VALID);
             }
 
-            return new MempoiColumnConfig(columnName, dataTransformationFunction);
+            return new MempoiColumnConfig(columnName, dataTransformationFunction, cellStyle);
         }
     }
 }

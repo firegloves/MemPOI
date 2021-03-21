@@ -7,6 +7,8 @@ import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
 public class MempoiColumnConfigTest {
@@ -14,17 +16,21 @@ public class MempoiColumnConfigTest {
     @Test
     public void testFullBuilder() {
 
+        CellStyle cellStyle = new XSSFWorkbook().createCellStyle();
+
         MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
                 .withColumnName(MempoiColumnConfigTestHelper.COLUMN_NAME)
                 .withDataTransformationFunction(MempoiColumnConfigTestHelper.STRING_DATA_TRANFORMATION_FUNCTION)
+                .withCellStyle(cellStyle)
                 .build();
 
         AssertionHelper.validateMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
                 mempoiColumnConfig);
+        assertEquals(cellStyle, mempoiColumnConfig.getCellStyle());
     }
 
     @Test
-    public void shouldTnrowExceptionIfNullOrEmptyColumnNameIsPassed() {
+    public void shouldThrowExceptionIfNullOrEmptyColumnNameIsPassed() {
 
         // null column name
         try {
