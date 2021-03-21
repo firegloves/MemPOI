@@ -69,6 +69,14 @@ public class MempoiBuilder {
      */
     private MempoiEncryption mempoiEncryption;
 
+    /**
+     * if true => null values from DB are treated as null and not as primitive data types default
+     *      => poi cells are empty
+     *      => data transformation function receive null values instead of primitive default values
+     */
+    private boolean nullValuesOverPrimitiveDetaultOnes;
+
+
 
     /**
      * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -289,8 +297,6 @@ public class MempoiBuilder {
         return this;
     }
 
-    // TODO add only withPassword => will use default settings => force generation if password and MempoiEncryption are available
-
     /**
      * @param mempoiEncryption the Encryption configuration to apply to the generating document
      * @return the current MempoiBuilder
@@ -300,6 +306,17 @@ public class MempoiBuilder {
         return this;
     }
 
+
+    /**
+     * @param nullValuesOverPrimitiveDetaultOnes if true => null values from DB are treated as null and not as primitive data types default
+     *                                 => poi cells are empty
+     *                                 => data transformation functions receive nulls instead of primitive default values
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withNullValuesOverPrimitiveDetaultOnes(boolean nullValuesOverPrimitiveDetaultOnes) {
+        this.nullValuesOverPrimitiveDetaultOnes = nullValuesOverPrimitiveDetaultOnes;
+        return this;
+    }
 
     /**
      * build the MemPOI with the desired preferences
@@ -335,7 +352,8 @@ public class MempoiBuilder {
                 this.evaluateCellFormulas,
                 this.mempoiSheetList,
                 this.file,
-                this.mempoiEncryption);
+                this.mempoiEncryption,
+                this.nullValuesOverPrimitiveDetaultOnes);
 
         return new MemPOI(workbookConfig);
     }

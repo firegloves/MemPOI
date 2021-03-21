@@ -9,6 +9,7 @@ import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -107,7 +108,8 @@ public class DataStrategos {
 
                     logger.debug("SETTING CELL FOR COLUMN {}", mempoiColumn.getColumnName());
 
-                    final Object value = mempoiColumn.getRsAccessDataMethod().invoke(rs, mempoiColumn.getColumnName());
+                    Object value = mempoiColumn.getRsAccessDataMethod().invoke(rs, mempoiColumn.getColumnName());
+                    value = this.getValueOrNull(rs, value);
 
                     Optional<DataTransformationFunction<?, ?>> optDataTransformationFunction = mempoiColumn
                             .getMempoiColumnConfig().getDataTransformationFunction();
@@ -120,7 +122,7 @@ public class DataStrategos {
                     }
 
                     // sets value in the cell
-                    if (!rs.wasNull() || optDataTransformationFunction.isPresent()) {
+                    if (hasCellValueToBeSet(rs, optDataTransformationFunction)) {
                         mempoiColumn.getCellSetValueMethod().invoke(cell, cellValue);
                     }
 
@@ -140,5 +142,41 @@ public class DataStrategos {
         }
 
         return rowCounter;
+    }
+
+
+    /**
+     * receive an object read from the DB and return the same value or null depending on the original value in the DB
+     * and on the workbookConfig.nullValuesOverPrimitiveDetaultOnes property
+     *
+     * @param resultSet the result set from which check if the read value was null
+     * @param value     the value read from the DB
+     * @return the same value or null
+     * @throws SQLException if an error arise during ResultSet access operation
+     */
+    private Object getValueOrNull(ResultSet resultSet, Object value) throws SQLException {
+
+        if (resultSet.wasNull() && workbookConfig.isNullValuesOverPrimitiveDetaultOnes()) {
+            return null;
+        } else {
+            return value;
+        }
+    }
+
+    /**
+     * receive an object read from the DB and return the same value or null depending on the original value in the DB
+     * and on the workbookConfig.nullValuesOverPrimitiveDetaultOnes property
+     *
+     * @param resultSet the result set from which check if the read value was null
+     * @param optDataTransformationFunction the optional DataTranformationFunction to apply to the read value
+     * @return true if the cell has to be invoke
+     * @throws SQLException if an error arise during ResultSet access operation
+     */
+    private boolean hasCellValueToBeSet(ResultSet resultSet,
+            Optional<DataTransformationFunction<?, ?>> optDataTransformationFunction) throws SQLException {
+
+        return !resultSet.wasNull()
+                || !workbookConfig.isNullValuesOverPrimitiveDetaultOnes()
+                || optDataTransformationFunction.isPresent();
     }
 }

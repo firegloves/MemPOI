@@ -42,6 +42,10 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
     public ExpectedException expectedEx = ExpectedException.none();
     private final String strValue = "terrrrribbblee!";
 
+    /*****************************************************************************
+     * SHOULD APPLY DATA TRANSFORMATION FUNCTIONS
+     ****************************************************************************/
+
     @Test
     public void shouldApplyStringDataTranformationFunctionIfSupplied() {
 
@@ -211,6 +215,241 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
     }
 
 
+    /*****************************************************************************
+     * NULL VALUES
+     ****************************************************************************/
+
+    @Test
+    public void givenANullValueReadByDBTheDateDataTranformationFunctionShouldReceiveNull() {
+
+        List<String> colNameList = Arrays.asList("creation_date", "dateTime", "STAMPONE", "attempato");
+
+        colNameList.forEach(colName -> {
+
+            try {
+                this.prepStmt = createNullValuesStatement();
+
+                MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                        .withColumnName(colName)
+                        .withDataTransformationFunction(new DateDataTransformationFunction<Integer>() {
+                            @Override
+                            public Integer transform(Date value) throws MempoiException {
+                                if (null != value) {
+                                    throw new MempoiException(
+                                            "data transformation function did not receive a null value");
+                                }
+                                return 5;
+                            }
+                        })
+                        .build();
+
+                MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt)
+                        .addMempoiColumnConfig(mempoiColumnConfig).build();
+
+                MemPOI memPOI = MempoiBuilder.aMemPOI().addMempoiSheet(mempoiSheet).build();
+
+                memPOI.prepareMempoiReportToByteArray().get();
+
+            } catch (Exception e) {
+                AssertionHelper.failAssertion(e);
+            }
+        });
+    }
+
+    @Test
+    public void givenANullValueReadByDBTheBooleanDataTranformationFunctionShouldReceivePrimitiveDefault() {
+
+        List<String> colNameList = Arrays.asList("valid", "bitTwo");
+
+        colNameList.forEach(colName -> {
+
+            try {
+                this.prepStmt = createNullValuesStatement();
+
+                MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                        .withColumnName(colName)
+                        .withDataTransformationFunction(new BooleanDataTransformationFunction<Integer>() {
+                            @Override
+                            public Integer transform(Boolean value) throws MempoiException {
+                                if (value) {
+                                    throw new MempoiException(
+                                            "boolean data transformation function did not receive primitive default value");
+                                }
+                                return 5;
+                            }
+                        })
+                        .build();
+
+                MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt)
+                        .addMempoiColumnConfig(mempoiColumnConfig).build();
+
+                MemPOI memPOI = MempoiBuilder.aMemPOI().addMempoiSheet(mempoiSheet).build();
+
+                memPOI.prepareMempoiReportToByteArray().get();
+
+            } catch (Exception e) {
+                AssertionHelper.failAssertion(e);
+            }
+        });
+    }
+
+    @Test
+    public void givenANullValueReadByDBTheBooleanDataTranformationFunctionShouldReceiveNullIfNullValuesOverPrimitiveDetaultOnes() {
+
+        List<String> colNameList = Arrays.asList("valid", "bitTwo");
+
+        colNameList.forEach(colName -> {
+
+            try {
+                this.prepStmt = createNullValuesStatement();
+
+                MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                        .withColumnName(colName)
+                        .withDataTransformationFunction(new BooleanDataTransformationFunction<Integer>() {
+                            @Override
+                            public Integer transform(Boolean value) throws MempoiException {
+                                if (null != value) {
+                                    throw new MempoiException(
+                                            "boolean data transformation function did not receive null value");
+                                }
+                                return 5;
+                            }
+                        })
+                        .build();
+
+                MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt)
+                        .addMempoiColumnConfig(mempoiColumnConfig).build();
+
+                MemPOI memPOI = MempoiBuilder.aMemPOI().addMempoiSheet(mempoiSheet)
+                        .withNullValuesOverPrimitiveDetaultOnes(true).build();
+
+                memPOI.prepareMempoiReportToByteArray().get();
+
+            } catch (Exception e) {
+                AssertionHelper.failAssertion(e);
+            }
+        });
+    }
+
+    @Test
+    public void givenANullValueReadByDBTheStringDataTranformationFunctionShouldReceiveNullValue() {
+
+        List<String> colNameList = Arrays.asList("name", "usefulChar");
+
+        colNameList.forEach(colName -> {
+
+            try {
+                this.prepStmt = createNullValuesStatement();
+
+                MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                        .withColumnName(colName)
+                        .withDataTransformationFunction(new StringDataTransformationFunction<Integer>() {
+                            @Override
+                            public Integer transform(String value) throws MempoiException {
+                                if (null != value) {
+                                    throw new MempoiException(
+                                            "string data transformation function did not receive a null value");
+                                }
+                                return 5;
+                            }
+                        })
+                        .build();
+
+                MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt)
+                        .addMempoiColumnConfig(mempoiColumnConfig).build();
+
+                MemPOI memPOI = MempoiBuilder.aMemPOI().addMempoiSheet(mempoiSheet)
+                        .withNullValuesOverPrimitiveDetaultOnes(true).build();
+
+                memPOI.prepareMempoiReportToByteArray().get();
+
+            } catch (Exception e) {
+                AssertionHelper.failAssertion(e);
+            }
+        });
+    }
+
+    @Test
+    public void givenANullValueReadByDBTheDoubleDataTranformationFunctionShouldReceivePrimitiveDefault() {
+
+        List<String> colNameList = Arrays
+                .asList("decimalOne", "doublone", "floattone", "interao", "mediano", "interuccio");
+
+        colNameList.forEach(colName -> {
+
+            try {
+                this.prepStmt = createNullValuesStatement();
+
+                MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                        .withColumnName(colName)
+                        .withDataTransformationFunction(new DoubleDataTransformationFunction<String>() {
+                            @Override
+                            public String transform(Double value) throws MempoiException {
+                                if (value != 0d) {
+                                    throw new MempoiException(
+                                            "double data transformation function did not receive primitive value");
+                                }
+                                return strValue;
+                            }
+                        })
+                        .build();
+
+                MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt)
+                        .addMempoiColumnConfig(mempoiColumnConfig).build();
+
+                MemPOI memPOI = MempoiBuilder.aMemPOI().addMempoiSheet(mempoiSheet).build();
+
+                memPOI.prepareMempoiReportToByteArray().get();
+
+            } catch (Exception e) {
+                AssertionHelper.failAssertion(e);
+            }
+        });
+    }
+
+    @Test
+    public void givenANullValueReadByDBTheDoubleDataTranformationFunctionShouldReceiveNullIfNullValuesOverPrimitiveDetaultOnesIsTrue() {
+
+        List<String> colNameList = Arrays
+                .asList("decimalOne", "doublone", "floattone", "interao", "mediano", "interuccio");
+
+        colNameList.forEach(colName -> {
+
+            try {
+                this.prepStmt = createNullValuesStatement();
+
+                MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                        .withColumnName(colName)
+                        .withDataTransformationFunction(new DoubleDataTransformationFunction<String>() {
+                            @Override
+                            public String transform(Double value) throws MempoiException {
+                                if (null != value) {
+                                    throw new MempoiException(
+                                            "data transformation function did not receive a null value");
+                                }
+                                return strValue;
+                            }
+                        })
+                        .build();
+
+                MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt)
+                        .addMempoiColumnConfig(mempoiColumnConfig).build();
+
+                MemPOI memPOI = MempoiBuilder.aMemPOI().addMempoiSheet(mempoiSheet)
+                        .withNullValuesOverPrimitiveDetaultOnes(true).build();
+
+                memPOI.prepareMempoiReportToByteArray().get();
+
+            } catch (Exception e) {
+                AssertionHelper.failAssertion(e);
+            }
+        });
+    }
+
+    /*****************************************************************************
+     * OTHERS
+     ****************************************************************************/
+
     @Test
     public void shouldNOTApplyTheDataTranformationFunctionIfSuppliedWithWrongColumnName() throws Exception {
 
@@ -262,11 +501,22 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
     }
 
 
+    /*****************************************************************************
+     * UTILITIES
+     ****************************************************************************/
+
+
     @Override
     public PreparedStatement createStatement() throws SQLException {
         return this.conn.prepareStatement(
                 this.createQuery(TestHelper.TABLE_EXPORT_TEST, TestHelper.COLUMNS_2, TestHelper.HEADERS_2, -1));
     }
+
+    public PreparedStatement createNullValuesStatement() throws SQLException {
+        return this.conn.prepareStatement(
+                this.createQuery(TestHelper.TABLE_NULL_VALUES, TestHelper.COLUMNS_2, TestHelper.HEADERS_2, 100));
+    }
+
 
     /**
      * opens the received generated xlsx file and applies generic asserts

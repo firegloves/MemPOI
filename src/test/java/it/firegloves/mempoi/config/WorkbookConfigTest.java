@@ -5,6 +5,7 @@
 package it.firegloves.mempoi.config;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
@@ -48,8 +49,9 @@ public class WorkbookConfigTest {
     public void workbookConfigConstructor() {
 
         MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet().withSheetName("test").withPrepStmt(prepStmt).build();
-        WorkbookConfig config = new WorkbookConfig(this.subFooter, this.footer, this.wb, true, true, Collections.singletonList(sheet), new File(fileName), mempoiEncryption);
-        this.assertWorkbookConfig(config);
+        WorkbookConfig config = new WorkbookConfig(this.subFooter, this.footer, this.wb, true, true,
+                Collections.singletonList(sheet), new File(fileName), mempoiEncryption, true);
+        this.assertWorkbookConfig(config, true);
     }
 
     @Test
@@ -67,7 +69,7 @@ public class WorkbookConfigTest {
                 .setMempoiEncryption(mempoiEncryption);
 //                .setSxssfRowManager(new SXSSFRowManager(50));
 
-        this.assertWorkbookConfig(config);
+        this.assertWorkbookConfig(config, false);
     }
 
 
@@ -76,7 +78,7 @@ public class WorkbookConfigTest {
      *
      * @param config
      */
-    private void assertWorkbookConfig(WorkbookConfig config) {
+    private void assertWorkbookConfig(WorkbookConfig config, boolean nullValuesOverPrimitiveDetaultOnes) {
 
         assertEquals(this.subFooter, config.getMempoiSubFooter());
         assertEquals(this.footer, config.getMempoiFooter());
@@ -87,5 +89,10 @@ public class WorkbookConfigTest {
         assertEquals(1, config.getSheetList().size());
         assertEquals(this.fileName, config.getFile().getName());
         assertEquals(this.password, config.getMempoiEncryption().getPassword());
+        if (nullValuesOverPrimitiveDetaultOnes) {
+            assertTrue(config.isNullValuesOverPrimitiveDetaultOnes());
+        } else {
+            assertFalse(config.isNullValuesOverPrimitiveDetaultOnes());
+        }
     }
 }
