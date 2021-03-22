@@ -1,3 +1,7 @@
+/**
+ * this class is meant to be run manually to analyze performances
+ */
+
 package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.MemPOI;
@@ -15,6 +19,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -22,6 +27,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class SpeedIT extends IntegrationBaseIT {
 
     // in order to run tests you need to first run DBPopulator's main method

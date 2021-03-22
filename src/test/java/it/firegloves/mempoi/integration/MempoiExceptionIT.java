@@ -11,6 +11,7 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class MempoiExceptionIT extends IntegrationBaseIT {
 
@@ -76,12 +77,13 @@ public class MempoiExceptionIT extends IntegrationBaseIT {
                 .build();
 
         try {
-            memPOI.prepareMempoiReportToFile().join();
+            memPOI.prepareMempoiReportToByteArray().join();
         } catch (CompletionException e) {
             try {
                 assertEquals("Exception cause is a MempoiException", MempoiException.class, e.getCause().getClass());
             } catch (Throwable throwable) {
-                throwable.printStackTrace();
+                e.printStackTrace();
+                fail();
             }
         }
 

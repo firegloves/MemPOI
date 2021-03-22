@@ -4,32 +4,49 @@
 
 package it.firegloves.mempoi.testutil;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.*;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataField;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataFields;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageField;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageFields;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertArrayEquals;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFPivotTable;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFTable;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataField;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTDataFields;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageField;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTPageFields;
 
 public class AssertionHelper {
 
@@ -326,11 +343,11 @@ public class AssertionHelper {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowPivotTable(rs, sheet.getRow(r), columns, styleTemplate, wb);
+                validateGeneratedFileDataRowPivotTable(rs, sheet.getRow(r), headers, styleTemplate, wb);
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
@@ -361,18 +378,20 @@ public class AssertionHelper {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRow(rs, sheet.getRow(r), columns, styleTemplate, wb);
+                validateGeneratedFileDataRow(rs, sheet.getRow(r), headers, styleTemplate, wb);
             }
 
             // validate subfooter cell formula
             if (!StringUtils.isEmpty(subfooterCellFormula)) {
-                validateSubfooterFormula(sheet.getRow(TestHelper.MAX_ROWS + 1), TestHelper.COLUMNS.length - 1, subfooterCellFormula);
+                validateSubfooterFormula(sheet.getRow(TestHelper.MAX_ROWS + 1), TestHelper.COLUMNS.length - 1,
+                        subfooterCellFormula);
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
+
 
 
     /**
@@ -408,7 +427,7 @@ public class AssertionHelper {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
@@ -419,36 +438,41 @@ public class AssertionHelper {
      *
      * @param rs            the ResultSet against which validate the Row
      * @param row           the Row to validate against the ResultSet
-     * @param columns       the array of columns name, useful to retrieve data from the ResultSet
+     * @param headers       the array of columns name, useful to retrieve data from the ResultSet
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    public static void validateGeneratedFileDataRow(ResultSet rs, Row row, String[] columns, StyleTemplate styleTemplate, Workbook wb) {
+    public static void validateGeneratedFileDataRow(ResultSet rs, Row row, String[] headers, StyleTemplate styleTemplate, Workbook wb) {
 
         try {
-            assertEquals(rs.getInt(columns[0]), (int) row.getCell(0).getNumericCellValue());
-            assertEquals(rs.getDate(columns[1]), row.getCell(1).getDateCellValue());
-            assertEquals(rs.getDate(columns[2]), row.getCell(2).getDateCellValue());
-            assertEquals(rs.getDate(columns[3]), row.getCell(3).getDateCellValue());
-            assertEquals(rs.getString(columns[4]), row.getCell(4).getStringCellValue());
-            assertEquals(rs.getBoolean(columns[5]), row.getCell(5).getBooleanCellValue());
-            assertEquals(rs.getString(columns[6]), row.getCell(6).getStringCellValue());
-            assertEquals(rs.getDouble(columns[7]), row.getCell(7).getNumericCellValue(), 0);
+            assertEquals(rs.getInt(headers[0]), (int) row.getCell(0).getNumericCellValue());
+            assertEquals(rs.getDate(headers[1]).getTime(), row.getCell(1).getDateCellValue().getTime());
+            assertEquals(rs.getTimestamp(headers[2]).getTime(), row.getCell(2).getDateCellValue().getTime());
+            assertEquals(rs.getTimestamp(headers[3]).getTime(), row.getCell(3).getDateCellValue().getTime());
+            assertEquals(rs.getString(headers[4]), row.getCell(4).getStringCellValue());
+            assertEquals(rs.getBoolean(headers[5]), row.getCell(5).getBooleanCellValue());
+            assertEquals(rs.getString(headers[6]), row.getCell(6).getStringCellValue());
+            assertEquals(rs.getDouble(headers[7]), row.getCell(7).getNumericCellValue(), 0);
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
                 AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
+                AssertionHelper
+                        .validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper
+                        .validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper
+                        .validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper
+                        .validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
+
 
 
     /**
@@ -456,19 +480,19 @@ public class AssertionHelper {
      *
      * @param rs            the ResultSet against which validate the Row
      * @param row           the Row to validate against the ResultSet
-     * @param columns       the array of columns name, useful to retrieve data from the ResultSet
+     * @param headers       the array of columns name, useful to retrieve data from the ResultSet
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    public static void validateGeneratedFileDataRowPivotTable(ResultSet rs, Row row, String[] columns, StyleTemplate styleTemplate, Workbook wb) {
+    public static void validateGeneratedFileDataRowPivotTable(ResultSet rs, Row row, String[] headers, StyleTemplate styleTemplate, Workbook wb) {
 
         try {
-            assertEquals(rs.getString(columns[0]), row.getCell(0).getStringCellValue());
-            assertEquals(rs.getString(columns[1]), row.getCell(1).getStringCellValue());
-            assertEquals(rs.getInt(columns[2]), row.getCell(2).getNumericCellValue(), 0.1);
-            assertEquals(rs.getString(columns[3]), row.getCell(3).getStringCellValue());
-            assertEquals(rs.getFloat(columns[4]), row.getCell(4).getNumericCellValue(), 0.1);
-            assertEquals(rs.getString(columns[5]), row.getCell(5).getStringCellValue());
+            assertEquals(rs.getString(headers[0]), row.getCell(0).getStringCellValue());
+            assertEquals(rs.getString(headers[1]), row.getCell(1).getStringCellValue());
+            assertEquals(rs.getInt(headers[2]), row.getCell(2).getNumericCellValue(), 0.1);
+            assertEquals(rs.getString(headers[3]), row.getCell(3).getStringCellValue());
+            assertEquals(rs.getFloat(headers[4]), row.getCell(4).getNumericCellValue(), 0.1);
+            assertEquals(rs.getString(headers[5]), row.getCell(5).getStringCellValue());
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
                 AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
@@ -479,7 +503,7 @@ public class AssertionHelper {
                 AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
@@ -499,32 +523,34 @@ public class AssertionHelper {
             while (rs.next()) {
                 try {
                     Row row = s.getRow(i);
-                    assertEquals(rs.getInt(TestHelper.COLUMNS_2[0]), (int) row.getCell(0).getNumericCellValue());
-                    assertEquals(rs.getDate(TestHelper.COLUMNS_2[1]), row.getCell(1).getDateCellValue());
-                    assertEquals(rs.getDate(TestHelper.COLUMNS_2[2]), row.getCell(2).getDateCellValue());
-                    assertEquals(rs.getDate(TestHelper.COLUMNS_2[3]), row.getCell(3).getDateCellValue());
-                    assertEquals(rs.getString(TestHelper.COLUMNS_2[4]), row.getCell(4).getStringCellValue());
-                    assertEquals(rs.getBoolean(TestHelper.COLUMNS_2[5]), row.getCell(5).getBooleanCellValue());
-                    assertEquals(rs.getString(TestHelper.COLUMNS_2[6]), row.getCell(6).getStringCellValue());
-                    assertEquals(rs.getDouble(TestHelper.COLUMNS_2[7]), row.getCell(7).getNumericCellValue(), 0.1);
-                    assertEquals(rs.getBoolean(TestHelper.COLUMNS_2[8]), row.getCell(8).getBooleanCellValue());
-                    assertEquals(rs.getDouble(TestHelper.COLUMNS_2[9]), row.getCell(9).getNumericCellValue(), 0.1);
-                    assertEquals(rs.getFloat(TestHelper.COLUMNS_2[10]), row.getCell(10).getNumericCellValue(), 0.1);
-                    assertEquals(rs.getInt(TestHelper.COLUMNS_2[11]), (int) row.getCell(11).getNumericCellValue(), 0.1);
-                    assertEquals(rs.getInt(TestHelper.COLUMNS_2[12]), (int) row.getCell(12).getNumericCellValue(), 0.1);
-                    assertEquals(rs.getTime(TestHelper.COLUMNS_2[13]), row.getCell(13).getDateCellValue());
-                    assertEquals(rs.getInt(TestHelper.COLUMNS_2[14]), (int) row.getCell(14).getNumericCellValue());
+                    assertEquals(rs.getInt(TestHelper.HEADERS_2[0]), (int) row.getCell(0).getNumericCellValue());
+                    assertEquals(rs.getDate(TestHelper.HEADERS_2[1]), row.getCell(1).getDateCellValue());
+                    assertEquals(rs.getTimestamp(TestHelper.HEADERS_2[2]).getTime(), row.getCell(2).getDateCellValue().getTime());
+                    assertEquals(rs.getTimestamp(TestHelper.HEADERS_2[3]).getTime(), row.getCell(3).getDateCellValue().getTime());
+                    assertEquals(rs.getString(TestHelper.HEADERS_2[4]), row.getCell(4).getStringCellValue());
+                    assertEquals(rs.getBoolean(TestHelper.HEADERS_2[5]), row.getCell(5).getBooleanCellValue());
+                    assertEquals(rs.getString(TestHelper.HEADERS_2[6]), row.getCell(6).getStringCellValue());
+                    assertEquals(rs.getDouble(TestHelper.HEADERS_2[7]), row.getCell(7).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getBoolean(TestHelper.HEADERS_2[8]), row.getCell(8).getBooleanCellValue());
+                    assertEquals(rs.getDouble(TestHelper.HEADERS_2[9]), row.getCell(9).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getFloat(TestHelper.HEADERS_2[10]), row.getCell(10).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getInt(TestHelper.HEADERS_2[11]), (int) row.getCell(11).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getInt(TestHelper.HEADERS_2[12]), (int) row.getCell(12).getNumericCellValue(), 0.1);
+                    assertEquals(rs.getTime(TestHelper.HEADERS_2[13]), row.getCell(13).getDateCellValue());
+                    assertEquals(rs.getInt(TestHelper.HEADERS_2[14]), (int) row.getCell(14).getNumericCellValue());
 
                     i++;
 
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    failAssertion(e);
                 }
             }
 
             return i;
 
         } catch (Exception e) {
+            e.printStackTrace();
+            fail();
             throw new RuntimeException(e);
         }
     }
@@ -644,8 +670,20 @@ public class AssertionHelper {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            failAssertion(e);
         }
     }
 
+
+    public static void validateMempoiColumnConfig(MempoiColumnConfig expected, MempoiColumnConfig current) {
+
+        assertEquals(expected.getColumnName(), current.getColumnName());
+        assertEquals(expected.getDataTransformationFunction().get(), current.getDataTransformationFunction().get());
+    }
+
+    public static void failAssertion(Exception e) {
+        e.printStackTrace();
+        fail();
+        throw new RuntimeException(e);
+    }
 }

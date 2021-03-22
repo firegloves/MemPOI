@@ -17,7 +17,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.4.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.0'
 ```
 
 #### With Maven
@@ -26,19 +26,47 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.4.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
 </dependency>
 
 ```
 
 ---
 
-### What's new in 1.4.0
+### What's new in 1.5.0
 
-Debug mode has been replaced by SLF4J. Logback dependency has been removed leaving the logging configuration to the user, ensuring the maximum flexibility.
-Using version 1.4.0 will result in a compilation error for `setDebug()` and `withDebug()` statements.
-This MemPOI update contains only this new feature, if you don't need SLF4J you can still use the previous version.
-Thanks to [zaplatynski](https://github.com/zaplatynski)
+- Updated bundled Apache POI version to 5.0.0
+- NEW FUNCTIONALITY - [Column Configuration](#column-configuration)
+- NEW FUNCTIONALITY - [Per column cell style](#column-cell-style)
+- NEW FUNCTIONALITY - [Data transformation functions](#data-transformation-functions)
+- NEW FUNCTIONALITY - [Encryption](#encryption)
+- NEW FUNCTIONALITY - [Null values over primitives default ones](#null-values-over-primitives-default-ones)
+- Issue [12](https://github.com/firegloves/MemPOI/issues/12) fix related to the mapping of large numbers.
+
+---
+
+Main features index:
+
+[Basic usage](#basic-usage)
+[File VS byte array](#file-vs-byte-array)
+[Supported SQL data types](#supported-sql-data-types)
+[Column headers](#column-headers)
+[Multiple sheets](#multiple-sheets)
+[Adjust columns width](#adjust-columns-width)
+[Styles](#styles)
+[Footers and subfooters](#footers-and-subfooters)
+[Cell formulas](#cell-formulas)
+[Excel Table](#excel-table)
+[Excel Pivot Table](#excel-pivot-table)
+[Column Configuration](#column-configuration)
+[Column cell style](#column-cell-style)
+[Data transformation functions](#data-transformation-functions)
+[Encryption](#encryption)
+[Null values over primitives default ones](#null-values-over-primitives-default-ones)
+[Data post elaboration pipeline](#data-post-elaboration-pipeline)
+[Merged Regions](#merged-regions)
+[Force Generation](#force-generation)
+[Logging](#logging)
    
 ---
 
@@ -500,7 +528,159 @@ MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempo
 
 ---
 
-### Data elaboration pipeline
+### Column Configuration
+
+MemPOI 1.5 introduces the concept of column configuration, allowing the user to add some column specific configurations.
+The binding is made throughout column name and currently 2 configuration are supported: column cell style and data transformation functions
+
+Here is a basic example to create an empty column configuration for the column "name":
+
+```Java
+MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("name")
+        .build();
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+        .withPrepStmt(prepStmt)
+        .addMempoiColumnConfig(mempoiColumnConfig)
+        .build();
+```
+
+As you can see, you add your desired `MempoiColumnConfig`s to the `MempoiSheet`, then MemPOI at runtime will search for the column identified by the name supplied and apply to it the desired customizations.
+
+
+#### Column cell style
+
+Until v1.4 MemPOI applies cell styles basing on data type, since v1.5 you can supply custom cell styles that will be applied to particular columns.
+Look at the following example:
+
+```Java
+CellStyle nameColumnCellStyle = workbook.createCellStyle();
+        nameColumnCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        nameColumnCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName(MempoiColumnConfigTestHelper.COLUMN_NAME)
+        .withCellStyle(nameColumnCellStyle)
+        .build();
+```
+
+This will result in having the entire "name" column with an aqua background.
+
+---
+
+#### Data transformation functions
+
+In certain situations could be necessary to apply a transformation to the data read from the DB. For example, you could want to write a custom string if a null value is received or more simply you could want to map a data type to another one.
+To address these situations, MemPOI v1.5 introduces the data transformation functions, that rely on 4 principles:
+
+- bound to a specific column
+- supplied by the user
+- receives one of the Apache POI supported data types (`String`, `Double`, `Boolean`, `Date`) and returns the same type or another one of them
+- executed for each value of the selected column, just before the write to the Apache POI workbook operation
+
+MemPOI supplies 4 data transformation function types, reflecting the Apache POI supported data types:
+
+- `StringDataTransformationFunction` receives a String (data read from the DB and cast to String)
+- `DoubleDataTransformationFunction` receives a number (data read from the DB cast to Double)
+- `BooleanDataTransformationFunction` receives a Boolean (data read from the DB cast to Boolean)
+- `DateDataTransformationFunction` receives a Date (data read from the DB and cast to Date)
+
+A data transformation function can return whatever you want but in the set of Apache POI supported data, so again `String`, `Double`, `Boolean` or `Date`.
+
+In the example below, we are returning "NO NAME" if the value read by the column "name" is `null`.
+Please note that in order to receive `null` values inside data transformation functions you need to set [nullValuesOverPrimitiveDetaultOnes](#null-values-over-primitives-default-ones) to `true`.
+
+```Java
+MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("name")
+        .withDataTransformationFunction(new StringDataTransformationFunction<String>() {
+            @Override
+            public String transform(String value) throws MempoiException {
+                return null == value
+                    ? "NO NAME"
+                    : value;
+            }
+        })
+        .build();
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+        .withPrepStmt(prepStmt)
+        .addMempoiColumnConfig(mempoiColumnConfig)
+        .build();
+```
+
+In this example we are changing data type to Integer
+
+```Java
+MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("name")
+        .withDataTransformationFunction(new StringDataTransformationFunction<Integer>() {
+            @Override
+            public Integer transform(String value) throws MempoiException {
+                return 999;
+            }
+        })
+        .build();
+```
+
+Be aware that changing column data types could invalidate cell formulas, footers results, etc.
+
+---
+
+### Encryption
+
+Since v1.5 MemPOI supports workbook encryption, both for binary files and xml-based files.
+As shown in this example, to encrypt a document you have to supply at least the password, MemPOI will automatically apply the `EncryptionMode.agile`:
+
+```Java
+MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
+        .withPassword("my_password")
+        .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+        .withFile(fileDest)
+        .addMempoiSheet(new MempoiSheet(prepStmt))
+        .withMempoiEncryption(mempoiEncryption)
+        .build();
+```
+
+Optionally you can set the `EncryptionInfo` to use in the encryption process.
+When MemPOI receives an `EncryptionInfo`, it passes the information directly to the Apache POI API, without applying any customization to the encryption process.
+
+```Java
+MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
+        .withPassword("my_password")
+        .withEncryptionInfo(new EncryptionInfo(EncryptionMode.cryptoAPI)
+        .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+        .withFile(fileDest)
+        .addMempoiSheet(new MempoiSheet(prepStmt))
+        .withMempoiEncryption(mempoiEncryption)
+        .build();
+```
+
+MemPOI encryption relies on the Apache POI one, so it obeys every [rule defined by Apache POI APIs](https://poi.apache.org/encryption.html).
+
+---
+
+### Null values over primitives default ones
+
+Apache POI receives primitive data type in its `Cell.setCellValue` when dealing with numbers and booleans, so passing a null value read from the DB to the cell will result in the primitive default value (0.0 for double, false for boolean and so on).
+MemPOI v1.5 introduces the possibility to keep `null` values when they are read from DB, by setting to true the property `nullValuesOverPrimitiveDetaultOnes` of the MemPOI object.
+In this case, the cell will be empty:
+
+```Java
+MempoiBuilder.aMemPOI()
+        .addMempoiSheet(new MempoiSheet(prepStmt))
+        .withNullValuesOverPrimitiveDetaultOnes(true)
+        .build();
+```
+
+---
+
+### Data post elaboration pipeline
 
 In some cases it's useful to have a way to make a data elaboration after the export file is generated. A good example could be the creation of <a href="https://poi.apache.org/components/spreadsheet/quick-guide.html#MergedCells">merged regions</a>.
 For this reason MemPOI introduces the `Data post elaboration system`. The main concept resides in the list of `MempoiColumnElaborationStep` added to the `MempoiColumn` class.
@@ -668,12 +848,12 @@ Thanks to [zaplatynski](https://github.com/zaplatynski)
 
 ### Apache POI version
 
-MemPOI comes with Apache POI 4.1.2 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+MemPOI comes with Apache POI 5.0.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.4.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.5.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -686,7 +866,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>

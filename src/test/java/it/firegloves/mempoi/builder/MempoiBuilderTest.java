@@ -1,7 +1,15 @@
 package it.firegloves.mempoi.builder;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.config.MempoiConfig;
+import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.NumberMinSubFooter;
@@ -14,6 +22,14 @@ import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
+import java.io.File;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -23,17 +39,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.io.File;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-
-import static org.junit.Assert.*;
 
 public class MempoiBuilderTest {
 
@@ -57,6 +62,7 @@ public class MempoiBuilderTest {
 
         String sheetName = "test name";
         String footerText = "test text";
+        String password = "pazzword";
 
         File fileDest = new File("file.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -64,6 +70,10 @@ public class MempoiBuilderTest {
         CellStyle headerCellStyle = workbook.createCellStyle();
         headerCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
         headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
+                .withPassword(password)
+                .build();
 
         MemPOI memPOI = MempoiBuilder.aMemPOI()
                 .withWorkbook(workbook)
@@ -76,6 +86,7 @@ public class MempoiBuilderTest {
                 .withMempoiSubFooter(new NumberSumSubFooter())
                 .withEvaluateCellFormulas(true)
                 .withMempoiFooter(new StandardMempoiFooter(workbook, footerText))
+                .withMempoiEncryption(mempoiEncryption)
                 .build();
 
         assertNotNull("MemPOIBuilder returns a not null MemPOI", memPOI);
@@ -103,6 +114,7 @@ public class MempoiBuilderTest {
         assertEquals("MemPOI footer text", footerText, memPOI.getWorkbookConfig().getMempoiFooter().getCenterText());
         assertTrue("MemPOI evaluateCellFormulas true", memPOI.getWorkbookConfig().isEvaluateCellFormulas());
         assertTrue("MemPOI evaluateCellFormulas true", memPOI.getWorkbookConfig().isHasFormulasToEvaluate());
+        assertEquals("MemPOI encryption password", password, memPOI.getWorkbookConfig().getMempoiEncryption().getPassword());
     }
 
 

@@ -30,7 +30,7 @@ public class WorkbookIT extends IntegrationBaseIT {
     @Test
     public void testWithHSSFWorkbook() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook.xls");
 
         try {
 

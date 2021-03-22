@@ -4,9 +4,20 @@
 
 package it.firegloves.mempoi.manager;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertNotNull;
+
 import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.testutil.EncryptionHelper;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Assert;
@@ -15,15 +26,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertNotNull;
 
 public class FileManagerTest {
 
@@ -41,7 +43,7 @@ public class FileManagerTest {
     }
 
     /******************************************************************************************************************
-     *                          writeFile
+     *                          createFinalFile
      *****************************************************************************************************************/
 
     @Test
@@ -176,5 +178,52 @@ public class FileManagerTest {
         } catch (Exception e) {
             throw e.getCause();
         }
+    }
+
+    /******************************************************************************************************************
+     *                          encryption
+     *****************************************************************************************************************/
+
+    @Test
+    public void shouldNOTEncryptFileIfNoEncryptionConfigIsSupplied() throws Exception {
+
+        File file = new File("temp.xlsx");
+        this.fileManager.createFinalFile(file);
+        Assert.assertFalse("file encrypted", EncryptionHelper.isEncrypted(file.getAbsolutePath()));
+        file.delete();
+    }
+
+    @Test
+    public void shouldCorrectlyEncryptBinaryFileIfEncryptionConfigIsSupplied() throws Exception {
+
+        MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
+                .withPassword("pass")
+                .build();
+        this.wbConfig = new WorkbookConfig()
+                .setWorkbook(new HSSFWorkbook())
+                .setMempoiEncryption(mempoiEncryption);
+        this.fileManager = new FileManager(this.wbConfig);
+
+        File file = new File("temp.xlsx");
+        this.fileManager.createFinalFile(file);
+        Assert.assertTrue("file encrypted", EncryptionHelper.isEncrypted(file.getAbsolutePath()));
+        file.delete();
+    }
+
+    @Test
+    public void shouldCorrectlyEncryptXmlBasedFileIfEncryptionConfigIsSupplied() throws Exception {
+
+        MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
+                .withPassword("pass")
+                .build();
+        this.wbConfig = new WorkbookConfig()
+                .setWorkbook(new SXSSFWorkbook())
+                .setMempoiEncryption(mempoiEncryption);
+        this.fileManager = new FileManager(this.wbConfig);
+
+        File file = new File("temp.xlsx");
+        this.fileManager.createFinalFile(file);
+        Assert.assertTrue("file encrypted", EncryptionHelper.isEncrypted(file.getAbsolutePath()));
+        file.delete();
     }
 }

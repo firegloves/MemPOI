@@ -5,8 +5,13 @@ package it.firegloves.mempoi.strategos;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,9 +20,6 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.ResultSet;
-import java.util.List;
 
 public class DataStrategos {
 
@@ -30,7 +32,6 @@ public class DataStrategos {
      */
     private WorkbookConfig workbookConfig;
 
-
     public DataStrategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
     }
@@ -41,7 +42,8 @@ public class DataStrategos {
      * @param sheet
      * @return the row couter updated
      */
-    protected int createHeaderRow(Sheet sheet, List<MempoiColumn> columnList, int rowCounter, MempoiStyler sheetReportStyler) {
+    protected int createHeaderRow(Sheet sheet, List<MempoiColumn> columnList, int rowCounter,
+            MempoiStyler sheetReportStyler) {
 
         Row row = sheet.createRow(rowCounter++);
 
@@ -65,19 +67,21 @@ public class DataStrategos {
 
         // adjust row height
         if (sheetReportStyler.getHeaderCellStyle() instanceof XSSFCellStyle) {
-            row.setHeightInPoints((float) ((XSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont().getFontHeightInPoints() + ROW_HEIGHT_PLUS);
+            row.setHeightInPoints((float) ((XSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont()
+                    .getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         } else {
-            row.setHeightInPoints((float) ((HSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
+            row.setHeightInPoints((float) ((HSSFCellStyle) sheetReportStyler.getHeaderCellStyle())
+                    .getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         }
 
         return rowCounter;
     }
 
-
     /**
      * creates data rows for the received Sheet and populates them with ResultSet data
-     * @param sheet the sheet to which add data rows
-     * @param rs the ResultSet from which read data to write in the Sheet
+     *
+     * @param sheet      the sheet to which add data rows
+     * @param rs         the ResultSet from which read data to write in the Sheet
      * @param columnList the List of MempoiColumn from which read the data configuration (data type, format, etc)
      * @param rowCounter the counter of the row to create/populate
      * @return the incremented row couter
@@ -85,6 +89,7 @@ public class DataStrategos {
     protected int createDataRows(Sheet sheet, ResultSet rs, List<MempoiColumn> columnList, int rowCounter) {
 
         int colListLen = columnList.size();
+        int rowIndex = 0;
 
         try {
             while (rs.next()) {
@@ -93,27 +98,43 @@ public class DataStrategos {
                 Row row = sheet.createRow(rowCounter++);
 
                 for (int i = 0; i < colListLen; i++) {
-                    MempoiColumn col = columnList.get(i);
+                    MempoiColumn mempoiColumn = columnList.get(i);
+
                     Cell cell = row.createCell(i);
 
                     if (!(sheet instanceof XSSFSheet)) {
-                        cell.setCellStyle(col.getCellStyle());
+                        cell.setCellStyle(mempoiColumn.getCellStyle());
                     }
 
-                    logger.debug("SETTING CELL FOR COLUMN {}", col.getColumnName());
+                    logger.debug("SETTING CELL FOR COLUMN {}", mempoiColumn.getColumnName());
 
-                    Object value = col.getRsAccessDataMethod().invoke(rs, col.getColumnName());
+                    Object value = mempoiColumn.getRsAccessDataMethod().invoke(rs, mempoiColumn.getColumnName());
+                    value = this.getValueOrNull(rs, value);
+
+                    Optional<DataTransformationFunction<?, ?>> optDataTransformationFunction = mempoiColumn
+                            .getMempoiColumnConfig().getDataTransformationFunction();
+
+                    Object cellValue;
+                    if (optDataTransformationFunction.isPresent()) {
+                        cellValue = optDataTransformationFunction.get().execute(value);
+                    } else {
+                        cellValue = value;
+                    }
 
                     // sets value in the cell
-                    col.getCellSetValueMethod().invoke(cell, value);
+                    if (hasCellValueToBeSet(rs, optDataTransformationFunction)) {
+                        mempoiColumn.getCellSetValueMethod().invoke(cell, cellValue);
+                    }
 
                     // analyze data for mempoi column's strategy
-                    col.elaborationStepListAnalyze(cell, value);
+                    mempoiColumn.elaborationStepListAnalyze(cell, cellValue);
+
+                    rowIndex++;
                 }
             }
 
             // close analysis on each MempoiColumn
-            int lastRowNum = rs.getRow() - 1;
+            int lastRowNum = rowIndex;
             columnList.forEach(mc -> mc.elaborationStepListCloseAnalysis(lastRowNum));
 
         } catch (Exception e) {
@@ -121,5 +142,41 @@ public class DataStrategos {
         }
 
         return rowCounter;
+    }
+
+
+    /**
+     * receive an object read from the DB and return the same value or null depending on the original value in the DB
+     * and on the workbookConfig.nullValuesOverPrimitiveDetaultOnes property
+     *
+     * @param resultSet the result set from which check if the read value was null
+     * @param value     the value read from the DB
+     * @return the same value or null
+     * @throws SQLException if an error arise during ResultSet access operation
+     */
+    private Object getValueOrNull(ResultSet resultSet, Object value) throws SQLException {
+
+        if (resultSet.wasNull() && workbookConfig.isNullValuesOverPrimitiveDetaultOnes()) {
+            return null;
+        } else {
+            return value;
+        }
+    }
+
+    /**
+     * receive an object read from the DB and return the same value or null depending on the original value in the DB
+     * and on the workbookConfig.nullValuesOverPrimitiveDetaultOnes property
+     *
+     * @param resultSet the result set from which check if the read value was null
+     * @param optDataTransformationFunction the optional DataTranformationFunction to apply to the read value
+     * @return true if the cell has to be invoke
+     * @throws SQLException if an error arise during ResultSet access operation
+     */
+    private boolean hasCellValueToBeSet(ResultSet resultSet,
+            Optional<DataTransformationFunction<?, ?>> optDataTransformationFunction) throws SQLException {
+
+        return !resultSet.wasNull()
+                || !workbookConfig.isNullValuesOverPrimitiveDetaultOnes()
+                || optDataTransformationFunction.isPresent();
     }
 }

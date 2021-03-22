@@ -1,0 +1,15 @@
+# to connect using a client ensure that driver properties allowPublicKeyRetrieval is set to true
+
+version: '3'
+
+services:
+
+  mysql-mempoi:
+    build: .
+    environment:
+      MYSQL_ROOT_PASSWORD: mempassword
+      MYSQL_DATABASE: mempoi
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql

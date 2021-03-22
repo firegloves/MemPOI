@@ -4,23 +4,24 @@
 
 package it.firegloves.mempoi.config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
+import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
+import java.io.File;
+import java.sql.PreparedStatement;
+import java.util.Collections;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.io.File;
-import java.sql.PreparedStatement;
-import java.util.Collections;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class WorkbookConfigTest {
 
@@ -29,6 +30,10 @@ public class WorkbookConfigTest {
     private MempoiFooter footer = new MempoiFooter(wb);
     private String fileName = "fileTest";
     private MempoiSheet sheet;
+    private String password = "pazzword";
+    private MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
+            .withPassword(password)
+            .build();
 
     @Mock
     private PreparedStatement prepStmt;
@@ -44,8 +49,9 @@ public class WorkbookConfigTest {
     public void workbookConfigConstructor() {
 
         MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet().withSheetName("test").withPrepStmt(prepStmt).build();
-        WorkbookConfig config = new WorkbookConfig(this.subFooter, this.footer, this.wb, true, true, Collections.singletonList(sheet), new File(fileName));
-        this.assertWorkbookConfig(config);
+        WorkbookConfig config = new WorkbookConfig(this.subFooter, this.footer, this.wb, true, true,
+                Collections.singletonList(sheet), new File(fileName), mempoiEncryption, true);
+        this.assertWorkbookConfig(config, true);
     }
 
     @Test
@@ -59,10 +65,11 @@ public class WorkbookConfigTest {
                 .setEvaluateCellFormulas(true)
                 .setHasFormulasToEvaluate(true)
                 .setSheetList(Collections.singletonList(sheet))
-                .setFile(new File(this.fileName));
+                .setFile(new File(this.fileName))
+                .setMempoiEncryption(mempoiEncryption);
 //                .setSxssfRowManager(new SXSSFRowManager(50));
 
-        this.assertWorkbookConfig(config);
+        this.assertWorkbookConfig(config, false);
     }
 
 
@@ -71,7 +78,7 @@ public class WorkbookConfigTest {
      *
      * @param config
      */
-    private void assertWorkbookConfig(WorkbookConfig config) {
+    private void assertWorkbookConfig(WorkbookConfig config, boolean nullValuesOverPrimitiveDetaultOnes) {
 
         assertEquals(this.subFooter, config.getMempoiSubFooter());
         assertEquals(this.footer, config.getMempoiFooter());
@@ -81,5 +88,11 @@ public class WorkbookConfigTest {
         assertTrue(config.isHasFormulasToEvaluate());
         assertEquals(1, config.getSheetList().size());
         assertEquals(this.fileName, config.getFile().getName());
+        assertEquals(this.password, config.getMempoiEncryption().getPassword());
+        if (nullValuesOverPrimitiveDetaultOnes) {
+            assertTrue(config.isNullValuesOverPrimitiveDetaultOnes());
+        } else {
+            assertFalse(config.isNullValuesOverPrimitiveDetaultOnes());
+        }
     }
 }

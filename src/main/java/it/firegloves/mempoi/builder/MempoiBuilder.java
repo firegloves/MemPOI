@@ -4,6 +4,7 @@ package it.firegloves.mempoi.builder;
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooter;
@@ -12,16 +13,15 @@ import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 public class MempoiBuilder {
 
@@ -59,10 +59,23 @@ public class MempoiBuilder {
     private CellStyle floatingPointCellStyle;
 
     /**
-     * by default MemPOI forces Excel to evaluate cell formulas when it opens the report
-     * but if this var is true MemPOI tries to evaluate cell formulas at runtime instead
+     * by default MemPOI forces Excel to evaluate cell formulas when it opens the report but if this var is true MemPOI
+     * tries to evaluate cell formulas at runtime instead
      */
     private boolean evaluateCellFormulas;
+
+    /**
+     * the encryption configuration for the report to generate
+     */
+    private MempoiEncryption mempoiEncryption;
+
+    /**
+     * if true - null values from DB are treated as null and not as primitive data types default
+     *      - poi cells are empty
+     *      - data transformation function receive null values instead of primitive default values
+     */
+    private boolean nullValuesOverPrimitiveDetaultOnes;
+
 
 
     /**
@@ -284,6 +297,26 @@ public class MempoiBuilder {
         return this;
     }
 
+    /**
+     * @param mempoiEncryption the Encryption configuration to apply to the generating document
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withMempoiEncryption(MempoiEncryption mempoiEncryption) {
+        this.mempoiEncryption = mempoiEncryption;
+        return this;
+    }
+
+
+    /**
+     * @param nullValuesOverPrimitiveDetaultOnes if true - null values from DB are treated as null and not as primitive data types default
+     *                                 - poi cells are empty
+     *                                 - data transformation functions receive nulls instead of primitive default values
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withNullValuesOverPrimitiveDetaultOnes(boolean nullValuesOverPrimitiveDetaultOnes) {
+        this.nullValuesOverPrimitiveDetaultOnes = nullValuesOverPrimitiveDetaultOnes;
+        return this;
+    }
 
     /**
      * build the MemPOI with the desired preferences
@@ -318,7 +351,9 @@ public class MempoiBuilder {
                 this.adjustColumnWidth,
                 this.evaluateCellFormulas,
                 this.mempoiSheetList,
-                this.file);
+                this.file,
+                this.mempoiEncryption,
+                this.nullValuesOverPrimitiveDetaultOnes);
 
         return new MemPOI(workbookConfig);
     }

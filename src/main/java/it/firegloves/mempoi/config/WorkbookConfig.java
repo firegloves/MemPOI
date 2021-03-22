@@ -3,6 +3,7 @@
  */
 package it.firegloves.mempoi.config;
 
+import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.FormulaSubFooter;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
@@ -66,12 +67,26 @@ public class WorkbookConfig {
      */
     private List<MempoiSheet> sheetList;
 
+    /**
+     * the encryption configuration for the report to generate
+     */
+    private MempoiEncryption mempoiEncryption;
+
+    /**
+     * if true - null values from DB are treated as null and not as primitive data types default
+     *      - poi cells are empty
+     *      - data transformation function receive null values instead of primitive default values
+     */
+    private boolean nullValuesOverPrimitiveDetaultOnes;
+
 
     public WorkbookConfig() {
     }
 
 
-    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook, boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList, File file) {
+    public WorkbookConfig(MempoiSubFooter mempoiSubFooter, MempoiFooter mempoiFooter, Workbook workbook,
+            boolean adjustColSize, boolean evaluateCellFormulas, List<MempoiSheet> sheetList, File file,
+            MempoiEncryption mempoiEncryption, boolean nullValuesOverPrimitiveDetaultOnes) {
         this.mempoiSubFooter = mempoiSubFooter;
         this.mempoiFooter = mempoiFooter;
         this.workbook = workbook;
@@ -79,6 +94,8 @@ public class WorkbookConfig {
         this.setEvaluateCellFormulas(evaluateCellFormulas);
         this.sheetList = sheetList;
         this.file = file;
+        this.mempoiEncryption = mempoiEncryption;
+        this.nullValuesOverPrimitiveDetaultOnes = nullValuesOverPrimitiveDetaultOnes;
     }
 
     /**

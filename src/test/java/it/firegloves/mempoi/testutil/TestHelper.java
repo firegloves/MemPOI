@@ -30,12 +30,14 @@ public class TestHelper {
     public static final String TABLE_SPEED_TEST = "`speed_test`";
     public static final String TABLE_MERGED_REGIONS = "`merged_regions_test`";
     public static final String TABLE_PIVOT_TABLE = "`pivot_table_test`";
+    public static final String TABLE_NULL_VALUES = "`null_values_test`";
 
     public static final String AREA_REFERENCE = "A1:F6";
     public static final String AREA_REFERENCE_2 = "H1:M6";
     public static final String AREA_REFERENCE_TABLE_DB_DATA = "A1:F101";
     public static final String TABLE_NAME = "nicetable";
     public static final String DISPLAY_TABLE_NAME = "nice_display_table";
+    public static final String BIG_NUMBERS_TABLE_NAME = "big_numbers";
 
     public static final String[] SUCCESSFUL_AREA_REFERENCES = {"A1:B5", "C1:C10", "C1:F1", "F10:A1"};
     public static final String[] FAILING_AREA_REFERENCES = {"A1:5B", "1A:B5", "A:B4", "A1:B", "A1B5", "A1:B5:C6", "", ":", "C1", "A-1:B5"};
@@ -64,6 +66,8 @@ public class TestHelper {
 
     public static final String[] COLUMNS_2 = {"id", "creation_date", "dateTime", "timeStamp", "name", "valid", "usefulChar", "decimalOne", "bitTwo", "doublone", "floattone", "interao", "mediano", "attempato", "interuccio"};
     public static final String[] HEADERS_2 = {"id", "creation_date", "dateTime", "STAMPONE", "name", "valid", "usefulChar", "decimalOne", "bitTwo", "doublone", "floattone", "interao", "mediano", "attempato", "interuccio"};
+
+    public static final String[] COLUMNS_BIG_NUMBERS = {"id", "big_number", "big_decimal", "max_big_int", "double", "double_precision", "numeric"};
 
     public static final String SUM_CELL_FORMULA = "SUM(H2:H11)";
     public static final String MAX_CELL_FORMULA = "MAX(H2:H11)";

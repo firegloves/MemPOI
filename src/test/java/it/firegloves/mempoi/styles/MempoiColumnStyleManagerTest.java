@@ -57,9 +57,9 @@ public class MempoiColumnStyleManagerTest {
       columnList.add(new MempoiColumn(Types.LONGVARCHAR, "col", 13));
       columnList.add(new MempoiColumn(Types.TIMESTAMP, "col", 14));
       columnList.add(new MempoiColumn(Types.DATE, "col", 15));
-      columnList.add(new MempoiColumn(Types.TIME, "col", 15));
-      columnList.add(new MempoiColumn(Types.BIT, "col", 16));
-      columnList.add(new MempoiColumn(Types.BOOLEAN, "col", 17));
+      columnList.add(new MempoiColumn(Types.TIME, "col", 16));
+      columnList.add(new MempoiColumn(Types.BIT, "col", 17));
+      columnList.add(new MempoiColumn(Types.BOOLEAN, "col", 18));
 
       when(reportStyler.getCommonDataCellStyle()).thenReturn(commonDataCellStyle);
       when(reportStyler.getDateCellStyle()).thenReturn(dateCellStyle);

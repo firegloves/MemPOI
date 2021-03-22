@@ -5,20 +5,24 @@
 package it.firegloves.mempoi.domain;
 
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
+import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
+import it.firegloves.mempoi.util.Errors;
+import java.lang.reflect.Method;
+import java.sql.ResultSet;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
-
-import java.lang.reflect.Method;
-import java.sql.ResultSet;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Data
 @Accessors(chain = true)
@@ -54,6 +58,15 @@ public class MempoiColumn {
      */
     private MempoiSubFooterCell subFooterCell;
 
+    public MempoiColumnConfig getMempoiColumnConfig() {
+        return mempoiColumnConfig;
+    }
+
+    /**
+     * contains the configuration of the current MempoiColumn
+     */
+    private MempoiColumnConfig mempoiColumnConfig;
+
 
     /**
      * pipeline pattern for elaborating MempoiColumn's data
@@ -83,7 +96,8 @@ public class MempoiColumn {
     private void setResultSetAccessMethod(EExportDataType type) {
 
         try {
-            this.rsAccessDataMethod = ResultSet.class.getMethod(type.getRsAccessDataMethodName(), type.getRsAccessParamClass());
+            this.rsAccessDataMethod = ResultSet.class
+                    .getMethod(type.getRsAccessDataMethodName(), type.getRsAccessParamClass());
         } catch (NoSuchMethodException e) {
             throw new MempoiException(e);
         }
@@ -111,6 +125,8 @@ public class MempoiColumn {
 
         switch (sqlObjType) {
 
+            case Types.BIGINT:
+                return EExportDataType.BIG_INTEGER;
             case Types.DOUBLE:
                 return EExportDataType.DOUBLE;
             case Types.DECIMAL:
@@ -121,7 +137,6 @@ public class MempoiColumn {
             case Types.INTEGER:
             case Types.SMALLINT:
             case Types.TINYINT:
-            case Types.BIGINT:
                 return EExportDataType.INT;
             case Types.CHAR:
             case Types.NCHAR:
@@ -141,6 +156,43 @@ public class MempoiColumn {
                 return EExportDataType.BOOLEAN;
             default:
                 throw new MempoiException("SQL TYPE NOT RECOGNIZED: " + sqlObjType);
+        }
+    }
+
+
+    /**
+     * basing on the received class type, returns the relative EExportDataType
+     */
+    private Optional<EExportDataType> getEExportDataTypeByParameterValue(Class<?> cellSetValueMethodParamClass) {
+
+        String simpleName = cellSetValueMethodParamClass.getSimpleName();
+
+        switch (simpleName) {
+
+            case "Double":
+            case "Long":
+            case "BigInteger":
+                return Optional.ofNullable(EExportDataType.DOUBLE);
+            case "Float":
+                return Optional.ofNullable(EExportDataType.FLOAT);
+            case "Integer":
+            case "Short":
+                return Optional.ofNullable(EExportDataType.INT);
+            case "String":
+            case "Character":
+                return Optional.ofNullable(EExportDataType.TEXT);
+            case "Time":
+            case "LocalDateTime":
+                return Optional.ofNullable(EExportDataType.TIME);
+            case "Timestamp":
+                return Optional.ofNullable(EExportDataType.TIMESTAMP);
+            case "Date":
+            case "LocalDate":
+                return Optional.ofNullable(EExportDataType.DATE);
+            case "Boolean":
+                return Optional.ofNullable(EExportDataType.BOOLEAN);
+            default:
+                throw new MempoiException("JAVA TYPE CLASS NOT RECOGNIZED: " + simpleName);
         }
     }
 
@@ -170,10 +222,59 @@ public class MempoiColumn {
     }
 
     /**
+     * sets and configure the required data to process the MempoiColumnConfig
+     *
+     * @param mempoiColumnConfig
+     * @param mempoiColumnStyleManager
+     * @return
+     */
+    public MempoiColumn setMempoiColumnConfig(MempoiColumnConfig mempoiColumnConfig, MempoiColumnStyleManager mempoiColumnStyleManager) {
+        this.mempoiColumnConfig = mempoiColumnConfig;
+
+        if (null != this.mempoiColumnConfig) {
+
+            this.mempoiColumnConfig.getDataTransformationFunction()
+                    //if user has supplied a list of transformation functions then apply configurations
+                    .ifPresent(dataTransformationFunction -> {
+
+
+                        // get transform method of the DataTransformationFunction selecting the one typed by the type
+                        // erasure. This is meant to avoid the Object function return type.
+                        Method functionMethod = Arrays
+                                .stream(dataTransformationFunction.getClass().getDeclaredMethods())
+                                .filter(method ->
+                                        DataTransformationFunction.TRANSFORM_METHOD_NAME.equals(method.getName()) &&
+                                                !method.getReturnType().getSimpleName().equals("Object"))
+                                .findFirst()
+                                .orElseThrow(() -> new MempoiException(
+                                        Errors.ERR_DATA_TRANSFORMATION_FUNCTION_METHOD_NOT_FOUND));
+
+                        // get the final step return data type
+                        EExportDataType eExportDataType = this
+                                .getEExportDataTypeByParameterValue(functionMethod.getReturnType())
+                                .orElseThrow(() -> new MempoiException(
+                                        Errors.ERR_DATA_TRANSFORMATION_FUNCTION_EEXPORTDATATYPE_NOT_FOUND));
+
+                        // set the export data type to be used to set the final cell value
+                        this.setCellSetValueMethod(eExportDataType);
+                        // set cell style basing of the new identified EExportDataType
+                        mempoiColumnStyleManager.setMempoiColumnCellStyle(this, eExportDataType);
+                    });
+
+            // TODO TEST THIS
+            if (null != mempoiColumnConfig.getCellStyle()) {
+                this.setCellStyle(mempoiColumnConfig.getCellStyle());
+            }
+        }
+
+        return this;
+    }
+
+    /**
      * applies pipeline elaboration steps (NOT SXSSF - after workbook creation)
      *
      * @param mempoiSheet the MempoiSheet from which gain informations
-     * @param workbook the Workbook from which get Sheet
+     * @param workbook    the Workbook from which get Sheet
      */
     public void elaborationStepListExecute(MempoiSheet mempoiSheet, Workbook workbook) {
         this.elaborationStepList.forEach(step -> step.execute(mempoiSheet, workbook));
