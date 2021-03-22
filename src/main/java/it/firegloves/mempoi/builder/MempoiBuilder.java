@@ -70,9 +70,9 @@ public class MempoiBuilder {
     private MempoiEncryption mempoiEncryption;
 
     /**
-     * if true => null values from DB are treated as null and not as primitive data types default
-     *      => poi cells are empty
-     *      => data transformation function receive null values instead of primitive default values
+     * if true - null values from DB are treated as null and not as primitive data types default
+     *      - poi cells are empty
+     *      - data transformation function receive null values instead of primitive default values
      */
     private boolean nullValuesOverPrimitiveDetaultOnes;
 
@@ -308,9 +308,9 @@ public class MempoiBuilder {
 
 
     /**
-     * @param nullValuesOverPrimitiveDetaultOnes if true => null values from DB are treated as null and not as primitive data types default
-     *                                 => poi cells are empty
-     *                                 => data transformation functions receive nulls instead of primitive default values
+     * @param nullValuesOverPrimitiveDetaultOnes if true - null values from DB are treated as null and not as primitive data types default
+     *                                 - poi cells are empty
+     *                                 - data transformation functions receive nulls instead of primitive default values
      * @return the current MempoiBuilder
      */
     public MempoiBuilder withNullValuesOverPrimitiveDetaultOnes(boolean nullValuesOverPrimitiveDetaultOnes) {

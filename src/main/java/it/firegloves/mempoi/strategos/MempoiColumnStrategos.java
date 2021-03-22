@@ -73,7 +73,7 @@ public class MempoiColumnStrategos {
 
         Map<String, MempoiColumnConfig> columnConfigMap = mempoiSheet.getColumnConfigMap();
 
-        // if a config exist in the map => set it in the relative mempoi column, otherwise set null
+        // if a config exist in the map - set it in the relative mempoi column, otherwise set null
         mempoiColumnList.forEach(mempoiColumn ->
                 mempoiColumn.setMempoiColumnConfig(
                         // get the one specified by the user

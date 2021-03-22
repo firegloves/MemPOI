@@ -4,7 +4,7 @@
  * To better explain the properties of this class let's use an example. In the code:
  * Date dateValue = resultSet.getDate("date_col_name")
  * These are the relative properties values:
- * rsAccessDataMethodName = "getDate" => to invoke the right method using the reflection
+ * rsAccessDataMethodName = "getDate" - to invoke the right method using the reflection
  * rsAccessParamClass = "String" because the method "getDate" accept a String (in this case "date_col_name")
  * rsReturnClass = Date because the invoked ResultSet's method return a Date object
  */

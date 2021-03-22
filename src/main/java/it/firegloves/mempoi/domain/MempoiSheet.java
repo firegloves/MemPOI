@@ -74,13 +74,13 @@ public class MempoiSheet {
      */
     private CellStyle floatingPointCellStyle;
 
-    // TODO remove Optional from variable => they should only be returned
+    // TODO remove Optional from variable - they should only be returned
     /**
      * the footer to apply to the sheet. if null no footer is appended to the report
      */
     private Optional<MempoiFooter> mempoiFooter = Optional.empty();
 
-    // TODO remove Optional from variable => they should only be returned
+    // TODO remove Optional from variable - they should only be returned
     /**
      * the sub footer to apply to the sheet. if null no sub footer is appended to the report
      */
@@ -102,13 +102,13 @@ public class MempoiSheet {
      */
     private Map<String, List<MempoiColumnElaborationStep>> dataElaborationStepMap = new HashMap<>();
 
-    // TODO remove Optional from variable => they should only be returned
+    // TODO remove Optional from variable - they should only be returned
     /**
      * a MempoTable containing data to build an optional Excel Table inside the current sheet
      */
     private Optional<MempoiTable> mempoiTable = Optional.empty();
 
-    // TODO remove Optional from variable => they should only be returned
+    // TODO remove Optional from variable - they should only be returned
     /**
      * a MempoPivotTable containing data to build an optional Excel PivotTable inside the current sheet
      */

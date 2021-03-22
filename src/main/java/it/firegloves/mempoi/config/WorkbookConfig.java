@@ -73,9 +73,9 @@ public class WorkbookConfig {
     private MempoiEncryption mempoiEncryption;
 
     /**
-     * if true => null values from DB are treated as null and not as primitive data types default
-     *      => poi cells are empty
-     *      => data transformation function receive null values instead of primitive default values
+     * if true - null values from DB are treated as null and not as primitive data types default
+     *      - poi cells are empty
+     *      - data transformation function receive null values instead of primitive default values
      */
     private boolean nullValuesOverPrimitiveDetaultOnes;
 
