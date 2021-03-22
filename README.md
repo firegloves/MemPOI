@@ -42,6 +42,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.0'
 - NEW FUNCTIONALITY - [Encryption](#encryption)
 - NEW FUNCTIONALITY - [Null values over primitives default ones](#null-values-over-primitives-default-ones)
 - Issue [12](https://github.com/firegloves/MemPOI/issues/12) fix related to the mapping of large numbers.
+- Special thanks to [mirkoPan](https://github.com/mirkoPan) who joined the MemPOI adventure as a permanent collaborator 
 
 ---
 
@@ -551,7 +552,7 @@ As you can see, you add your desired `MempoiColumnConfig`s to the `MempoiSheet`,
 
 #### Column cell style
 
-Until v1.4 MemPOI applies cell styles basing on data type, since v1.5 you can supply custom cell styles that will be applied to particular columns.
+Up to v1.4 MemPOI applies cell styles basing on data type, from v1.5 you can supply custom cell styles that will be applied to particular columns.
 Look at the following example:
 
 ```Java
@@ -571,25 +572,25 @@ This will result in having the entire "name" column with an aqua background.
 
 #### Data transformation functions
 
-In certain situations could be necessary to apply a transformation to the data read from the DB. For example, you could want to write a custom string if a null value is received or more simply you could want to map a data type to another one.
-To address these situations, MemPOI v1.5 introduces the data transformation functions, that rely on 4 principles:
+In certain situations could be necessary to apply a transformation to the data read from the DB. For example, you may want to write a custom string if a null value is received or more simply you may want to map a data type to another.
+To address these situations, MemPOI v1.5 introduces data transformation functions, that rely on 4 principles:
 
 - bound to a specific column
 - supplied by the user
 - receives one of the Apache POI supported data types (`String`, `Double`, `Boolean`, `Date`) and returns the same type or another one of them
 - executed for each value of the selected column, just before the write to the Apache POI workbook operation
 
-MemPOI supplies 4 data transformation function types, reflecting the Apache POI supported data types:
+MemPOI provides 4 types of data transformation functions, which reflect the data types supported by Apache POI:
 
 - `StringDataTransformationFunction` receives a String (data read from the DB and cast to String)
 - `DoubleDataTransformationFunction` receives a number (data read from the DB cast to Double)
 - `BooleanDataTransformationFunction` receives a Boolean (data read from the DB cast to Boolean)
 - `DateDataTransformationFunction` receives a Date (data read from the DB and cast to Date)
 
-A data transformation function can return whatever you want but in the set of Apache POI supported data, so again `String`, `Double`, `Boolean` or `Date`.
+A data transformation function can return whatever you want but in the set of data types supported by Apache POI, so again `String`, `Double`, `Boolean` or `Date`.
 
-In the example below, we are returning "NO NAME" if the value read by the column "name" is `null`.
-Please note that in order to receive `null` values inside data transformation functions you need to set [nullValuesOverPrimitiveDetaultOnes](#null-values-over-primitives-default-ones) to `true`.
+In the following example, we are returning "NO NAME" if the value read by the "name" column is `null`.
+Please note that in order to receive `null` values within data transformation functions you must set [nullValuesOverPrimitiveDetaultOnes](#null-values-over-primitives-default-ones) to `true`.
 
 ```Java
 MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
@@ -610,7 +611,7 @@ MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
         .build();
 ```
 
-In this example we are changing data type to Integer
+In the following example we are changing data type to Integer:
 
 ```Java
 MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
@@ -624,14 +625,14 @@ MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnC
         .build();
 ```
 
-Be aware that changing column data types could invalidate cell formulas, footers results, etc.
+Be aware that changing column data types may invalidate cell formulas, footers results, etc.
 
 ---
 
 ### Encryption
 
-Since v1.5 MemPOI supports workbook encryption, both for binary files and xml-based files.
-As shown in this example, to encrypt a document you have to supply at least the password, MemPOI will automatically apply the `EncryptionMode.agile`:
+Since v1.5 MemPOI supports encryption of workbooks, both for binary and xml-based files.
+As shown in this example, to encrypt a document you must provide at least the password, MemPOI will automatically apply the `EncryptionMode.agile`:
 
 ```Java
 MempoiEncryption mempoiEncryption = MempoiEncryption.MempoiEncryptionBuilder.aMempoiEncryption()
@@ -668,8 +669,8 @@ MemPOI encryption relies on the Apache POI one, so it obeys every [rule defined 
 ### Null values over primitives default ones
 
 Apache POI receives primitive data type in its `Cell.setCellValue` when dealing with numbers and booleans, so passing a null value read from the DB to the cell will result in the primitive default value (0.0 for double, false for boolean and so on).
-MemPOI v1.5 introduces the possibility to keep `null` values when they are read from DB, by setting to true the property `nullValuesOverPrimitiveDetaultOnes` of the MemPOI object.
-In this case, the cell will be empty:
+MemPOI v1.5 introduces the possibility to keep `null` values when read from DB, by setting the property `nullValuesOverPrimitiveDetaultOnes` of the MemPOI object to `true`.
+In this case, cells that read a `null` value from the DB will be blank:
 
 ```Java
 MempoiBuilder.aMemPOI()
