@@ -1,6 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 /gradle/
 !/gradle/wrapper
+/docs/
+!/docs/diagrams
+**/.DS_Store
 /.gradle/
 /.idea/
 /out/
