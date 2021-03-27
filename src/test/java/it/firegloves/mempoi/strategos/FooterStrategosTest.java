@@ -1,20 +1,19 @@
 package it.firegloves.mempoi.strategos;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 public class FooterStrategosTest {
 

@@ -9,6 +9,9 @@ import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.ForceGenerationHelper;
 import it.firegloves.mempoi.validator.AreaReferenceValidator;
 import it.firegloves.mempoi.validator.WorkbookValidator;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
@@ -16,10 +19,6 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
 
 public final class MempoiPivotTableBuilder {
 

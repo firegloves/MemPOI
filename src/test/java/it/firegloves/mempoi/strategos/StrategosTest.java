@@ -1,6 +1,12 @@
 package it.firegloves.mempoi.strategos;
 
-import it.firegloves.mempoi.config.MempoiConfig;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
@@ -9,16 +15,6 @@ import it.firegloves.mempoi.manager.FileManager;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,13 +22,14 @@ import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class StrategosTest {
 

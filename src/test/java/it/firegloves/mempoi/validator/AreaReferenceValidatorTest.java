@@ -4,15 +4,15 @@
 
 package it.firegloves.mempoi.validator;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.Arrays;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class AreaReferenceValidatorTest {
 

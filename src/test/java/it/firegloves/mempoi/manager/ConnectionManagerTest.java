@@ -4,18 +4,17 @@
 
 package it.firegloves.mempoi.manager;
 
-import it.firegloves.mempoi.exception.MempoiException;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.when;
 
+import it.firegloves.mempoi.exception.MempoiException;
 import java.lang.reflect.Constructor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class ConnectionManagerTest {
 

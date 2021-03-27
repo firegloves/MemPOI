@@ -1,5 +1,7 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
@@ -10,19 +12,16 @@ import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Test;
-
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
-
-import static org.junit.Assert.assertEquals;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Test;
 
 
 public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {

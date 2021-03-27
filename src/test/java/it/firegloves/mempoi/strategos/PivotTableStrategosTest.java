@@ -1,8 +1,10 @@
 package it.firegloves.mempoi.strategos;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import it.firegloves.mempoi.builder.MempoiPivotTableBuilder;
 import it.firegloves.mempoi.builder.MempoiTableBuilder;
-import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
@@ -10,22 +12,22 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFPivotTable;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFTable;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
-
-import static org.junit.Assert.*;
 
 public class PivotTableStrategosTest {
 

@@ -1,24 +1,23 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
-import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.concurrent.CompletableFuture;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.concurrent.CompletableFuture;
-
-import static org.junit.Assert.*;
 
 public class CommonIT extends IntegrationBaseIT {
 

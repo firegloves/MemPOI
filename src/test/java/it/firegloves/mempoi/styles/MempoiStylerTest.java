@@ -1,13 +1,10 @@
 package it.firegloves.mempoi.styles;
 
-import it.firegloves.mempoi.styles.template.*;
+import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class MempoiStylerTest {
 

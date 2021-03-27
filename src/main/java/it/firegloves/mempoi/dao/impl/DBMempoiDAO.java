@@ -3,17 +3,16 @@ package it.firegloves.mempoi.dao.impl;
 
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.exception.MempoiException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 public class DBMempoiDAO implements it.firegloves.mempoi.dao.MempoiDAO {
 

@@ -1,17 +1,23 @@
 package it.firegloves.mempoi.strategos;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
-import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -19,24 +25,10 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.IntStream;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 public class TableStrategosTest {
 

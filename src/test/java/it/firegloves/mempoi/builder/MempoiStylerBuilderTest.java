@@ -6,13 +6,12 @@ import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
+import java.util.Optional;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Optional;
 
 public class MempoiStylerBuilderTest {
 

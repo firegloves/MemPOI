@@ -12,15 +12,18 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.ForceGenerationHelper;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.PreparedStatement;
-import java.util.*;
 
 public final class MempoiSheetBuilder {
 

@@ -4,10 +4,9 @@
 
 package it.firegloves.mempoi.config;
 
-import org.junit.Test;
-
-import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+
+import org.junit.Test;
 
 public class MempoiConfigTest {
 

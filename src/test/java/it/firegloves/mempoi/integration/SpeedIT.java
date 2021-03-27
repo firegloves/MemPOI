@@ -4,6 +4,8 @@
 
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
@@ -15,17 +17,14 @@ import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
 import it.firegloves.mempoi.testutil.ConnectionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+import java.io.File;
+import java.util.concurrent.CompletableFuture;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.File;
-import java.util.concurrent.CompletableFuture;
-
-import static org.junit.Assert.assertEquals;
 
 @Ignore
 public class SpeedIT extends IntegrationBaseIT {

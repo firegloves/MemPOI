@@ -1,14 +1,13 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class FilePathIT extends IntegrationBaseIT {
 

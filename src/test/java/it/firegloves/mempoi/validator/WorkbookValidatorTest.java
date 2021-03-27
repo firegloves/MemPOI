@@ -4,20 +4,18 @@
 
 package it.firegloves.mempoi.validator;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.util.Errors;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
 
 public class WorkbookValidatorTest {
 

@@ -1,6 +1,18 @@
 package it.firegloves.mempoi.styles;
 
-import it.firegloves.mempoi.styles.template.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import it.firegloves.mempoi.styles.template.AquaStyleTemplate;
+import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
+import it.firegloves.mempoi.styles.template.PanegiriconStyleTemplate;
+import it.firegloves.mempoi.styles.template.PurpleStyleTemplate;
+import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
+import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
+import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
+import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -9,8 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.junit.Assert.*;
 
 public class StyleTemplateTest {
 

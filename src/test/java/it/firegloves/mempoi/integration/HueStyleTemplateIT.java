@@ -1,26 +1,37 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
-import it.firegloves.mempoi.styles.template.*;
+import it.firegloves.mempoi.styles.template.AquaStyleTemplate;
+import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
+import it.firegloves.mempoi.styles.template.PanegiriconStyleTemplate;
+import it.firegloves.mempoi.styles.template.PurpleStyleTemplate;
+import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
+import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
+import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
+import it.firegloves.mempoi.styles.template.StyleTemplate;
+import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.junit.Test;
-import org.mockito.Mock;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import static org.junit.Assert.assertEquals;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.junit.Test;
+import org.mockito.Mock;
 
 public class HueStyleTemplateIT extends IntegrationBaseIT {
 
