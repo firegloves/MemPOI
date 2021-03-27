@@ -280,7 +280,7 @@ public class PivotTableStrategosTest {
 
         MempoiSheet mempoiSheet = TestHelper.getMempoiSheetBuilder(wb, prepStmt)
                 .build()
-                .setSheet(sheet);;
+                .setSheet(sheet);
 
         this.pivotTableStrategos.manageMempoiPivotTable(mempoiSheet);
 
