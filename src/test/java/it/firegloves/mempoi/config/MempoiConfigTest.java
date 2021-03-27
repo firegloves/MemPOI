@@ -16,5 +16,6 @@ public class MempoiConfigTest {
     public void forceGenerationTestTrue() {
         MempoiConfig.getInstance().setForceGeneration(true);
         assertTrue(MempoiConfig.getInstance().isForceGeneration());
+        MempoiConfig.getInstance().setForceGeneration(false);
     }
 }

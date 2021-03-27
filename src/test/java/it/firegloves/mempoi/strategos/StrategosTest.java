@@ -6,6 +6,7 @@ import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.manager.FileManager;
+import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
@@ -104,15 +106,20 @@ public class StrategosTest {
     @Test
     public void applyMempoiColumnStrategiesNullColListForceGenerating() throws Exception {
 
-        when(mempoiSheet.getColumnList()).thenReturn(null);
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
-        MempoiConfig.getInstance().setForceGeneration(true);
+            try {
+                when(mempoiSheet.getColumnList()).thenReturn(null);
 
-        Strategos strategos = new Strategos(new WorkbookConfig());
+                Strategos strategos = new Strategos(new WorkbookConfig());
 
-        Method m = Strategos.class.getDeclaredMethod("applyMempoiColumnStrategies", MempoiSheet.class);
-        m.setAccessible(true);
-        m.invoke(strategos, mempoiSheet);
+                Method m = Strategos.class.getDeclaredMethod("applyMempoiColumnStrategies", MempoiSheet.class);
+                m.setAccessible(true);
+                m.invoke(strategos, mempoiSheet);
+            } catch (Exception e) {
+                fail();
+            }
+        });
     }
 
 
