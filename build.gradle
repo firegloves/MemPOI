@@ -105,7 +105,6 @@ jacocoTestReport {
         csv.enabled false
         html.enabled false
     }
-//    dependsOn test // tests are required to run before generating the report
 }
 
 jacocoTestCoverageVerification {
@@ -122,13 +121,6 @@ jacocoTestCoverageVerification {
 }
 
 check.dependsOn jacocoTestCoverageVerification
-
-jacoco {
-    toolVersion = "0.8.6"
-}
-
-//jacocoTestReport.mustRunAfter test
-//jacocoTestCoverageVerification.dependsOn jacocoTestReport
 
 extraArchive {
     sources = true

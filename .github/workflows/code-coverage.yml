@@ -1,17 +1,13 @@
-# This workflow will build a Java project with Gradle
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
-
-name: Build and Test
+name: Code coverage
 
 on:
-  pull_request:
+  push:
     branches:
       - master
-      - dev
 
 jobs:
-  # TEST
-  test:
+  # Code coverage
+  code-coverage:
     runs-on: ubuntu-latest
     steps:
       # checkout
@@ -23,7 +19,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      # mysql docker
       - name: DB Docker container
         run: |
           cd docker_data
@@ -41,9 +36,13 @@ jobs:
       # build and test
       - name: Build with Gradle
         run: ./gradlew clean build
-      # Publish test results
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
+      # generate jacoco
+      - name: Genereate jacoco test report
+        if: steps.set-is-master.outputs.IS_MASTER == 'true'
+        run: ./gradlew jacocoTestReport
+      # codacy coverage reporter
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
         with:
-          files: build/test-results/**/*.xml
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: build/reports/jacoco/test/jacocoTestReport.xml
