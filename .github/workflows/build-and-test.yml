@@ -48,18 +48,18 @@ jobs:
         with:
           files: build/test-results/**/*.xml
 
-#  # codacy code analysis
-#  codacy-code-analysis:
-#    name: Codacy Analysis CLI
-#    runs-on: ubuntu-latest
-#    steps:
-#      # checkout
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#      # code analysis
-#      - name: Run Codacy Analysis CLI
-#        uses: codacy/codacy-analysis-cli-action@master
-#        with:
-#          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-#          upload: true
-#          max-allowed-issues: 2147483647
+  # codacy code analysis
+  codacy-code-analysis:
+    name: Codacy Analysis CLI
+    runs-on: ubuntu-latest
+    steps:
+      # checkout
+      - name: Checkout code
+        uses: actions/checkout@v2
+      # code analysis
+      - name: Run Codacy Analysis CLI
+        uses: codacy/codacy-analysis-cli-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          upload: true
+          max-allowed-issues: 2147483647
