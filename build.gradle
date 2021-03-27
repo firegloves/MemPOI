@@ -10,8 +10,9 @@ buildscript {
 plugins {
     id 'java-library'
     id 'signing'
-    id 'io.codearte.nexus-staging' version '0.21.2'
-    id "io.freefair.lombok" version "5.1.0"
+    id 'io.codearte.nexus-staging' version '0.30.0'
+    id "io.freefair.lombok" version "5.3.0"
+    id 'jacoco'
 }
 
 apply plugin: 'com.bmuschko.nexus'
@@ -92,6 +93,42 @@ modifyPom {
         }
     }
 }
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        csv.enabled false
+        html.enabled false
+    }
+//    dependsOn test // tests are required to run before generating the report
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.7
+            }
+            failOnViolation true
+        }
+    }
+
+    dependsOn jacocoTestReport
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+jacoco {
+    toolVersion = "0.8.6"
+}
+
+//jacocoTestReport.mustRunAfter test
+//jacocoTestCoverageVerification.dependsOn jacocoTestReport
 
 extraArchive {
     sources = true
