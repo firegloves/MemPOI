@@ -24,10 +24,8 @@ public class MergedRegionsManagerTest {
     private Cell cell1, cell2, cell3, cell4;
     private MergedRegionsManager<String> mergedRegionsManager;
 
-    private Workbook workbook;
     private Sheet sheet;
     private CellStyle cellStyle;
-
 
     @Before
     public void beforeTest() {
@@ -39,9 +37,9 @@ public class MergedRegionsManagerTest {
         this.initCellRow(cell3, row3, 2, "fuck yeah");
         this.initCellRow(cell4, row4, 3, "oh wonderful");
 
-        this.workbook = new XSSFWorkbook();
-        this.sheet = this.workbook.createSheet();
-        this.cellStyle = this.workbook.createCellStyle();
+        Workbook workbook = new XSSFWorkbook();
+        this.sheet = workbook.createSheet();
+        this.cellStyle = workbook.createCellStyle();
     }
 
 

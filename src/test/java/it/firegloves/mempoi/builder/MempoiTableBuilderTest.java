@@ -73,7 +73,7 @@ public class MempoiTableBuilderTest {
                         constructor = wbTypeClass.getConstructor();
                         workbook = constructor.newInstance();
                     } catch (Exception e) {
-                        throw new RuntimeException();
+                        throw new MempoiException();
                     }
 
                     try {

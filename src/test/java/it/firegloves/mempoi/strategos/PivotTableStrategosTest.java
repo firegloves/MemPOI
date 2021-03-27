@@ -47,7 +47,7 @@ public class PivotTableStrategosTest {
         this.wb = new XSSFWorkbook();
         this.sheet = wb.createSheet();
         this.initSheet(this.sheet);
-        this.pivotTableStrategos = new PivotTableStrategos(new WorkbookConfig().setWorkbook(wb));
+        this.pivotTableStrategos = new PivotTableStrategos();
     }
 
     /**

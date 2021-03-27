@@ -27,17 +27,6 @@ public class PivotTableStrategos {
     private static final Logger logger = LoggerFactory.getLogger(PivotTableStrategos.class);
 
     /**
-     * contains the workbook configurations
-     */
-    private WorkbookConfig workbookConfig;
-
-
-    public PivotTableStrategos(WorkbookConfig workbookConfig) {
-        this.workbookConfig = workbookConfig;
-    }
-
-
-    /**
      * if needed, adds the Excel Table to the current sheet
      */
     public void manageMempoiPivotTable(MempoiSheet mempoiSheet) {

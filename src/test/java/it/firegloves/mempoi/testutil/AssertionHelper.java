@@ -15,6 +15,7 @@ import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import java.io.File;
@@ -551,7 +552,7 @@ public class AssertionHelper {
         } catch (Exception e) {
             e.printStackTrace();
             fail();
-            throw new RuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 
@@ -684,6 +685,6 @@ public class AssertionHelper {
     public static void failAssertion(Exception e) {
         e.printStackTrace();
         fail();
-        throw new RuntimeException(e);
+        throw new MempoiException(e);
     }
 }

@@ -3,6 +3,7 @@ package it.firegloves.mempoi.datapostelaboration.mergedregions;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.exception.MempoiException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,30 +25,26 @@ public class StreamApiMergedRegionsStepTest {
 
     private StreamApiMergedRegionsStep<String> step;
 
-    private SXSSFWorkbook workbook;
     private SXSSFSheet sheet;
-    private CellStyle cellStyle;
-    private MempoiSheet mempoiSheet;
-
-    private int colInd = 1;
-    private Method mergeRegionMethod;
 
     @Mock
     private PreparedStatement prepStmt;
 
-    private String[] cellValues = {"test", "fuck yeah", "fuck yeah", "oh wonderful"};
+    private final String[] cellValues = {"test", "fuck yeah", "fuck yeah", "oh wonderful"};
 
     @Before
     public void beforeTest() {
         MockitoAnnotations.initMocks(this);
 
-        this.mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt).withSheetName("test name").build();
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt).withSheetName("test name")
+                .build();
 
-        this.workbook = new SXSSFWorkbook();
-        this.sheet = this.workbook.createSheet(mempoiSheet.getSheetName());
-        this.cellStyle = this.workbook.createCellStyle();
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+        this.sheet = workbook.createSheet(mempoiSheet.getSheetName());
+        CellStyle cellStyle = workbook.createCellStyle();
 
-        this.step = new StreamApiMergedRegionsStep<>(this.cellStyle, this.colInd, this.workbook, this.mempoiSheet);
+        int colInd = 1;
+        this.step = new StreamApiMergedRegionsStep<>(cellStyle, colInd, workbook, mempoiSheet);
 
         for (int i = 0; i < 4; i++) {
             Row r = this.sheet.createRow(i);
@@ -87,29 +84,29 @@ public class StreamApiMergedRegionsStepTest {
     public void mergeRegionTest() {
 
         try {
-            this.mergeRegionMethod = StreamApiMergedRegionsStep.class.getDeclaredMethod("mergeRegion", Pair.class);
-            this.mergeRegionMethod.setAccessible(true);
+            Method mergeRegionMethod = StreamApiMergedRegionsStep.class.getDeclaredMethod("mergeRegion", Pair.class);
+            mergeRegionMethod.setAccessible(true);
 
-            this.mergeRegionMethod.invoke(this.step, new ImmutablePair<>(0, 1));
+            mergeRegionMethod.invoke(this.step, new ImmutablePair<>(0, 1));
             assertEquals("Merged regions num 1", 1, this.sheet.getNumMergedRegions());
 
-            this.mergeRegionMethod.invoke(this.step, new ImmutablePair<>(2, 5));
+            mergeRegionMethod.invoke(this.step, new ImmutablePair<>(2, 5));
             assertEquals("Merged regions num 2", 2, this.sheet.getNumMergedRegions());
 
-            this.mergeRegionMethod.invoke(this.step, new ImmutablePair<>(10, 5));
+            mergeRegionMethod.invoke(this.step, new ImmutablePair<>(10, 5));
             assertEquals("Merged regions num 2", 2, this.sheet.getNumMergedRegions());
 
-            this.mergeRegionMethod.invoke(this.step, new ImmutablePair<>(-4, -1));
+            mergeRegionMethod.invoke(this.step, new ImmutablePair<>(-4, -1));
             assertEquals("Merged regions num 2", 2, this.sheet.getNumMergedRegions());
 
-            this.mergeRegionMethod.invoke(this.step, new ImmutablePair<>(0, 0));
+            mergeRegionMethod.invoke(this.step, new ImmutablePair<>(0, 0));
             assertEquals("Merged regions num 2", 2, this.sheet.getNumMergedRegions());
 
-            this.mergeRegionMethod.invoke(this.step, new ImmutablePair<>(5, 5));
+            mergeRegionMethod.invoke(this.step, new ImmutablePair<>(5, 5));
             assertEquals("Merged regions num 2", 2, this.sheet.getNumMergedRegions());
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new MempoiException(e);
         }
     }
 

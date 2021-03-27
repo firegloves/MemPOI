@@ -33,7 +33,6 @@ public class NotStreamApiMergedRegionsStepTest {
 
     private int colInd = 1;
 
-    private Field mergedRegionsLimitsField;
     private List mergedRegionsLimits;
 
     @Mock
@@ -56,9 +55,10 @@ public class NotStreamApiMergedRegionsStepTest {
         this.step = new NotStreamApiMergedRegionsStep<>(this.cellStyle, this.colInd);
 
         try {
-            this.mergedRegionsLimitsField = NotStreamApiMergedRegionsStep.class.getDeclaredField("mergedRegionsLimits");
-            this.mergedRegionsLimitsField.setAccessible(true);
-            this.mergedRegionsLimits = (List) this.mergedRegionsLimitsField.get(this.step);
+            Field mergedRegionsLimitsField = NotStreamApiMergedRegionsStep.class
+                    .getDeclaredField("mergedRegionsLimits");
+            mergedRegionsLimitsField.setAccessible(true);
+            this.mergedRegionsLimits = (List) mergedRegionsLimitsField.get(this.step);
         } catch (Exception e) {
             e.printStackTrace();
         }
