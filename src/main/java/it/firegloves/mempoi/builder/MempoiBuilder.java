@@ -369,17 +369,27 @@ public class MempoiBuilder {
         // create the Optional of the MempoiStyler
         Optional<MempoiStyler> sheetStylerOpt = MempoiStylerBuilder.aMempoiStyler(this.workbook)
                 .withStyleTemplate(null != s.getStyleTemplate() ? s.getStyleTemplate() : this.styleTemplate)
-                .withCommonDataCellStyle(null != s.getCommonDataCellStyle() ? s.getCommonDataCellStyle() : this.commonDataCellStyle)
-                .withDateCellStyle(null != s.getDateCellStyle() ? s.getDateCellStyle() : this.dateCellStyle)
-                .withDatetimeCellStyle(null != s.getDatetimeCellStyle() ? s.getDatetimeCellStyle() : this.datetimeCellStyle)
-                .withHeaderCellStyle(null != s.getHeaderCellStyle() ? s.getHeaderCellStyle() : this.headerCellStyle)
-                .withIntegerCellStyle(null != s.getIntegerCellStyle() ? s.getIntegerCellStyle() : this.integerCellStyle)
-                .withFloatingPointCellStyle(null != s.getFloatingPointCellStyle() ? s.getFloatingPointCellStyle() : this.floatingPointCellStyle)
-                .withSubFooterCellStyle(null != s.getSubFooterCellStyle() ? s.getSubFooterCellStyle() : this.subFooterCellStyle)
+                .withCommonDataCellStyle(getFirstNotNullCellStyle(s.getCommonDataCellStyle(), this.commonDataCellStyle))
+                .withDateCellStyle(getFirstNotNullCellStyle(s.getDateCellStyle(), this.dateCellStyle))
+                .withDatetimeCellStyle(getFirstNotNullCellStyle(s.getDatetimeCellStyle(), this.datetimeCellStyle))
+                .withHeaderCellStyle(getFirstNotNullCellStyle(s.getHeaderCellStyle(), this.headerCellStyle))
+                .withIntegerCellStyle(getFirstNotNullCellStyle(s.getIntegerCellStyle(), this.integerCellStyle))
+                .withFloatingPointCellStyle(getFirstNotNullCellStyle(s.getFloatingPointCellStyle(), this.floatingPointCellStyle))
+                .withSubFooterCellStyle(getFirstNotNullCellStyle(s.getSubFooterCellStyle(), this.subFooterCellStyle))
                 .build();
 
         // configure the MempoiSheet with the constructed MempoiStyler or with a blank one in case of errors
         s.setSheetStyler(sheetStylerOpt.orElseGet(MempoiStyler::new));
+    }
+
+    /**
+     * if the first CellStyle is not null returns that one, otherwise the second one
+     * @param first the first CellStyle
+     * @param second the second CellStyle
+     * @return the first CellStyle if it is not null, otherwise the second one
+     */
+    private CellStyle getFirstNotNullCellStyle(CellStyle first, CellStyle second) {
+        return null != first ? first : second;
     }
 
 

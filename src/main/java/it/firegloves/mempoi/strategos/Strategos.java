@@ -56,7 +56,7 @@ public class Strategos {
     public Strategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
         this.tableStrategos = new TableStrategos(workbookConfig);
-        this.pivotTableStrategos = new PivotTableStrategos(workbookConfig);
+        this.pivotTableStrategos = new PivotTableStrategos();
         this.dataStrategos = new DataStrategos(workbookConfig);
         this.footerStrategos = new FooterStrategos(workbookConfig);
         this.fileManager = new FileManager(workbookConfig);

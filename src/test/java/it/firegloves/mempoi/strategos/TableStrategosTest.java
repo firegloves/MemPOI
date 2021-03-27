@@ -145,10 +145,10 @@ public class TableStrategosTest {
                         constructor = wbTypeClass.getConstructor();
                         workbook = constructor.newInstance();
                     } catch (Exception e) {
-                        throw new RuntimeException();
+                        throw new MempoiException();
                     }
 
-                    Sheet sheet = workbook.createSheet();
+                    workbook.createSheet();
                     MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                             .withPrepStmt(prepStmt)
                             .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
@@ -156,8 +156,7 @@ public class TableStrategosTest {
 
                     try {
                         tableStrategos.manageMempoiTable(mempoiSheet, TestHelper.getAreaReference(wb));
-                    } catch (Exception e) {
-                        assertTrue(e instanceof MempoiException);
+                    } catch (MempoiException e) {
                         assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
                     }
                 });

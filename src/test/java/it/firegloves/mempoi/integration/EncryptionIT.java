@@ -6,6 +6,7 @@ import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
@@ -112,13 +113,13 @@ public class EncryptionIT extends IntegrationBaseIT {
         Decryptor d = Decryptor.getInstance(info);
         try {
             if (!d.verifyPassword(password)) {
-                throw new RuntimeException("Unable to process: document is encrypted");
+                throw new MempoiException("Unable to process: document is encrypted");
             }
             InputStream dataStream = d.getDataStream(filesystem);
             return WorkbookFactory.create(dataStream);
 
         } catch (GeneralSecurityException ex) {
-            throw new RuntimeException("Unable to process encrypted document", ex);
+            throw new MempoiException("Unable to process encrypted document", ex);
         }
     }
 
