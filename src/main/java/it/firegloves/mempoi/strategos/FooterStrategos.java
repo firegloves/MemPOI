@@ -106,7 +106,7 @@ class FooterStrategos {
      * @param sheet the sheet to which append sub footer row
      * @param mempoiFooter MempoiFooter containing info about Footer to create
      */
-    void createFooterRow(Sheet sheet, MempoiFooter mempoiFooter) {
+    private void createFooterRow(Sheet sheet, MempoiFooter mempoiFooter) {
 
         if (null == sheet) {
             throw new MempoiException(Errors.ERR_SHEET_NULL);

@@ -253,7 +253,7 @@ public class MempoiSheetBuilderTest {
 
 
     @Test
-    public void mempoiSheetBuilder_withDataElaborationStepMap() {
+    public void mempoiSheetBuilderWithDataElaborationStepMap() {
 
         Map<String, List<MempoiColumnElaborationStep>> postElaborationStepMap = new HashMap<>();
 
@@ -267,7 +267,7 @@ public class MempoiSheetBuilderTest {
 
 
     @Test
-    public void mempoiSheetBuilder_withDataElaborationStep() {
+    public void mempoiSheetBuilderWithDataElaborationStep() {
 
         Workbook wb = new XSSFWorkbook();
         NotStreamApiMergedRegionsStep step = TestHelper.getNotStreamApiMergedRegionsStep(wb);
