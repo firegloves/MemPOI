@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 
 public class TableStrategos {
 
-    private static final Logger logger = LoggerFactory.getLogger(TableStrategos.class);
-
     /**
      * contains the workbook configurations
      */

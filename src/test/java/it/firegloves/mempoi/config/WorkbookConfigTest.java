@@ -51,7 +51,7 @@ public class WorkbookConfigTest {
         MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet().withSheetName("test").withPrepStmt(prepStmt).build();
         WorkbookConfig config = new WorkbookConfig(this.subFooter, this.footer, this.wb, true, true,
                 Collections.singletonList(sheet), new File(fileName), mempoiEncryption, true);
-        this.assertWorkbookConfig(config, true);
+        this.assertOnWorkbookConfig(config, true);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class WorkbookConfigTest {
                 .setMempoiEncryption(mempoiEncryption);
 //                .setSxssfRowManager(new SXSSFRowManager(50));
 
-        this.assertWorkbookConfig(config, false);
+        this.assertOnWorkbookConfig(config, false);
     }
 
 
@@ -78,7 +78,7 @@ public class WorkbookConfigTest {
      *
      * @param config
      */
-    private void assertWorkbookConfig(WorkbookConfig config, boolean nullValuesOverPrimitiveDetaultOnes) {
+    private void assertOnWorkbookConfig(WorkbookConfig config, boolean nullValuesOverPrimitiveDetaultOnes) {
 
         assertEquals(this.subFooter, config.getMempoiSubFooter());
         assertEquals(this.footer, config.getMempoiFooter());

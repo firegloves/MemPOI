@@ -29,7 +29,7 @@ class FooterStrategos {
      */
     private WorkbookConfig workbookConfig;
 
-    FooterStrategos(WorkbookConfig workbookConfig) {
+    public FooterStrategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
     }
 
@@ -63,7 +63,7 @@ class FooterStrategos {
      * @param rowCounter counter of the current row
      * @param reportStyler MempoiStyler containing style configuration
      */
-    void createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
+    private void createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
 
         if (null != mempoiSubFooter) {
 

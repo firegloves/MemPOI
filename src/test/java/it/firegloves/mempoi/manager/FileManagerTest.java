@@ -59,25 +59,25 @@ public class FileManagerTest {
     }
 
     @Test(expected = MempoiException.class)
-    public void writeFileTest_nullWorkbook() {
+    public void writeFileTestNullWorkbook() {
 
         new FileManager(new WorkbookConfig()).createFinalFile(new File("/not_existing/temp.xlsx"));
     }
 
     @Test(expected = MempoiException.class)
-    public void writeFileTest_invalidFilePath() throws Throwable {
+    public void writeFileTestInvalidFilePath() {
 
         this.fileManager.createFinalFile(new File("/not_existing/temp.xlsx"));
     }
 
     @Test(expected = MempoiException.class)
-    public void writeFileTest_invalidFilePathAndNullWorkbook() {
+    public void writeFileTestInvalidFilePathAndNullWorkbook() {
 
         this.fileManager.createFinalFile(new File("/not_existing/temp.xlsx"));
     }
 
     @Test(expected = MempoiException.class)
-    public void writeFileTest_errorWriting() throws Throwable {
+    public void writeFileTestErrorWriting() throws Throwable {
 
         try {
 
@@ -141,7 +141,7 @@ public class FileManagerTest {
      *                          close workbook
      *****************************************************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void closeWorkbook() throws Exception {
 
         Method m = PrivateAccessHelper.getAccessibleMethod(FileManager.class, "closeWorkbook");

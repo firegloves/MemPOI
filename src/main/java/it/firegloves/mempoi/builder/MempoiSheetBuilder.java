@@ -229,15 +229,17 @@ public final class MempoiSheetBuilder {
      */
     public MempoiSheetBuilder withMergedRegionColumns(String[] mergedRegionColumns) {
 
-        if (null == mergedRegionColumns || mergedRegionColumns.length == 0) {
+        String[] mergedRegionColumnsToSet = mergedRegionColumns;
+
+        if (null == mergedRegionColumnsToSet || mergedRegionColumnsToSet.length == 0) {
             if (MempoiConfig.getInstance().isForceGeneration()) {
-                mergedRegionColumns = null;
+                mergedRegionColumnsToSet = null;
             } else {
                 throw new MempoiException(Errors.ERR_MERGED_REGIONS_LIST_NULL);
             }
         }
 
-        this.mergedRegionColumns = mergedRegionColumns;
+        this.mergedRegionColumns = mergedRegionColumnsToSet;
         return this;
     }
 

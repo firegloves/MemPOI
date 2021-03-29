@@ -18,8 +18,8 @@ public abstract class IntegrationBaseIT {
     // it's a mysql 8+ dump
     // then adjust db connection string accordingly with your parameters
 
-    Connection conn = null;
-    PreparedStatement prepStmt = null;
+    private Connection conn = null;
+    protected PreparedStatement prepStmt = null;
 
     @Before
     public void init() {
