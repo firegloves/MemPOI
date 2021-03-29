@@ -35,7 +35,7 @@ public final class MempoiPivotTableBuilderTest {
 
 
     @Test
-    public void withInvalidReferenceArea_throwsMempoiException() {
+    public void withInvalidReferenceAreaThrowsMempoiException() {
 
         Arrays.asList(TestHelper.FAILING_AREA_REFERENCES)
                 .forEach(areaRef -> {
@@ -53,7 +53,7 @@ public final class MempoiPivotTableBuilderTest {
     }
 
     @Test(expected = MempoiException.class)
-    public void withReferenceAreaAndTable_throwsMempoiException() {
+    public void withReferenceAreaAndTableThrowsMempoiException() {
 
         MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
@@ -126,7 +126,7 @@ public final class MempoiPivotTableBuilderTest {
 
 
     @Test(expected = MempoiException.class)
-    public void withoutReferenceAreaAndTable_throwsMempoiException() {
+    public void withoutReferenceAreaAndTableThrowsMempoiException() {
 
         MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
@@ -135,7 +135,7 @@ public final class MempoiPivotTableBuilderTest {
 
 
     @Test(expected = MempoiException.class)
-    public void withoutPosition_throwsMempoiException() {
+    public void withoutPositionThrowsMempoiException() {
 
         MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
@@ -145,7 +145,7 @@ public final class MempoiPivotTableBuilderTest {
 
 
     @Test
-    public void withWorkbookNotOfTypeXSSFWorkbook_throwsMempoiException() {
+    public void withWorkbookNotOfTypeXSSFWorkbookThrowsMempoiException() {
 
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
@@ -174,7 +174,7 @@ public final class MempoiPivotTableBuilderTest {
 
 
     @Test(expected = MempoiException.class)
-    public void withNullWorkbook_throwsMempoiException() {
+    public void withNullWorkbookThrowsMempoiException() {
 
         MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withAreaReferenceSource(TestHelper.AREA_REFERENCE)

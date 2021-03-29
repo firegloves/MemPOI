@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 
 public class PivotTableStrategos {
 
-    private static final Logger logger = LoggerFactory.getLogger(PivotTableStrategos.class);
-
     /**
      * if needed, adds the Excel Table to the current sheet
      */

@@ -35,8 +35,6 @@ public class StrategosTest {
 
     @Mock
     private MempoiSheet mempoiSheet;
-    //    @Mock
-//    private MempoiFooter mempoiFooter;
     @Mock
     private ResultSet rs;
     @Mock
@@ -186,7 +184,7 @@ public class StrategosTest {
     }
 
     @Test
-    public void openTempFileAndEvaluateCellFormulas_nullWorkbook() throws Throwable {
+    public void openTempFileAndEvaluateCellFormulasNullWorkbook() throws Throwable {
 
         File file = new File("temp.xlsx");
 
@@ -195,7 +193,7 @@ public class StrategosTest {
     }
 
     @Test(expected = MempoiException.class)
-    public void openTempFileAndEvaluateCellFormulas_invalidFilePath() throws Throwable {
+    public void openTempFileAndEvaluateCellFormulasInvalidFilePath() throws Throwable {
 
         File file = new File("/not_existing/temp.xlsx");
 
@@ -205,7 +203,7 @@ public class StrategosTest {
 
 
     @Test(expected = MempoiException.class)
-    public void openTempFileAndEvaluateCellFormulas_invalidFilePathAndNullWorkbook() throws Throwable {
+    public void openTempFileAndEvaluateCellFormulasInvalidFilePathAndNullWorkbook() throws Throwable {
 
         File file = new File("/not_existing/temp.xlsx");
 
@@ -256,23 +254,4 @@ public class StrategosTest {
 
         assertEquals(TestHelper.AREA_REFERENCE, areaReference.formatAsString());
     }
-
-
-//
-//
-//            createHeaderRow
-//
-//    prepareMempoiColumn
-//
-//            generateSheet
-//
-//    generateReport
-//
-//            manageFormulaToEvaluate
-//
-//    generateMempoiReport
-//
-//            generateMempoiReportToByteArray
-//
-//    generateMempoiReportToFile
 }

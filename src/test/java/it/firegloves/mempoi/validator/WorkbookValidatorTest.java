@@ -23,14 +23,14 @@ public class WorkbookValidatorTest {
     private String error = "Error";
 
     @Test
-    public void validateWorkbookTypeAndThrow_willSuccess() {
+    public void validateWorkbookTypeAndThrowWillSuccess() {
 
         Workbook[] workbooks = { new XSSFWorkbook(), new HSSFWorkbook(), new SXSSFWorkbook()};
         Arrays.asList(workbooks).forEach(wb -> this.areaReferenceValidator.validateWorkbookTypeAndThrow(wb, wb.getClass(), error));
     }
 
     @Test
-    public void validateWorkbookTypeAndThrow_differentClass_willFail() {
+    public void validateWorkbookTypeAndThrowDifferentClassWillFail() {
 
         Map<Workbook, List<Class<? extends Workbook>>> map = new HashMap<>();
         map.put(new XSSFWorkbook(), Arrays.asList(HSSFWorkbook.class, SXSSFWorkbook.class));
@@ -56,19 +56,19 @@ public class WorkbookValidatorTest {
 
 
     @Test(expected = MempoiException.class)
-    public void validateWorkbookTypeAndThrow_withNullWorkbook_willFail() {
+    public void validateWorkbookTypeAndThrowWithNullWorkbookWillFail() {
 
         this.areaReferenceValidator.validateWorkbookTypeAndThrow(null, HSSFWorkbook.class, error);
     }
 
     @Test(expected = MempoiException.class)
-    public void validateWorkbookTypeAndThrow_withNullClass_willFail() {
+    public void validateWorkbookTypeAndThrowWithNullClassWillFail() {
 
         this.areaReferenceValidator.validateWorkbookTypeAndThrow(new HSSFWorkbook(), null, error);
     }
 
     @Test(expected = MempoiException.class)
-    public void validateWorkbookTypeAndThrow_withNullError_willFail() {
+    public void validateWorkbookTypeAndThrowWithNullErrorWillFail() {
 
         this.areaReferenceValidator.validateWorkbookTypeAndThrow(new HSSFWorkbook(), XSSFWorkbook.class, null);
     }

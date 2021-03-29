@@ -126,8 +126,7 @@ public class PivotTableStrategosTest {
 
         XSSFSheet secondSheet = this.wb.createSheet("SecondSheet");
         this.initSheet(secondSheet);
-        MempoiSheet mempoiSecondSheet = new MempoiSheet(prepStmt)
-                .setSheet(secondSheet);
+        new MempoiSheet(prepStmt).setSheet(secondSheet);
 
         MempoiSheet mempoiSheet = new MempoiSheet(prepStmt)
                 .setSheet(sheet);
@@ -141,7 +140,6 @@ public class PivotTableStrategosTest {
 
         MempoiPivotTable mempoiPivotTable = MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
-//                .withMempoiSheetSource(mempoiSecondSheet)
                 .withMempoiTableSource(mempoiTable)
                 .withPosition(TestHelper.POSITION)
                 .build();
@@ -211,7 +209,7 @@ public class PivotTableStrategosTest {
 
 
     @Test(expected = Exception.class)
-    public void addPivotTablewithNullMempoiSheet_willFail() throws Exception {
+    public void addPivotTablewithNullMempoiSheetWillFail() throws Exception {
 
         MempoiSheet mempoiSheet = TestHelper.getMempoiSheetWithMempoiColumns(wb, prepStmt).setSheet(sheet);
 
@@ -222,7 +220,7 @@ public class PivotTableStrategosTest {
     }
 
     @Test(expected = Exception.class)
-    public void addPivotTablewithNullMempoiPivotTable_willFail() throws Exception {
+    public void addPivotTablewithNullMempoiPivotTableWillFail() throws Exception {
 
         MempoiSheet mempoiSheet = TestHelper.getMempoiSheetWithMempoiColumns(wb, prepStmt).setSheet(sheet);
 
@@ -231,7 +229,7 @@ public class PivotTableStrategosTest {
     }
 
     @Test(expected = Exception.class)
-    public void addPivotTablewitAllNullParams_willFail() throws Exception {
+    public void addPivotTablewitAllNullParamsWillFail() throws Exception {
 
         Method addPivotTableMethod = PrivateAccessHelper.getAccessibleMethod(this.pivotTableStrategos, "addPivotTable", MempoiSheet.class, MempoiPivotTable.class);
         addPivotTableMethod.invoke(this.pivotTableStrategos, null, null);
@@ -264,7 +262,7 @@ public class PivotTableStrategosTest {
 
 
     @Test(expected = MempoiException.class)
-    public void managePivotTableTest_withoutSheet_willFail() {
+    public void managePivotTableTestWithoutSheetWillFail() {
 
         MempoiPivotTable mempoiPivotTable = TestHelper.getTestMempoiPivotTableBuilder(wb)
                 .withMempoiSheetSource(null)
@@ -278,7 +276,7 @@ public class PivotTableStrategosTest {
     }
 
     @Test
-    public void managePivotTableTest_withoutMempoiPivotTable() {
+    public void managePivotTableTestWithoutMempoiPivotTable() {
 
         MempoiSheet mempoiSheet = TestHelper.getMempoiSheetBuilder(wb, prepStmt)
                 .build()

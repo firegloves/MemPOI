@@ -128,7 +128,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
 
     @Test(expected = CompletionException.class)
-    public void testWithFileAndMergedRegionsHSSF_toManyRows() throws SQLException {
+    public void testWithFileAndMergedRegionsHSSFToManyRows() throws SQLException {
 
         prepStmt = this.createStatement(null, 100_000);
 
@@ -636,7 +636,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
      **********************************************************************/
 
     @Test(expected = MempoiException.class)
-    public void testWithFileAndMergedRegionsHSSFNullMergedRegions_Fail() {
+    public void testWithFileAndMergedRegionsHSSFNullMergedRegionsFail() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
         int limit = 450;
@@ -661,7 +661,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     }
 
     @Test(expected = MempoiException.class)
-    public void testWithFileAndMergedRegionsHSSFEmptyMergedRegions_Fail() {
+    public void testWithFileAndMergedRegionsHSSFEmptyMergedRegionsFail() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
         int limit = 450;

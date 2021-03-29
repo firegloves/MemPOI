@@ -46,28 +46,30 @@ public class MempoiTableBuilderTest {
     }
 
     @Test
-    public void withInvalidReferenceArea_throwsMempoiException() {
+    public void withInvalidReferenceAreaThrowsMempoiException() {
 
         Arrays.asList(TestHelper.FAILING_AREA_REFERENCES)
                 .forEach(areaRef -> {
 
-                    try {
-                        MempoiTableBuilder.aMempoiTable()
-                                .withWorkbook(wb)
-                                .withAreaReferenceSource(areaRef)
-                                .build();
-                    } catch (MempoiException e) {
-                        assertEquals(Errors.ERR_AREA_REFERENCE_NOT_VALID, e.getMessage());
-                    }
+                    exceptionRule.expect(MempoiException.class);
+                    exceptionRule.expectMessage(Errors.ERR_AREA_REFERENCE_NOT_VALID);
+
+                    MempoiTableBuilder.aMempoiTable()
+                            .withWorkbook(wb)
+                            .withAreaReferenceSource(areaRef)
+                            .build();
                 });
     }
 
 
     @Test
-    public void withWorkbookNotOfTypeXSSFWorkbook_throwsMempoiException() {
+    public void withWorkbookNotOfTypeXSSFWorkbookThrowsMempoiException() {
 
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
+
+                    exceptionRule.expect(MempoiException.class);
+                    exceptionRule.expectMessage(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
 
                     Constructor<? extends Workbook> constructor;
                     Workbook workbook;
@@ -75,24 +77,20 @@ public class MempoiTableBuilderTest {
                         constructor = wbTypeClass.getConstructor();
                         workbook = constructor.newInstance();
                     } catch (Exception e) {
-                        throw new MempoiException();
+                        throw new MempoiException("wrong error");
                     }
 
-                    try {
-                        MempoiTableBuilder.aMempoiTable()
+                    MempoiTableBuilder.aMempoiTable()
                                 .withWorkbook(workbook)
                                 .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                                 .build();
-                    } catch (MempoiException e) {
-                        assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
-                    }
                 });
 
     }
 
 
     @Test(expected = MempoiException.class)
-    public void withNullWorkbook_throwsMempoiException() {
+    public void withNullWorkbookThrowsMempoiException() {
 
         MempoiTableBuilder.aMempoiTable()
                 .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
@@ -100,7 +98,7 @@ public class MempoiTableBuilderTest {
     }
 
     @Test(expected = MempoiException.class)
-    public void withNullAreaReferenceAndNoAllSheetData_throwsMempoiException() {
+    public void withNullAreaReferenceAndNoAllSheetDataThrowsMempoiException() {
 
         MempoiTableBuilder.aMempoiTable()
                 .withWorkbook(wb)
@@ -136,7 +134,7 @@ public class MempoiTableBuilderTest {
     }
 
     @Test
-    public void addingExcelTableWithWitheSpacesInDisplayName_willFail() {
+    public void addingExcelTableWithWitheSpacesInDisplayNameWillFail() {
 
         exceptionRule.expect(MempoiException.class);
         exceptionRule.expectMessage(Errors.ERR_TABLE_DISPLAY_NAME);
@@ -147,8 +145,8 @@ public class MempoiTableBuilderTest {
     }
 
 
-    @Test
-    public void addingExcelTableWithWitheSpacesInDisplayNameAndForceGeneration_willSuccedWithUnderScores() {
+    @Test(expected = Test.None.class)
+    public void addingExcelTableWithWitheSpacesInDisplayNameAndForceGenerationWillSuccedWithUnderScores() {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
@@ -171,7 +169,7 @@ public class MempoiTableBuilderTest {
                 .build();
     }
 
-    @Test
+    @Test(expected = Test.None.class /* no exception expected */)
     public void testTableAreaReferenceValidationWithForceGeneration() {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {

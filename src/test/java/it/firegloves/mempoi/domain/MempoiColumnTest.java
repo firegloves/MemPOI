@@ -39,8 +39,6 @@ public class MempoiColumnTest {
 
     @Mock
     private PreparedStatement prepStmt;
-//    @Mock
-//    private MergedRegionsManager<String> mergedRegionsManager;
     @Mock
     private MempoiColumnElaborationStep mockedStep;
 
@@ -63,102 +61,102 @@ public class MempoiColumnTest {
     }
 
     @Test
-    public void column_BIGINT() throws NoSuchMethodException {
+    public void columnBigint() throws NoSuchMethodException {
         this.assertMempoiColumn("column_BIGINT", Types.BIGINT, EExportDataType.BIG_INTEGER);
     }
 
     @Test
-    public void column_DOUBLE() throws NoSuchMethodException {
+    public void columnDouble() throws NoSuchMethodException {
         this.assertMempoiColumn("column_DOUBLE", Types.DOUBLE, EExportDataType.DOUBLE);
     }
 
     @Test
-    public void column_DECIMAL() throws NoSuchMethodException {
+    public void columnDecimal() throws NoSuchMethodException {
         this.assertMempoiColumn("column_DECIMAL", Types.DECIMAL, EExportDataType.FLOAT);
     }
 
     @Test
-    public void column_FLOAT() throws NoSuchMethodException {
+    public void columnFloat() throws NoSuchMethodException {
         this.assertMempoiColumn("column_FLOAT", Types.FLOAT, EExportDataType.FLOAT);
     }
 
     @Test
-    public void column_NUMERIC() throws NoSuchMethodException {
+    public void columnNumeric() throws NoSuchMethodException {
         this.assertMempoiColumn("column_NUMERIC", Types.NUMERIC, EExportDataType.FLOAT);
     }
 
     @Test
-    public void column_REAL() throws NoSuchMethodException {
+    public void columnReal() throws NoSuchMethodException {
         this.assertMempoiColumn("column_REAL", Types.REAL, EExportDataType.FLOAT);
     }
 
     @Test
-    public void column_INTEGER() throws NoSuchMethodException {
+    public void columnInteger() throws NoSuchMethodException {
         this.assertMempoiColumn("column_INTEGER", Types.INTEGER, EExportDataType.INT);
     }
 
     @Test
-    public void column_SMALLINT() throws NoSuchMethodException {
+    public void columnSmallint() throws NoSuchMethodException {
         this.assertMempoiColumn("column_SMALLINT", Types.SMALLINT, EExportDataType.INT);
     }
 
     @Test
-    public void column_TINYINT() throws NoSuchMethodException {
+    public void columnTinyint() throws NoSuchMethodException {
         this.assertMempoiColumn("column_TINYINT", Types.TINYINT, EExportDataType.INT);
     }
 
     @Test
-    public void column_CHAR() throws NoSuchMethodException {
+    public void columnChar() throws NoSuchMethodException {
         this.assertMempoiColumn("column_CHAR", Types.CHAR, EExportDataType.TEXT);
     }
 
     @Test
-    public void column_NCHAR() throws NoSuchMethodException {
+    public void columnNchar() throws NoSuchMethodException {
         this.assertMempoiColumn("column_NCHAR", Types.NCHAR, EExportDataType.TEXT);
     }
 
     @Test
-    public void column_VARCHAR() throws NoSuchMethodException {
+    public void columnVarchar() throws NoSuchMethodException {
         this.assertMempoiColumn("column_VARCHAR", Types.VARCHAR, EExportDataType.TEXT);
     }
 
     @Test
-    public void column_NVARCHAR() throws NoSuchMethodException {
+    public void columnNvarchar() throws NoSuchMethodException {
         this.assertMempoiColumn("column_NVARCHAR", Types.NVARCHAR, EExportDataType.TEXT);
     }
 
     @Test
-    public void column_LONGVARCHAR() throws NoSuchMethodException {
+    public void columnLongvarchar() throws NoSuchMethodException {
         this.assertMempoiColumn("column_LONGVARCHAR", Types.LONGVARCHAR, EExportDataType.TEXT);
     }
 
     @Test
-    public void column_TIMESTAMP() throws NoSuchMethodException {
+    public void columnTimestamp() throws NoSuchMethodException {
         this.assertMempoiColumn("column_TIMESTAMP", Types.TIMESTAMP, EExportDataType.TIMESTAMP);
     }
 
     @Test
-    public void column_DATE() throws NoSuchMethodException {
+    public void columnDate() throws NoSuchMethodException {
         this.assertMempoiColumn("column_DATE", Types.DATE, EExportDataType.DATE);
     }
 
     @Test
-    public void column_TIME() throws NoSuchMethodException {
+    public void columnTime() throws NoSuchMethodException {
         this.assertMempoiColumn("column_TIME", Types.TIME, EExportDataType.TIME);
     }
 
     @Test
-    public void column_BIT() throws NoSuchMethodException {
+    public void columnBit() throws NoSuchMethodException {
         this.assertMempoiColumn("column_BIT", Types.BIT, EExportDataType.BOOLEAN);
     }
 
     @Test
-    public void column_BOOLEAN() throws NoSuchMethodException {
+    public void columnBoolean() throws NoSuchMethodException {
         this.assertMempoiColumn("column_BOOLEAN", Types.BOOLEAN, EExportDataType.BOOLEAN);
     }
 
     @Test
-    public void column_UUID() throws NoSuchMethodException {
+    public void columnUUID() throws NoSuchMethodException {
         this.assertMempoiColumn("column_UUID", TypesExtended.UUID, EExportDataType.TEXT);
     }
 
@@ -239,13 +237,6 @@ public class MempoiColumnTest {
         new MempoiColumn(9999, "test", 0);
     }
 
-//    @Test(expected = MempoiException.class)
-//    public void setResultSetAccessMethodNotFound() throws Exception {
-//
-//        when(resultSet.getClass().getMethod(Mockito.anyString(), Mockito.any())).thenThrow(new NoSuchMethodException());
-//
-//        new MempoiColumn(Types.BOOLEAN, "test");
-//    }
 
     @Test
     public void addElaborationStep() throws Exception {
@@ -281,7 +272,6 @@ public class MempoiColumnTest {
     @Test
     public void elaborationStepListAnalyzeTest() {
 
-//      when(this.mergedRegionsManager.performAnalysis(Mockito.any(), Mockito.anyString())).thenReturn(Optional.empty());
         doNothing().when(this.mockedStep).performAnalysis(Mockito.any(), Mockito.anyString());
 
         mc.addElaborationStep(step);

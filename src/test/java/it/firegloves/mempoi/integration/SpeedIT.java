@@ -51,7 +51,7 @@ public class SpeedIT extends IntegrationBaseIT {
 
 
     @Test
-    public void speedTestSXSSFWorkbook_1() {
+    public void speedTestSXSSFWorkbook1() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_1.xlsx");
 
@@ -72,7 +72,7 @@ public class SpeedIT extends IntegrationBaseIT {
 
 
     @Test
-    public void speedTestSXSSFWorkbook_2() {
+    public void speedTestSXSSFWorkbook2() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_2.xlsx");
 
@@ -93,7 +93,7 @@ public class SpeedIT extends IntegrationBaseIT {
     }
 
     @Test
-    public void speedTestSXSSFWorkbook_3() {
+    public void speedTestSXSSFWorkbook3() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_3.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -117,7 +117,7 @@ public class SpeedIT extends IntegrationBaseIT {
 
 
     @Test
-    public void speedTestSXSSFWorkbook_4() {
+    public void speedTestSXSSFWorkbook4() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_4.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -142,7 +142,7 @@ public class SpeedIT extends IntegrationBaseIT {
 
 
     @Test
-    public void speedTestSXSSFWorkbook_5() {
+    public void speedTestSXSSFWorkbook5() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "speed_test_5.xlsx");
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -168,7 +168,7 @@ public class SpeedIT extends IntegrationBaseIT {
 
 
     @Test
-    public void speedTestHSSFWorkbook_1() {
+    public void speedTestHSSFWorkbook1() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_HSSFWorkbook_1.xlsx");
 
@@ -197,7 +197,7 @@ public class SpeedIT extends IntegrationBaseIT {
     }
 
     @Test
-    public void speedTestXSSFWorkbook_1() {
+    public void speedTestXSSFWorkbook1() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_XSSFWorkbook_1.xlsx");
 

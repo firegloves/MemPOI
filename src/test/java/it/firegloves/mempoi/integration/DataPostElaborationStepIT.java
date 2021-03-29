@@ -152,12 +152,12 @@ public class DataPostElaborationStepIT extends IntegrationBaseMergedRegionsIT {
 
         @Override
         public void performAnalysis(Cell cell, String value) {
-
+            // do nothing
         }
 
         @Override
         public void closeAnalysis(int currRowNum) {
-
+            // do nothing
         }
 
         @Override

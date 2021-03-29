@@ -165,7 +165,6 @@ public class DBPopulator {
     private void populateMergedRegionsTest() {
         String sqlQuery = "insert into " + TestHelper.TABLE_MERGED_REGIONS + " (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        Random rand = new Random(System.currentTimeMillis());
         PreparedStatement pstmt = null;
 
         try {
