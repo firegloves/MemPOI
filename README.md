@@ -9,8 +9,8 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 
 ### Support
 
-- Apache POI 4.0.0+
-- Java 8+
+  - Apache POI 4.0.0+
+  - Java 8+
 
 ---
 
@@ -96,9 +96,9 @@ CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
 You can find more examples in the functional tests package.
 
 By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s descendants:
-- `SXSSFWorkbook`
-- `XSSFWorkbook`
-- `HSSFWorkbook`
+  - `SXSSFWorkbook`
+  - `XSSFWorkbook`
+  - `HSSFWorkbook`
 
 **Multiple sheets supported** - Each `MempoiSheet` will add a sheet to the generated report
 
@@ -108,7 +108,7 @@ By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s des
 
 You can choose to write directly to a file or to obtain the byte array of the generated report (for example to pass it back to a waiting client)
 
-#### File:
+#### File
 
 ```Java
 File fileDest = new File("test_with_file.xlsx");
@@ -122,7 +122,7 @@ CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 String absoluteFileName = fut.get();
 ```
 
-#### Byte array:
+#### Byte array
 
 ```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
@@ -133,29 +133,29 @@ CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
 byte[] bytes = fut.get();
 ```
 
-
 ### Supported SQL data types
 
-- BIGINT
-- DOUBLE
-- DECIMAL
-- FLOAT
-- NUMERIC
-- REAL
-- INTEGER
-- SMALLINT
-- TINYINT
-- CHAR
-- NCHAR
-- VARCHAR
-- NVARCHAR
-- LONGVARCHAR
-- TIMESTAMP
-- DATE
-- TIME
-- BIT
-- BOOLEAN
-- UUID (Postgres) (thanks to [nanshakov](https://github.com/nanshakov))
+  - BIGINT
+  - DOUBLE
+  - DECIMAL
+  - FLOAT
+  - NUMERIC
+  - REAL
+  - INTEGER
+  - SMALLINT
+  - TINYINT
+  - CHAR
+  - NCHAR
+  - VARCHAR
+  - NVARCHAR
+  - LONGVARCHAR
+  - TIMESTAMP
+  - DATE
+  - TIME
+  - BIT
+  - BOOLEAN
+  - UUID (Postgres) (thanks to [nanshakov](https://github.com/nanshakov))
+
 ---            
 
 **You have to take care to manage your database connection, meanwhile `PreparedStatement` and `ResultSet` are managed and closed internally by MemPOI**
@@ -231,11 +231,11 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 MemPOI comes with a preset of default data formatting styles for
 
-- header cells
-- integer data types cells
-- floating-point data types cells
-- date data types cells
-- datetime data types cells
+  - header cells
+  - integer data types cells
+  - floating-point data types cells
+  - date data types cells
+  - datetime data types cells
 
 The default styles are automatically applied. You can inspect them looking at the end of `MempoiReportStyler` class 
 If you want to reset the default styles you need to use an empty `CellStyle` when you use `MempoiBuilder`, for example:
@@ -262,7 +262,6 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .build();
 ```                    
 
-
 MemPOI comes with a set of templates ready to use. You can use them as follows:
 
 ```Java
@@ -274,8 +273,8 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 ```
 
 Actually you can:
-* provide different styles for different sheets
-* granularly override bundled styles' cell styles
+  - provide different styles for different sheets
+  - granularly override bundled styles' cell styles
 
 ```Java
 // SummerStyleTemplate for dogsSheet
@@ -307,8 +306,6 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .build();
 ``` 
 
-
-
 List of available templates:
 
 | Name                      |      Image            |
@@ -322,12 +319,10 @@ List of available templates:
 | StoneStyleTemplate        |![](img/template/stone.jpg)
 | SummerStyleTemplate       |![](img/template/summer.jpg)
 
-
 #### Numeric cell styles
 
 Numeric data types (and the corresponding cell styles) are now split between integer and floating-point data types. This means that from version 1.3.0 database integer data types will be exported without numbers after comma. You can still specify a custom cell style or explicitly use one of the available ones.
 For example in order use pre v1.3.0 integer cell style you can do something like this:
-
 
 ```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
@@ -336,7 +331,6 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withIntegerCellStyle(new StandardStyleTemplate().getFloatingPointCellStyle())     // no default style for integer fields
                     .build();
 ```
-
 
 ---
 
@@ -357,10 +351,10 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 List of available subfooters:
 
-- **NumberSumSubFooter**: places a cell containing the sum of the column (works only on numeric comlumns)
-- **NumberMaxSubFooter**: places a cell containing the maximum value of the column (works only on numeric comlumns)
-- **NumberMinSubFooter**: places a cell containing the minimum value of the column (works only on numeric comlumns)
-- **NumberAverageSubFooter**: places a cell containing the average value of the column (works only on numeric comlumns)
+  - **NumberSumSubFooter**: places a cell containing the sum of the column (works only on numeric comlumns)
+  - **NumberMaxSubFooter**: places a cell containing the maximum value of the column (works only on numeric comlumns)
+  - **NumberMinSubFooter**: places a cell containing the minimum value of the column (works only on numeric comlumns)
+  - **NumberAverageSubFooter**: places a cell containing the average value of the column (works only on numeric comlumns)
 
 By default no footer and no subfooter are appended to the report.
 
@@ -448,8 +442,8 @@ MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
 #### Pivot Table source
 
 You can specify one source for the pivot table choosing from:
-- explicit area reference (in this case you can also specify a source sheet if different from the one in which place the pivot table)
-- a previously generated table (the table's sheet will be used as source sheet)
+  - explicit area reference (in this case you can also specify a source sheet if different from the one in which place the pivot table)
+  - a previously generated table (the table's sheet will be used as source sheet)
 
 Unfortunately Apache POI actually doesn't support table as source for a pivot table.
 MemPOI makes an abstraction that is only able to extract the table area reference and use it as source for the upcoming pivot table. 
@@ -527,7 +521,6 @@ MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempo
                  .withColumnLabelColumns(columnLabelColumnsMap)
                  .withReportFilterColumns(reportFilterColumnList);
 ```
-
 
 ---
 

@@ -15,8 +15,6 @@ import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TableStrategos {
 

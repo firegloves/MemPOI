@@ -111,21 +111,29 @@ public final class MempoiPivotTableBuilderTest {
     @Test
     public void withoutReferenceAreaButTable() {
 
-        MempoiPivotTableBuilder.aMempoiPivotTable()
+        MempoiPivotTable mempoiPivotTable = MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
                 .withPosition(TestHelper.POSITION)
                 .withMempoiTableSource(new MempoiTable())
                 .build();
+
+        assertEquals(TestHelper.POSITION, mempoiPivotTable.getPosition());
+        assertEquals(wb, mempoiPivotTable.getWorkbook());
+        assertNotNull(mempoiPivotTable.getSource());
     }
 
     @Test
     public void withoutTableButReferenceArea() {
 
-        MempoiPivotTableBuilder.aMempoiPivotTable()
+        MempoiPivotTable mempoiPivotTable = MempoiPivotTableBuilder.aMempoiPivotTable()
                 .withWorkbook(wb)
                 .withPosition(TestHelper.POSITION)
                 .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                 .build();
+
+        assertEquals(TestHelper.POSITION, mempoiPivotTable.getPosition());
+        assertEquals(wb, mempoiPivotTable.getWorkbook());
+        assertEquals(TestHelper.AREA_REFERENCE, mempoiPivotTable.getSource().getAreaReference().formatAsString());
     }
 
 

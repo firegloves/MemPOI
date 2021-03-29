@@ -46,7 +46,6 @@ public class MempoiBuilderTest {
     private PreparedStatement prepStmt;
     private CellStyle cellStyle;
     private List<MempoiSheetBuilder> sheetBuilderList;
-    MempoiPivotTableBuilderTest
 
     @Before
     public void prepare() {

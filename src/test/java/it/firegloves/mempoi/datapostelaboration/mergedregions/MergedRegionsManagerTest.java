@@ -171,7 +171,7 @@ public class MergedRegionsManagerTest {
 
         int firstRow = 5, lastRow = 4, colInd = 1;
 
-        assertTrue(this.mergedRegionsManager.mergeRegion(this.sheet, null, firstRow, lastRow, colInd));
+        assertFalse(this.mergedRegionsManager.mergeRegion(this.sheet, null, firstRow, lastRow, colInd));
     }
 
     @Test
@@ -179,7 +179,7 @@ public class MergedRegionsManagerTest {
 
         int firstRow = -5, lastRow = 4, colInd = 1;
 
-        assertTrue(this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd));
+        assertFalse(this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd));
     }
 
     @Test
