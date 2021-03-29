@@ -83,23 +83,23 @@ public class MempoiSheetBuilderTest {
         assertEquals("Prepared Statement", prepStmt, mempoiSheet.getPrepStmt());
         assertEquals("Sheet name", sheetName, mempoiSheet.getSheetName());
         assertEquals("Subfooter", numberSumSubFooter, mempoiSheet.getMempoiSubFooter().get());
-        AssertionHelper.validateCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
-        AssertionHelper.validateCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
-        AssertionHelper.validateCellStyle(styleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
-        AssertionHelper.validateCellStyle(styleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
-        AssertionHelper.validateCellStyle(styleTemplate.getIntegerCellStyle(wb), mempoiSheet.getIntegerCellStyle());
-        AssertionHelper.validateCellStyle(styleTemplate.getFloatingPointCellStyle(wb),
+        AssertionHelper.assertOnCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getIntegerCellStyle(wb), mempoiSheet.getIntegerCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getFloatingPointCellStyle(wb),
                 mempoiSheet.getFloatingPointCellStyle());
-        AssertionHelper.validateCellStyle(styleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getSubfooterCellStyle(wb), mempoiSheet.getSubFooterCellStyle());
         assertEquals("footer text", footerName, mempoiSheet.getMempoiFooter().get().getCenterText());
         assertArrayEquals("merged cols", mergedCols, mempoiSheet.getMergedRegionColumns());
         assertEquals("workbook", wb, mempoiSheet.getWorkbook());
 
-        AssertionHelper.validateMempoiTable(wb, mempoiSheet.getMempoiTable().get());
-        AssertionHelper.validateMempoiPivotTable(wb, mempoiSheet.getMempoiPivotTable().get());
+        AssertionHelper.assertOnMempoiTable(wb, mempoiSheet.getMempoiTable().get());
+        AssertionHelper.assertOnMempoiPivotTable(wb, mempoiSheet.getMempoiPivotTable().get());
 
         assertEquals(1, mempoiSheet.getColumnConfigMap().size());
-        AssertionHelper.validateMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
+        AssertionHelper.assertOnMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
                 mempoiSheet.getColumnConfigMap().get(MempoiColumnConfigTestHelper.COLUMN_NAME));
     }
 
@@ -146,8 +146,8 @@ public class MempoiSheetBuilderTest {
                 .build();
 
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
-        AssertionHelper.validateCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
-        AssertionHelper.validateCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
         // other cell styles must be null, they are taken by the styler that is built from MemPOI
         assertNull(mempoiSheet.getDatetimeCellStyle());
         assertNull(mempoiSheet.getHeaderCellStyle());
@@ -338,9 +338,9 @@ public class MempoiSheetBuilderTest {
                 .withMempoiColumnConfigList(Arrays.asList(mempoiColumnConfig1, mempoiColumnConfig2))
                 .build();
 
-        AssertionHelper.validateMempoiColumnConfig(mempoiColumnConfig1,
+        AssertionHelper.assertOnMempoiColumnConfig(mempoiColumnConfig1,
                 mempoiSheet.getColumnConfigMap().get(MempoiColumnConfigTestHelper.COLUMN_NAME));
-        AssertionHelper.validateMempoiColumnConfig(mempoiColumnConfig2, mempoiSheet.getColumnConfigMap().get(colName));
+        AssertionHelper.assertOnMempoiColumnConfig(mempoiColumnConfig2, mempoiSheet.getColumnConfigMap().get(colName));
     }
 
 }

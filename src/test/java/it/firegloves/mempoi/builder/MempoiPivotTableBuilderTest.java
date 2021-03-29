@@ -35,7 +35,7 @@ public final class MempoiPivotTableBuilderTest {
     @Test
     public void fullyPopulated() {
 
-        AssertionHelper.validateMempoiPivotTable(wb, TestHelper.getTestMempoiPivotTable(wb));
+        AssertionHelper.assertOnMempoiPivotTable(wb, TestHelper.getTestMempoiPivotTable(wb));
     }
 
 
@@ -214,8 +214,8 @@ public final class MempoiPivotTableBuilderTest {
         assertNotNull(mempoiPivotTable.getSource().getAreaReference());
         assertNotNull(mempoiPivotTable.getPosition());
 
-        AssertionHelper.validateColumnLabelColumns(TestHelper.SUM_COLS_LABEL_COLUMNS_2, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.SUM));
-        AssertionHelper.validateColumnLabelColumns(TestHelper.AVERAGE_COLS_LABEL_COLUMNS_2, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.AVERAGE));
+        AssertionHelper.assertOnColumnLabelColumns(TestHelper.SUM_COLS_LABEL_COLUMNS_2, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.SUM));
+        AssertionHelper.assertOnColumnLabelColumns(TestHelper.AVERAGE_COLS_LABEL_COLUMNS_2, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.AVERAGE));
 
     }
 }

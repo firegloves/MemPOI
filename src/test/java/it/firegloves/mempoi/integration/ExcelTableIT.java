@@ -51,10 +51,10 @@ public class ExcelTableIT extends IntegrationBaseIT {
         assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         // validates first sheet
-        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
+        AssertionHelper.assertOnGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
         XSSFSheet sheet = ((XSSFWorkbook) (TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
-        AssertionHelper.validateTable(sheet);
+        AssertionHelper.assertOnTable(sheet);
     }
 
 
@@ -83,10 +83,10 @@ public class ExcelTableIT extends IntegrationBaseIT {
         assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         // validates first sheet
-        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
+        AssertionHelper.assertOnGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
         XSSFSheet sheet = ((XSSFWorkbook) (TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
-        AssertionHelper.validateTable(sheet);
+        AssertionHelper.assertOnTable(sheet);
     }
 
 

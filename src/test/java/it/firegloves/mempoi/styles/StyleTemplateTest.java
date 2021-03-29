@@ -109,13 +109,13 @@ public class StyleTemplateTest {
 
         MempoiStyler styler = new DummyStyleTemplate().toMempoiStyler(new SXSSFWorkbook());
 
-        AssertionHelper.validateCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
-        AssertionHelper.validateCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
-        AssertionHelper.validateCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
-        AssertionHelper.validateCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
-        AssertionHelper.validateCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
-        AssertionHelper.validateCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
-        AssertionHelper.validateCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
+        AssertionHelper.assertOnCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
+        AssertionHelper.assertOnCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
+        AssertionHelper.assertOnCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
+        AssertionHelper.assertOnCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
+        AssertionHelper.assertOnCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
+        AssertionHelper.assertOnCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
     }
 
 

@@ -56,11 +56,11 @@ public class PivotTableIT extends IntegrationBaseIT {
 
         String fileName = memPOI.prepareMempoiReportToFile().get();
 
-        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
+        AssertionHelper.assertOnGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
         Workbook loadedWb = TestHelper.openFile(fileName);
         XSSFPivotTable pivotTable = ((XSSFSheet) loadedWb.getSheet(TestHelper.SHEET_NAME)).getPivotTables().get(0);
-        AssertionHelper.assertPivotTable(pivotTable, mempoiSheet.getMempoiPivotTable().get(), mempoiSheet.getColumnList());
+        AssertionHelper.assertOnPivotTable(pivotTable, mempoiSheet.getMempoiPivotTable().get(), mempoiSheet.getColumnList());
     }
 
     @Test
@@ -91,11 +91,11 @@ public class PivotTableIT extends IntegrationBaseIT {
 
         String fileName = memPOI.prepareMempoiReportToFile().get();
 
-        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
+        AssertionHelper.assertOnGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
         Workbook loadedWb = TestHelper.openFile(fileName);
         XSSFPivotTable pivotTable = ((XSSFSheet) loadedWb.getSheet(TestHelper.SHEET_NAME_2)).getPivotTables().get(0);
-        AssertionHelper.assertPivotTable(pivotTable, mempoiSheet2.getMempoiPivotTable().get(), mempoiSheet2.getColumnList());
+        AssertionHelper.assertOnPivotTable(pivotTable, mempoiSheet2.getMempoiPivotTable().get(), mempoiSheet2.getColumnList());
     }
 
 
@@ -129,11 +129,11 @@ public class PivotTableIT extends IntegrationBaseIT {
 
         String fileName = memPOI.prepareMempoiReportToFile().get();
 
-        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
+        AssertionHelper.assertOnGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
         Workbook loadedWb = TestHelper.openFile(fileName);
         XSSFPivotTable pivotTable = ((XSSFSheet) loadedWb.getSheet(TestHelper.SHEET_NAME)).getPivotTables().get(0);
-        AssertionHelper.assertPivotTable(pivotTable, mempoiSheet.getMempoiPivotTable().get(), mempoiSheet.getColumnList());
+        AssertionHelper.assertOnPivotTable(pivotTable, mempoiSheet.getMempoiPivotTable().get(), mempoiSheet.getColumnList());
     }
 
 
@@ -172,11 +172,11 @@ public class PivotTableIT extends IntegrationBaseIT {
 
         String fileName = memPOI.prepareMempoiReportToFile().get();
 
-        AssertionHelper.validateGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
+        AssertionHelper.assertOnGeneratedFilePivotTable(this.createStatement(), fileName, TestHelper.MEMPOI_COLUMN_NAMES, TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0);
 
         Workbook loadedWb = TestHelper.openFile(fileName);
         XSSFPivotTable pivotTable = ((XSSFSheet) loadedWb.getSheet(TestHelper.SHEET_NAME_2)).getPivotTables().get(0);
-        AssertionHelper.assertPivotTable(pivotTable, mempoiSheet2.getMempoiPivotTable().get(), mempoiSheet2.getColumnList());
+        AssertionHelper.assertOnPivotTable(pivotTable, mempoiSheet2.getMempoiPivotTable().get(), mempoiSheet2.getColumnList());
     }
 
 

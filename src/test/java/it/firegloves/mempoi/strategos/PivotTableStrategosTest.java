@@ -185,7 +185,7 @@ public class PivotTableStrategosTest {
         addPivotTableMethod.invoke(this.pivotTableStrategos, mempoiSheet, mempoiPivotTable);
 
         XSSFPivotTable pivotTable = sheet.getPivotTables().get(0);
-        AssertionHelper.assertPivotTable(pivotTable);
+        AssertionHelper.assertOnPivotTable(pivotTable);
     }
 
     @Test
@@ -204,7 +204,7 @@ public class PivotTableStrategosTest {
         addPivotTableMethod.invoke(this.pivotTableStrategos, mempoiSheet, mempoiPivotTable);
 
         XSSFPivotTable pivotTable = sheet.getPivotTables().get(0);
-        AssertionHelper.assertPivotTable(pivotTable, mempoiPivotTable, TestHelper.getMempoiColumnList(wb));
+        AssertionHelper.assertOnPivotTable(pivotTable, mempoiPivotTable, TestHelper.getMempoiColumnList(wb));
     }
 
 
@@ -257,7 +257,7 @@ public class PivotTableStrategosTest {
 
         this.pivotTableStrategos.manageMempoiPivotTable(mempoiSheet);
 
-        AssertionHelper.assertPivotTableIntoSheet(mempoiSheet);
+        AssertionHelper.assertOnPivotTableIntoSheet(mempoiSheet);
     }
 
 

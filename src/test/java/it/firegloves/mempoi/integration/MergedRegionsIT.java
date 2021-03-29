@@ -52,7 +52,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -84,8 +84,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -118,8 +118,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             // sum of 2 columns regions
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -176,11 +176,11 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, false);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1, 0);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1, 0);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
 
         } catch (Exception e) {
@@ -220,11 +220,11 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, true);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1, 0);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1, 0);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
 
         } catch (Exception e) {
@@ -262,8 +262,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -302,11 +302,11 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, false);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1, 0);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1, 0);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
 
         } catch (Exception e) {
@@ -339,8 +339,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -379,11 +379,11 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, true);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1, 0);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1, 0);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
 
         } catch (Exception e) {
@@ -421,8 +421,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -461,11 +461,11 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, false);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -497,8 +497,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -530,8 +530,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -562,8 +562,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
         int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
 
-        AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-        AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+        AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+        AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
     }
 
 
@@ -598,11 +598,11 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, false);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -705,7 +705,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-                AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+                AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
 
             } catch (Exception e) {
                 throw new MempoiException(e);
@@ -736,7 +736,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-                AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+                AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
 
             } catch (Exception e) {
                 throw new MempoiException(e);

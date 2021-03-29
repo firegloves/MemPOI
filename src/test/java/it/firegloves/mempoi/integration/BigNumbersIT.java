@@ -56,7 +56,7 @@ public class BigNumbersIT extends IntegrationBaseIT {
             Sheet sheet = wb.getSheetAt(0);
 
             // validates header row
-            AssertionHelper.validateHeaderRow(sheet.getRow(0), TestHelper.COLUMNS_BIG_NUMBERS,
+            AssertionHelper.assertOnHeaderRow(sheet.getRow(0), TestHelper.COLUMNS_BIG_NUMBERS,
                     styleTemplate.getHeaderCellStyle(wb));
 
             // validates data rows
@@ -72,12 +72,12 @@ public class BigNumbersIT extends IntegrationBaseIT {
                 assertEquals(rs.getDouble(TestHelper.COLUMNS_BIG_NUMBERS[5]), row.getCell(5).getNumericCellValue(), 0);
                 assertEquals(rs.getDouble(TestHelper.COLUMNS_BIG_NUMBERS[6]), row.getCell(6).getNumericCellValue(), 0);
 
-                AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
             }
         } catch (Exception e) {
             AssertionHelper.failAssertion(e);

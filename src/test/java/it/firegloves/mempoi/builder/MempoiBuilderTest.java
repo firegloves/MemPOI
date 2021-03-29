@@ -185,7 +185,7 @@ public class MempoiBuilderTest {
 
         assertNull("null style template", mempoi.getWorkbookConfig().getSheetList().get(0).getStyleTemplate());
 
-        AssertionHelper.validateTemplateAndStyler(mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), template, wb);
+        AssertionHelper.assertOnTemplateAndStyler(mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), template, wb);
     }
 
 
@@ -636,7 +636,7 @@ public class MempoiBuilderTest {
                 .setStyleTemplate(template)
                 .build();
 
-        AssertionHelper.validateTemplateAndStyler(mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), template, wb);
+        AssertionHelper.assertOnTemplateAndStyler(mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler(), template, wb);
     }
 
 

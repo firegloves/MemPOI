@@ -469,7 +469,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             AssertionHelper
-                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS_2,
+                    .assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS_2,
                             TestHelper.HEADERS_2,
                             null, new StandardStyleTemplate());
 
@@ -540,7 +540,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
             Sheet sheet = wb.getSheetAt(0);
 
             // validates header row
-            AssertionHelper.validateHeaderRow(sheet.getRow(0), headers,
+            AssertionHelper.assertOnHeaderRow(sheet.getRow(0), headers,
                     null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
 
             // validates data rows
@@ -614,12 +614,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getStringCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         } else {
             assertEquals(rs.getInt(TestHelper.HEADERS_2[columnIndex]),
                     (int) row.getCell(columnIndex).getNumericCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         }
     }
@@ -631,12 +631,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getStringCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         } else {
             assertEquals(rs.getDouble(TestHelper.HEADERS_2[columnIndex]),
                     row.getCell(columnIndex).getNumericCellValue(), 0.1);
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         }
     }
@@ -648,12 +648,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getStringCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         } else {
             assertEquals(rs.getFloat(TestHelper.HEADERS_2[columnIndex]),
                     (int) row.getCell(columnIndex).getNumericCellValue(), 0.1);
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getFloatingPointCellStyle(wb));
         }
     }
@@ -665,12 +665,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getNumericCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         } else {
             assertEquals(rs.getTimestamp(TestHelper.HEADERS_2[columnIndex]).getTime(),
                     row.getCell(columnIndex).getDateCellValue().getTime());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getDateCellStyle(wb));
         }
     }
@@ -682,12 +682,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getNumericCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         } else {
             assertEquals(rs.getBoolean(TestHelper.HEADERS_2[columnIndex]),
                     row.getCell(columnIndex).getBooleanCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         }
     }
@@ -699,12 +699,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getNumericCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         } else {
             assertEquals(rs.getString(TestHelper.HEADERS_2[columnIndex]),
                     row.getCell(columnIndex).getStringCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         }
     }

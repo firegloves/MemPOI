@@ -67,7 +67,7 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             AssertionHelper
-                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
+                    .assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
                             null, new StandardStyleTemplate());
 
         } catch (Exception e) {
@@ -117,7 +117,7 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             AssertionHelper
-                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
+                    .assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
                             null, new StandardStyleTemplate());
 
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
             Sheet sheet = wb.getSheetAt(0);
 
             // validates header row
-            AssertionHelper.validateHeaderRow(sheet.getRow(0), headers,
+            AssertionHelper.assertOnHeaderRow(sheet.getRow(0), headers,
                     null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
 
             // validates data rows
@@ -187,21 +187,21 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
             if (null != styleTemplate
                     && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
                 AssertionHelper
-                        .validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(4).getCellStyle(), perColumnCellStyle);
+                        .assertOnCellStyle(row.getCell(4).getCellStyle(), perColumnCellStyle);
                 AssertionHelper
-                        .validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(7).getCellStyle(),
+                        .assertOnCellStyle(row.getCell(7).getCellStyle(),
                                 styleTemplate.getFloatingPointCellStyle(wb));
             }
 

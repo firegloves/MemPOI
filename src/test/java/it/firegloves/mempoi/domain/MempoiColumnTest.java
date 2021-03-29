@@ -185,7 +185,7 @@ public class MempoiColumnTest {
 
         mc.setCellStyle(this.cellStyle);
 
-        AssertionHelper.validateCellStyle(mc.getCellStyle(), this.cellStyle);
+        AssertionHelper.assertOnCellStyle(mc.getCellStyle(), this.cellStyle);
     }
 
     @Test
@@ -205,7 +205,7 @@ public class MempoiColumnTest {
 
         mc.setSubFooterCell(subFooterCell);
 
-        AssertionHelper.validateCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
+        AssertionHelper.assertOnCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
     }
 
     @Test
@@ -215,7 +215,7 @@ public class MempoiColumnTest {
 
         mc.setSubFooterCell(subFooterCell);
 
-        AssertionHelper.validateCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
+        AssertionHelper.assertOnCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
     }
 
 
