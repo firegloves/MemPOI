@@ -18,12 +18,17 @@ import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public final class MempoiPivotTableBuilderTest {
 
     // TODO add assertions
     // TODO review this tests
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     private final Workbook wb = new XSSFWorkbook();
 
@@ -40,15 +45,14 @@ public final class MempoiPivotTableBuilderTest {
         Arrays.asList(TestHelper.FAILING_AREA_REFERENCES)
                 .forEach(areaRef -> {
 
-                    try {
-                        MempoiPivotTableBuilder.aMempoiPivotTable()
-                                .withWorkbook(wb)
-                                .withPosition(TestHelper.POSITION)
-                                .withAreaReferenceSource(areaRef)
-                                .build();
-                    } catch (MempoiException e) {
-                        assertEquals(Errors.ERR_AREA_REFERENCE_NOT_VALID, e.getMessage());
-                    }
+                    exceptionRule.expect(MempoiException.class);
+                    exceptionRule.expectMessage(Errors.ERR_AREA_REFERENCE_NOT_VALID);
+
+                    MempoiPivotTableBuilder.aMempoiPivotTable()
+                            .withWorkbook(wb)
+                            .withPosition(TestHelper.POSITION)
+                            .withAreaReferenceSource(areaRef)
+                            .build();
                 });
     }
 
@@ -150,24 +154,23 @@ public final class MempoiPivotTableBuilderTest {
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
 
+                    exceptionRule.expect(MempoiException.class);
+                    exceptionRule.expectMessage(Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
+
                     Constructor<? extends Workbook> constructor;
                     Workbook workbook;
                     try {
                         constructor = wbTypeClass.getConstructor();
                         workbook = constructor.newInstance();
                     } catch (Exception e) {
-                        throw new MempoiException();
+                        throw new MempoiException("wrong error");
                     }
 
-                    try {
-                        MempoiPivotTableBuilder.aMempoiPivotTable()
+                    MempoiPivotTableBuilder.aMempoiPivotTable()
                                 .withWorkbook(workbook)
                                 .withPosition(TestHelper.POSITION)
                                 .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                                 .build();
-                    } catch (MempoiException e) {
-                        assertEquals(Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
-                    }
                 });
 
     }

@@ -169,7 +169,7 @@ public class MempoiTableBuilderTest {
                 .build();
     }
 
-    @Test(expected = Test.None.class /* no exception expected */)
+    @Test(expected = Test.None.class)
     public void testTableAreaReferenceValidationWithForceGeneration() {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {

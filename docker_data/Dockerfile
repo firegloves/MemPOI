@@ -1,5 +1,7 @@
 FROM mysql:8.0.23
 
+USER 1000:1000
+
 ENV MYSQL_DATABASE=mempoi \
     MYSQL_ROOT_PASSWORD=mempassword
 

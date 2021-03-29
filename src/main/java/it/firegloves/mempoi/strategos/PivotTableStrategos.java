@@ -17,8 +17,6 @@ import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PivotTableStrategos {
 
