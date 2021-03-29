@@ -77,7 +77,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-                this.validateGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
+                this.assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
                         TestHelper.HEADERS_2, new StandardStyleTemplate(),
                         (double) MempoiColumnConfigTestHelper.CELL_VALUE, Double.class,
                         colName);
@@ -119,7 +119,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-                this.validateGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
+                this.assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
                         TestHelper.HEADERS_2, new StandardStyleTemplate(),
                         (double) MempoiColumnConfigTestHelper.CELL_VALUE, Double.class,
                         colName);
@@ -161,7 +161,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-                this.validateGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
+                this.assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
                         TestHelper.HEADERS_2, new StandardStyleTemplate(),
                         (double) MempoiColumnConfigTestHelper.CELL_VALUE, Double.class,
                         colName);
@@ -205,7 +205,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-                this.validateGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
+                this.assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
                         TestHelper.HEADERS_2, new StandardStyleTemplate(), strValue, String.class, colName);
 
             } catch (Exception e) {
@@ -219,7 +219,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
      * NULL VALUES
      ****************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheDateDataTranformationFunctionShouldReceiveNull() {
 
         List<String> colNameList = Arrays.asList("creation_date", "dateTime", "STAMPONE", "attempato");
@@ -256,7 +256,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheBooleanDataTranformationFunctionShouldReceivePrimitiveDefault() {
 
         List<String> colNameList = Arrays.asList("valid", "bitTwo");
@@ -293,7 +293,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheBooleanDataTranformationFunctionShouldReceiveNullIfNullValuesOverPrimitiveDetaultOnes() {
 
         List<String> colNameList = Arrays.asList("valid", "bitTwo");
@@ -331,7 +331,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheStringDataTranformationFunctionShouldReceiveNullValue() {
 
         List<String> colNameList = Arrays.asList("name", "usefulChar");
@@ -369,7 +369,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheDoubleDataTranformationFunctionShouldReceivePrimitiveDefault() {
 
         List<String> colNameList = Arrays
@@ -407,7 +407,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheDoubleDataTranformationFunctionShouldReceiveNullIfNullValuesOverPrimitiveDetaultOnesIsTrue() {
 
         List<String> colNameList = Arrays
@@ -525,7 +525,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
      * @param fileToValidate the absolute filename of the xlsx file on which apply the generic asserts
      * @param headers        the array of headers name required
      */
-    private void validateGeneratedFileDataTransformationFunction(PreparedStatement prepStmt,
+    private void assertOnGeneratedFileDataTransformationFunction(PreparedStatement prepStmt,
             String fileToValidate, String[] headers, StyleTemplate styleTemplate, Object transformedValue,
             Class transformedValueCastClass, String transformedColumnName) {
 

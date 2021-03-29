@@ -230,26 +230,26 @@ public class DBPopulator {
      *******************************************************************************************/
 
 
-    private void createTablePivotTableTest() {
-
-        String speedTestTbl = "CREATE TABLE " + TestHelper.TABLE_PIVOT_TABLE + " (\n" +
-                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
-                "  `" + TestHelper.MEMPOI_COLUMN_NAME + "` varchar(64) NOT NULL,\n" +
-                "  `" + TestHelper.MEMPOI_COLUMN_SURNAME + "` varchar(64) DEFAULT NULL,\n" +
-                "  `" + TestHelper.MEMPOI_COLUMN_AGE + "` int DEFAULT NULL,\n" +
-                "  `" + TestHelper.MEMPOI_COLUMN_ADDRESS + "` varchar(128) NOT NULL,\n" +
-                "  `" + TestHelper.MEMPOI_COLUMN_AMOUNT + "` float DEFAULT NULL,\n" +
-                "  `" + TestHelper.MEMPOI_COLUMN_WITCHER + "` char(128) COLLATE utf8mb4_general_ci DEFAULT NULL,\n" +
-                "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
-
-        try {
-            PreparedStatement stmt = this.conn.prepareStatement(speedTestTbl);
-            stmt.execute();
-        } catch (Exception e) {
-            throw new MempoiException(e);
-        }
-    }
+//    private void createTablePivotTableTest() {
+//
+//        String speedTestTbl = "CREATE TABLE " + TestHelper.TABLE_PIVOT_TABLE + " (\n" +
+//                "  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n" +
+//                "  `" + TestHelper.MEMPOI_COLUMN_NAME + "` varchar(64) NOT NULL,\n" +
+//                "  `" + TestHelper.MEMPOI_COLUMN_SURNAME + "` varchar(64) DEFAULT NULL,\n" +
+//                "  `" + TestHelper.MEMPOI_COLUMN_AGE + "` int DEFAULT NULL,\n" +
+//                "  `" + TestHelper.MEMPOI_COLUMN_ADDRESS + "` varchar(128) NOT NULL,\n" +
+//                "  `" + TestHelper.MEMPOI_COLUMN_AMOUNT + "` float DEFAULT NULL,\n" +
+//                "  `" + TestHelper.MEMPOI_COLUMN_WITCHER + "` char(128) COLLATE utf8mb4_general_ci DEFAULT NULL,\n" +
+//                "  PRIMARY KEY (`id`)\n" +
+//                ") ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+//
+//        try {
+//            PreparedStatement stmt = this.conn.prepareStatement(speedTestTbl);
+//            stmt.execute();
+//        } catch (Exception e) {
+//            throw new MempoiException(e);
+//        }
+//    }
 
 //    private void populatePivotTableTest() {
 //

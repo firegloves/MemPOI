@@ -25,9 +25,21 @@ import org.mockito.MockitoAnnotations;
 public class NotStreamApiMergedRegionsStepTest {
 
     @Mock
-    private Row row1, row2, row3, row4;
+    private Row row1;
     @Mock
-    private Cell cell1, cell2, cell3, cell4;
+    private Row row2;
+    @Mock
+    private Row row3;
+    @Mock
+    private Row row4;
+    @Mock
+    private Cell cell1;
+    @Mock
+    private Cell cell2;
+    @Mock
+    private Cell cell3;
+    @Mock
+    private Cell cell4;
     private NotStreamApiMergedRegionsStep<String> step;
 
     private Workbook workbook;

@@ -21,13 +21,15 @@ public class AreaReferenceValidatorTest {
     @Test
     public void validateAreaReferenceTestWillSuccess() {
 
-        Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES).forEach(areaRef -> assertTrue(areaRef, this.areaReferenceValidator.validateAreaReference(areaRef)));
+        Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES).forEach(areaRef ->
+                assertTrue(areaRef, this.areaReferenceValidator.validateAreaReference(areaRef)));
     }
 
     @Test
     public void validateAreaReferenceTestWillFail() {
 
-        Arrays.stream(TestHelper.FAILING_AREA_REFERENCES).forEach(areaRef -> assertFalse(areaRef, this.areaReferenceValidator.validateAreaReference(areaRef)));
+        Arrays.stream(TestHelper.FAILING_AREA_REFERENCES)
+                .forEach(areaRef -> assertFalse(areaRef, this.areaReferenceValidator.validateAreaReference(areaRef)));
     }
 
     @Test
@@ -46,7 +48,8 @@ public class AreaReferenceValidatorTest {
     @Test
     public void validateAreaReferenceTestAndThrowWillSuccess() {
 
-        Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES).forEach(this.areaReferenceValidator::validateAreaReferenceAndThrow);
+        Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES)
+                .forEach(this.areaReferenceValidator::validateAreaReferenceAndThrow);
     }
 
     @Test

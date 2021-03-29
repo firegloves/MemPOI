@@ -91,7 +91,7 @@ public class ExcelTableIT extends IntegrationBaseIT {
 
 
     @Test
-    public void addingExcelTableToNonXSSFWorkbook_willFail() {
+    public void addingExcelTableToNonXSSFWorkbookWillFail() {
 
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {

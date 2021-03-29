@@ -13,7 +13,6 @@ import it.firegloves.mempoi.styles.template.PurpleStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
-import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
@@ -31,13 +30,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
-import org.mockito.Mock;
 
 public class HueStyleTemplateIT extends IntegrationBaseIT {
-
-    @Mock
-    StyleTemplate styleTemplate;
-
 
     @Test
     public void testWithFileAndStandardTemplate() throws Exception {

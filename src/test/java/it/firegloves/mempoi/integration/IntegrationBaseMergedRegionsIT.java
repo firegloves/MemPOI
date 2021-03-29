@@ -13,8 +13,8 @@ import org.junit.Before;
 
 public abstract class IntegrationBaseMergedRegionsIT extends IntegrationBaseIT {
 
-    Connection conn = null;
-    PreparedStatement prepStmt = null;
+    protected Connection conn = null;
+    protected PreparedStatement prepStmt = null;
 
     @Before
     public void init() {

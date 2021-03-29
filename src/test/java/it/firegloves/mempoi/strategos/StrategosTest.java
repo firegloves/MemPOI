@@ -174,7 +174,7 @@ public class StrategosTest {
      *                          openTempFileAndEvaluateCellFormulas
      *****************************************************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void openTempFileAndEvaluateCellFormulasTest() throws Throwable {
 
         File file = new File("temp.xlsx");
@@ -183,7 +183,7 @@ public class StrategosTest {
         this.invokeOpenTempFileAndEvaluateCellFormulas(file, this.wbConfig);
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void openTempFileAndEvaluateCellFormulasNullWorkbook() throws Throwable {
 
         File file = new File("temp.xlsx");

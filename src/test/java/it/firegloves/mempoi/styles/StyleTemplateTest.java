@@ -34,42 +34,42 @@ public class StyleTemplateTest {
 
     @Test
     public void standardTemplateTest() {
-        this.genericTemplateTest(new StandardStyleTemplate(), new SXSSFWorkbook());
+        this.assertTemplateCellStylesNotNull(new StandardStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void aquaTemplateTest() {
-        this.genericTemplateTest(new AquaStyleTemplate(), new SXSSFWorkbook());
+        this.assertTemplateCellStylesNotNull(new AquaStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void panegiriconTemplateTest() {
-        this.genericTemplateTest(new PanegiriconStyleTemplate(), new SXSSFWorkbook());
+        this.assertTemplateCellStylesNotNull(new PanegiriconStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void forestTemplateTest() {
-        this.genericTemplateTest(new ForestStyleTemplate(), new SXSSFWorkbook());
+        this.assertTemplateCellStylesNotNull(new ForestStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void purpleTemplateTest() {
-        this.genericTemplateTest(new PurpleStyleTemplate(), new SXSSFWorkbook());
+        this.assertTemplateCellStylesNotNull(new PurpleStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void roseTemplateTest() {
-        this.genericTemplateTest(new RoseStyleTemplate(), new SXSSFWorkbook());
+        this.assertTemplateCellStylesNotNull(new RoseStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void stoneTemplateTest() {
-        this.genericTemplateTest(new StoneStyleTemplate(), new SXSSFWorkbook());
+        this.assertTemplateCellStylesNotNull(new StoneStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void summerTemplateTest() {
-        this.genericTemplateTest(new SummerStyleTemplate(), new SXSSFWorkbook());
+        this.assertTemplateCellStylesNotNull(new SummerStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
@@ -142,7 +142,7 @@ public class StyleTemplateTest {
      * @param template
      * @param workbook
      */
-    private void genericTemplateTest(StyleTemplate template, Workbook workbook) {
+    private void assertTemplateCellStylesNotNull(StyleTemplate template, Workbook workbook) {
 
         assertNotNull("template " + template.getClass().getName() + " common data cell style not null", template.getCommonDataCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " date cell style not null", template.getDateCellStyle(workbook));
