@@ -49,7 +49,7 @@ public class AreaReferenceValidatorTest {
     }
 
 
-    @Test
+    @Test(expected = Test.None.class)
     public void validateAreaReferenceTestAndThrowWillSuccess() {
 
         Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES)

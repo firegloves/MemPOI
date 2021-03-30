@@ -269,7 +269,7 @@ public class MempoiColumnTest {
     }
 
 
-    @Test
+    @Test(expected = Test.None.class)
     public void elaborationStepListAnalyzeTest() {
 
         doNothing().when(this.mockedStep).performAnalysis(Mockito.any(), Mockito.anyString());
@@ -278,7 +278,7 @@ public class MempoiColumnTest {
         mc.elaborationStepListAnalyze(this.wb.createSheet().createRow(0).createCell(0), "testValue");
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void elaborationStepListCloseAnalysisTest() {
 
         doNothing().when(this.mockedStep).closeAnalysis(Mockito.anyInt());
@@ -287,7 +287,7 @@ public class MempoiColumnTest {
         mc.elaborationStepListCloseAnalysis(5);
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void elaborationStepListExecuteTest() {
 
         doNothing().when(this.mockedStep).execute(Mockito.any(), Mockito.any());

@@ -1,4 +1,5 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Grade)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
@@ -231,11 +232,11 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 MemPOI comes with a preset of default data formatting styles for
 
-  - header cells
-  - integer data types cells
-  - floating-point data types cells
-  - date data types cells
-  - datetime data types cells
+- header cells
+- integer data types cells
+- floating-point data types cells
+- date data types cells
+- datetime data types cells
 
 The default styles are automatically applied. You can inspect them looking at the end of `MempoiReportStyler` class 
 If you want to reset the default styles you need to use an empty `CellStyle` when you use `MempoiBuilder`, for example:
@@ -273,8 +274,8 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 ```
 
 Actually you can:
-  - provide different styles for different sheets
-  - granularly override bundled styles' cell styles
+- provide different styles for different sheets
+- granularly override bundled styles' cell styles
 
 ```Java
 // SummerStyleTemplate for dogsSheet
@@ -351,10 +352,10 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 
 List of available subfooters:
 
-  - **NumberSumSubFooter**: places a cell containing the sum of the column (works only on numeric comlumns)
-  - **NumberMaxSubFooter**: places a cell containing the maximum value of the column (works only on numeric comlumns)
-  - **NumberMinSubFooter**: places a cell containing the minimum value of the column (works only on numeric comlumns)
-  - **NumberAverageSubFooter**: places a cell containing the average value of the column (works only on numeric comlumns)
+- **NumberSumSubFooter**: places a cell containing the sum of the column (works only on numeric comlumns)
+- **NumberMaxSubFooter**: places a cell containing the maximum value of the column (works only on numeric comlumns)
+- **NumberMinSubFooter**: places a cell containing the minimum value of the column (works only on numeric comlumns)
+- **NumberAverageSubFooter**: places a cell containing the average value of the column (works only on numeric comlumns)
 
 By default no footer and no subfooter are appended to the report.
 
@@ -442,8 +443,8 @@ MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
 #### Pivot Table source
 
 You can specify one source for the pivot table choosing from:
-  - explicit area reference (in this case you can also specify a source sheet if different from the one in which place the pivot table)
-  - a previously generated table (the table's sheet will be used as source sheet)
+- explicit area reference (in this case you can also specify a source sheet if different from the one in which place the pivot table)
+- a previously generated table (the table's sheet will be used as source sheet)
 
 Unfortunately Apache POI actually doesn't support table as source for a pivot table.
 MemPOI makes an abstraction that is only able to extract the table area reference and use it as source for the upcoming pivot table. 
