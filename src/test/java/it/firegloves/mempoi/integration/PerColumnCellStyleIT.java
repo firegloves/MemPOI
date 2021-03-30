@@ -66,9 +66,8 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            AssertionHelper
-                    .assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
-                            null, new StandardStyleTemplate());
+            assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fut.get(), TestHelper.HEADERS,
+                    new StandardStyleTemplate());
 
         } catch (Exception e) {
             AssertionHelper.failAssertion(e);
@@ -116,9 +115,8 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            AssertionHelper
-                    .assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS,
-                            null, new StandardStyleTemplate());
+            assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fut.get(), TestHelper.HEADERS,
+                            new StandardStyleTemplate());
 
         } catch (Exception e) {
             AssertionHelper.failAssertion(e);
@@ -133,7 +131,7 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
      * @param fileToValidate the absolute filename of the xlsx file on which apply the generic asserts
      * @param headers        the array of headers name required
      */
-    private void validateGeneratedFileDataTransformationFunction(PreparedStatement prepStmt,
+    private void assertOnGeneratedFileDataTransformationFunction(PreparedStatement prepStmt,
             String fileToValidate, String[] headers, StyleTemplate styleTemplate) {
 
         File file = new File(fileToValidate);
@@ -152,7 +150,7 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowPerColumnStyle(rs, sheet.getRow(r), headers, styleTemplate, wb);
+                assertOnGeneratedFileDataRowPerColumnStyle(rs, sheet.getRow(r), headers, styleTemplate, wb);
             }
 
         } catch (Exception e) {
@@ -171,7 +169,7 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    private void validateGeneratedFileDataRowPerColumnStyle(ResultSet rs, Row row, String[] headers,
+    private void assertOnGeneratedFileDataRowPerColumnStyle(ResultSet rs, Row row, String[] headers,
             StyleTemplate styleTemplate, Workbook wb) {
 
         try {

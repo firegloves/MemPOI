@@ -4,7 +4,6 @@
 
 package it.firegloves.mempoi.validator;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -12,9 +11,14 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
 import java.util.Arrays;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class AreaReferenceValidatorTest {
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     private AreaReferenceValidator areaReferenceValidator = new AreaReferenceValidator();
 
@@ -57,11 +61,10 @@ public class AreaReferenceValidatorTest {
 
         Arrays.stream(TestHelper.FAILING_AREA_REFERENCES).forEach(areaRef -> {
 
-            try {
-                this.areaReferenceValidator.validateAreaReferenceAndThrow(areaRef);
-            } catch (MempoiException e) {
-                assertEquals(Errors.ERR_AREA_REFERENCE_NOT_VALID, e.getMessage());
-            }
+            exceptionRule.expect(MempoiException.class);
+            exceptionRule.expectMessage(Errors.ERR_AREA_REFERENCE_NOT_VALID);
+
+            this.areaReferenceValidator.validateAreaReferenceAndThrow(areaRef);
         });
     }
 

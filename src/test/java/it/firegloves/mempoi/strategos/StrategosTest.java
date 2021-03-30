@@ -63,7 +63,7 @@ public class StrategosTest {
      *                          applyMempoiColumnStrategies
      *****************************************************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void applyMempoiColumnStrategies() throws Exception {
 
         when(mempoiSheet.getColumnList()).thenReturn(Arrays.asList(new MempoiColumn(Types.BIGINT, "temp", 0)));
@@ -98,8 +98,8 @@ public class StrategosTest {
         m.invoke(strategos, mempoiSheet);
     }
 
-    @Test
-    public void applyMempoiColumnStrategiesNullColListForceGenerating() throws Exception {
+    @Test(expected = Test.None.class)
+    public void applyMempoiColumnStrategiesNullColListForceGenerating() {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
@@ -122,7 +122,7 @@ public class StrategosTest {
      *                          adjustColSize
      *****************************************************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void adjustColSize() throws Exception {
 
         WorkbookConfig wbConfig = new WorkbookConfig()
@@ -139,7 +139,7 @@ public class StrategosTest {
     }
 
 
-    @Test
+    @Test(expected = Test.None.class)
     public void adjustColSizeNegativeColLenght() throws Exception {
 
         WorkbookConfig wbConfig = new WorkbookConfig()
@@ -155,7 +155,7 @@ public class StrategosTest {
         m.invoke(strategos, sheet, -5);
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void adjustColSizeNullSheet() throws Exception {
 
         WorkbookConfig wbConfig = new WorkbookConfig()

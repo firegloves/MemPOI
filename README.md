@@ -9,8 +9,8 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 
 ### Support
 
-  - Apache POI 4.0.0+
-  - Java 8+
+- Apache POI 4.0.0+
+- Java 8+
 
 ---
 
@@ -96,9 +96,9 @@ CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
 You can find more examples in the functional tests package.
 
 By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s descendants:
-  - `SXSSFWorkbook`
-  - `XSSFWorkbook`
-  - `HSSFWorkbook`
+- `SXSSFWorkbook`
+- `XSSFWorkbook`
+- `HSSFWorkbook`
 
 **Multiple sheets supported** - Each `MempoiSheet` will add a sheet to the generated report
 
@@ -135,26 +135,26 @@ byte[] bytes = fut.get();
 
 ### Supported SQL data types
 
-  - BIGINT
-  - DOUBLE
-  - DECIMAL
-  - FLOAT
-  - NUMERIC
-  - REAL
-  - INTEGER
-  - SMALLINT
-  - TINYINT
-  - CHAR
-  - NCHAR
-  - VARCHAR
-  - NVARCHAR
-  - LONGVARCHAR
-  - TIMESTAMP
-  - DATE
-  - TIME
-  - BIT
-  - BOOLEAN
-  - UUID (Postgres) (thanks to [nanshakov](https://github.com/nanshakov))
+- BIGINT
+- DOUBLE
+- DECIMAL
+- FLOAT
+- NUMERIC
+- REAL
+- INTEGER
+- SMALLINT
+- TINYINT
+- CHAR
+- NCHAR
+- VARCHAR
+- NVARCHAR
+- LONGVARCHAR
+- TIMESTAMP
+- DATE
+- TIME
+- BIT
+- BOOLEAN
+- UUID (Postgres) (thanks to [nanshakov](https://github.com/nanshakov))
 
 ---            
 

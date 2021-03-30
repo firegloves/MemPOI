@@ -2,7 +2,6 @@ package it.firegloves.mempoi.datapostelaboration.mergedregions;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.MergedRegionsManager;
@@ -151,7 +150,9 @@ public class MergedRegionsManagerTest {
     @Test
     public void mergeRegionLastRowLowerThanFirst() {
 
-        int firstRow = 5, lastRow = 4, colInd = 1;
+        int firstRow = 5;
+        int lastRow = 4;
+        int colInd = 1;
 
         boolean merged = this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd);
 
@@ -161,7 +162,9 @@ public class MergedRegionsManagerTest {
     @Test(expected = MempoiException.class)
     public void mergeRegionNullSheet() {
 
-        int firstRow = 5, lastRow = 4, colInd = 1;
+        int firstRow = 5;
+        int lastRow = 4;
+        int colInd = 1;
 
         this.mergedRegionsManager.mergeRegion(null, this.cellStyle, firstRow, lastRow, colInd);
     }
@@ -169,7 +172,9 @@ public class MergedRegionsManagerTest {
     @Test
     public void mergeRegionNullCellStyle() {
 
-        int firstRow = 5, lastRow = 4, colInd = 1;
+        int firstRow = 5;
+        int lastRow = 4;
+        int colInd = 1;
 
         assertFalse(this.mergedRegionsManager.mergeRegion(this.sheet, null, firstRow, lastRow, colInd));
     }
@@ -177,7 +182,9 @@ public class MergedRegionsManagerTest {
     @Test
     public void mergeRegionNegativeFirstRow() {
 
-        int firstRow = -5, lastRow = 4, colInd = 1;
+        int firstRow = -5;
+        int lastRow = 4;
+        int colInd = 1;
 
         assertFalse(this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd));
     }
@@ -185,7 +192,9 @@ public class MergedRegionsManagerTest {
     @Test
     public void mergeRegionNegativeColInd() {
 
-        int firstRow = -5, lastRow = 4, colInd = -1;
+        int firstRow = -5;
+        int lastRow = 4;
+        int colInd = -1;
 
         assertFalse(this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd));
     }

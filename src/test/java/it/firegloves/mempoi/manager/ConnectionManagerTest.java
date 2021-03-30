@@ -21,9 +21,9 @@ import org.mockito.MockitoAnnotations;
 public class ConnectionManagerTest {
 
     @Mock
-    ResultSet rs;
+    private ResultSet rs;
     @Mock
-    PreparedStatement prepStmt;
+    private PreparedStatement prepStmt;
 
     @Before
     public void setup() {

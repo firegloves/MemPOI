@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.domain;
 
+import static it.firegloves.mempoi.testutil.AssertionHelper.assertOnCellStyle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doNothing;
@@ -13,7 +14,6 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
-import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import java.lang.reflect.Method;
@@ -62,102 +62,102 @@ public class MempoiColumnTest {
 
     @Test
     public void columnBigint() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_BIGINT", Types.BIGINT, EExportDataType.BIG_INTEGER);
+        assertOnMempoiColumn("column_BIGINT", Types.BIGINT, EExportDataType.BIG_INTEGER);
     }
 
     @Test
     public void columnDouble() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_DOUBLE", Types.DOUBLE, EExportDataType.DOUBLE);
+        assertOnMempoiColumn("column_DOUBLE", Types.DOUBLE, EExportDataType.DOUBLE);
     }
 
     @Test
     public void columnDecimal() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_DECIMAL", Types.DECIMAL, EExportDataType.FLOAT);
+        assertOnMempoiColumn("column_DECIMAL", Types.DECIMAL, EExportDataType.FLOAT);
     }
 
     @Test
     public void columnFloat() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_FLOAT", Types.FLOAT, EExportDataType.FLOAT);
+        assertOnMempoiColumn("column_FLOAT", Types.FLOAT, EExportDataType.FLOAT);
     }
 
     @Test
     public void columnNumeric() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_NUMERIC", Types.NUMERIC, EExportDataType.FLOAT);
+        assertOnMempoiColumn("column_NUMERIC", Types.NUMERIC, EExportDataType.FLOAT);
     }
 
     @Test
     public void columnReal() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_REAL", Types.REAL, EExportDataType.FLOAT);
+        assertOnMempoiColumn("column_REAL", Types.REAL, EExportDataType.FLOAT);
     }
 
     @Test
     public void columnInteger() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_INTEGER", Types.INTEGER, EExportDataType.INT);
+        assertOnMempoiColumn("column_INTEGER", Types.INTEGER, EExportDataType.INT);
     }
 
     @Test
     public void columnSmallint() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_SMALLINT", Types.SMALLINT, EExportDataType.INT);
+        assertOnMempoiColumn("column_SMALLINT", Types.SMALLINT, EExportDataType.INT);
     }
 
     @Test
     public void columnTinyint() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_TINYINT", Types.TINYINT, EExportDataType.INT);
+        assertOnMempoiColumn("column_TINYINT", Types.TINYINT, EExportDataType.INT);
     }
 
     @Test
     public void columnChar() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_CHAR", Types.CHAR, EExportDataType.TEXT);
+        assertOnMempoiColumn("column_CHAR", Types.CHAR, EExportDataType.TEXT);
     }
 
     @Test
     public void columnNchar() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_NCHAR", Types.NCHAR, EExportDataType.TEXT);
+        assertOnMempoiColumn("column_NCHAR", Types.NCHAR, EExportDataType.TEXT);
     }
 
     @Test
     public void columnVarchar() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_VARCHAR", Types.VARCHAR, EExportDataType.TEXT);
+        assertOnMempoiColumn("column_VARCHAR", Types.VARCHAR, EExportDataType.TEXT);
     }
 
     @Test
     public void columnNvarchar() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_NVARCHAR", Types.NVARCHAR, EExportDataType.TEXT);
+        assertOnMempoiColumn("column_NVARCHAR", Types.NVARCHAR, EExportDataType.TEXT);
     }
 
     @Test
     public void columnLongvarchar() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_LONGVARCHAR", Types.LONGVARCHAR, EExportDataType.TEXT);
+        assertOnMempoiColumn("column_LONGVARCHAR", Types.LONGVARCHAR, EExportDataType.TEXT);
     }
 
     @Test
     public void columnTimestamp() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_TIMESTAMP", Types.TIMESTAMP, EExportDataType.TIMESTAMP);
+        assertOnMempoiColumn("column_TIMESTAMP", Types.TIMESTAMP, EExportDataType.TIMESTAMP);
     }
 
     @Test
     public void columnDate() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_DATE", Types.DATE, EExportDataType.DATE);
+        assertOnMempoiColumn("column_DATE", Types.DATE, EExportDataType.DATE);
     }
 
     @Test
     public void columnTime() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_TIME", Types.TIME, EExportDataType.TIME);
+        assertOnMempoiColumn("column_TIME", Types.TIME, EExportDataType.TIME);
     }
 
     @Test
     public void columnBit() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_BIT", Types.BIT, EExportDataType.BOOLEAN);
+        assertOnMempoiColumn("column_BIT", Types.BIT, EExportDataType.BOOLEAN);
     }
 
     @Test
     public void columnBoolean() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_BOOLEAN", Types.BOOLEAN, EExportDataType.BOOLEAN);
+        assertOnMempoiColumn("column_BOOLEAN", Types.BOOLEAN, EExportDataType.BOOLEAN);
     }
 
     @Test
     public void columnUUID() throws NoSuchMethodException {
-        this.assertMempoiColumn("column_UUID", TypesExtended.UUID, EExportDataType.TEXT);
+        assertOnMempoiColumn("column_UUID", TypesExtended.UUID, EExportDataType.TEXT);
     }
 
     /**
@@ -168,7 +168,7 @@ public class MempoiColumnTest {
      * @param eExportDataType
      * @throws NoSuchMethodException
      */
-    private void assertMempoiColumn(String colName, int sqlObjType, EExportDataType eExportDataType) throws NoSuchMethodException {
+    private void assertOnMempoiColumn(String colName, int sqlObjType, EExportDataType eExportDataType) throws NoSuchMethodException {
 
         MempoiColumn mc = new MempoiColumn(sqlObjType, colName, 0);
 
@@ -185,7 +185,7 @@ public class MempoiColumnTest {
 
         mc.setCellStyle(this.cellStyle);
 
-        AssertionHelper.assertOnCellStyle(mc.getCellStyle(), this.cellStyle);
+        assertOnCellStyle(mc.getCellStyle(), this.cellStyle);
     }
 
     @Test
@@ -205,7 +205,7 @@ public class MempoiColumnTest {
 
         mc.setSubFooterCell(subFooterCell);
 
-        AssertionHelper.assertOnCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
+        assertOnCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
     }
 
     @Test
@@ -215,7 +215,7 @@ public class MempoiColumnTest {
 
         mc.setSubFooterCell(subFooterCell);
 
-        AssertionHelper.assertOnCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
+        assertOnCellStyle(subFooterCell.getStyle(), mc.getSubFooterCell().getStyle());
     }
 
 

@@ -104,7 +104,7 @@ public class FileManagerTest {
 
         File file = this.fileManager.writeTempFile();
 
-        Assert.assertNotNull("file not null", file);
+        assertNotNull("file not null", file);
         Assert.assertTrue("file exists", file.exists());
     }
 

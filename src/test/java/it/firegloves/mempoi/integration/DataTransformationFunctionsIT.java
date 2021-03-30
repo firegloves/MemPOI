@@ -545,7 +545,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowDataTransformationFunction(rs, sheet.getRow(r), headers, styleTemplate, wb,
+                assertOnGeneratedFileDataRowDataTransformationFunction(rs, sheet.getRow(r), styleTemplate, wb,
                         transformedValue, transformedValueCastClass, transformedColumnName);
             }
 
@@ -561,11 +561,10 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
      *
      * @param rs            the ResultSet against which validate the Row
      * @param row           the Row to validate against the ResultSet
-     * @param headers       the array of columns name, useful to retrieve data from the ResultSet
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    private void validateGeneratedFileDataRowDataTransformationFunction(ResultSet rs, Row row, String[] headers,
+    private void assertOnGeneratedFileDataRowDataTransformationFunction(ResultSet rs, Row row,
             StyleTemplate styleTemplate, Workbook wb, Object transformedValue, Class transformedValueCastClass,
             String transformedColumnName) {
 

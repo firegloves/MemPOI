@@ -4,8 +4,6 @@
 
 package it.firegloves.mempoi.validator;
 
-import static org.junit.Assert.assertEquals;
-
 import it.firegloves.mempoi.exception.MempoiException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,21 +13,26 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class WorkbookValidatorTest {
 
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
     private WorkbookValidator areaReferenceValidator = new WorkbookValidator();
     private String error = "Error";
 
-    @Test
+    @Test(expected = Test.None.class)
     public void validateWorkbookTypeAndThrowWillSuccess() {
 
-        Workbook[] workbooks = { new XSSFWorkbook(), new HSSFWorkbook(), new SXSSFWorkbook()};
-        Arrays.asList(workbooks).forEach(wb -> this.areaReferenceValidator.validateWorkbookTypeAndThrow(wb, wb.getClass(), error));
+        Workbook[] workbooks = {new XSSFWorkbook(), new HSSFWorkbook(), new SXSSFWorkbook()};
+        Arrays.asList(workbooks)
+                .forEach(wb -> this.areaReferenceValidator.validateWorkbookTypeOrThrow(wb, wb.getClass(), error));
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void validateWorkbookTypeAndThrowDifferentClassWillFail() {
 
         Map<Workbook, List<Class<? extends Workbook>>> map = new HashMap<>();
@@ -41,15 +44,10 @@ public class WorkbookValidatorTest {
 
             map.get(wb).forEach(wbClazz -> {
 
-                try {
-                    this.areaReferenceValidator.validateWorkbookTypeAndThrow(wb, wb.getClass(), error);
+                exceptionRule.expect(MempoiException.class);
+                exceptionRule.expectMessage(error);
 
-                } catch (MempoiException e) {
-
-                    assertEquals(String.format("Validating %s against class %s", wb.getClass().getName(), wbClazz.getName()),
-                            error,
-                            e.getMessage());
-                }
+                this.areaReferenceValidator.validateWorkbookTypeOrThrow(wb, wbClazz, error);
             });
         });
     }
@@ -58,18 +56,18 @@ public class WorkbookValidatorTest {
     @Test(expected = MempoiException.class)
     public void validateWorkbookTypeAndThrowWithNullWorkbookWillFail() {
 
-        this.areaReferenceValidator.validateWorkbookTypeAndThrow(null, HSSFWorkbook.class, error);
+        this.areaReferenceValidator.validateWorkbookTypeOrThrow(null, HSSFWorkbook.class, error);
     }
 
     @Test(expected = MempoiException.class)
     public void validateWorkbookTypeAndThrowWithNullClassWillFail() {
 
-        this.areaReferenceValidator.validateWorkbookTypeAndThrow(new HSSFWorkbook(), null, error);
+        this.areaReferenceValidator.validateWorkbookTypeOrThrow(new HSSFWorkbook(), null, error);
     }
 
     @Test(expected = MempoiException.class)
     public void validateWorkbookTypeAndThrowWithNullErrorWillFail() {
 
-        this.areaReferenceValidator.validateWorkbookTypeAndThrow(new HSSFWorkbook(), XSSFWorkbook.class, null);
+        this.areaReferenceValidator.validateWorkbookTypeOrThrow(new HSSFWorkbook(), XSSFWorkbook.class, null);
     }
 }

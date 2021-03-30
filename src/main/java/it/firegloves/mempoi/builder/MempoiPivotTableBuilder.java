@@ -214,7 +214,7 @@ public final class MempoiPivotTableBuilder {
             throw new MempoiException(Errors.ERR_PIVOTTABLE_POSITION_NOT_FOUND);
         }
 
-        this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
+        this.workbookValidator.validateWorkbookTypeOrThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
 
         // TODO test if it can be null != areaReference
         if (null == mempoiTable) {

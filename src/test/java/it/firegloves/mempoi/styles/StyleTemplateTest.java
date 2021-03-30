@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.styles;
 
+import static it.firegloves.mempoi.testutil.AssertionHelper.assertOnCellStyle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -13,63 +14,51 @@ import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
-import it.firegloves.mempoi.testutil.AssertionHelper;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 public class StyleTemplateTest {
 
-    @Mock
-    Workbook workbook;
-
-    @Before
-    public void prepare() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     @Test
     public void standardTemplateTest() {
-        this.assertTemplateCellStylesNotNull(new StandardStyleTemplate(), new SXSSFWorkbook());
+        assertTemplateCellStylesNotNull(new StandardStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void aquaTemplateTest() {
-        this.assertTemplateCellStylesNotNull(new AquaStyleTemplate(), new SXSSFWorkbook());
+        assertTemplateCellStylesNotNull(new AquaStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void panegiriconTemplateTest() {
-        this.assertTemplateCellStylesNotNull(new PanegiriconStyleTemplate(), new SXSSFWorkbook());
+        assertTemplateCellStylesNotNull(new PanegiriconStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void forestTemplateTest() {
-        this.assertTemplateCellStylesNotNull(new ForestStyleTemplate(), new SXSSFWorkbook());
+        assertTemplateCellStylesNotNull(new ForestStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void purpleTemplateTest() {
-        this.assertTemplateCellStylesNotNull(new PurpleStyleTemplate(), new SXSSFWorkbook());
+        assertTemplateCellStylesNotNull(new PurpleStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void roseTemplateTest() {
-        this.assertTemplateCellStylesNotNull(new RoseStyleTemplate(), new SXSSFWorkbook());
+        assertTemplateCellStylesNotNull(new RoseStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void stoneTemplateTest() {
-        this.assertTemplateCellStylesNotNull(new StoneStyleTemplate(), new SXSSFWorkbook());
+        assertTemplateCellStylesNotNull(new StoneStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
     public void summerTemplateTest() {
-        this.assertTemplateCellStylesNotNull(new SummerStyleTemplate(), new SXSSFWorkbook());
+        assertTemplateCellStylesNotNull(new SummerStyleTemplate(), new SXSSFWorkbook());
     }
 
     @Test
@@ -109,13 +98,13 @@ public class StyleTemplateTest {
 
         MempoiStyler styler = new DummyStyleTemplate().toMempoiStyler(new SXSSFWorkbook());
 
-        AssertionHelper.assertOnCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
-        AssertionHelper.assertOnCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
-        AssertionHelper.assertOnCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
-        AssertionHelper.assertOnCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
-        AssertionHelper.assertOnCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
-        AssertionHelper.assertOnCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
-        AssertionHelper.assertOnCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
+        assertOnCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
+        assertOnCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
+        assertOnCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
+        assertOnCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
+        assertOnCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
+        assertOnCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
+        assertOnCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
     }
 
 

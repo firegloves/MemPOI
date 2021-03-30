@@ -19,7 +19,7 @@ public class WorkbookValidator {
      * @param error the error message to put into the exception if thrown
      * @throws MempoiException if validation fails
      */
-    public void validateWorkbookTypeAndThrow(Workbook workbook, Class<? extends Workbook> wbClazz, String error) throws MempoiException {
+    public void validateWorkbookTypeOrThrow(Workbook workbook, Class<? extends Workbook> wbClazz, String error) throws MempoiException {
 
         if (null == workbook) {
             throw new MempoiException(Errors.ERR_WORKBOOK_NULL);

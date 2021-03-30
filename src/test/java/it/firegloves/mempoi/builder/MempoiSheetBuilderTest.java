@@ -197,7 +197,6 @@ public class MempoiSheetBuilderTest {
 
             assertNotNull("Force generation null array - mempoi sheet not null", mempoiSheet);
             assertNull("Force generation null array - merged regions array null", mempoiSheet.getMergedRegionColumns());
-
         });
     }
 
@@ -237,7 +236,7 @@ public class MempoiSheetBuilderTest {
     }
 
     @Test
-    public void mempoiSheetBuilder_withMempoiTableAndPivotTable() {
+    public void mempoiSheetBuilderWithMempoiTableAndPivotTable() {
 
         Workbook wb = new XSSFWorkbook();
         MempoiTable mempoiTable = TestHelper.getTestMempoiTable(wb);
