@@ -1,9 +1,13 @@
 package it.firegloves.mempoi.datapostelaboration.mergedregions;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,11 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
-
-import static org.junit.Assert.assertEquals;
 
 public class StreamApiMergedRegionsStepTest {
 

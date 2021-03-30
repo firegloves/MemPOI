@@ -1,4 +1,5 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Grade)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
@@ -108,7 +109,7 @@ By default `SXSSFWorkbook` is used, but these are the supported `Workbook`'s des
 
 You can choose to write directly to a file or to obtain the byte array of the generated report (for example to pass it back to a waiting client)
 
-#### File:
+#### File
 
 ```Java
 File fileDest = new File("test_with_file.xlsx");
@@ -122,7 +123,7 @@ CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
 String absoluteFileName = fut.get();
 ```
 
-#### Byte array:
+#### Byte array
 
 ```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
@@ -132,7 +133,6 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
 byte[] bytes = fut.get();
 ```
-
 
 ### Supported SQL data types
 
@@ -156,6 +156,7 @@ byte[] bytes = fut.get();
 - BIT
 - BOOLEAN
 - UUID (Postgres) (thanks to [nanshakov](https://github.com/nanshakov))
+
 ---            
 
 **You have to take care to manage your database connection, meanwhile `PreparedStatement` and `ResultSet` are managed and closed internally by MemPOI**
@@ -262,7 +263,6 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .build();
 ```                    
 
-
 MemPOI comes with a set of templates ready to use. You can use them as follows:
 
 ```Java
@@ -274,8 +274,8 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 ```
 
 Actually you can:
-* provide different styles for different sheets
-* granularly override bundled styles' cell styles
+- provide different styles for different sheets
+- granularly override bundled styles' cell styles
 
 ```Java
 // SummerStyleTemplate for dogsSheet
@@ -307,8 +307,6 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .build();
 ``` 
 
-
-
 List of available templates:
 
 | Name                      |      Image            |
@@ -322,12 +320,10 @@ List of available templates:
 | StoneStyleTemplate        |![](img/template/stone.jpg)
 | SummerStyleTemplate       |![](img/template/summer.jpg)
 
-
 #### Numeric cell styles
 
 Numeric data types (and the corresponding cell styles) are now split between integer and floating-point data types. This means that from version 1.3.0 database integer data types will be exported without numbers after comma. You can still specify a custom cell style or explicitly use one of the available ones.
 For example in order use pre v1.3.0 integer cell style you can do something like this:
-
 
 ```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
@@ -336,7 +332,6 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withIntegerCellStyle(new StandardStyleTemplate().getFloatingPointCellStyle())     // no default style for integer fields
                     .build();
 ```
-
 
 ---
 
@@ -527,7 +522,6 @@ MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempo
                  .withColumnLabelColumns(columnLabelColumnsMap)
                  .withReportFilterColumns(reportFilterColumnList);
 ```
-
 
 ---
 

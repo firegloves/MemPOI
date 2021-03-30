@@ -12,15 +12,18 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.ForceGenerationHelper;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.PreparedStatement;
-import java.util.*;
 
 public final class MempoiSheetBuilder {
 
@@ -226,15 +229,17 @@ public final class MempoiSheetBuilder {
      */
     public MempoiSheetBuilder withMergedRegionColumns(String[] mergedRegionColumns) {
 
-        if (null == mergedRegionColumns || mergedRegionColumns.length == 0) {
+        String[] mergedRegionColumnsToSet = mergedRegionColumns;
+
+        if (null == mergedRegionColumnsToSet || mergedRegionColumnsToSet.length == 0) {
             if (MempoiConfig.getInstance().isForceGeneration()) {
-                mergedRegionColumns = null;
+                mergedRegionColumnsToSet = null;
             } else {
                 throw new MempoiException(Errors.ERR_MERGED_REGIONS_LIST_NULL);
             }
         }
 
-        this.mergedRegionColumns = mergedRegionColumns;
+        this.mergedRegionColumns = mergedRegionColumnsToSet;
         return this;
     }
 

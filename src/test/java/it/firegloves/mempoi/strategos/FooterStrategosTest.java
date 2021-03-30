@@ -1,8 +1,12 @@
 package it.firegloves.mempoi.strategos;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import it.firegloves.mempoi.config.WorkbookConfig;
-import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Before;
@@ -10,18 +14,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 public class FooterStrategosTest {
 
     @Mock
-    MempoiSheet mempoiSheet;
-    @Mock
-    MempoiFooter mempoiFooter;
+    private MempoiFooter mempoiFooter;
 
     @Before
     public void prepare() {
@@ -37,7 +33,9 @@ public class FooterStrategosTest {
     @Test
     public void createFooterRow() throws Exception {
 
-        String leftTxt = "left txt", centerTxt = "centered txt", rightTxt = "right txt";
+        String leftTxt = "left txt";
+        String centerTxt = "centered txt";
+        String rightTxt = "right txt";
 
         Sheet sheet = new SXSSFWorkbook().createSheet();
         when(mempoiFooter.getLeftText()).thenReturn(leftTxt);

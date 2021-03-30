@@ -10,11 +10,14 @@ import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElabora
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.poi.ss.usermodel.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
 
 public class NotStreamApiMergedRegionsStep<T> implements MempoiColumnElaborationStep<T> {
 

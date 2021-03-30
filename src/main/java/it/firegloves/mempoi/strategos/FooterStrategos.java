@@ -12,14 +12,13 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.util.Errors;
+import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Footer;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 class FooterStrategos {
 
@@ -30,7 +29,7 @@ class FooterStrategos {
      */
     private WorkbookConfig workbookConfig;
 
-    FooterStrategos(WorkbookConfig workbookConfig) {
+    public FooterStrategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
     }
 
@@ -64,7 +63,7 @@ class FooterStrategos {
      * @param rowCounter counter of the current row
      * @param reportStyler MempoiStyler containing style configuration
      */
-    void createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
+    private void createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
 
         if (null != mempoiSubFooter) {
 
@@ -107,7 +106,7 @@ class FooterStrategos {
      * @param sheet the sheet to which append sub footer row
      * @param mempoiFooter MempoiFooter containing info about Footer to create
      */
-    void createFooterRow(Sheet sheet, MempoiFooter mempoiFooter) {
+    private void createFooterRow(Sheet sheet, MempoiFooter mempoiFooter) {
 
         if (null == sheet) {
             throw new MempoiException(Errors.ERR_SHEET_NULL);

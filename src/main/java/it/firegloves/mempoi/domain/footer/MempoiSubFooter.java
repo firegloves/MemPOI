@@ -1,10 +1,9 @@
 package it.firegloves.mempoi.domain.footer;
 
 import it.firegloves.mempoi.domain.MempoiColumn;
+import java.util.List;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
-
-import java.util.List;
 
 public interface MempoiSubFooter {
 

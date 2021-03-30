@@ -1,8 +1,12 @@
 package it.firegloves.mempoi.testutil;
 
 import it.firegloves.mempoi.exception.MempoiException;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Random;
 
 /**
@@ -11,21 +15,21 @@ import java.util.Random;
 
 public class DBPopulator {
 
-    Connection conn = null;
+    private Connection conn = null;
 
     public static void main(String[] args) {
 
         DBPopulator instance = new DBPopulator();
         instance.initConn();
 
-        // instance.createTableSpeedTest();
-        // instance.populateSpeedTest();
+         instance.createTableSpeedTest();
+         instance.populateSpeedTest();
 
-//        instance.createTableMergedRegionsTest();
-//        instance.populateMergedRegionsTest();
+        instance.createTableMergedRegionsTest();
+        instance.populateMergedRegionsTest();
 
-//        instance.createTablePivotTableTest();
-//        instance.populatePivotTableTest();
+        instance.createTablePivotTableTest();
+        instance.populatePivotTableTest();
 
         instance.closeConn();
     }
@@ -161,7 +165,6 @@ public class DBPopulator {
     private void populateMergedRegionsTest() {
         String sqlQuery = "insert into " + TestHelper.TABLE_MERGED_REGIONS + " (creation_date, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        Random rand = new Random(System.currentTimeMillis());
         PreparedStatement pstmt = null;
 
         try {
@@ -254,7 +257,6 @@ public class DBPopulator {
                 TestHelper.MEMPOI_COLUMN_NAME, TestHelper.MEMPOI_COLUMN_SURNAME, TestHelper.MEMPOI_COLUMN_AGE,
                 TestHelper.MEMPOI_COLUMN_ADDRESS, TestHelper.MEMPOI_COLUMN_AMOUNT, TestHelper.MEMPOI_COLUMN_WITCHER);
 
-        Random rand = new Random(System.currentTimeMillis());
         PreparedStatement pstmt = null;
 
         try {
@@ -269,10 +271,6 @@ public class DBPopulator {
             String[] witchers = new String[] { "Geralt", "Rivia", "Wolf", "Ascanio", "Ettore", "Bear", "Ciry" };
 
             for (int i = 0; i < 100; i++) {
-
-//                int ind4Based = (int) Math.ceil(i / 100) % 4;
-//                int ind7Based = (int) Math.ceil(i / 80) % 7;
-
                 pstmt.setString(1, names[i % 4]);
                 pstmt.setString(2, surnames[i % 4]);
                 pstmt.setInt(3, ages[i % 7]);

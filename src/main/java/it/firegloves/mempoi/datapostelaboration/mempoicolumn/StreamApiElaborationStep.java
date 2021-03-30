@@ -5,12 +5,11 @@
 package it.firegloves.mempoi.datapostelaboration.mempoicolumn;
 
 import it.firegloves.mempoi.exception.MempoiException;
+import java.io.IOException;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 public abstract class StreamApiElaborationStep<T> implements MempoiColumnElaborationStep<T> {
 

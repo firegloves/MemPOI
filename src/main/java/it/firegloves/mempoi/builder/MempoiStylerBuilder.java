@@ -4,10 +4,9 @@ package it.firegloves.mempoi.builder;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
+import java.util.Optional;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
-
-import java.util.Optional;
 
 public class MempoiStylerBuilder {
 

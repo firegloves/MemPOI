@@ -1,5 +1,10 @@
 package it.firegloves.mempoi.util;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
+
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import org.junit.Before;
@@ -9,11 +14,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class ForceGenerationHelperTest {
 

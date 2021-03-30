@@ -33,8 +33,6 @@ public class MempoiBuilder {
 
     // sheet with export query and maybe names
     private List<MempoiSheet> mempoiSheetList;
-    // sheet builder list
-    private List<MempoiSheetBuilder> mempoiSheetBuilderList;
 
     // optional mempoi sub footer
     private MempoiSubFooter mempoiSubFooter;

@@ -1,10 +1,20 @@
 package it.firegloves.mempoi.datapostelaboration.mergedregions;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
-import org.apache.poi.ss.usermodel.*;
+import java.lang.reflect.Field;
+import java.sql.PreparedStatement;
+import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
@@ -12,19 +22,24 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.lang.reflect.Field;
-import java.sql.PreparedStatement;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 public class NotStreamApiMergedRegionsStepTest {
 
     @Mock
-    private Row row1, row2, row3, row4;
+    private Row row1;
     @Mock
-    private Cell cell1, cell2, cell3, cell4;
+    private Row row2;
+    @Mock
+    private Row row3;
+    @Mock
+    private Row row4;
+    @Mock
+    private Cell cell1;
+    @Mock
+    private Cell cell2;
+    @Mock
+    private Cell cell3;
+    @Mock
+    private Cell cell4;
     private NotStreamApiMergedRegionsStep<String> step;
 
     private Workbook workbook;

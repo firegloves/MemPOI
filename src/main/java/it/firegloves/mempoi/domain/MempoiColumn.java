@@ -44,7 +44,6 @@ public class MempoiColumn {
      * the column index in the report
      */
     private int colIndex;
-
     /**
      * the method to call on the ResultSet to extract the desired data
      */
@@ -57,11 +56,6 @@ public class MempoiColumn {
      * data needed to manage the subfooter of this column
      */
     private MempoiSubFooterCell subFooterCell;
-
-    public MempoiColumnConfig getMempoiColumnConfig() {
-        return mempoiColumnConfig;
-    }
-
     /**
      * contains the configuration of the current MempoiColumn
      */
@@ -101,6 +95,10 @@ public class MempoiColumn {
         } catch (NoSuchMethodException e) {
             throw new MempoiException(e);
         }
+    }
+
+    public MempoiColumnConfig getMempoiColumnConfig() {
+        return mempoiColumnConfig;
     }
 
     /**

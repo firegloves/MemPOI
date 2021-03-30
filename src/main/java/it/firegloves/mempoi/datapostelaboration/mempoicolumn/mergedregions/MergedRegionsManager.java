@@ -2,13 +2,12 @@ package it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions;
 
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
+import java.util.Optional;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
-
-import java.util.Optional;
 
 public class MergedRegionsManager<T> {
 

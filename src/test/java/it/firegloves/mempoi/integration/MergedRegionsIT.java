@@ -1,5 +1,8 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
@@ -10,19 +13,16 @@ import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Test;
-
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
-
-import static org.junit.Assert.assertEquals;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Test;
 
 
 public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
@@ -38,7 +38,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         int limit = 450;
 
         try {
-            prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
+            prepStmt = this
+                    .createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // sheet
             MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
@@ -53,7 +54,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -64,7 +66,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsHSSFValidateData() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_validate_data.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_HSSF_validate_data.xlsx");
         int limit = 500;
 
         try {
@@ -85,8 +88,9 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -97,7 +101,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsHSSFValidateDataMultiColumn() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_validate_data_mulitcolumn.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_HSSF_validate_data_mulitcolumn.xlsx");
         int limit = 400;
 
         try {
@@ -119,8 +124,9 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             // sum of 2 columns regions
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -129,7 +135,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
 
     @Test(expected = CompletionException.class)
-    public void testWithFileAndMergedRegionsHSSF_toManyRows() throws SQLException {
+    public void testWithFileAndMergedRegionsHSSFToManyRows() throws SQLException {
 
         prepStmt = this.createStatement(null, 100_000);
 
@@ -149,7 +155,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsHSSFValidateDataMultisheet() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_validate_data_multisheet.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_HSSF_validate_data_multisheet.xlsx");
         int limit1 = 200;
         int limit2 = 100;
 
@@ -177,11 +184,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, false);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1, 0);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1, 0);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
 
         } catch (Exception e) {
@@ -193,7 +202,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsHSSFValidateDataMultisheetMultiColumn() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_validate_data_multisheet_mulitcolumn.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_HSSF_validate_data_multisheet_mulitcolumn.xlsx");
         int limit1 = 400;
         int limit2 = 400;
 
@@ -221,11 +231,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, true);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1, 0);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1, 0);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
 
         } catch (Exception e) {
@@ -263,8 +275,9 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -275,7 +288,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsXSSFValidateDataMultisheet() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_XSSF_validate_data_multisheet.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_XSSF_validate_data_multisheet.xlsx");
         int limit1 = 200;
         int limit2 = 100;
 
@@ -303,11 +317,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, false);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1, 0);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1, 0);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
 
         } catch (Exception e) {
@@ -319,7 +335,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsXSSFMultiColumn() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_XSSF_multicolumn.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_XSSF_multicolumn.xlsx");
         int limit = 10_000;
 
         try {
@@ -340,8 +357,9 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -352,7 +370,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsXSSFValidateDataMultisheetMultiColumn() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_XSSF_validate_data_multisheet_multicolumn.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_XSSF_validate_data_multisheet_multicolumn.xlsx");
         int limit1 = 400;
         int limit2 = 800;
 
@@ -380,11 +399,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, true);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1, 0);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate(), 0);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1, 0);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
 
         } catch (Exception e) {
@@ -401,11 +422,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsSXSSFAndFixedRowAccessWindowSize() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size.xlsx");
         int limit = 50_000;
 
         try {
-            prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
+            prepStmt = this
+                    .createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // sheet
             MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
@@ -422,8 +445,9 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -434,12 +458,14 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsSXSSFAndFixedRowAccessWindowSizeMultisheet() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size_multisheet.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size_multisheet.xlsx");
         int limit1 = 500;
         int limit2 = 200;
 
         try {
-            prepStmt = this.createStatement(null, limit1);    // TODO create tests that exceed HSSF limits and try to manage it
+            prepStmt = this
+                    .createStatement(null, limit1);    // TODO create tests that exceed HSSF limits and try to manage it
             PreparedStatement prepStmt2 = this.createStatement(null, limit2);
 
             // sheet 1
@@ -462,11 +488,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, false);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -477,11 +505,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsSXSSFAndFixedRowAccessWindowSizeMultiColumn() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size_multicolumn.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size_multicolumn.xlsx");
         int limit = 50_000;
 
         try {
-            prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
+            prepStmt = this
+                    .createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // sheet
             MempoiSheet sheet = this.createMempoiSheetMergedRegionsMultiColumn(prepStmt);
@@ -498,8 +528,9 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -510,11 +541,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
     @Test
     public void testWithFileAndMergedRegionsSXSSFAndVariableRowAccessWindowSize() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size.xlsx");
         int limit = 50_000;
 
         try {
-            prepStmt = this.createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
+            prepStmt = this
+                    .createStatement(null, limit);    // TODO create tests that exceed HSSF limits and try to manage it
 
             // sheet
             MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
@@ -531,8 +564,9 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
             int mergedRegionsNum = this.getMergedRegionsNumber(limit, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -541,9 +575,11 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
 
     @Test(expected = ExecutionException.class)
-    public void testWithFileAndMergedRegionsSXSSFAndVariableRowAccessWindowSizeMultiColumn() throws SQLException, ExecutionException, InterruptedException {
+    public void testWithFileAndMergedRegionsSXSSFAndVariableRowAccessWindowSizeMultiColumn()
+            throws SQLException, ExecutionException, InterruptedException {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size_multicolumn.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size_multicolumn.xlsx");
         int limit = 200;
 
         prepStmt = this.createStatement(null, limit);
@@ -558,20 +594,15 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
                 .addMempoiSheet(sheet)
                 .build();
 
-        CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-
-        int mergedRegionsNum = this.getMergedRegionsNumber(limit, true);
-
-        AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-        AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum);
+        memPOI.prepareMempoiReportToFile().get();
     }
 
 
     @Test
     public void testWithFileAndMergedRegionsSXSSFAndVariableRowAccessWindowSizeMultisheet() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size_multisheet.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size_multisheet.xlsx");
         int limit1 = 300;
         int limit2 = 100;
 
@@ -599,11 +630,13 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
             int mergedRegionsNum1 = this.getMergedRegionsNumber(limit1, false);
             int mergedRegionsNum2 = this.getMergedRegionsNumber(limit2, false);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit1), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new ForestStyleTemplate());
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum1);
 
-            AssertionHelper.validateGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
-            AssertionHelper.validateMergedRegions(fut.get(), mergedRegionsNum2, 1);
+            AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit2), fut.get(), TestHelper.COLUMNS,
+                    TestHelper.HEADERS, null, new RoseStyleTemplate(), 1);
+            AssertionHelper.assertOnMergedRegions(fut.get(), mergedRegionsNum2, 1);
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -612,9 +645,11 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
 
     @Test(expected = ExecutionException.class)
-    public void testWithFileAndMergedRegionsSXSSFAndLimitedFixedRowAccessWindowSize() throws SQLException, ExecutionException, InterruptedException {
+    public void testWithFileAndMergedRegionsSXSSFAndLimitedFixedRowAccessWindowSize()
+            throws SQLException, ExecutionException, InterruptedException {
 
-        prepStmt = this.createStatement(null, 50_000);    // TODO create tests that exceed HSSF limits and try to manage it
+        prepStmt = this
+                .createStatement(null, 50_000);    // TODO create tests that exceed HSSF limits and try to manage it
 
         // sheet
         MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt);
@@ -628,7 +663,6 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
         memPOI.prepareMempoiReportToByteArray().get();
     }
 
-
     // SXSSF multicolumn is not supported -> multisheet and multicolumn also
 
 
@@ -637,53 +671,45 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
      **********************************************************************/
 
     @Test(expected = MempoiException.class)
-    public void testWithFileAndMergedRegionsHSSFNullMergedRegions_Fail() {
+    public void testWithFileAndMergedRegionsHSSFNullMergedRegionsFail() throws Exception {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
         int limit = 450;
 
-        try {
-            prepStmt = this.createStatement(null, limit);
+        prepStmt = this.createStatement(null, limit);
 
-            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt, null);
+        MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt, null);
 
-            MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withFile(fileDest)
-                    .withStyleTemplate(new ForestStyleTemplate())
-                    .withWorkbook(new HSSFWorkbook())
-                    .addMempoiSheet(sheet)
-                    .build();
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withFile(fileDest)
+                .withStyleTemplate(new ForestStyleTemplate())
+                .withWorkbook(new HSSFWorkbook())
+                .addMempoiSheet(sheet)
+                .build();
 
-            memPOI.prepareMempoiReportToFile().get();
-
-        } catch (Exception e) {
-            throw new MempoiException(e);
-        }
+        memPOI.prepareMempoiReportToFile().get();
     }
 
     @Test(expected = MempoiException.class)
-    public void testWithFileAndMergedRegionsHSSFEmptyMergedRegions_Fail() {
+    public void testWithFileAndMergedRegionsHSSFEmptyMergedRegionsFail() throws Exception {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
         int limit = 450;
 
-        try {
-            prepStmt = this.createStatement(null, limit);
+        prepStmt = this.createStatement(null, limit);
 
-            MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt, new String[0]);
+        MempoiSheet sheet = this.createMempoiSheetMergedRegions(prepStmt, new String[0]);
 
-            MemPOI memPOI = MempoiBuilder.aMemPOI()
-                    .withFile(fileDest)
-                    .withStyleTemplate(new ForestStyleTemplate())
-                    .withWorkbook(new HSSFWorkbook())
-                    .addMempoiSheet(sheet)
-                    .build();
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withFile(fileDest)
+                .withStyleTemplate(new ForestStyleTemplate())
+                .withWorkbook(new HSSFWorkbook())
+                .addMempoiSheet(sheet)
+                .build();
 
-            memPOI.prepareMempoiReportToFile().get();
-
-        } catch (Exception e) {
-            throw new MempoiException(e);
-        }
+        memPOI.prepareMempoiReportToFile().get();
     }
 
     @Test
@@ -691,7 +717,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
-            File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+            File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                    "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
             int limit = 450;
 
             try {
@@ -706,7 +733,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-                AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+                AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                        TestHelper.HEADERS, null, new ForestStyleTemplate());
 
             } catch (Exception e) {
                 throw new MempoiException(e);
@@ -720,7 +748,8 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
-            File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
+            File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                    "test_with_file_and_merged_regions_HSSF_force_generation.xlsx");
             int limit = 450;
 
             try {
@@ -737,14 +766,14 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
-                AssertionHelper.validateGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new ForestStyleTemplate());
+                AssertionHelper.assertOnGeneratedFile(this.createStatement(null, limit), fut.get(), TestHelper.COLUMNS,
+                        TestHelper.HEADERS, null, new ForestStyleTemplate());
 
             } catch (Exception e) {
-                throw new MempoiException(e);
+                fail();
             }
         });
     }
-
 
     /***********************************************************************
      *                               OTHERS

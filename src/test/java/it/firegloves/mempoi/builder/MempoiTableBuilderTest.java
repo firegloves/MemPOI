@@ -1,10 +1,17 @@
 package it.firegloves.mempoi.builder;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -14,11 +21,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.MockitoAnnotations;
-
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 public class MempoiTableBuilderTest {
 
@@ -44,28 +46,30 @@ public class MempoiTableBuilderTest {
     }
 
     @Test
-    public void withInvalidReferenceArea_throwsMempoiException() {
+    public void withInvalidReferenceAreaThrowsMempoiException() {
 
         Arrays.asList(TestHelper.FAILING_AREA_REFERENCES)
                 .forEach(areaRef -> {
 
-                    try {
-                        MempoiTableBuilder.aMempoiTable()
-                                .withWorkbook(wb)
-                                .withAreaReferenceSource(areaRef)
-                                .build();
-                    } catch (MempoiException e) {
-                        assertEquals(Errors.ERR_AREA_REFERENCE_NOT_VALID, e.getMessage());
-                    }
+                    exceptionRule.expect(MempoiException.class);
+                    exceptionRule.expectMessage(Errors.ERR_AREA_REFERENCE_NOT_VALID);
+
+                    MempoiTableBuilder.aMempoiTable()
+                            .withWorkbook(wb)
+                            .withAreaReferenceSource(areaRef)
+                            .build();
                 });
     }
 
 
     @Test
-    public void withWorkbookNotOfTypeXSSFWorkbook_throwsMempoiException() {
+    public void withWorkbookNotOfTypeXSSFWorkbookThrowsMempoiException() {
 
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
+
+                    exceptionRule.expect(MempoiException.class);
+                    exceptionRule.expectMessage(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
 
                     Constructor<? extends Workbook> constructor;
                     Workbook workbook;
@@ -73,24 +77,20 @@ public class MempoiTableBuilderTest {
                         constructor = wbTypeClass.getConstructor();
                         workbook = constructor.newInstance();
                     } catch (Exception e) {
-                        throw new MempoiException();
+                        throw new MempoiException("wrong error");
                     }
 
-                    try {
-                        MempoiTableBuilder.aMempoiTable()
+                    MempoiTableBuilder.aMempoiTable()
                                 .withWorkbook(workbook)
                                 .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
                                 .build();
-                    } catch (MempoiException e) {
-                        assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
-                    }
                 });
 
     }
 
 
     @Test(expected = MempoiException.class)
-    public void withNullWorkbook_throwsMempoiException() {
+    public void withNullWorkbookThrowsMempoiException() {
 
         MempoiTableBuilder.aMempoiTable()
                 .withAreaReferenceSource(TestHelper.AREA_REFERENCE)
@@ -98,7 +98,7 @@ public class MempoiTableBuilderTest {
     }
 
     @Test(expected = MempoiException.class)
-    public void withNullAreaReferenceAndNoAllSheetData_throwsMempoiException() {
+    public void withNullAreaReferenceAndNoAllSheetDataThrowsMempoiException() {
 
         MempoiTableBuilder.aMempoiTable()
                 .withWorkbook(wb)
@@ -134,7 +134,7 @@ public class MempoiTableBuilderTest {
     }
 
     @Test
-    public void addingExcelTableWithWitheSpacesInDisplayName_willFail() {
+    public void addingExcelTableWithWitheSpacesInDisplayNameWillFail() {
 
         exceptionRule.expect(MempoiException.class);
         exceptionRule.expectMessage(Errors.ERR_TABLE_DISPLAY_NAME);
@@ -145,8 +145,8 @@ public class MempoiTableBuilderTest {
     }
 
 
-    @Test
-    public void addingExcelTableWithWitheSpacesInDisplayNameAndForceGeneration_willSuccedWithUnderScores() {
+    @Test(expected = Test.None.class)
+    public void addingExcelTableWithWitheSpacesInDisplayNameAndForceGenerationWillSuccedWithUnderScores() {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
@@ -169,7 +169,7 @@ public class MempoiTableBuilderTest {
                 .build();
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void testTableAreaReferenceValidationWithForceGeneration() {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {

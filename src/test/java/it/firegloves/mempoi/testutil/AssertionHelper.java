@@ -7,6 +7,7 @@ package it.firegloves.mempoi.testutil;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -57,7 +58,7 @@ public class AssertionHelper {
      * @param cellStyle         the cell's CellStyle
      * @param expectedCellStyle the expected CellStyle
      */
-    public static void validateCellStyle(CellStyle cellStyle, CellStyle expectedCellStyle) {
+    public static void assertOnCellStyle(CellStyle cellStyle, CellStyle expectedCellStyle) {
 
         if (null != expectedCellStyle) {
 
@@ -78,6 +79,8 @@ public class AssertionHelper {
                 assertEquals(((XSSFCellStyle) cellStyle).getFont().getColor(), ((XSSFCellStyle) expectedCellStyle).getFont().getColor());
                 assertEquals(((XSSFCellStyle) cellStyle).getFont().getBold(), ((XSSFCellStyle) expectedCellStyle).getFont().getBold());
             }
+        } else {
+            assertNull(cellStyle);
         }
     }
 
@@ -89,15 +92,15 @@ public class AssertionHelper {
      * @param template
      * @param wb
      */
-    public static void validateTemplateAndStyler(MempoiStyler mempoiStyler, StyleTemplate template, Workbook wb) {
+    public static void assertOnTemplateAndStyler(MempoiStyler mempoiStyler, StyleTemplate template, Workbook wb) {
 
-        AssertionHelper.validateCellStyle(template.getCommonDataCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
-        AssertionHelper.validateCellStyle(template.getIntegerCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
-        AssertionHelper.validateCellStyle(template.getFloatingPointCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
-        AssertionHelper.validateCellStyle(template.getDateCellStyle(wb), mempoiStyler.getDateCellStyle());
-        AssertionHelper.validateCellStyle(template.getDatetimeCellStyle(wb), mempoiStyler.getDatetimeCellStyle());
-        AssertionHelper.validateCellStyle(template.getHeaderCellStyle(wb), mempoiStyler.getHeaderCellStyle());
-        AssertionHelper.validateCellStyle(template.getSubfooterCellStyle(wb), mempoiStyler.getSubFooterCellStyle());
+        AssertionHelper.assertOnCellStyle(template.getCommonDataCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(template.getIntegerCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(template.getFloatingPointCellStyle(wb), mempoiStyler.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(template.getDateCellStyle(wb), mempoiStyler.getDateCellStyle());
+        AssertionHelper.assertOnCellStyle(template.getDatetimeCellStyle(wb), mempoiStyler.getDatetimeCellStyle());
+        AssertionHelper.assertOnCellStyle(template.getHeaderCellStyle(wb), mempoiStyler.getHeaderCellStyle());
+        AssertionHelper.assertOnCellStyle(template.getSubfooterCellStyle(wb), mempoiStyler.getSubFooterCellStyle());
     }
 
     /**
@@ -105,7 +108,7 @@ public class AssertionHelper {
      *
      * @param sheet the XSSFSheet containing the table to validate
      */
-    public static void validateTable(XSSFSheet sheet) {
+    public static void assertOnTable(XSSFSheet sheet) {
 
         XSSFTable table = sheet.getTables().get(0);
 
@@ -127,7 +130,7 @@ public class AssertionHelper {
      * @param wb          the Workbook used to create the MempoiTable
      * @param mempoiTable the MempoiTable to validate
      */
-    public static void validateMempoiTable(Workbook wb, MempoiTable mempoiTable) {
+    public static void assertOnMempoiTable(Workbook wb, MempoiTable mempoiTable) {
 
         assertEquals(TestHelper.TABLE_NAME, mempoiTable.getTableName());
         assertEquals(TestHelper.DISPLAY_TABLE_NAME, mempoiTable.getDisplayTableName());
@@ -141,7 +144,7 @@ public class AssertionHelper {
      * @param wb               the Workbook used to create the MempoiTable
      * @param mempoiPivotTable the MempoiTable to validate
      */
-    public static void validateMempoiPivotTable(Workbook wb, MempoiPivotTable mempoiPivotTable) {
+    public static void assertOnMempoiPivotTable(Workbook wb, MempoiPivotTable mempoiPivotTable) {
 
         assertEquals(wb, mempoiPivotTable.getWorkbook());
         assertEquals(TestHelper.POSITION, mempoiPivotTable.getPosition());
@@ -151,8 +154,8 @@ public class AssertionHelper {
         assertArrayEquals(TestHelper.ROW_LABEL_COLUMNS.toArray(), mempoiPivotTable.getRowLabelColumns().toArray());
         assertArrayEquals(TestHelper.REPORT_FILTER_COLUMNS.toArray(), mempoiPivotTable.getReportFilterColumns().toArray());
 
-        validateColumnLabelColumns(TestHelper.SUM_COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.SUM));
-        validateColumnLabelColumns(TestHelper.AVERAGE_COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.AVERAGE));
+        assertOnColumnLabelColumns(TestHelper.SUM_COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.SUM));
+        assertOnColumnLabelColumns(TestHelper.AVERAGE_COLS_LABEL_COLUMNS, mempoiPivotTable.getColumnLabelColumns().get(DataConsolidateFunction.AVERAGE));
     }
 
 
@@ -162,7 +165,7 @@ public class AssertionHelper {
      * @param expected
      * @param actual
      */
-    public static void validateColumnLabelColumns(List<String> expected, List<String> actual) {
+    public static void assertOnColumnLabelColumns(List<String> expected, List<String> actual) {
 
         assertEquals(expected.size(), actual.size());
 
@@ -176,7 +179,7 @@ public class AssertionHelper {
      *
      * @param pivotTable
      */
-    public static void assertPivotTable(XSSFPivotTable pivotTable) {
+    public static void assertOnPivotTable(XSSFPivotTable pivotTable) {
 
         // RowLabel
         List<Integer> rowLabelIndexes = TestHelper.getRowLabelIndexesForAssertion();
@@ -196,7 +199,7 @@ public class AssertionHelper {
         List<CTDataField> dataFieldList = pivotTable.getCTPivotTableDefinition().getDataFields().getDataFieldList();
 
         // do asserts
-        assertPivotTable(rowLabelIndexes, rowLabelColumns, rowFilterIndexes, pageFieldList, columnLabelColumnsIndexes, dataFieldList);
+        assertOnPivotTable(rowLabelIndexes, rowLabelColumns, rowFilterIndexes, pageFieldList, columnLabelColumnsIndexes, dataFieldList);
     }
 
 
@@ -206,7 +209,7 @@ public class AssertionHelper {
      * @param pivotTable
      * @param mempoiPivotTable
      */
-    public static void assertPivotTable(XSSFPivotTable pivotTable, MempoiPivotTable mempoiPivotTable, List<MempoiColumn> mempoiColumnList) {
+    public static void assertOnPivotTable(XSSFPivotTable pivotTable, MempoiPivotTable mempoiPivotTable, List<MempoiColumn> mempoiColumnList) {
 
         // RowLabel
         List<Integer> rowLabelIndexes = getColumnIndexes(mempoiPivotTable.getRowLabelColumns(), mempoiColumnList);
@@ -231,7 +234,7 @@ public class AssertionHelper {
                 .orElse(new ArrayList<>());
 
         // do asserts
-        assertPivotTable(rowLabelIndexes, rowLabelColumns, rowFilterIndexes, pageFieldList, columnLabelColumnsIndexes, dataFieldList);
+        assertOnPivotTable(rowLabelIndexes, rowLabelColumns, rowFilterIndexes, pageFieldList, columnLabelColumnsIndexes, dataFieldList);
     }
 
 
@@ -245,7 +248,7 @@ public class AssertionHelper {
      * @param columnLabelColumnsIndexes
      * @param dataFieldList
      */
-    public static void assertPivotTable(List<Integer> rowLabelIndexes, List<Integer> rowLabelColumns,
+    public static void assertOnPivotTable(List<Integer> rowLabelIndexes, List<Integer> rowLabelColumns,
                                         List<Integer> rowFilterIndexes, List<CTPageField> pageFieldList,
                                         Map<DataConsolidateFunction, List<Long>> columnLabelColumnsIndexes, List<CTDataField> dataFieldList) {
 
@@ -288,7 +291,7 @@ public class AssertionHelper {
      *
      * @param mempoiSheet the MempoiSheet containing all needed data to assert
      */
-    public static void assertPivotTableIntoSheet(MempoiSheet mempoiSheet) {
+    public static void assertOnPivotTableIntoSheet(MempoiSheet mempoiSheet) {
 
         if (mempoiSheet.getMempoiPivotTable().isPresent()) {
 
@@ -296,7 +299,7 @@ public class AssertionHelper {
             MempoiPivotTable mempoiPivotTable = mempoiSheet.getMempoiPivotTable().get();
             XSSFPivotTable pivotTable = sheet.getPivotTables().get(0);
 
-            assertPivotTable(pivotTable, mempoiPivotTable, mempoiSheet.getColumnList());
+            assertOnPivotTable(pivotTable, mempoiPivotTable, mempoiSheet.getColumnList());
         } else {
 
             assertEquals(0, ((XSSFSheet) mempoiSheet.getSheet()).getPivotTables().size());
@@ -314,8 +317,8 @@ public class AssertionHelper {
      * @param subfooterCellFormula
      * @param styleTemplate
      */
-    public static void validateGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate) {
-        validateGeneratedFile(prepStmt, fileToValidate, columns, headers, subfooterCellFormula, styleTemplate, 0);
+    public static void assertOnGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate) {
+        assertOnGeneratedFile(prepStmt, fileToValidate, columns, headers, subfooterCellFormula, styleTemplate, 0);
     }
 
 
@@ -327,7 +330,7 @@ public class AssertionHelper {
      * @param columns              the array of columns name, useful to retrieve data from the ResultSet
      * @param headers              the array of headers name
      */
-    public static void validateGeneratedFilePivotTable(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, StyleTemplate styleTemplate, int sheetNum) {
+    public static void assertOnGeneratedFilePivotTable(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, StyleTemplate styleTemplate, int sheetNum) {
 
         File file = new File(fileToValidate);
 
@@ -340,11 +343,11 @@ public class AssertionHelper {
             Sheet sheet = wb.getSheetAt(sheetNum);
 
             // validates header row
-            validateHeaderRow(sheet.getRow(0), headers, null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
+            assertOnHeaderRow(sheet.getRow(0), headers, null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowPivotTable(rs, sheet.getRow(r), headers, styleTemplate, wb);
+                assertOnGeneratedFileDataRowPivotTable(rs, sheet.getRow(r), headers, styleTemplate, wb);
             }
 
         } catch (Exception e) {
@@ -362,7 +365,7 @@ public class AssertionHelper {
      * @param headers              the array of headers name
      * @param subfooterCellFormula if not null it defines the check to run against the last row. if null no check is required
      */
-    public static void validateGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate, int sheetNum) {
+    public static void assertOnGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns, String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate, int sheetNum) {
 
         File file = new File(fileToValidate);
 
@@ -375,16 +378,16 @@ public class AssertionHelper {
             Sheet sheet = wb.getSheetAt(sheetNum);
 
             // validates header row
-            validateHeaderRow(sheet.getRow(0), headers, null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
+            assertOnHeaderRow(sheet.getRow(0), headers, null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRow(rs, sheet.getRow(r), headers, styleTemplate, wb);
+                assertOnGeneratedFileDataRow(rs, sheet.getRow(r), headers, styleTemplate, wb);
             }
 
             // validate subfooter cell formula
             if (!StringUtils.isEmpty(subfooterCellFormula)) {
-                validateSubfooterFormula(sheet.getRow(TestHelper.MAX_ROWS + 1), TestHelper.COLUMNS.length - 1,
+                assertOnSubfooterFormula(sheet.getRow(TestHelper.MAX_ROWS + 1), TestHelper.COLUMNS.length - 1,
                         subfooterCellFormula);
             }
 
@@ -404,7 +407,7 @@ public class AssertionHelper {
      * @param headers              the array of headers name
      * @param validateCellFormulas if true validates also subfooter cell formulas
      */
-    public static void validateSecondPrepStmtSheet(PreparedStatement prepStmt, String fileToValidate, int sheetIndex, String[] headers, boolean validateCellFormulas, StyleTemplate styleTemplate) {
+    public static void assertOnSecondPrepStmtSheet(PreparedStatement prepStmt, String fileToValidate, int sheetIndex, String[] headers, boolean validateCellFormulas, StyleTemplate styleTemplate) {
 
         File file = new File(fileToValidate);
 
@@ -417,14 +420,14 @@ public class AssertionHelper {
             Sheet sheet = wb.getSheetAt(sheetIndex);
 
             // validates header row
-            validateHeaderRow(sheet.getRow(0), headers, null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
+            assertOnHeaderRow(sheet.getRow(0), headers, null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
 
             // validates data rows
-            int subfooterInd = validateGeneratedFileDataRowSecondQuery(rs, sheet);
+            int subfooterInd = assertOnGeneratedFileDataRowSecondQuery(rs, sheet);
 
             // validates subfooter formulas
             if (validateCellFormulas) {
-                validateCellFormulasSecondQuery(sheet.getRow(subfooterInd), subfooterInd);
+                assertOnCellFormulasSecondQuery(sheet.getRow(subfooterInd), subfooterInd);
             }
 
         } catch (Exception e) {
@@ -443,7 +446,7 @@ public class AssertionHelper {
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    public static void validateGeneratedFileDataRow(ResultSet rs, Row row, String[] headers, StyleTemplate styleTemplate, Workbook wb) {
+    public static void assertOnGeneratedFileDataRow(ResultSet rs, Row row, String[] headers, StyleTemplate styleTemplate, Workbook wb) {
 
         try {
             assertEquals(rs.getInt(headers[0]), (int) row.getCell(0).getNumericCellValue());
@@ -456,18 +459,18 @@ public class AssertionHelper {
             assertEquals(rs.getDouble(headers[7]), row.getCell(7).getNumericCellValue(), 0);
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
-                AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getDateCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getDateCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(6).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
                 AssertionHelper
-                        .validateCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
+                        .assertOnCellStyle(row.getCell(7).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
             }
         } catch (Exception e) {
             failAssertion(e);
@@ -485,7 +488,7 @@ public class AssertionHelper {
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    public static void validateGeneratedFileDataRowPivotTable(ResultSet rs, Row row, String[] headers, StyleTemplate styleTemplate, Workbook wb) {
+    public static void assertOnGeneratedFileDataRowPivotTable(ResultSet rs, Row row, String[] headers, StyleTemplate styleTemplate, Workbook wb) {
 
         try {
             assertEquals(rs.getString(headers[0]), row.getCell(0).getStringCellValue());
@@ -496,12 +499,12 @@ public class AssertionHelper {
             assertEquals(rs.getString(headers[5]), row.getCell(5).getStringCellValue());
 
             if (null != styleTemplate && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
-                AssertionHelper.validateCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
-                AssertionHelper.validateCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(0).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(1).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(3).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(4).getCellStyle(), styleTemplate.getFloatingPointCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(5).getCellStyle(), styleTemplate.getCommonDataCellStyle(wb));
             }
         } catch (Exception e) {
             failAssertion(e);
@@ -517,7 +520,7 @@ public class AssertionHelper {
      * @param s  the sheet to validate
      * @return the next row number (useful if after this method you want to validate subfooter)
      */
-    protected static int validateGeneratedFileDataRowSecondQuery(ResultSet rs, Sheet s) {
+    protected static int assertOnGeneratedFileDataRowSecondQuery(ResultSet rs, Sheet s) {
 
         try {
             int i = 1;
@@ -561,13 +564,13 @@ public class AssertionHelper {
      * @param row the row of the subfooter to validate
      * @param i   the index of the last row
      */
-    public static void validateCellFormulasSecondQuery(Row row, int i) {
-        validateSubfooterFormula(row, 7, "SUM(H2:H" + i + ")");
-        validateSubfooterFormula(row, 9, "SUM(J2:J" + i + ")");
-        validateSubfooterFormula(row, 10, "SUM(K2:K" + i + ")");
-        validateSubfooterFormula(row, 11, "SUM(L2:L" + i + ")");
-        validateSubfooterFormula(row, 12, "SUM(M2:M" + i + ")");
-        validateSubfooterFormula(row, 14, "SUM(O2:O" + i + ")");
+    public static void assertOnCellFormulasSecondQuery(Row row, int i) {
+        assertOnSubfooterFormula(row, 7, "SUM(H2:H" + i + ")");
+        assertOnSubfooterFormula(row, 9, "SUM(J2:J" + i + ")");
+        assertOnSubfooterFormula(row, 10, "SUM(K2:K" + i + ")");
+        assertOnSubfooterFormula(row, 11, "SUM(L2:L" + i + ")");
+        assertOnSubfooterFormula(row, 12, "SUM(M2:M" + i + ")");
+        assertOnSubfooterFormula(row, 14, "SUM(O2:O" + i + ")");
     }
 
     // TODO add style check
@@ -579,14 +582,14 @@ public class AssertionHelper {
      * @param headers           the array of headers name
      * @param expectedCellStyle the expected cell style of the headers
      */
-    public static void validateHeaderRow(Row headerRow, String[] headers, CellStyle expectedCellStyle) {
+    public static void assertOnHeaderRow(Row headerRow, String[] headers, CellStyle expectedCellStyle) {
 
         for (int i = 0; i < headers.length; i++) {
 
             Cell cell = headerRow.getCell(i);
             assertEquals(headers[i], cell.getStringCellValue());
 
-            validateHeaderCellStyle(cell.getCellStyle(), expectedCellStyle);
+            assertOnHeaderCellStyle(cell.getCellStyle(), expectedCellStyle);
         }
     }
 
@@ -597,7 +600,7 @@ public class AssertionHelper {
      * @param subfooterRow
      * @param subfooterCellFormula
      */
-    public static void validateSubfooterFormula(Row subfooterRow, int columnIndex, String subfooterCellFormula) {
+    public static void assertOnSubfooterFormula(Row subfooterRow, int columnIndex, String subfooterCellFormula) {
         assertEquals(subfooterCellFormula, subfooterRow.getCell(columnIndex).getCellFormula());
     }
 
@@ -608,14 +611,14 @@ public class AssertionHelper {
      * @param cellStyle         the cell's CellStyle
      * @param expectedCellStyle the expected CellStyle
      */
-    public static void validateHeaderCellStyle(CellStyle cellStyle, CellStyle expectedCellStyle) {
+    public static void assertOnHeaderCellStyle(CellStyle cellStyle, CellStyle expectedCellStyle) {
 
         if (null != expectedCellStyle) {
 
             assertEquals(expectedCellStyle.getWrapText(), cellStyle.getWrapText());
             assertEquals(expectedCellStyle.getAlignment(), cellStyle.getAlignment());
 
-            AssertionHelper.validateCellStyle(cellStyle, expectedCellStyle);
+            AssertionHelper.assertOnCellStyle(cellStyle, expectedCellStyle);
         }
     }
 
@@ -626,17 +629,15 @@ public class AssertionHelper {
      * @param fileToValidate
      * @param mergedRegionNums
      */
-    public static void validateMergedRegions(String fileToValidate, int mergedRegionNums) {
-        validateMergedRegions(fileToValidate, mergedRegionNums, 0);
+    public static void assertOnMergedRegions(String fileToValidate, int mergedRegionNums) {
+        assertOnMergedRegions(fileToValidate, mergedRegionNums, 0);
     }
 
 
     /**
      * adds merged regions check
      */
-    public static void validateMergedRegions(String fileToValidate, int mergedRegionNums, int sheetNum) {
-
-//        int mergedRegionNums = (int) Math.ceil((double)sqlLimit / 100);
+    public static void assertOnMergedRegions(String fileToValidate, int mergedRegionNums, int sheetNum) {
 
         File file = new File(fileToValidate);
 
@@ -676,7 +677,7 @@ public class AssertionHelper {
     }
 
 
-    public static void validateMempoiColumnConfig(MempoiColumnConfig expected, MempoiColumnConfig current) {
+    public static void assertOnMempoiColumnConfig(MempoiColumnConfig expected, MempoiColumnConfig current) {
 
         assertEquals(expected.getColumnName(), current.getColumnName());
         assertEquals(expected.getDataTransformationFunction().get(), current.getDataTransformationFunction().get());

@@ -1,19 +1,23 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.domain.footer.*;
+import it.firegloves.mempoi.domain.footer.NumberAverageSubFooter;
+import it.firegloves.mempoi.domain.footer.NumberFormulaSubFooter;
+import it.firegloves.mempoi.domain.footer.NumberMaxSubFooter;
+import it.firegloves.mempoi.domain.footer.NumberMinSubFooter;
+import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
+import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
-
-import static org.junit.Assert.assertEquals;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.junit.Test;
 
 public class FooterIT extends IntegrationBaseIT {
 

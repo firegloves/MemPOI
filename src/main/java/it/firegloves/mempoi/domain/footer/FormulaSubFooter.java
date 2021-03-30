@@ -6,11 +6,10 @@ package it.firegloves.mempoi.domain.footer;
 
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
+import java.util.List;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
-
-import java.util.List;
 
 
 public abstract class FormulaSubFooter implements MempoiSubFooter {

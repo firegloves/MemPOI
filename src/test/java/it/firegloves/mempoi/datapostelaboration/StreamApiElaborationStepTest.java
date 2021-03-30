@@ -1,11 +1,17 @@
 package it.firegloves.mempoi.datapostelaboration;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.StreamApiElaborationStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.StreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.hamcrest.core.IsInstanceOf;
@@ -14,13 +20,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class StreamApiElaborationStepTest {
 

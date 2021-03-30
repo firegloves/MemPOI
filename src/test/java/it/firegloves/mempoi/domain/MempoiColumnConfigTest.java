@@ -24,7 +24,7 @@ public class MempoiColumnConfigTest {
                 .withCellStyle(cellStyle)
                 .build();
 
-        AssertionHelper.validateMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
+        AssertionHelper.assertOnMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
                 mempoiColumnConfig);
         assertEquals(cellStyle, mempoiColumnConfig.getCellStyle());
     }

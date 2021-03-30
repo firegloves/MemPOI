@@ -1,6 +1,12 @@
 package it.firegloves.mempoi.strategos;
 
-import it.firegloves.mempoi.config.MempoiConfig;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
@@ -9,16 +15,6 @@ import it.firegloves.mempoi.manager.FileManager;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.AreaReference;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,20 +22,19 @@ import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class StrategosTest {
 
     @Mock
     private MempoiSheet mempoiSheet;
-    //    @Mock
-//    private MempoiFooter mempoiFooter;
     @Mock
     private ResultSet rs;
     @Mock
@@ -68,7 +63,7 @@ public class StrategosTest {
      *                          applyMempoiColumnStrategies
      *****************************************************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void applyMempoiColumnStrategies() throws Exception {
 
         when(mempoiSheet.getColumnList()).thenReturn(Arrays.asList(new MempoiColumn(Types.BIGINT, "temp", 0)));
@@ -103,8 +98,8 @@ public class StrategosTest {
         m.invoke(strategos, mempoiSheet);
     }
 
-    @Test
-    public void applyMempoiColumnStrategiesNullColListForceGenerating() throws Exception {
+    @Test(expected = Test.None.class)
+    public void applyMempoiColumnStrategiesNullColListForceGenerating() {
 
         ForceGenerationUtils.executeTestWithForceGeneration(() -> {
 
@@ -127,7 +122,7 @@ public class StrategosTest {
      *                          adjustColSize
      *****************************************************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void adjustColSize() throws Exception {
 
         WorkbookConfig wbConfig = new WorkbookConfig()
@@ -144,7 +139,7 @@ public class StrategosTest {
     }
 
 
-    @Test
+    @Test(expected = Test.None.class)
     public void adjustColSizeNegativeColLenght() throws Exception {
 
         WorkbookConfig wbConfig = new WorkbookConfig()
@@ -160,7 +155,7 @@ public class StrategosTest {
         m.invoke(strategos, sheet, -5);
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void adjustColSizeNullSheet() throws Exception {
 
         WorkbookConfig wbConfig = new WorkbookConfig()
@@ -179,7 +174,7 @@ public class StrategosTest {
      *                          openTempFileAndEvaluateCellFormulas
      *****************************************************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void openTempFileAndEvaluateCellFormulasTest() throws Throwable {
 
         File file = new File("temp.xlsx");
@@ -188,8 +183,8 @@ public class StrategosTest {
         this.invokeOpenTempFileAndEvaluateCellFormulas(file, this.wbConfig);
     }
 
-    @Test
-    public void openTempFileAndEvaluateCellFormulas_nullWorkbook() throws Throwable {
+    @Test(expected = Test.None.class)
+    public void openTempFileAndEvaluateCellFormulasNullWorkbook() throws Throwable {
 
         File file = new File("temp.xlsx");
 
@@ -198,7 +193,7 @@ public class StrategosTest {
     }
 
     @Test(expected = MempoiException.class)
-    public void openTempFileAndEvaluateCellFormulas_invalidFilePath() throws Throwable {
+    public void openTempFileAndEvaluateCellFormulasInvalidFilePath() throws Throwable {
 
         File file = new File("/not_existing/temp.xlsx");
 
@@ -208,7 +203,7 @@ public class StrategosTest {
 
 
     @Test(expected = MempoiException.class)
-    public void openTempFileAndEvaluateCellFormulas_invalidFilePathAndNullWorkbook() throws Throwable {
+    public void openTempFileAndEvaluateCellFormulasInvalidFilePathAndNullWorkbook() throws Throwable {
 
         File file = new File("/not_existing/temp.xlsx");
 
@@ -259,23 +254,4 @@ public class StrategosTest {
 
         assertEquals(TestHelper.AREA_REFERENCE, areaReference.formatAsString());
     }
-
-
-//
-//
-//            createHeaderRow
-//
-//    prepareMempoiColumn
-//
-//            generateSheet
-//
-//    generateReport
-//
-//            manageFormulaToEvaluate
-//
-//    generateMempoiReport
-//
-//            generateMempoiReportToByteArray
-//
-//    generateMempoiReportToFile
 }

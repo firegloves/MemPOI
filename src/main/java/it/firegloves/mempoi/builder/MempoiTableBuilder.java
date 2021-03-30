@@ -129,18 +129,18 @@ public final class MempoiTableBuilder {
 
         if (null == displayTableName) return null;
 
-        displayTableName = displayTableName.trim();
+        String displayTableNameToReturn = displayTableName.trim();
 
-        if (displayTableName.contains(" ")) {
+        if (displayTableNameToReturn.contains(" ")) {
 
             if (MempoiConfig.getInstance().isForceGeneration()) {
-                displayTableName = displayTableName.replaceAll("\\s", "_");
+                displayTableNameToReturn = displayTableNameToReturn.replaceAll("\\s", "_");
             } else {
                 throw new MempoiException(Errors.ERR_TABLE_DISPLAY_NAME);
             }
         }
 
-        return displayTableName;
+        return displayTableNameToReturn;
     }
 
 
@@ -149,7 +149,7 @@ public final class MempoiTableBuilder {
      */
     private void validate() {
 
-        this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
+        this.workbookValidator.validateWorkbookTypeOrThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
         this.displayTableName = this.validateDisplayName(this.displayTableName);
 
         if (null == areaReferenceSource && ! allSheetData) {

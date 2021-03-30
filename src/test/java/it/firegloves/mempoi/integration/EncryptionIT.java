@@ -59,11 +59,11 @@ public class EncryptionIT extends IntegrationBaseIT {
         StandardStyleTemplate standardStyleTemplate = new StandardStyleTemplate();
         // validates header row
         AssertionHelper
-                .validateHeaderRow(sheet.getRow(0), TestHelper.HEADERS, standardStyleTemplate.getHeaderCellStyle(wb));
+                .assertOnHeaderRow(sheet.getRow(0), TestHelper.HEADERS, standardStyleTemplate.getHeaderCellStyle(wb));
         // validates data rows
         for (int r = 1; rs.next(); r++) {
             AssertionHelper
-                    .validateGeneratedFileDataRow(rs, sheet.getRow(r), TestHelper.HEADERS, standardStyleTemplate, wb);
+                    .assertOnGeneratedFileDataRow(rs, sheet.getRow(r), TestHelper.HEADERS, standardStyleTemplate, wb);
         }
 
         Biff8EncryptionKey.setCurrentUserPassword(null);
@@ -97,11 +97,11 @@ public class EncryptionIT extends IntegrationBaseIT {
         StandardStyleTemplate standardStyleTemplate = new StandardStyleTemplate();
         // validates header row
         AssertionHelper
-                .validateHeaderRow(sheet.getRow(0), TestHelper.HEADERS, standardStyleTemplate.getHeaderCellStyle(wb));
+                .assertOnHeaderRow(sheet.getRow(0), TestHelper.HEADERS, standardStyleTemplate.getHeaderCellStyle(wb));
         // validates data rows
         for (int r = 1; rs.next(); r++) {
             AssertionHelper
-                    .validateGeneratedFileDataRow(rs, sheet.getRow(r), TestHelper.HEADERS, standardStyleTemplate, wb);
+                    .assertOnGeneratedFileDataRow(rs, sheet.getRow(r), TestHelper.HEADERS, standardStyleTemplate, wb);
         }
     }
 

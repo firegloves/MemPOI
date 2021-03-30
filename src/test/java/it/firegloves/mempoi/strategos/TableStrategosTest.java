@@ -1,17 +1,23 @@
 package it.firegloves.mempoi.strategos;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
-import it.firegloves.mempoi.domain.footer.MempoiFooter;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.PrivateAccessHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -26,19 +32,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.IntStream;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 public class TableStrategosTest {
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     private XSSFWorkbook wb;
     private TableStrategos tableStrategos;
@@ -62,7 +59,6 @@ public class TableStrategosTest {
     }
 
 
-
     /******************************************************************************************************************
      *                          setColumnIds
      *****************************************************************************************************************/
@@ -73,10 +69,11 @@ public class TableStrategosTest {
 
         XSSFTable table = sheet.createTable(new AreaReference(TestHelper.AREA_REFERENCE, wb.getSpreadsheetVersion()));
 
-        Method setTableColumnsMethod = PrivateAccessHelper.getAccessibleMethod(tableStrategos, "setTableColumns", XSSFTable.class, MempoiSheet.class);
+        Method setTableColumnsMethod = PrivateAccessHelper
+                .getAccessibleMethod(tableStrategos, "setTableColumns", XSSFTable.class, MempoiSheet.class);
         setTableColumnsMethod.invoke(tableStrategos, table, this.mempoiSheet);
 
-        this.validateTableColumns(table);
+        this.assertOnTableColumns(table);
     }
 
 
@@ -88,17 +85,16 @@ public class TableStrategosTest {
     @Test
     public void addsAnExcelTable() throws Exception {
 
-
-
         MempoiTable mempoiTable = TestHelper.getTestMempoiTable(wb);
 
-        Method addTableMethod = PrivateAccessHelper.getAccessibleMethod(tableStrategos, "addTable", MempoiSheet.class, MempoiTable.class);
+        Method addTableMethod = PrivateAccessHelper
+                .getAccessibleMethod(tableStrategos, "addTable", MempoiSheet.class, MempoiTable.class);
         addTableMethod.invoke(tableStrategos, mempoiSheet, mempoiTable);
 
         XSSFTable table = sheet.getTables().get(0);
 
         assertEquals(1, sheet.getTables().size());
-        this.validateTableColumns(table);
+        this.assertOnTableColumns(table);
         assertTrue(table.getCTTable().isSetAutoFilter());
         assertEquals(TestHelper.TABLE_NAME, table.getCTTable().getName());
         assertEquals(TestHelper.DISPLAY_TABLE_NAME, table.getCTTable().getDisplayName());
@@ -126,7 +122,7 @@ public class TableStrategosTest {
         XSSFTable table = sheet.getTables().get(0);
 
         assertEquals(1, sheet.getTables().size());
-        this.validateTableColumns(table);
+        this.assertOnTableColumns(table);
         assertTrue(table.getCTTable().isSetAutoFilter());
         assertEquals(TestHelper.TABLE_NAME, table.getCTTable().getName());
         assertEquals(TestHelper.DISPLAY_TABLE_NAME, table.getCTTable().getDisplayName());
@@ -134,10 +130,13 @@ public class TableStrategosTest {
 
 
     @Test
-    public void manageMempoiTable_withSheetNotOfTypeXSSFSheet_shouldFail() throws Exception {
+    public void manageMempoiTableWithSheetNotOfTypeXSSFSheetShouldFail() {
 
         Arrays.asList(SXSSFWorkbook.class, HSSFWorkbook.class)
                 .forEach(wbTypeClass -> {
+
+                    exceptionRule.expect(MempoiException.class);
+                    exceptionRule.expectMessage(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
 
                     Constructor<? extends Workbook> constructor;
                     Workbook workbook;
@@ -145,7 +144,7 @@ public class TableStrategosTest {
                         constructor = wbTypeClass.getConstructor();
                         workbook = constructor.newInstance();
                     } catch (Exception e) {
-                        throw new MempoiException();
+                        throw new MempoiException("wrong error");
                     }
 
                     workbook.createSheet();
@@ -154,17 +153,13 @@ public class TableStrategosTest {
                             .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
                             .build();
 
-                    try {
-                        tableStrategos.manageMempoiTable(mempoiSheet, TestHelper.getAreaReference(wb));
-                    } catch (MempoiException e) {
-                        assertEquals(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF, e.getMessage());
-                    }
+                    tableStrategos.manageMempoiTable(mempoiSheet, TestHelper.getAreaReference(wb));
                 });
     }
 
 
     @Test
-    public void manageTableTest_withoutMempoiTable() {
+    public void manageTableTestWithoutMempoiTable() {
 
         XSSFSheet sheet = wb.createSheet();
 
@@ -173,9 +168,9 @@ public class TableStrategosTest {
                 .build()
                 .setSheet(sheet);
 
-        this.tableStrategos.manageMempoiTable(mempoiSheet,TestHelper.getAreaReference(wb));
+        this.tableStrategos.manageMempoiTable(mempoiSheet, TestHelper.getAreaReference(wb));
 
-        assertEquals(0, ((XSSFSheet)mempoiSheet.getSheet()).getTables().size());
+        assertEquals(0, ((XSSFSheet) mempoiSheet.getSheet()).getTables().size());
     }
 
 
@@ -183,11 +178,12 @@ public class TableStrategosTest {
      *                          generic validations
      *****************************************************************************************************************/
 
-    private void validateTableColumns(XSSFTable table) {
+    private void assertOnTableColumns(XSSFTable table) {
 
         List<CTTableColumn> tableColumnList = table.getCTTable().getTableColumns().getTableColumnList();
 
         assertEquals(TestHelper.MEMPOI_COLUMN_NAMES.length, tableColumnList.size());
-        IntStream.range(0, tableColumnList.size()).forEachOrdered(i -> assertEquals(i + 1, tableColumnList.get(i).getId()));
+        IntStream.range(0, tableColumnList.size())
+                .forEachOrdered(i -> assertEquals(i + 1, tableColumnList.get(i).getId()));
     }
 }

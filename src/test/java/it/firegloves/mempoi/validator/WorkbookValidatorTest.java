@@ -5,34 +5,35 @@
 package it.firegloves.mempoi.validator;
 
 import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.util.Errors;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class WorkbookValidatorTest {
 
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
     private WorkbookValidator areaReferenceValidator = new WorkbookValidator();
     private String error = "Error";
 
-    @Test
-    public void validateWorkbookTypeAndThrow_willSuccess() {
+    @Test(expected = Test.None.class)
+    public void validateWorkbookTypeAndThrowWillSuccess() {
 
-        Workbook[] workbooks = { new XSSFWorkbook(), new HSSFWorkbook(), new SXSSFWorkbook()};
-        Arrays.asList(workbooks).forEach(wb -> this.areaReferenceValidator.validateWorkbookTypeAndThrow(wb, wb.getClass(), error));
+        Workbook[] workbooks = {new XSSFWorkbook(), new HSSFWorkbook(), new SXSSFWorkbook()};
+        Arrays.asList(workbooks)
+                .forEach(wb -> this.areaReferenceValidator.validateWorkbookTypeOrThrow(wb, wb.getClass(), error));
     }
 
-    @Test
-    public void validateWorkbookTypeAndThrow_differentClass_willFail() {
+    @Test(expected = Test.None.class)
+    public void validateWorkbookTypeAndThrowDifferentClassWillFail() {
 
         Map<Workbook, List<Class<? extends Workbook>>> map = new HashMap<>();
         map.put(new XSSFWorkbook(), Arrays.asList(HSSFWorkbook.class, SXSSFWorkbook.class));
@@ -43,35 +44,30 @@ public class WorkbookValidatorTest {
 
             map.get(wb).forEach(wbClazz -> {
 
-                try {
-                    this.areaReferenceValidator.validateWorkbookTypeAndThrow(wb, wb.getClass(), error);
+                exceptionRule.expect(MempoiException.class);
+                exceptionRule.expectMessage(error);
 
-                } catch (MempoiException e) {
-
-                    assertEquals(String.format("Validating %s against class %s", wb.getClass().getName(), wbClazz.getName()),
-                            error,
-                            e.getMessage());
-                }
+                this.areaReferenceValidator.validateWorkbookTypeOrThrow(wb, wbClazz, error);
             });
         });
     }
 
 
     @Test(expected = MempoiException.class)
-    public void validateWorkbookTypeAndThrow_withNullWorkbook_willFail() {
+    public void validateWorkbookTypeAndThrowWithNullWorkbookWillFail() {
 
-        this.areaReferenceValidator.validateWorkbookTypeAndThrow(null, HSSFWorkbook.class, error);
+        this.areaReferenceValidator.validateWorkbookTypeOrThrow(null, HSSFWorkbook.class, error);
     }
 
     @Test(expected = MempoiException.class)
-    public void validateWorkbookTypeAndThrow_withNullClass_willFail() {
+    public void validateWorkbookTypeAndThrowWithNullClassWillFail() {
 
-        this.areaReferenceValidator.validateWorkbookTypeAndThrow(new HSSFWorkbook(), null, error);
+        this.areaReferenceValidator.validateWorkbookTypeOrThrow(new HSSFWorkbook(), null, error);
     }
 
     @Test(expected = MempoiException.class)
-    public void validateWorkbookTypeAndThrow_withNullError_willFail() {
+    public void validateWorkbookTypeAndThrowWithNullErrorWillFail() {
 
-        this.areaReferenceValidator.validateWorkbookTypeAndThrow(new HSSFWorkbook(), XSSFWorkbook.class, null);
+        this.areaReferenceValidator.validateWorkbookTypeOrThrow(new HSSFWorkbook(), XSSFWorkbook.class, null);
     }
 }
