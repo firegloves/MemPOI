@@ -1,7 +1,6 @@
 package it.firegloves.mempoi.dao;
 
 import it.firegloves.mempoi.domain.MempoiColumn;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;

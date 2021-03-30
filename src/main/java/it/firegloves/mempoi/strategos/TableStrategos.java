@@ -9,19 +9,14 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.stream.IntStream;
 
 public class TableStrategos {
-
-    private static final Logger logger = LoggerFactory.getLogger(TableStrategos.class);
 
     /**
      * contains the workbook configurations

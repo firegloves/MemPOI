@@ -1,18 +1,17 @@
 package it.firegloves.mempoi.styles;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import it.firegloves.mempoi.domain.MempoiColumn;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 public class MempoiColumnStyleManagerTest {
 

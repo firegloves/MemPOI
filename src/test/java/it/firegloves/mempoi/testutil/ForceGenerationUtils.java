@@ -10,8 +10,9 @@ public class ForceGenerationUtils {
      */
     public static void executeTestWithForceGeneration(Runnable runnable) {
 
+        MempoiConfig.getInstance().setForceGeneration(true);
+
         try {
-            MempoiConfig.getInstance().setForceGeneration(true);
             runnable.run();
         } finally {
             MempoiConfig.getInstance().setForceGeneration(false);

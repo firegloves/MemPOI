@@ -9,6 +9,9 @@ import it.firegloves.mempoi.util.Errors;
 import it.firegloves.mempoi.util.ForceGenerationHelper;
 import it.firegloves.mempoi.validator.AreaReferenceValidator;
 import it.firegloves.mempoi.validator.WorkbookValidator;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
@@ -16,10 +19,6 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
 
 public final class MempoiPivotTableBuilder {
 
@@ -215,7 +214,7 @@ public final class MempoiPivotTableBuilder {
             throw new MempoiException(Errors.ERR_PIVOTTABLE_POSITION_NOT_FOUND);
         }
 
-        this.workbookValidator.validateWorkbookTypeAndThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
+        this.workbookValidator.validateWorkbookTypeOrThrow(this.workbook, XSSFWorkbook.class, Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
 
         // TODO test if it can be null != areaReference
         if (null == mempoiTable) {

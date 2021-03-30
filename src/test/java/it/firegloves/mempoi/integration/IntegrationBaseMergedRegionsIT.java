@@ -3,21 +3,18 @@ package it.firegloves.mempoi.integration;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.ConnectionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.junit.After;
-import org.junit.Before;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.After;
+import org.junit.Before;
 
 public abstract class IntegrationBaseMergedRegionsIT extends IntegrationBaseIT {
 
-    Connection conn = null;
-    PreparedStatement prepStmt = null;
+    protected Connection conn = null;
+    protected PreparedStatement prepStmt = null;
 
     @Before
     public void init() {

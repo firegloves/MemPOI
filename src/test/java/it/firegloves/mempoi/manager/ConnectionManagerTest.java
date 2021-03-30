@@ -4,25 +4,26 @@
 
 package it.firegloves.mempoi.manager;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import it.firegloves.mempoi.exception.MempoiException;
+import java.lang.reflect.Constructor;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.lang.reflect.Constructor;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import static org.mockito.Mockito.when;
-
 public class ConnectionManagerTest {
 
     @Mock
-    ResultSet rs;
+    private ResultSet rs;
     @Mock
-    PreparedStatement prepStmt;
+    private PreparedStatement prepStmt;
 
     @Before
     public void setup() {
@@ -53,46 +54,61 @@ public class ConnectionManagerTest {
      *****************************************************************************************************************/
 
     @Test
-    public void closeResultSetAndPrepStmt_allOpen() throws Exception {
+    public void closeResultSetAndPrepStmtAllOpen() throws Exception {
 
         when(rs.isClosed()).thenReturn(false);
         when(prepStmt.isClosed()).thenReturn(false);
 
         ConnectionManager.closeResultSetAndPrepStmt(rs, prepStmt);
+
+        verify(rs, times(1)).close();
+        verify(prepStmt, times(1)).close();
     }
 
     @Test
-    public void closeResultSetAndPrepStmt_rsOpenStmtClosed() throws Exception {
+    public void closeResultSetAndPrepStmtRsOpenStmtClosed() throws Exception {
 
         when(rs.isClosed()).thenReturn(false);
         when(prepStmt.isClosed()).thenReturn(true);
 
         ConnectionManager.closeResultSetAndPrepStmt(rs, prepStmt);
+
+        verify(rs, times(1)).close();
+        verify(prepStmt, times(0)).close();
     }
 
     @Test
-    public void closeResultSetAndPrepStmt_rsClosedStmtOpen() throws Exception {
+    public void closeResultSetAndPrepStmtRsClosedStmtOpen() throws Exception {
 
         when(rs.isClosed()).thenReturn(true);
         when(prepStmt.isClosed()).thenReturn(false);
 
         ConnectionManager.closeResultSetAndPrepStmt(rs, prepStmt);
+
+        verify(rs, times(0)).close();
+        verify(prepStmt, times(1)).close();
     }
 
     @Test
-    public void closeResultSetAndPrepStmt_rsClosedStmtClosed() throws Exception {
+    public void closeResultSetAndPrepStmtRsClosedStmtClosed() throws Exception {
 
         when(rs.isClosed()).thenReturn(true);
         when(prepStmt.isClosed()).thenReturn(true);
 
         ConnectionManager.closeResultSetAndPrepStmt(rs, prepStmt);
+
+        verify(rs, times(0)).close();
+        verify(prepStmt, times(0)).close();
     }
 
     @Test(expected = MempoiException.class)
-    public void closeResultSetAndPrepStmt_errorClosing() throws Exception {
+    public void closeResultSetAndPrepStmtErrorClosing() throws Exception {
 
         when(rs.isClosed()).thenThrow(new SQLException());
 
         ConnectionManager.closeResultSetAndPrepStmt(rs, prepStmt);
+
+        verify(rs, times(1)).close();
+        verify(prepStmt, times(0)).close();
     }
 }

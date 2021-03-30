@@ -4,72 +4,78 @@
 
 package it.firegloves.mempoi.validator;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.TestHelper;
 import it.firegloves.mempoi.util.Errors;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.Arrays;
-
-import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class AreaReferenceValidatorTest {
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     private AreaReferenceValidator areaReferenceValidator = new AreaReferenceValidator();
 
     @Test
-    public void validateAreaReferenceTest_willSuccess() {
+    public void validateAreaReferenceTestWillSuccess() {
 
-        Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES).forEach(areaRef -> assertTrue(areaRef, this.areaReferenceValidator.validateAreaReference(areaRef)));
+        Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES).forEach(areaRef ->
+                assertTrue(areaRef, this.areaReferenceValidator.validateAreaReference(areaRef)));
     }
 
     @Test
-    public void validateAreaReferenceTest_willFail() {
+    public void validateAreaReferenceTestWillFail() {
 
-        Arrays.stream(TestHelper.FAILING_AREA_REFERENCES).forEach(areaRef -> assertFalse(areaRef, this.areaReferenceValidator.validateAreaReference(areaRef)));
+        Arrays.stream(TestHelper.FAILING_AREA_REFERENCES)
+                .forEach(areaRef -> assertFalse(areaRef, this.areaReferenceValidator.validateAreaReference(areaRef)));
     }
 
     @Test
-    public void validateAreaReferenceTest_withNullAreaReference_willFail() {
+    public void validateAreaReferenceTestWithNullAreaReferenceWillFail() {
 
         assertFalse(this.areaReferenceValidator.validateAreaReference(null));
     }
 
     @Test
-    public void validateAreaReferenceTest_withEmptyAreaReference_willFail() {
+    public void validateAreaReferenceTestWithEmptyAreaReferenceWillFail() {
 
         assertFalse(this.areaReferenceValidator.validateAreaReference(""));
     }
 
 
-    @Test
-    public void validateAreaReferenceTestAndThrow_willSuccess() {
+    @Test(expected = Test.None.class)
+    public void validateAreaReferenceTestAndThrowWillSuccess() {
 
-        Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES).forEach(this.areaReferenceValidator::validateAreaReferenceAndThrow);
+        Arrays.stream(TestHelper.SUCCESSFUL_AREA_REFERENCES)
+                .forEach(this.areaReferenceValidator::validateAreaReferenceAndThrow);
     }
 
     @Test
-    public void validateAreaReferenceTestAndThrow_willFail() {
+    public void validateAreaReferenceTestAndThrowWillFail() {
 
         Arrays.stream(TestHelper.FAILING_AREA_REFERENCES).forEach(areaRef -> {
 
-            try {
-                this.areaReferenceValidator.validateAreaReferenceAndThrow(areaRef);
-            } catch (MempoiException e) {
-                assertEquals(Errors.ERR_AREA_REFERENCE_NOT_VALID, e.getMessage());
-            }
+            exceptionRule.expect(MempoiException.class);
+            exceptionRule.expectMessage(Errors.ERR_AREA_REFERENCE_NOT_VALID);
+
+            this.areaReferenceValidator.validateAreaReferenceAndThrow(areaRef);
         });
     }
 
     @Test(expected = MempoiException.class)
-    public void validateAreaReferenceTestAndThrow_withNullAreaReference_willFail() {
+    public void validateAreaReferenceTestAndThrowWithNullAreaReferenceWillFail() {
 
         this.areaReferenceValidator.validateAreaReferenceAndThrow(null);
     }
 
     @Test(expected = MempoiException.class)
-    public void validateAreaReferenceTestAndThrow_withEmptyAreaReference_willFail() {
+    public void validateAreaReferenceTestAndThrowWithEmptyAreaReferenceWillFail() {
 
         this.areaReferenceValidator.validateAreaReferenceAndThrow("");
     }

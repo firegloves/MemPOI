@@ -7,9 +7,7 @@
 package it.firegloves.mempoi.domain.datatransformation;
 
 import it.firegloves.mempoi.exception.MempoiException;
-
 import java.util.Date;
-
 import lombok.Setter;
 
 @Setter

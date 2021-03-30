@@ -3,13 +3,12 @@ package it.firegloves.mempoi.integration;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.testutil.ConnectionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import org.junit.After;
 import org.junit.Before;
-
-import java.io.File;
-import java.sql.*;
-
-import static org.junit.Assert.assertEquals;
 
 public abstract class IntegrationBaseIT {
 
@@ -19,8 +18,8 @@ public abstract class IntegrationBaseIT {
     // it's a mysql 8+ dump
     // then adjust db connection string accordingly with your parameters
 
-    Connection conn = null;
-    PreparedStatement prepStmt = null;
+    protected Connection conn = null;
+    protected PreparedStatement prepStmt = null;
 
     @Before
     public void init() {

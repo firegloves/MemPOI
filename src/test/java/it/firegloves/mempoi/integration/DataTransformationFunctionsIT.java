@@ -77,7 +77,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-                this.validateGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
+                this.assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
                         TestHelper.HEADERS_2, new StandardStyleTemplate(),
                         (double) MempoiColumnConfigTestHelper.CELL_VALUE, Double.class,
                         colName);
@@ -119,7 +119,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-                this.validateGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
+                this.assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
                         TestHelper.HEADERS_2, new StandardStyleTemplate(),
                         (double) MempoiColumnConfigTestHelper.CELL_VALUE, Double.class,
                         colName);
@@ -161,7 +161,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-                this.validateGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
+                this.assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
                         TestHelper.HEADERS_2, new StandardStyleTemplate(),
                         (double) MempoiColumnConfigTestHelper.CELL_VALUE, Double.class,
                         colName);
@@ -205,7 +205,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
                 assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-                this.validateGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
+                this.assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fileDest.getAbsolutePath(),
                         TestHelper.HEADERS_2, new StandardStyleTemplate(), strValue, String.class, colName);
 
             } catch (Exception e) {
@@ -219,7 +219,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
      * NULL VALUES
      ****************************************************************************/
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheDateDataTranformationFunctionShouldReceiveNull() {
 
         List<String> colNameList = Arrays.asList("creation_date", "dateTime", "STAMPONE", "attempato");
@@ -256,7 +256,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheBooleanDataTranformationFunctionShouldReceivePrimitiveDefault() {
 
         List<String> colNameList = Arrays.asList("valid", "bitTwo");
@@ -293,7 +293,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheBooleanDataTranformationFunctionShouldReceiveNullIfNullValuesOverPrimitiveDetaultOnes() {
 
         List<String> colNameList = Arrays.asList("valid", "bitTwo");
@@ -331,7 +331,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheStringDataTranformationFunctionShouldReceiveNullValue() {
 
         List<String> colNameList = Arrays.asList("name", "usefulChar");
@@ -369,7 +369,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheDoubleDataTranformationFunctionShouldReceivePrimitiveDefault() {
 
         List<String> colNameList = Arrays
@@ -407,7 +407,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
-    @Test
+    @Test(expected = Test.None.class)
     public void givenANullValueReadByDBTheDoubleDataTranformationFunctionShouldReceiveNullIfNullValuesOverPrimitiveDetaultOnesIsTrue() {
 
         List<String> colNameList = Arrays
@@ -469,7 +469,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             AssertionHelper
-                    .validateGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS_2,
+                    .assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS_2,
                             TestHelper.HEADERS_2,
                             null, new StandardStyleTemplate());
 
@@ -525,7 +525,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
      * @param fileToValidate the absolute filename of the xlsx file on which apply the generic asserts
      * @param headers        the array of headers name required
      */
-    private void validateGeneratedFileDataTransformationFunction(PreparedStatement prepStmt,
+    private void assertOnGeneratedFileDataTransformationFunction(PreparedStatement prepStmt,
             String fileToValidate, String[] headers, StyleTemplate styleTemplate, Object transformedValue,
             Class transformedValueCastClass, String transformedColumnName) {
 
@@ -540,12 +540,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
             Sheet sheet = wb.getSheetAt(0);
 
             // validates header row
-            AssertionHelper.validateHeaderRow(sheet.getRow(0), headers,
+            AssertionHelper.assertOnHeaderRow(sheet.getRow(0), headers,
                     null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
-                validateGeneratedFileDataRowDataTransformationFunction(rs, sheet.getRow(r), headers, styleTemplate, wb,
+                assertOnGeneratedFileDataRowDataTransformationFunction(rs, sheet.getRow(r), styleTemplate, wb,
                         transformedValue, transformedValueCastClass, transformedColumnName);
             }
 
@@ -561,11 +561,10 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
      *
      * @param rs            the ResultSet against which validate the Row
      * @param row           the Row to validate against the ResultSet
-     * @param headers       the array of columns name, useful to retrieve data from the ResultSet
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
      */
-    private void validateGeneratedFileDataRowDataTransformationFunction(ResultSet rs, Row row, String[] headers,
+    private void assertOnGeneratedFileDataRowDataTransformationFunction(ResultSet rs, Row row,
             StyleTemplate styleTemplate, Workbook wb, Object transformedValue, Class transformedValueCastClass,
             String transformedColumnName) {
 
@@ -614,12 +613,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getStringCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         } else {
             assertEquals(rs.getInt(TestHelper.HEADERS_2[columnIndex]),
                     (int) row.getCell(columnIndex).getNumericCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         }
     }
@@ -631,12 +630,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getStringCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         } else {
             assertEquals(rs.getDouble(TestHelper.HEADERS_2[columnIndex]),
                     row.getCell(columnIndex).getNumericCellValue(), 0.1);
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         }
     }
@@ -648,12 +647,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getStringCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         } else {
             assertEquals(rs.getFloat(TestHelper.HEADERS_2[columnIndex]),
                     (int) row.getCell(columnIndex).getNumericCellValue(), 0.1);
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getFloatingPointCellStyle(wb));
         }
     }
@@ -665,12 +664,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getNumericCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         } else {
             assertEquals(rs.getTimestamp(TestHelper.HEADERS_2[columnIndex]).getTime(),
                     row.getCell(columnIndex).getDateCellValue().getTime());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getDateCellStyle(wb));
         }
     }
@@ -682,12 +681,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getNumericCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         } else {
             assertEquals(rs.getBoolean(TestHelper.HEADERS_2[columnIndex]),
                     row.getCell(columnIndex).getBooleanCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         }
     }
@@ -699,12 +698,12 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         if (TestHelper.HEADERS_2[columnIndex].equals(transformedColumnName)) {
             assertEquals(transformedValueCastClass.cast(transformedValue),
                     row.getCell(columnIndex).getNumericCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getIntegerCellStyle(wb));
         } else {
             assertEquals(rs.getString(TestHelper.HEADERS_2[columnIndex]),
                     row.getCell(columnIndex).getStringCellValue());
-            AssertionHelper.validateCellStyle(row.getCell(columnIndex).getCellStyle(),
+            AssertionHelper.assertOnCellStyle(row.getCell(columnIndex).getCellStyle(),
                     styleTemplate.getCommonDataCellStyle(wb));
         }
     }

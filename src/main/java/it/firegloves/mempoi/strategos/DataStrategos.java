@@ -45,7 +45,9 @@ public class DataStrategos {
     protected int createHeaderRow(Sheet sheet, List<MempoiColumn> columnList, int rowCounter,
             MempoiStyler sheetReportStyler) {
 
-        Row row = sheet.createRow(rowCounter++);
+        int counter = rowCounter;
+
+        Row row = sheet.createRow(counter++);
 
         int colListLen = columnList.size();
 
@@ -74,7 +76,7 @@ public class DataStrategos {
                     .getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
         }
 
-        return rowCounter;
+        return counter;
     }
 
     /**

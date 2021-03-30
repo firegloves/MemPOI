@@ -2,7 +2,11 @@ package it.firegloves.mempoi.styles.template;
 
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.styles.StandardDataFormat;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Workbook;
 
 public interface StyleTemplate {
 

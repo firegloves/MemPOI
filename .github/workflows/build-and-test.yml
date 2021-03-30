@@ -11,7 +11,7 @@ on:
 
 jobs:
   # TEST
-  test:
+  Test:
     runs-on: ubuntu-latest
     steps:
       # checkout

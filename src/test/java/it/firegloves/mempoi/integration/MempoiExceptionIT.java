@@ -1,17 +1,16 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
-import org.junit.Test;
-
 import java.sql.SQLException;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 public class MempoiExceptionIT extends IntegrationBaseIT {
 

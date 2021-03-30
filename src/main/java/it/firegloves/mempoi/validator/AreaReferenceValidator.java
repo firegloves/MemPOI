@@ -6,9 +6,8 @@ package it.firegloves.mempoi.validator;
 
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 public class AreaReferenceValidator {
 

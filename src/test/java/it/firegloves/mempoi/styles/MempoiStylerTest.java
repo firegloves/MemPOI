@@ -1,13 +1,10 @@
 package it.firegloves.mempoi.styles;
 
-import it.firegloves.mempoi.styles.template.*;
+import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class MempoiStylerTest {
 
@@ -27,12 +24,12 @@ public class MempoiStylerTest {
               template.getSubfooterCellStyle(wb)
       );
 
-      AssertionHelper.validateCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
-      AssertionHelper.validateCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
-      AssertionHelper.validateCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
-      AssertionHelper.validateCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
-      AssertionHelper.validateCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
-      AssertionHelper.validateCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
-      AssertionHelper.validateCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
    }
 }

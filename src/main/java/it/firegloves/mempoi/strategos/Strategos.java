@@ -8,21 +8,16 @@ import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
 import it.firegloves.mempoi.domain.MempoiColumn;
-import it.firegloves.mempoi.domain.MempoiEncryption;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.manager.FileManager;
 import it.firegloves.mempoi.util.Errors;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.File;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.poifs.crypt.EncryptionInfo;
-import org.apache.poi.poifs.crypt.EncryptionMode;
-import org.apache.poi.poifs.crypt.Encryptor;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.AreaReference;
@@ -31,11 +26,6 @@ import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Strategos {
 

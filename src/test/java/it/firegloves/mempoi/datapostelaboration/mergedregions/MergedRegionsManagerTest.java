@@ -1,9 +1,18 @@
 package it.firegloves.mempoi.datapostelaboration.mergedregions;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.when;
+
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.MergedRegionsManager;
 import it.firegloves.mempoi.exception.MempoiException;
+import java.util.Optional;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
@@ -11,17 +20,24 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Optional;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 public class MergedRegionsManagerTest {
 
     @Mock
-    private Row row1, row2, row3, row4;
+    private Row row1;
     @Mock
-    private Cell cell1, cell2, cell3, cell4;
+    private Row row2;
+    @Mock
+    private Row row3;
+    @Mock
+    private Row row4;
+    @Mock
+    private Cell cell1;
+    @Mock
+    private Cell cell2;
+    @Mock
+    private Cell cell3;
+    @Mock
+    private Cell cell4;
     private MergedRegionsManager<String> mergedRegionsManager;
 
     private Sheet sheet;
@@ -89,7 +105,9 @@ public class MergedRegionsManagerTest {
     @Test
     public void mergeRegionTest() {
 
-        int firstRow = 1, lastRow = 4, colInd = 1;
+        int firstRow = 1;
+        int lastRow = 4;
+        int colInd = 1;
 
         for (int i = 0; i < 10; i++) {
             Row r = this.sheet.createRow(i);
@@ -132,7 +150,9 @@ public class MergedRegionsManagerTest {
     @Test
     public void mergeRegionLastRowLowerThanFirst() {
 
-        int firstRow = 5, lastRow = 4, colInd = 1;
+        int firstRow = 5;
+        int lastRow = 4;
+        int colInd = 1;
 
         boolean merged = this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd);
 
@@ -142,7 +162,9 @@ public class MergedRegionsManagerTest {
     @Test(expected = MempoiException.class)
     public void mergeRegionNullSheet() {
 
-        int firstRow = 5, lastRow = 4, colInd = 1;
+        int firstRow = 5;
+        int lastRow = 4;
+        int colInd = 1;
 
         this.mergedRegionsManager.mergeRegion(null, this.cellStyle, firstRow, lastRow, colInd);
     }
@@ -150,25 +172,31 @@ public class MergedRegionsManagerTest {
     @Test
     public void mergeRegionNullCellStyle() {
 
-        int firstRow = 5, lastRow = 4, colInd = 1;
+        int firstRow = 5;
+        int lastRow = 4;
+        int colInd = 1;
 
-        this.mergedRegionsManager.mergeRegion(this.sheet, null, firstRow, lastRow, colInd);
+        assertFalse(this.mergedRegionsManager.mergeRegion(this.sheet, null, firstRow, lastRow, colInd));
     }
 
     @Test
     public void mergeRegionNegativeFirstRow() {
 
-        int firstRow = -5, lastRow = 4, colInd = 1;
+        int firstRow = -5;
+        int lastRow = 4;
+        int colInd = 1;
 
-        this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd);
+        assertFalse(this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd));
     }
 
     @Test
     public void mergeRegionNegativeColInd() {
 
-        int firstRow = -5, lastRow = 4, colInd = -1;
+        int firstRow = -5;
+        int lastRow = 4;
+        int colInd = -1;
 
-        this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd);
+        assertFalse(this.mergedRegionsManager.mergeRegion(this.sheet, this.cellStyle, firstRow, lastRow, colInd));
     }
 
 
