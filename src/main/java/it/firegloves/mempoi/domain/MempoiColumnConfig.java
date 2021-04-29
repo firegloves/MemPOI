@@ -3,7 +3,6 @@
  */
 package it.firegloves.mempoi.domain;
 
-import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;

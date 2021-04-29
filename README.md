@@ -630,7 +630,6 @@ Be aware that changing column data types may invalidate cell formulas, footers r
 
 ---
 
-
 #### Column header customization
 
 If you need to change the column header display name without changing the SQL statement, you can configure the display name by setting the display name configuration.
