@@ -649,7 +649,7 @@ And expect this result
 |demo | Demo | MEMPOI | Comment in column without title | 
 
 In this example : 
-* The selected column 'username' doesn't a custom configuration
+* The selected column 'username' doesn't need a custom configuration
 * The selected column 'fname' needs a custom configuration to display "First name"
 * The selected column 'lname' needs a custom configuration to display "Last name"
 * The selected column 'comment' needs a custom configuration to display an empty text 

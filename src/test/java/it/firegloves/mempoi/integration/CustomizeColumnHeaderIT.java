@@ -47,7 +47,7 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
     }
 
     @Test
-    public void shouldApplyColumnDisplayNameIfNoAsIsClausesSupplied()
+    public void shouldApplyColumnDisplayNameAsSelectClausesSupplied()
     {
         File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
                 "customize_column_header_without_as_is.xlsx");
