@@ -1,8 +1,7 @@
 package it.firegloves.mempoi.domain;
 
 import static it.firegloves.mempoi.testutil.AssertionHelper.assertOnCellStyle;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.doNothing;
 
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
@@ -320,5 +319,39 @@ public class MempoiColumnTest {
         this.mc.setMempoiColumnConfig(mempoiColumnConfig, new MempoiColumnStyleManager(new MempoiStyler()));
 
         assertEquals(cellStyle, this.mc.getCellStyle());
+    }
+
+
+    @Test
+    public void shouldOverrideColumnTitleIfSuppliedIntoMempoiColumnConfig() throws NoSuchMethodException {
+        // Test without changing the column name
+        assertEquals(this.mc.getColumnName(), this.mc.getColumnDisplayName());
+
+        CellStyle cellStyle = new XSSFWorkbook().createCellStyle();
+
+        // Applying the column name config
+        MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                .withCellStyle(cellStyle)
+                .withColumnName("test")
+                .withColumnDisplayName("TEST")
+                .build();
+        this.mc.setMempoiColumnConfig(mempoiColumnConfig, new MempoiColumnStyleManager(new MempoiStyler()));
+
+        // Verify the display name
+        assertEquals("TEST", this.mc.getColumnDisplayName());
+        assertNotEquals(this.mc.getColumnName(), this.mc.getColumnDisplayName());
+
+        // Applying the column name config with an empty display name
+        mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                .withCellStyle(cellStyle)
+                .withColumnName("test")
+                .withColumnDisplayName("")
+                .build();
+        this.mc.setMempoiColumnConfig(mempoiColumnConfig, new MempoiColumnStyleManager(new MempoiStyler()));
+
+        // Verify that display name is now empty
+        assertEquals("", this.mc.getColumnDisplayName());
+        assertNotEquals(this.mc.getColumnName(), this.mc.getColumnDisplayName());
+
     }
 }

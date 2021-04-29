@@ -62,9 +62,9 @@ public class DataStrategos {
             }
 
             cell.setCellStyle(sheetReportStyler.getHeaderCellStyle());
-            cell.setCellValue(cm.getColumnName());
+            cell.setCellValue(cm.getColumnDisplayName());
 
-            logger.debug("SETTING HEADER FOR COLUMN {}", columnList.get(i).getColumnName());
+            logger.debug("SETTING HEADER FOR COLUMN {} (DISPLAY NAME {})", cm.getColumnName(), cm.getColumnDisplayName());
         }
 
         // adjust row height
