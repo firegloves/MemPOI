@@ -20,7 +20,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.1'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.6.0'
 ```
 
 #### With Maven
@@ -29,14 +29,14 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
 </dependency>
 
 ```
 
 ---
 
-### What's new in 1.5.1
+### What's new in 1.6.0
 - NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with [Column Header customization](#column-header-customization) 
 
 
@@ -177,7 +177,7 @@ SELECT id, name AS first_name FROM Foo
 
 will result in a sheet with 2 columns: id and first_name (containing db's name column data)
 
-Since version 1.5.1 you can manage programmaticly column headers via a specific [Column header customization](#column-header-customization)  
+Since version 1.6.0 you can manage programmaticly column headers via a specific [Column header customization](#column-header-customization)  
 
 ---
 
@@ -636,7 +636,26 @@ If you need to change the column header display name without changing the SQL st
 
 The display name is only used to populate the column header cell value.
 
+In this following example we want to configure an Excel sheet from this query
+
+```sql
+SELECT username, fname, lname, comment FROM person 
+```
+
+And expect this result
+
+| username | First name | Last name | |   
+|----------|------------|-----------|-------| 
+|demo | Demo | MEMPOI | Comment in column without title | 
+
+In this example : 
+* The selected column 'username' doesn't a custom configuration
+* The selected column 'fname' needs a custom configuration to display "First name"
+* The selected column 'lname' needs a custom configuration to display "Last name"
+* The selected column 'comment' needs a custom configuration to display an empty text 
+
 ```Java
+
 MempoiColumnConfig firstNameConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
         .withColumnName("fname")
         .withColumnDisplayName("First name")
@@ -653,7 +672,7 @@ MempoiColumnConfig commentWithoutHeaderTextConfig = MempoiColumnConfigBuilder.aM
         .build();
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-        .withPrepStmt("SELECT fname, lname, comment FROM person ")
+        .withPrepStmt("SELECT username, fname, lname, comment FROM person ")
         .addMempoiColumnConfig(firstNameConfig)
         .addMempoiColumnConfig(lastNameConfig)
         .addMempoiColumnConfig(commentWithoutHeaderTextConfig)

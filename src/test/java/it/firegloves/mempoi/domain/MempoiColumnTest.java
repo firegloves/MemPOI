@@ -323,17 +323,25 @@ public class MempoiColumnTest {
         assertEquals(cellStyle, this.mc.getCellStyle());
     }
 
-
     @Test
-    public void shouldOverrideColumnTitleIfSuppliedIntoMempoiColumnConfig() throws NoSuchMethodException {
+    public void shouldLetDefaultColumnTitleIfNotSuppliedIntoMempoiColumnConfig()
+    {
         // Test without changing the column name
         assertEquals(this.mc.getColumnName(), this.mc.getColumnDisplayName());
 
-        CellStyle cellStyle = new XSSFWorkbook().createCellStyle();
+        // Applying the column display name to null
+        MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                .withColumnName("test")
+                .withColumnDisplayName(null)
+                .build();
+        this.mc.setMempoiColumnConfig(mempoiColumnConfig, new MempoiColumnStyleManager(new MempoiStyler()));
+        assertEquals(this.mc.getColumnName(), this.mc.getColumnDisplayName());
+    }
 
+    @Test
+    public void shouldOverrideColumnTitleIfSuppliedIntoMempoiColumnConfig() {
         // Applying the column name config
         MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
-                .withCellStyle(cellStyle)
                 .withColumnName("test")
                 .withColumnDisplayName("TEST")
                 .build();
@@ -345,7 +353,6 @@ public class MempoiColumnTest {
 
         // Applying the column name config with an empty display name
         mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
-                .withCellStyle(cellStyle)
                 .withColumnName("test")
                 .withColumnDisplayName("")
                 .build();

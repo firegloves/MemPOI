@@ -42,11 +42,11 @@ public class MempoiColumnConfig {
 
     private MempoiColumnConfig(String columnName,
             DataTransformationFunction<?, ?> dataTransformationFunction,
-            CellStyle cellStyle, Optional<String> columnDisplayName) {
+            CellStyle cellStyle, String columnDisplayName) {
         this.columnName = columnName;
         this.dataTransformationFunction = dataTransformationFunction;
         this.cellStyle = cellStyle;
-        this.columnDisplayName = columnDisplayName;
+        this.columnDisplayName = Optional.ofNullable(columnDisplayName);
     }
 
 
@@ -65,7 +65,7 @@ public class MempoiColumnConfig {
         private String columnName;
         private DataTransformationFunction<?, ?> dataTransformationFunction;
         private CellStyle cellStyle;
-        private Optional<String> columnDisplayName = Optional.empty();
+        private String columnDisplayName;
 
         /**
          * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -106,8 +106,9 @@ public class MempoiColumnConfig {
          * @return the current MempoiColumnConfigBuilder
          */
         public MempoiColumnConfigBuilder withColumnDisplayName(String columnDisplayName) {
-            this.columnDisplayName.ifPresent(mt -> logger.info(OVERRIDING_MEMPOI_TABLE_COLUMN_NAME, this.columnName));
-            this.columnDisplayName = Optional.ofNullable(columnDisplayName);
+            if(this.columnDisplayName != null)
+                logger.info(OVERRIDING_MEMPOI_TABLE_COLUMN_NAME, this.columnName);
+            this.columnDisplayName = columnDisplayName;
             return this;
         }
 
