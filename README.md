@@ -38,6 +38,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.6.0'
 
 ### What's new in 1.6.0
 - NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with [Column Header customization](#column-header-customization) 
+- NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with transformation option with ResultSet row datas
 
 
 ### What's new in 1.5.0
