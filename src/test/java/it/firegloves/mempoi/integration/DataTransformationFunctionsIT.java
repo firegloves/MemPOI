@@ -1,23 +1,24 @@
 package it.firegloves.mempoi.integration;
 
-import static org.junit.Assert.assertEquals;
-
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.domain.datatransformation.BooleanDataTransformationFunction;
-import it.firegloves.mempoi.domain.datatransformation.DateDataTransformationFunction;
-import it.firegloves.mempoi.domain.datatransformation.DoubleDataTransformationFunction;
-import it.firegloves.mempoi.domain.datatransformation.StringDataTransformationFunction;
+import it.firegloves.mempoi.domain.datatransformation.*;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+import org.apache.poi.ss.usermodel.*;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -28,13 +29,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.assertEquals;
 
 public class DataTransformationFunctionsIT extends IntegrationBaseIT {
 
@@ -63,7 +59,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new StringDataTransformationFunction<Integer>() {
                             @Override
-                            public Integer transform(String value) throws MempoiException {
+                            public Integer transform(final ResultSet rs, String value) throws MempoiException {
                                 return MempoiColumnConfigTestHelper.CELL_VALUE;
                             }
                         })
@@ -105,7 +101,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new BooleanDataTransformationFunction<Integer>() {
                             @Override
-                            public Integer transform(Boolean value) throws MempoiException {
+                            public Integer transform(final ResultSet rs, Boolean value) throws MempoiException {
                                 return MempoiColumnConfigTestHelper.CELL_VALUE;
                             }
                         })
@@ -147,7 +143,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new DateDataTransformationFunction<Integer>() {
                             @Override
-                            public Integer transform(Date value) throws MempoiException {
+                            public Integer transform(final ResultSet rs, Date value) throws MempoiException {
                                 return MempoiColumnConfigTestHelper.CELL_VALUE;
                             }
                         })
@@ -191,7 +187,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new DoubleDataTransformationFunction<String>() {
                             @Override
-                            public String transform(Double value) throws MempoiException {
+                            public String transform(final ResultSet rs, Double value) throws MempoiException {
                                 return strValue;
                             }
                         })
@@ -214,6 +210,66 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         });
     }
 
+    @Test
+    public void shouldApplyNameTranformationIfColumnValidIsTrue() {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+                "string_name_dynamicdata_transf_function.xlsx");
+
+        try {
+            this.prepStmt = createStatement();
+
+            MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+                    .withColumnName("name")
+                    .withDataTransformationFunction(new StringDataTransformationFunction<String>() {
+                        @Override
+                        public String transform(final ResultSet rs, String value) throws MempoiException {
+                            try
+                            {
+                                if (rs.getBoolean("valid"))
+                                    return value +" validated";
+                                return value;
+                            }catch (SQLException e)
+                            {
+                              throw new MempoiException(e);
+                            }
+                        }
+                    })
+                    .build();
+
+            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt)
+                    .addMempoiColumnConfig(mempoiColumnConfig).build();
+
+            MemPOI memPOI = MempoiBuilder.aMemPOI().withFile(fileDest).addMempoiSheet(mempoiSheet).build();
+
+            CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+            assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+            try (InputStream inp = new FileInputStream(fileDest)) {
+
+                ResultSet rs =  createStatement().executeQuery();
+                Workbook wb = WorkbookFactory.create(inp);
+                Sheet sheet = wb.getSheetAt(0);
+                // validates data rows
+                for (int r = 1; rs.next(); r++) {
+                    String cellText = sheet.getRow(r).getCell(4).getStringCellValue();
+                    if (rs.getBoolean("valid"))
+                        Assert.assertEquals(rs.getString("name") + " validated", cellText);
+                    else
+                        Assert.assertEquals(rs.getString("name"),  cellText);
+                }
+
+            } catch (Exception e) {
+                AssertionHelper.failAssertion(e);
+            }
+
+        } catch (Exception e) {
+            AssertionHelper.failAssertion(e);
+        }
+
+    }
+
+
 
     /*****************************************************************************
      * NULL VALUES
@@ -233,7 +289,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new DateDataTransformationFunction<Integer>() {
                             @Override
-                            public Integer transform(Date value) throws MempoiException {
+                            public Integer transform(ResultSet rs, Date value) throws MempoiException {
                                 if (null != value) {
                                     throw new MempoiException(
                                             "data transformation function did not receive a null value");
@@ -270,7 +326,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new BooleanDataTransformationFunction<Integer>() {
                             @Override
-                            public Integer transform(Boolean value) throws MempoiException {
+                            public Integer transform(ResultSet rs, Boolean value) throws MempoiException {
                                 if (value) {
                                     throw new MempoiException(
                                             "boolean data transformation function did not receive primitive default value");
@@ -307,7 +363,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new BooleanDataTransformationFunction<Integer>() {
                             @Override
-                            public Integer transform(Boolean value) throws MempoiException {
+                            public Integer transform(ResultSet rs, Boolean value) throws MempoiException {
                                 if (null != value) {
                                     throw new MempoiException(
                                             "boolean data transformation function did not receive null value");
@@ -345,7 +401,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new StringDataTransformationFunction<Integer>() {
                             @Override
-                            public Integer transform(String value) throws MempoiException {
+                            public Integer transform(final ResultSet rs, String value) throws MempoiException {
                                 if (null != value) {
                                     throw new MempoiException(
                                             "string data transformation function did not receive a null value");
@@ -384,7 +440,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new DoubleDataTransformationFunction<String>() {
                             @Override
-                            public String transform(Double value) throws MempoiException {
+                            public String transform(final ResultSet rs, Double value) throws MempoiException {
                                 if (value != 0d) {
                                     throw new MempoiException(
                                             "double data transformation function did not receive primitive value");
@@ -422,7 +478,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                         .withColumnName(colName)
                         .withDataTransformationFunction(new DoubleDataTransformationFunction<String>() {
                             @Override
-                            public String transform(Double value) throws MempoiException {
+                            public String transform(final ResultSet rs, Double value) throws MempoiException {
                                 if (null != value) {
                                     throw new MempoiException(
                                             "data transformation function did not receive a null value");
@@ -487,7 +543,7 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 .withColumnName(MempoiColumnConfigTestHelper.COLUMN_NAME)
                 .withDataTransformationFunction(new DoubleDataTransformationFunction<Integer>() {
                     @Override
-                    public Integer transform(Double value) throws MempoiException {
+                    public Integer transform(final ResultSet rs, Double value) throws MempoiException {
                         return 1;
                     }
                 })

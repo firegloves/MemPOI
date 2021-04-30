@@ -4,17 +4,16 @@
  */
 package it.firegloves.mempoi.domain.datatransformation;
 
-import it.firegloves.mempoi.exception.MempoiException;
 import lombok.Setter;
 
+import java.sql.ResultSet;
 
 @Setter
 public abstract class DoubleDataTransformationFunction<O> extends DataTransformationFunction<Double, O> {
 
     @Override
-    public O execute(Object value) {
-        return super.applyTransformation(value, Double.class);
+    public O execute(final ResultSet rs, Object value) {
+        return super.applyTransformation(rs, value, Double.class);
     }
 
-    public abstract O transform(final Double value) throws MempoiException;
 }

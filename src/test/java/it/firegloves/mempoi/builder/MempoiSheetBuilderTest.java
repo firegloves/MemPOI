@@ -1,11 +1,5 @@
 package it.firegloves.mempoi.builder;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumnConfig;
@@ -20,22 +14,19 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
 import it.firegloves.mempoi.styles.template.StyleTemplate;
-import it.firegloves.mempoi.testutil.AssertionHelper;
-import it.firegloves.mempoi.testutil.ForceGenerationUtils;
-import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
-import it.firegloves.mempoi.testutil.TestHelper;
-import java.sql.PreparedStatement;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import it.firegloves.mempoi.testutil.*;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class MempoiSheetBuilderTest {
 
@@ -323,7 +314,7 @@ public class MempoiSheetBuilderTest {
         String colName = "test";
         StringDataTransformationFunction<Date> dataTransformationFunction = new StringDataTransformationFunction<Date>() {
             @Override
-            public Date transform(String value) throws MempoiException {
+            public Date transform(final ResultSet rs, String value) throws MempoiException {
                 return new Date();
             }
         };
