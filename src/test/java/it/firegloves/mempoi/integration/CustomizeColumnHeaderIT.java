@@ -41,45 +41,77 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
     @Test
     public void shouldApplyColumnDisplayNameIfNoAsClausesSupplied()
     {
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
-                "customize_column_header_without_as_clause.xlsx");
-        customizeColumnHeader(fileDest, null);
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() , "/data_trans_fn/customize_column_header_without_as_clause_01.xlsx");
+        customizeColumnHeader(fileDest, null, null);
+
+        String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
+        displayedHeader[0] = "Customized "+displayedHeader[0];
+        fileDest = new File(this.outReportFolder.getAbsolutePath() , "/data_trans_fn/customize_column_header_without_as_clause_02.xlsx");
+        customizeColumnHeader(fileDest, null, displayedHeader);
     }
 
     @Test
     public void shouldApplyColumnDisplayNameAsSelectClausesSupplied()
     {
         File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
-                "customize_column_header_without_as_is.xlsx");
-        customizeColumnHeader(fileDest, COLUMNS);
+                "customize_column_header_without_as_is_01.xlsx");
+        customizeColumnHeader(fileDest, null, COLUMNS);
+
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+                "customize_column_header_without_as_is_02.xlsx");
+        customizeColumnHeader(fileDest, COLUMNS, COLUMNS);
     }
 
     @Test
     public void shouldApplyColumnDisplayNameIfAsClausesForSeveralColumnsSupplied() {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
-                "customize_column_header_with_as_several_clause.xlsx");
-        String[] headers = Arrays.copyOf(COLUMNS, COLUMNS.length);
-        headers[0] = "Customized "+headers[0];
-        customizeColumnHeader(fileDest, headers);
+                "customize_column_header_with_as_several_clause_01.xlsx");
+        String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
+        displayedHeader[0] = "Customized "+displayedHeader[0];
+        customizeColumnHeader(fileDest, null, displayedHeader);
+
+        fileDest = new File(this.outReportFolder.getAbsolutePath(), "/data_trans_fn/customize_column_header_with_as_several_clause_02.xlsx");
+        customizeColumnHeader(fileDest, COLUMNS, displayedHeader);
     }
 
     @Test
     public void shouldApplyColumnDisplayNameIfAsClausesForEachColumnsSupplied() {
         File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
-                "customize_column_header_with_as_for_each_clause.xlsx");
+                "customize_column_header_with_as_for_each_clause_01.xlsx");
         String[] headers = Arrays.copyOf(COLUMNS, COLUMNS.length);
+        String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
         for(int i = 0; i<headers.length; i++)
-            headers[i] = "Customized "+headers[i] ;
-        customizeColumnHeader(fileDest, headers);
+        {
+            headers[i] = "AS CLAUSE " + headers[i];
+            displayedHeader[i] = "Customized " + displayedHeader[i];
+        }
+        // No AS Clause
+        customizeColumnHeader(fileDest, null, displayedHeader);
+
+        // Same AS Clause
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+                "customize_column_header_with_as_for_each_clause_02.xlsx");
+        customizeColumnHeader(fileDest, COLUMNS, displayedHeader);
+        // Same AS Clause
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+                "customize_column_header_with_as_for_each_clause_03.xlsx");
+        customizeColumnHeader(fileDest, headers, displayedHeader);
+
+        headers[0] = null;
+        displayedHeader[1] = null;
+        // Mix AS Clause / Custom header
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+                "customize_column_header_with_as_for_each_clause_04.xlsx");
+        customizeColumnHeader(fileDest, headers, displayedHeader);
     }
 
-    private void customizeColumnHeader(File fileDest, String[] headers) {
+    private void customizeColumnHeader(File fileDest, String[] sqlStatementHeaders, String[] displayedHeaders) {
         try {
-            this.prepStmt = createStatement(COLUMNS, headers);
+            this.prepStmt = createStatement(COLUMNS, sqlStatementHeaders);
 
             MempoiSheetBuilder builder = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(prepStmt);
-            configureMempoi(builder, headers);
+            configureMempoi(builder, sqlStatementHeaders, displayedHeaders);
             MempoiSheet mempoiSheet = builder.build();
 
             MemPOI memPOI = MempoiBuilder.aMemPOI().withFile(fileDest).addMempoiSheet(mempoiSheet).build();
@@ -87,19 +119,17 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
             CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
-            if(headers == null)
-                assertGeneratedColumnHeader(fileDest, COLUMNS);
-            else
-            {
-                String[] expectedHeaders = new String[COLUMNS.length];
-                for (int i = 0; i < expectedHeaders.length; i++) {
-                    if (headers != null && i < headers.length && headers[i] != null && !headers[i].isEmpty())
-                        expectedHeaders[i] = headers[i];
-                    else
-                        expectedHeaders[i] = COLUMNS[i];
-                }
-                assertGeneratedColumnHeader(fileDest, expectedHeaders);
+            String[] expectedHeaders = new String[COLUMNS.length];
+            for (int i = 0; i < expectedHeaders.length; i++) {
+                if (displayedHeaders != null && i < displayedHeaders.length && displayedHeaders[i] != null && !displayedHeaders[i].isEmpty())
+                    expectedHeaders[i] = displayedHeaders[i];
+                else  if (sqlStatementHeaders != null && i < sqlStatementHeaders.length && sqlStatementHeaders[i] != null && !sqlStatementHeaders[i].isEmpty())
+                    expectedHeaders[i] = sqlStatementHeaders[i];
+                else
+                    expectedHeaders[i] = COLUMNS[i];
             }
+            assertGeneratedColumnHeader(fileDest, expectedHeaders);
+
 
 
         } catch (Exception e) {
@@ -108,12 +138,16 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
 
     }
 
-    private void configureMempoi(MempoiSheetBuilder builder, String[] headers)
+    private void configureMempoi(MempoiSheetBuilder builder, String[] sqlStatementHeaders, String[] headers)
     {
         for(int i = 0; i < COLUMNS.length; i++)
         {
+            String colName = COLUMNS[i];
+            if(sqlStatementHeaders != null && sqlStatementHeaders[i] != null && !sqlStatementHeaders[i].isEmpty())
+                colName = sqlStatementHeaders[i];
+
             MempoiColumnConfigBuilder cb = MempoiColumnConfigBuilder.aMempoiColumnConfig()
-                    .withColumnName(COLUMNS[i]);
+                    .withColumnName(colName);
             if (headers != null && i < headers.length && headers[i] != null && !headers[i].isEmpty())
                 cb.withColumnDisplayName(headers[i]);
 
