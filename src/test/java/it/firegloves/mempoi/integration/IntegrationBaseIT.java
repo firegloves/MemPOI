@@ -45,7 +45,7 @@ public abstract class IntegrationBaseIT {
      * creates and returns the export query
      *
      * @param columns  the String[] of the columns needed in the export query
-     * @param headers  the String[] of the columns needed in the export query
+     * @param headers  the String[] of the columns name needed in the export query (null or empty value are ignored)
      * @param maxLimit the upper bound value of the limit statement, set it to -1 if limit is not desired -> NO_LIMITS
      * @return the resulting query
      */
@@ -54,7 +54,7 @@ public abstract class IntegrationBaseIT {
         StringBuilder sb = new StringBuilder("SELECT ");
         for (int i = 0; i < columns.length; i++) {
             sb.append("`").append(columns[i]).append("`");
-            if (i < headers.length) {
+            if (headers != null && i < headers.length && headers[i] != null && !headers[i].isEmpty()) {
                 sb.append(" AS ").append("`").append(headers[i]).append("`");
             }
             sb.append(", ");

@@ -20,7 +20,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.6.0'
 ```
 
 #### With Maven
@@ -29,12 +29,16 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
 </dependency>
 
 ```
 
 ---
+
+### What's new in 1.6.0
+- NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with [Column Header customization](#column-header-customization) 
+
 
 ### What's new in 1.5.0
 
@@ -51,26 +55,26 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.0'
 
 Main features index:
 
-[Basic usage](#basic-usage)
-[File VS byte array](#file-vs-byte-array)
-[Supported SQL data types](#supported-sql-data-types)
-[Column headers](#column-headers)
-[Multiple sheets](#multiple-sheets)
-[Adjust columns width](#adjust-columns-width)
-[Styles](#styles)
-[Footers and subfooters](#footers-and-subfooters)
-[Cell formulas](#cell-formulas)
-[Excel Table](#excel-table)
-[Excel Pivot Table](#excel-pivot-table)
-[Column Configuration](#column-configuration)
-[Column cell style](#column-cell-style)
-[Data transformation functions](#data-transformation-functions)
-[Encryption](#encryption)
-[Null values over primitives default ones](#null-values-over-primitives-default-ones)
-[Data post elaboration pipeline](#data-post-elaboration-pipeline)
-[Merged Regions](#merged-regions)
-[Force Generation](#force-generation)
-[Logging](#logging)
+- [Basic usage](#basic-usage)
+- [File VS byte array](#file-vs-byte-array)
+- [Supported SQL data types](#supported-sql-data-types)
+- [Column headers](#column-headers)
+- [Multiple sheets](#multiple-sheets)
+- [Adjust columns width](#adjust-columns-width)
+- [Styles](#styles)
+- [Footers and subfooters](#footers-and-subfooters)
+- [Cell formulas](#cell-formulas)
+- [Excel Table](#excel-table)
+- [Excel Pivot Table](#excel-pivot-table)
+- [Column Configuration](#column-configuration)
+- [Column cell style](#column-cell-style)
+- [Data transformation functions](#data-transformation-functions)
+- [Encryption](#encryption)
+- [Null values over primitives default ones](#null-values-over-primitives-default-ones)
+- [Data post elaboration pipeline](#data-post-elaboration-pipeline)
+- [Merged Regions](#merged-regions)
+- [Force Generation](#force-generation)
+- [Logging](#logging)
    
 ---
 
@@ -165,13 +169,15 @@ byte[] bytes = fut.get();
 
 ### Column headers
 
-Column headers are generated taking export query column names. If you want to choose column headers you need to speficy them with `AS` clause. For example:
+Column headers are generated taking export query column names. If you want to choose column headers you can specify them with `AS` clause. For example:
 
 ```SQL
 SELECT id, name AS first_name FROM Foo
 ```
 
 will result in a sheet with 2 columns: id and first_name (containing db's name column data)
+
+Since version 1.6.0 you can manage programmaticly column headers via a specific [Column header customization](#column-header-customization)  
 
 ---
 
@@ -545,7 +551,6 @@ MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
 
 As you can see, you add your desired `MempoiColumnConfig`s to the `MempoiSheet`, then MemPOI at runtime will search for the column identified by the name supplied and apply to it the desired customizations.
 
-
 #### Column cell style
 
 Up to v1.4 MemPOI applies cell styles basing on data type, from v1.5 you can supply custom cell styles that will be applied to particular columns.
@@ -624,6 +629,58 @@ MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnC
 Be aware that changing column data types may invalidate cell formulas, footers results, etc.
 
 ---
+
+#### Column header customization
+
+If you need to change the column header display name without changing the SQL statement, you can configure the display name by setting the display name configuration.
+
+The display name is only used to populate the column header cell value.
+
+In this following example we want to configure an Excel sheet from this query
+
+```sql
+SELECT username, fname, lname, comment FROM person 
+```
+
+And expect this result
+
+| username | First name | Last name | |   
+|----------|------------|-----------|-------| 
+|demo | Demo | MEMPOI | Comment in column without title | 
+
+In this example : 
+* The selected column 'username' doesn't need a custom configuration
+* The selected column 'fname' needs a custom configuration to display "First name"
+* The selected column 'lname' needs a custom configuration to display "Last name"
+* The selected column 'comment' needs a custom configuration to display an empty text 
+
+```Java
+
+MempoiColumnConfig firstNameConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("fname")
+        .withColumnDisplayName("First name")
+        .build();
+
+MempoiColumnConfig lastNameConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("lname")
+        .withColumnDisplayName("Last name")
+        .build();
+
+MempoiColumnConfig commentWithoutHeaderTextConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("comment")
+        .withColumnDisplayName("")
+        .build();
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+        .withPrepStmt("SELECT username, fname, lname, comment FROM person ")
+        .addMempoiColumnConfig(firstNameConfig)
+        .addMempoiColumnConfig(lastNameConfig)
+        .addMempoiColumnConfig(commentWithoutHeaderTextConfig)
+        .build();
+``` 
+
+---
+
 
 ### Encryption
 

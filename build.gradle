@@ -18,7 +18,7 @@ plugins {
 apply plugin: 'com.bmuschko.nexus'
 
 group 'it.firegloves'
-version '1.5.0'
+version '1.5.1'
 
 sourceCompatibility = 1.8
 
