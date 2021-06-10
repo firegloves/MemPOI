@@ -8,6 +8,8 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import lombok.Setter;
 
+import java.sql.ResultSet;
+
 @Setter
 public abstract class DataTransformationFunction<I, O> {
 
@@ -18,11 +20,11 @@ public abstract class DataTransformationFunction<I, O> {
      */
     private String columnName;
 
-    public abstract O execute(final Object value);
+    public abstract O execute(final ResultSet rs, final Object value);
 
-    protected O applyTransformation(final Object value, Class<I> clazz) {
+    protected final O applyTransformation(final ResultSet rs, final Object value, Class<I> clazz) {
         I castValue = this.<I>cast(value, clazz);
-        return this.transform(castValue);
+        return this.transform(rs, castValue);
     }
 
     protected final <T> T cast(Object obj, Class<T> toType) throws MempoiException {
@@ -41,5 +43,5 @@ public abstract class DataTransformationFunction<I, O> {
         }
     }
 
-    protected abstract O transform(final I value) throws MempoiException;
+    protected abstract O transform(final ResultSet rs, final I value) throws MempoiException;
 }

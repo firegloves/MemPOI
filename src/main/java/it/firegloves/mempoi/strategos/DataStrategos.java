@@ -8,10 +8,6 @@ import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,6 +16,11 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 
 public class DataStrategos {
 
@@ -118,7 +119,7 @@ public class DataStrategos {
 
                     Object cellValue;
                     if (optDataTransformationFunction.isPresent()) {
-                        cellValue = optDataTransformationFunction.get().execute(value);
+                        cellValue = optDataTransformationFunction.get().execute(rs, value);
                     } else {
                         cellValue = value;
                     }

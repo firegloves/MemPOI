@@ -38,6 +38,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.6.0'
 
 ### What's new in 1.6.0
 - NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with [Column Header customization](#column-header-customization) 
+- NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with transformation option with ResultSet row datas
 
 
 ### What's new in 1.5.0
@@ -598,7 +599,7 @@ MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnC
         .withColumnName("name")
         .withDataTransformationFunction(new StringDataTransformationFunction<String>() {
             @Override
-            public String transform(String value) throws MempoiException {
+            public String transform(final ResultSet rs, String value) throws MempoiException {
                 return null == value
                     ? "NO NAME"
                     : value;
@@ -619,11 +620,32 @@ MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnC
         .withColumnName("name")
         .withDataTransformationFunction(new StringDataTransformationFunction<Integer>() {
             @Override
-            public Integer transform(String value) throws MempoiException {
+            public Integer transform(final ResultSet rs, String value) throws MempoiException {
                 return 999;
             }
         })
         .build();
+```
+
+In some particular case you need to transform data based on the current SQL statement, for this reason, the current resultset is provided in the transformation params.
+```Java
+MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+    .withColumnName("name")
+    .withDataTransformationFunction(new StringDataTransformationFunction<String>() {
+        @Override
+        public String transform(final ResultSet rs, String value) throws MempoiException {
+            try
+            {
+                if (rs.getBoolean("valid"))
+                    return value +" validated";
+                return value;
+            }catch (SQLException e)
+            {
+              throw new MempoiException(e);
+            }
+        }
+    })
+    .build(); 
 ```
 
 Be aware that changing column data types may invalidate cell formulas, footers results, etc.
