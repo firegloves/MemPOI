@@ -36,48 +36,50 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
     public static final String[] COLUMNS = {"id", "creation_date", "name"};
+    public static final String[] COLUMNS_DISPLAY_NAMES = {"CUST id", "CUST creation_date", "CUST name"};
+    public static final String[] COLUMNS_AS_CLAUSES = {"AS idas", "AS creation_dateas", "AS nameas"};
 
 
     @Test
     public void shouldApplyColumnDisplayNameIfNoAsClausesSupplied()
     {
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() , "/data_trans_fn/customize_column_header_without_as_clause_01.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() , "/col_display_name/customize_column_header_without_as_clause_01.xlsx");
         customizeColumnHeader(fileDest, null, null);
 
         String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
         displayedHeader[0] = "Customized "+displayedHeader[0];
-        fileDest = new File(this.outReportFolder.getAbsolutePath() , "/data_trans_fn/customize_column_header_without_as_clause_02.xlsx");
+        fileDest = new File(this.outReportFolder.getAbsolutePath() , "/col_display_name/customize_column_header_without_as_clause_02.xlsx");
         customizeColumnHeader(fileDest, null, displayedHeader);
     }
 
     @Test
-    public void shouldApplyColumnDisplayNameAsSelectClausesSupplied()
+    public void shouldApplyColumnDisplayNameOverAsSelectClauses()
     {
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
-                "customize_column_header_without_as_is_01.xlsx");
-        customizeColumnHeader(fileDest, null, COLUMNS);
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
+                "customize_column_header_over_as_clauses_01.xlsx");
+        customizeColumnHeader(fileDest, null, COLUMNS_DISPLAY_NAMES);
 
-        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
-                "customize_column_header_without_as_is_02.xlsx");
-        customizeColumnHeader(fileDest, COLUMNS, COLUMNS);
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
+                "customize_column_header_without_over_as_clauses_02.xlsx");
+        customizeColumnHeader(fileDest, COLUMNS_AS_CLAUSES, COLUMNS_DISPLAY_NAMES);
     }
 
     @Test
     public void shouldApplyColumnDisplayNameIfAsClausesForSeveralColumnsSupplied() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_several_clause_01.xlsx");
         String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
         displayedHeader[0] = "Customized "+displayedHeader[0];
         customizeColumnHeader(fileDest, null, displayedHeader);
 
-        fileDest = new File(this.outReportFolder.getAbsolutePath(), "/data_trans_fn/customize_column_header_with_as_several_clause_02.xlsx");
+        fileDest = new File(this.outReportFolder.getAbsolutePath(), "/col_display_name/customize_column_header_with_as_several_clause_02.xlsx");
         customizeColumnHeader(fileDest, COLUMNS, displayedHeader);
     }
 
     @Test
     public void shouldApplyColumnDisplayNameIfAsClausesForEachColumnsSupplied() {
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_for_each_clause_01.xlsx");
         String[] headers = Arrays.copyOf(COLUMNS, COLUMNS.length);
         String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
@@ -90,18 +92,18 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
         customizeColumnHeader(fileDest, null, displayedHeader);
 
         // Same AS Clause
-        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_for_each_clause_02.xlsx");
         customizeColumnHeader(fileDest, COLUMNS, displayedHeader);
         // Same AS Clause
-        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_for_each_clause_03.xlsx");
         customizeColumnHeader(fileDest, headers, displayedHeader);
 
         headers[0] = null;
         displayedHeader[1] = null;
         // Mix AS Clause / Custom header
-        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_for_each_clause_04.xlsx");
         customizeColumnHeader(fileDest, headers, displayedHeader);
     }
@@ -129,8 +131,6 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
                     expectedHeaders[i] = COLUMNS[i];
             }
             assertGeneratedColumnHeader(fileDest, expectedHeaders);
-
-
 
         } catch (Exception e) {
             AssertionHelper.failAssertion(e);
@@ -163,7 +163,7 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
      * @param fileToValidate the absolute filename of the xlsx file on which apply the generic asserts
      * @param headers        the array of headers name required
      */
-    private void assertGeneratedColumnHeader(  File fileToValidate, String[] headers) {
+    private void assertGeneratedColumnHeader(File fileToValidate, String[] headers) {
 
         try (InputStream inp = new FileInputStream(fileToValidate)) {
 

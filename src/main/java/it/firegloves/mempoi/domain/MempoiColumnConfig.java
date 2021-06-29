@@ -26,8 +26,8 @@ public class MempoiColumnConfig {
     /**
      * used to bind the current MempoiColumnConfig to the relative MempoiColumn
      */
-    @Getter
-    Optional<String> columnDisplayName;
+    String columnDisplayName;
+
 
     /**
      * DataTransformationFunction to apply to every value read by the DB for column identified by the columnName
@@ -46,7 +46,7 @@ public class MempoiColumnConfig {
         this.columnName = columnName;
         this.dataTransformationFunction = dataTransformationFunction;
         this.cellStyle = cellStyle;
-        this.columnDisplayName = Optional.ofNullable(columnDisplayName);
+        this.columnDisplayName = columnDisplayName;
     }
 
 
@@ -54,6 +54,9 @@ public class MempoiColumnConfig {
         return Optional.ofNullable(dataTransformationFunction);
     }
 
+    public Optional<String> getColumnDisplayName() {
+        return Optional.ofNullable(columnDisplayName);
+    }
 
     /*
      * BUILDER
