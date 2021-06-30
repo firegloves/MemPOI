@@ -3,15 +3,9 @@ package it.firegloves.mempoi.integration;
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
-import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
-import it.firegloves.mempoi.domain.datatransformation.*;
-import it.firegloves.mempoi.exception.MempoiException;
-import it.firegloves.mempoi.styles.template.StandardStyleTemplate;
-import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
-import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import org.apache.poi.ss.usermodel.*;
 import org.junit.Rule;
@@ -22,11 +16,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
@@ -36,48 +27,50 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
     public static final String[] COLUMNS = {"id", "creation_date", "name"};
+    public static final String[] COLUMNS_DISPLAY_NAMES = {"CUST id", "CUST creation_date", "CUST name"};
+    public static final String[] COLUMNS_AS_CLAUSES = {"AS idas", "AS creation_dateas", "AS nameas"};
 
 
     @Test
     public void shouldApplyColumnDisplayNameIfNoAsClausesSupplied()
     {
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() , "/data_trans_fn/customize_column_header_without_as_clause_01.xlsx");
-        customizeColumnHeader(fileDest, null, null);
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() , "/col_display_name/customize_column_header_without_as_clause_01.xlsx");
+        assertAfterCustomizeColumnHeader(fileDest, null, null);
 
         String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
         displayedHeader[0] = "Customized "+displayedHeader[0];
-        fileDest = new File(this.outReportFolder.getAbsolutePath() , "/data_trans_fn/customize_column_header_without_as_clause_02.xlsx");
-        customizeColumnHeader(fileDest, null, displayedHeader);
+        fileDest = new File(this.outReportFolder.getAbsolutePath() , "/col_display_name/customize_column_header_without_as_clause_02.xlsx");
+        assertAfterCustomizeColumnHeader(fileDest, null, displayedHeader);
     }
 
     @Test
-    public void shouldApplyColumnDisplayNameAsSelectClausesSupplied()
+    public void shouldApplyColumnDisplayNameOverAsSelectClauses()
     {
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
-                "customize_column_header_without_as_is_01.xlsx");
-        customizeColumnHeader(fileDest, null, COLUMNS);
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
+                "customize_column_header_over_as_clauses_01.xlsx");
+        assertAfterCustomizeColumnHeader(fileDest, null, COLUMNS_DISPLAY_NAMES);
 
-        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
-                "customize_column_header_without_as_is_02.xlsx");
-        customizeColumnHeader(fileDest, COLUMNS, COLUMNS);
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
+                "customize_column_header_without_over_as_clauses_02.xlsx");
+        assertAfterCustomizeColumnHeader(fileDest, COLUMNS_AS_CLAUSES, COLUMNS_DISPLAY_NAMES);
     }
 
     @Test
     public void shouldApplyColumnDisplayNameIfAsClausesForSeveralColumnsSupplied() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_several_clause_01.xlsx");
         String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
         displayedHeader[0] = "Customized "+displayedHeader[0];
-        customizeColumnHeader(fileDest, null, displayedHeader);
+        assertAfterCustomizeColumnHeader(fileDest, null, displayedHeader);
 
-        fileDest = new File(this.outReportFolder.getAbsolutePath(), "/data_trans_fn/customize_column_header_with_as_several_clause_02.xlsx");
-        customizeColumnHeader(fileDest, COLUMNS, displayedHeader);
+        fileDest = new File(this.outReportFolder.getAbsolutePath(), "/col_display_name/customize_column_header_with_as_several_clause_02.xlsx");
+        assertAfterCustomizeColumnHeader(fileDest, COLUMNS, displayedHeader);
     }
 
     @Test
     public void shouldApplyColumnDisplayNameIfAsClausesForEachColumnsSupplied() {
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_for_each_clause_01.xlsx");
         String[] headers = Arrays.copyOf(COLUMNS, COLUMNS.length);
         String[] displayedHeader = Arrays.copyOf(COLUMNS, COLUMNS.length);
@@ -87,26 +80,26 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
             displayedHeader[i] = "Customized " + displayedHeader[i];
         }
         // No AS Clause
-        customizeColumnHeader(fileDest, null, displayedHeader);
+        assertAfterCustomizeColumnHeader(fileDest, null, displayedHeader);
 
         // Same AS Clause
-        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_for_each_clause_02.xlsx");
-        customizeColumnHeader(fileDest, COLUMNS, displayedHeader);
+        assertAfterCustomizeColumnHeader(fileDest, COLUMNS, displayedHeader);
         // Same AS Clause
-        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_for_each_clause_03.xlsx");
-        customizeColumnHeader(fileDest, headers, displayedHeader);
+        assertAfterCustomizeColumnHeader(fileDest, headers, displayedHeader);
 
         headers[0] = null;
         displayedHeader[1] = null;
         // Mix AS Clause / Custom header
-        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/data_trans_fn/",
+        fileDest = new File(this.outReportFolder.getAbsolutePath() + "/col_display_name/",
                 "customize_column_header_with_as_for_each_clause_04.xlsx");
-        customizeColumnHeader(fileDest, headers, displayedHeader);
+        assertAfterCustomizeColumnHeader(fileDest, headers, displayedHeader);
     }
 
-    private void customizeColumnHeader(File fileDest, String[] sqlStatementHeaders, String[] displayedHeaders) {
+    private void assertAfterCustomizeColumnHeader(File fileDest, String[] sqlStatementHeaders, String[] displayedHeaders) {
         try {
             this.prepStmt = createStatement(COLUMNS, sqlStatementHeaders);
 
@@ -129,8 +122,6 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
                     expectedHeaders[i] = COLUMNS[i];
             }
             assertGeneratedColumnHeader(fileDest, expectedHeaders);
-
-
 
         } catch (Exception e) {
             AssertionHelper.failAssertion(e);
@@ -163,7 +154,7 @@ public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
      * @param fileToValidate the absolute filename of the xlsx file on which apply the generic asserts
      * @param headers        the array of headers name required
      */
-    private void assertGeneratedColumnHeader(  File fileToValidate, String[] headers) {
+    private void assertGeneratedColumnHeader(File fileToValidate, String[] headers) {
 
         try (InputStream inp = new FileInputStream(fileToValidate)) {
 

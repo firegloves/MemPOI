@@ -38,8 +38,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.6.0'
 
 ### What's new in 1.6.0
 - NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with [Column Header customization](#column-header-customization) 
-- NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with transformation option with ResultSet row datas
-
+- NEW FUNCTIONALITY - [Data transformation functions](#data-transformation-functions) improved with ResultSet
 
 ### What's new in 1.5.0
 
@@ -178,7 +177,7 @@ SELECT id, name AS first_name FROM Foo
 
 will result in a sheet with 2 columns: id and first_name (containing db's name column data)
 
-Since version 1.6.0 you can manage programmaticly column headers via a specific [Column header customization](#column-header-customization)  
+From version 1.6.0 it is possible to programmatically manage column headings through a specific [Column header customization](#column-header-customization)  
 
 ---
 
@@ -627,20 +626,21 @@ MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnC
         .build();
 ```
 
-In some particular case you need to transform data based on the current SQL statement, for this reason, the current resultset is provided in the transformation params.
+In some particular cases, you need to transform the data based on the current SQL statement values, for this reason, the current ResultSet is provided among the transformation params.
+
 ```Java
 MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
     .withColumnName("name")
     .withDataTransformationFunction(new StringDataTransformationFunction<String>() {
         @Override
         public String transform(final ResultSet rs, String value) throws MempoiException {
-            try
-            {
-                if (rs.getBoolean("valid"))
-                    return value +" validated";
-                return value;
-            }catch (SQLException e)
-            {
+            try {
+                if (rs.getBoolean("valid")){
+                    return value + " validated";
+                } else{
+                    return value;
+                }
+            } catch (SQLException e) {
               throw new MempoiException(e);
             }
         }
@@ -648,7 +648,7 @@ MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnC
     .build(); 
 ```
 
-Be aware that changing column data types may invalidate cell formulas, footers results, etc.
+!!! BE AWARE !!! THIS IS AN ADVANCED FEATURE: EVERY ACTION MADE ON THE RESULTSET MAY INVALIDATE RESULTING DATA
 
 ---
 
@@ -697,9 +697,10 @@ MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
         .withPrepStmt("SELECT username, fname, lname, comment FROM person ")
         .addMempoiColumnConfig(firstNameConfig)
         .addMempoiColumnConfig(lastNameConfig)
-        .addMempoiColumnConfig(commentWithoutHeaderTextConfig)
         .build();
 ``` 
+
+Thanks to [bdzzaid](https://github.com/bdzzaid)
 
 ---
 
@@ -966,9 +967,18 @@ Look at the [contributing file](docs/CONTRIBUTING.md) to go deeper!
 
 ---
 
-### Updates
+### Donate crypto
 
-:soon: If you have any request, feel free to ask for new features.
+MemPOI joined [Cardano](https://cardano.org/)'s vision and encourages cooperation over competition, sustainability over resource consumption.
+MemPOI joined [Brave](https://brave.com/)'s vision of protecting your privacy because we believe that fans like you would support us in our effort to keep the web a clean and safe place to be.
+
+MemPOI's maintenance is becoming hard, it would be nice if you donate some crypto to the project.
+
+Your tip is much appreciated and it encourages us to continue.
+
+Cardano wallet address: `addr1vyt4ru3nde9y942g24cpypzwnrsve0vdyp3l4xndm68vc0s4wh88h`
+
+![](img/crypto/cardano-wallet-qrcode.png)
 
 ---
 
