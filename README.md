@@ -977,6 +977,7 @@ MemPOI's maintenance is becoming hard, it would be nice if you donate some crypt
 Your tip is much appreciated and it encourages us to continue.
 
 Cardano wallet address: `addr1vyt4ru3nde9y942g24cpypzwnrsve0vdyp3l4xndm68vc0s4wh88h`
+
 ![](img/crypto/cardano-wallet-qrcode.png)
 
 ---
