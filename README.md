@@ -971,9 +971,9 @@ Look at the [contributing file](docs/CONTRIBUTING.md) to go deeper!
 MemPOI joined [Cardano](https://cardano.org/)'s vision and encourages cooperation over competition, sustainability over resource consumption.
 MemPOI joined [Brave](https://brave.com/)'s vision of protecting your privacy because we believe that fans like you would support us in our effort to keep the web a clean and safe place to be.
 
-MemPOI's maintenance is becoming hard, it would be nice if you donate some crypto to the project.
-
-Your tip is much appreciated and it encourages us to continue.
+:tropical_drink:
+If MemPOI has saved you precious time, you could reciprocate by offering me a good drink!
+:tropical_drink:
 
 Cardano wallet address: `addr1vyt4ru3nde9y942g24cpypzwnrsve0vdyp3l4xndm68vc0s4wh88h`
 
