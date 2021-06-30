@@ -969,9 +969,12 @@ Look at the [contributing file](docs/CONTRIBUTING.md) to go deeper!
 ### Donate crypto
 
 MemPOI joined [Cardano](https://cardano.org/)'s vision and encourages cooperation over competition, sustainability over resource consumption.
+
 MemPOI joined [Brave](https://brave.com/)'s vision of protecting your privacy because we believe that fans like you would support us in our effort to keep the web a clean and safe place to be.
 
-If MemPOI has saved you precious time, you could reciprocate by offering me a good drink :tropical_drink:
+### :tropical_drink: :tropical_drink: :tropical_drink:
+If MemPOI has saved you precious time, you could reciprocate by offering me a good drink!
+### :tropical_drink: :tropical_drink: :tropical_drink:
 
 Cardano wallet address: `addr1vyt4ru3nde9y942g24cpypzwnrsve0vdyp3l4xndm68vc0s4wh88h`
 
