@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Value
 public class MempoiColumnConfig {
@@ -20,6 +22,12 @@ public class MempoiColumnConfig {
      */
     @Getter
     String columnName;
+
+    /**
+     * used to bind the current MempoiColumnConfig to the relative MempoiColumn
+     */
+    String columnDisplayName;
+
 
     /**
      * DataTransformationFunction to apply to every value read by the DB for column identified by the columnName
@@ -34,10 +42,11 @@ public class MempoiColumnConfig {
 
     private MempoiColumnConfig(String columnName,
             DataTransformationFunction<?, ?> dataTransformationFunction,
-            CellStyle cellStyle) {
+            CellStyle cellStyle, String columnDisplayName) {
         this.columnName = columnName;
         this.dataTransformationFunction = dataTransformationFunction;
         this.cellStyle = cellStyle;
+        this.columnDisplayName = columnDisplayName;
     }
 
 
@@ -45,15 +54,21 @@ public class MempoiColumnConfig {
         return Optional.ofNullable(dataTransformationFunction);
     }
 
+    public Optional<String> getColumnDisplayName() {
+        return Optional.ofNullable(columnDisplayName);
+    }
 
     /*
      * BUILDER
      */
     public static class MempoiColumnConfigBuilder {
 
+        private static final Logger logger = LoggerFactory.getLogger(MempoiColumnConfigBuilder.class);
+        private static final String OVERRIDING_MEMPOI_TABLE_COLUMN_NAME = "A previously setted value of Excel Table column {} is about to be replaced";
         private String columnName;
         private DataTransformationFunction<?, ?> dataTransformationFunction;
         private CellStyle cellStyle;
+        private String columnDisplayName;
 
         /**
          * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -87,13 +102,26 @@ public class MempoiColumnConfig {
             return this;
         }
 
+        /**
+         * Customize the column title
+         *
+         * @param columnDisplayName the column header text to export
+         * @return the current MempoiColumnConfigBuilder
+         */
+        public MempoiColumnConfigBuilder withColumnDisplayName(String columnDisplayName) {
+            if(this.columnDisplayName != null)
+                logger.info(OVERRIDING_MEMPOI_TABLE_COLUMN_NAME, this.columnName);
+            this.columnDisplayName = columnDisplayName;
+            return this;
+        }
+
         public MempoiColumnConfig build() {
 
             if (StringUtils.isEmpty(columnName)) {
                 throw new MempoiException(Errors.ERR_MEMPOI_COL_CONFIG_COLNAME_NOT_VALID);
             }
 
-            return new MempoiColumnConfig(columnName, dataTransformationFunction, cellStyle);
+            return new MempoiColumnConfig(columnName, dataTransformationFunction, cellStyle, columnDisplayName);
         }
     }
 }

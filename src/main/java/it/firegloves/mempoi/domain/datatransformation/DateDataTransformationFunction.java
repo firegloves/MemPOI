@@ -6,17 +6,17 @@
 
 package it.firegloves.mempoi.domain.datatransformation;
 
-import it.firegloves.mempoi.exception.MempoiException;
-import java.util.Date;
 import lombok.Setter;
+
+import java.sql.ResultSet;
+import java.util.Date;
 
 @Setter
 public abstract class DateDataTransformationFunction<O> extends DataTransformationFunction<Date, O> {
 
     @Override
-    public O execute(Object value) {
-        return super.applyTransformation(value, Date.class);
+    public O execute(final ResultSet rs, Object value) {
+        return super.applyTransformation(rs, value, Date.class);
     }
 
-    public abstract O transform(final Date value) throws MempoiException;
 }

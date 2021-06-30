@@ -85,6 +85,22 @@ public class MempoiColumn {
     }
 
     /**
+     * By default, return the column name.
+     * If a mempoiColumnConfig is set and a display name is configured then, the configured displayed name is returned.
+     *
+     * Note: empty String is allowed in the configuration.
+     *
+     * @return The column header cell value to display
+     */
+    public String getColumnDisplayName() {
+        if(Objects.nonNull(mempoiColumnConfig)) {
+            return mempoiColumnConfig.getColumnDisplayName().orElse(this.columnName);
+        }
+        return this.columnName;
+    }
+
+
+    /**
      * read result set access method String from type and set the relative java.reflect.Method
      */
     private void setResultSetAccessMethod(EExportDataType type) {

@@ -20,7 +20,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.6.0'
 ```
 
 #### With Maven
@@ -29,12 +29,16 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.5.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
 </dependency>
 
 ```
 
 ---
+
+### What's new in 1.6.0
+- NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with [Column Header customization](#column-header-customization) 
+- NEW FUNCTIONALITY - [Data transformation functions](#data-transformation-functions) improved with ResultSet
 
 ### What's new in 1.5.0
 
@@ -165,13 +169,15 @@ byte[] bytes = fut.get();
 
 ### Column headers
 
-Column headers are generated taking export query column names. If you want to choose column headers you need to speficy them with `AS` clause. For example:
+Column headers are generated taking export query column names. If you want to choose column headers you can specify them with `AS` clause. For example:
 
 ```SQL
 SELECT id, name AS first_name FROM Foo
 ```
 
 will result in a sheet with 2 columns: id and first_name (containing db's name column data)
+
+From version 1.6.0 it is possible to programmatically manage column headings through a specific [Column header customization](#column-header-customization)  
 
 ---
 
@@ -545,7 +551,6 @@ MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
 
 As you can see, you add your desired `MempoiColumnConfig`s to the `MempoiSheet`, then MemPOI at runtime will search for the column identified by the name supplied and apply to it the desired customizations.
 
-
 #### Column cell style
 
 Up to v1.4 MemPOI applies cell styles basing on data type, from v1.5 you can supply custom cell styles that will be applied to particular columns.
@@ -593,7 +598,7 @@ MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnC
         .withColumnName("name")
         .withDataTransformationFunction(new StringDataTransformationFunction<String>() {
             @Override
-            public String transform(String value) throws MempoiException {
+            public String transform(final ResultSet rs, String value) throws MempoiException {
                 return null == value
                     ? "NO NAME"
                     : value;
@@ -614,14 +619,88 @@ MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnC
         .withColumnName("name")
         .withDataTransformationFunction(new StringDataTransformationFunction<Integer>() {
             @Override
-            public Integer transform(String value) throws MempoiException {
+            public Integer transform(final ResultSet rs, String value) throws MempoiException {
                 return 999;
             }
         })
         .build();
 ```
 
-Be aware that changing column data types may invalidate cell formulas, footers results, etc.
+In some particular cases, you need to transform the data based on the current SQL statement values, for this reason, the current ResultSet is provided among the transformation params.
+
+```Java
+MempoiColumnConfig mempoiColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+    .withColumnName("name")
+    .withDataTransformationFunction(new StringDataTransformationFunction<String>() {
+        @Override
+        public String transform(final ResultSet rs, String value) throws MempoiException {
+            try {
+                if (rs.getBoolean("valid")){
+                    return value + " validated";
+                } else{
+                    return value;
+                }
+            } catch (SQLException e) {
+              throw new MempoiException(e);
+            }
+        }
+    })
+    .build(); 
+```
+
+!!! BE AWARE !!! THIS IS AN ADVANCED FEATURE: EVERY ACTION MADE ON THE RESULTSET MAY INVALIDATE RESULTING DATA
+
+---
+
+#### Column header customization
+
+If you need to change the column header display name without changing the SQL statement, you can configure the display name by setting the display name configuration.
+
+The display name is only used to populate the column header cell value.
+
+In this following example we want to configure an Excel sheet from this query
+
+```sql
+SELECT username, fname, lname, comment FROM person 
+```
+
+And expect this result
+
+| username | First name | Last name | |   
+|----------|------------|-----------|-------| 
+|demo | Demo | MEMPOI | Comment in column without title | 
+
+In this example : 
+- The selected column 'username' doesn't need a custom configuration
+- The selected column 'fname' needs a custom configuration to display "First name"
+- The selected column 'lname' needs a custom configuration to display "Last name"
+- The selected column 'comment' needs a custom configuration to display an empty text 
+
+```Java
+
+MempoiColumnConfig firstNameConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("fname")
+        .withColumnDisplayName("First name")
+        .build();
+
+MempoiColumnConfig lastNameConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("lname")
+        .withColumnDisplayName("Last name")
+        .build();
+
+MempoiColumnConfig commentWithoutHeaderTextConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("comment")
+        .withColumnDisplayName("")
+        .build();
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+        .withPrepStmt("SELECT username, fname, lname, comment FROM person ")
+        .addMempoiColumnConfig(firstNameConfig)
+        .addMempoiColumnConfig(lastNameConfig)
+        .build();
+``` 
+
+Thanks to [bdzzaid](https://github.com/bdzzaid)
 
 ---
 
@@ -887,9 +966,18 @@ Look at the [contributing file](docs/CONTRIBUTING.md) to go deeper!
 
 ---
 
-### Updates
+### Donate crypto
 
-:soon: If you have any request, feel free to ask for new features.
+MemPOI joined [Cardano](https://cardano.org/)'s vision and encourages cooperation over competition, sustainability over resource consumption.
+MemPOI joined [Brave](https://brave.com/)'s vision of protecting your privacy because we believe that fans like you would support us in our effort to keep the web a clean and safe place to be.
+
+MemPOI's maintenance is becoming hard, it would be nice if you donate some crypto to the project.
+
+Your tip is much appreciated and it encourages us to continue.
+
+Cardano wallet address: `addr1vyt4ru3nde9y942g24cpypzwnrsve0vdyp3l4xndm68vc0s4wh88h`
+
+![](img/crypto/cardano-wallet-qrcode.png)
 
 ---
 
