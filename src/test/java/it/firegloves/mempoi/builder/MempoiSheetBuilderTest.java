@@ -18,6 +18,11 @@ import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
@@ -27,9 +32,12 @@ import org.mockito.MockitoAnnotations;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class MempoiSheetBuilderTest {
 

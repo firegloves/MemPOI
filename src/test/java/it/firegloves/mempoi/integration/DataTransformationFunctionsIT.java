@@ -1,5 +1,7 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
@@ -16,15 +18,6 @@ import it.firegloves.mempoi.styles.template.StyleTemplate;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -35,8 +28,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import static org.junit.Assert.assertEquals;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class DataTransformationFunctionsIT extends IntegrationBaseIT {
 
@@ -260,9 +258,9 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                 for (int r = 1; rs.next(); r++) {
                     String cellText = sheet.getRow(r).getCell(4).getStringCellValue();
                     if (rs.getBoolean("valid"))
-                        Assert.assertEquals(rs.getString("name") + " validated", cellText);
+                        assertEquals(rs.getString("name") + " validated", cellText);
                     else
-                        Assert.assertEquals(rs.getString("name"),  cellText);
+                        assertEquals(rs.getString("name"),  cellText);
                 }
 
             } catch (Exception e) {
