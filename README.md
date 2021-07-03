@@ -976,7 +976,7 @@ MemPOI joined [Brave](https://brave.com/)'s vision of protecting your privacy to
 If MemPOI has saved you precious time, you could reciprocate by offering me a good drink!
 ### :tropical_drink: :tropical_drink: :tropical_drink:
 
-Cardano wallet address: `addr1vyt4ru3nde9y942g24cpypzwnrsve0vdyp3l4xndm68vc0s4wh88h`
+Cardano wallet address: `addr1q84u2lkc22ec78d84nyggxea6s53tlh4lzuznrqf82qptvl0ryqgdg3fvrcnur6sjweg7jcgjj958x2zxavpcu6hrq7qavr0n6`
 
 ![](img/crypto/cardano-wallet-qrcode.png)
 
