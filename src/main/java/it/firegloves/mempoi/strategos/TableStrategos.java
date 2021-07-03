@@ -10,6 +10,7 @@ import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -31,22 +32,23 @@ public class TableStrategos {
 
     /**
      * if needed, adds the Excel Table to the current sheet
+     * @return an Optional with the AreaReference of the table, if a table was created,
      */
-    public void manageMempoiTable(MempoiSheet mempoiSheet, AreaReference sheetDataAreaReference) {
+    public Optional<AreaReference> manageMempoiTable(MempoiSheet mempoiSheet, AreaReference sheetDataAreaReference) {
 
         if (mempoiSheet.getMempoiTable().isPresent() && ! (mempoiSheet.getSheet() instanceof XSSFSheet)) {
             throw new MempoiException(Errors.ERR_TABLE_SUPPORTS_ONLY_XSSF);
         }
 
-        mempoiSheet.getMempoiTable()
-                .ifPresent(mempoiTable -> {
+        return mempoiSheet.getMempoiTable()
+                .map(mempoiTable -> {
 
                     // if isAllSheetData updates the area reference with the one received
                     if (mempoiTable.isAllSheetData()) {
                         mempoiTable.setAreaReferenceSource(sheetDataAreaReference.formatAsString());
                     }
 
-                    this.addTable(mempoiSheet, mempoiTable);
+                    return this.addTable(mempoiSheet, mempoiTable);
                 });
     }
 
@@ -55,8 +57,9 @@ public class TableStrategos {
      * adds the desired table to the received sheet
      * @param mempoiSheet the MempoiSheet on which add the table
      * @param mempoiTable the MempoiTable containing table settings
+     * @return the AreaReference of the created table
      */
-    private void addTable(MempoiSheet mempoiSheet, MempoiTable mempoiTable) {
+    private AreaReference addTable(MempoiSheet mempoiSheet, MempoiTable mempoiTable) {
 
         AreaReference areaReference = this.workbookConfig.getWorkbook().getCreationHelper().createAreaReference(mempoiTable.getAreaReferenceSource());
         XSSFTable table = ((XSSFSheet)mempoiSheet.getSheet()).createTable(areaReference);
@@ -71,6 +74,8 @@ public class TableStrategos {
         if (null != mempoiTable.getDisplayTableName()) {
             table.setDisplayName(mempoiTable.getDisplayTableName());
         }
+
+        return areaReference;
     }
 
 

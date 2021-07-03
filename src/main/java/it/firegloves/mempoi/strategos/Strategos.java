@@ -4,11 +4,14 @@
  */
 package it.firegloves.mempoi.strategos;
 
+import it.firegloves.mempoi.builder.MempoiSheetMetadataBuilder;
 import it.firegloves.mempoi.config.MempoiConfig;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.dao.impl.DBMempoiDAO;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.MempoiReport;
 import it.firegloves.mempoi.domain.MempoiSheet;
+import it.firegloves.mempoi.domain.MempoiSheetMetadata;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.manager.ConnectionManager;
 import it.firegloves.mempoi.manager.FileManager;
@@ -17,6 +20,10 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -55,13 +62,37 @@ public class Strategos {
 
     /**
      * starting from export PreparedStatement prepares the MempoiReport for battle!
-     * writes exported data to the received file parameter
      *
-     * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
+     * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into
+     *                        mempoi report and eventually the sheet's name
+     * @return the MempoiReport object (exported data info and metadata)
+     * @throws MempoiException if something went wrong
+     */
+    public MempoiReport composeMempoiReport(List<MempoiSheet> mempoiSheetList) {
+
+        final MempoiReport mempoiReport = this.generateMempoiReport(mempoiSheetList);
+
+        if (this.workbookConfig.getFile() == null) {
+            mempoiReport.setBytes(this.fileManager.writeToByteArray());
+        } else {
+            mempoiReport.setFile(this.fileManager.createFinalFile(this.workbookConfig.getFile()));
+        }
+
+        return mempoiReport;
+    }
+
+
+    /**
+     * starting from export PreparedStatement prepares the MempoiReport for battle! writes exported data to the received
+     * file parameter
+     *
+     * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into
+     *                        mempoi report and eventually the sheet's name
      * @param fileToExport    the destination file (with path) where write exported data
      * @return the filename with path of the report generated file
      * @throws MempoiException if something went wrong
      */
+    @Deprecated
     public String generateMempoiReportToFile(List<MempoiSheet> mempoiSheetList, File fileToExport) {
 
         this.generateMempoiReport(mempoiSheetList);
@@ -75,6 +106,7 @@ public class Strategos {
      * @return the filename with path of the report generated file
      * @throws MempoiException if something went wrong
      */
+    @Deprecated
     public byte[] generateMempoiReportToByteArray() {
 
         this.generateMempoiReport(this.workbookConfig.getSheetList());
@@ -86,15 +118,18 @@ public class Strategos {
      * generate the report into the WorkbookConfig.workbook variable
      *
      * @param mempoiSheetList
+     * @return the MempoiReport containing info about the generated report
      */
-    private void generateMempoiReport(List<MempoiSheet> mempoiSheetList) {
+    private MempoiReport generateMempoiReport(List<MempoiSheet> mempoiSheetList) {
 
-        this.generateSheets(mempoiSheetList);
+        final Map<Integer, MempoiSheetMetadata> mempoiSheetMetadataMap = this.generateSheets(mempoiSheetList);
 
         // if needed generate a tempfile
         if ((this.workbookConfig.isEvaluateCellFormulas() && this.workbookConfig.isHasFormulasToEvaluate())) {
             this.manageFormulaToEvaluate();
         }
+
+        return new MempoiReport().setMempoiSheetMetadataMap(mempoiSheetMetadataMap);
     }
 
 
@@ -113,11 +148,16 @@ public class Strategos {
     /**
      * generates the poi report executing the received prepared statement
      *
-     * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into mempoi report and eventually the sheet's name
+     * @param mempoiSheetList the List of MempoiSheet containing the PreparedStatement to execute to export data into
+     *                        mempoi report and eventually the sheet's name
      */
-    private void generateSheets(List<MempoiSheet> mempoiSheetList) {
+    private Map<Integer, MempoiSheetMetadata> generateSheets(List<MempoiSheet> mempoiSheetList) {
 
-        mempoiSheetList.forEach(this::generateSheet);
+        return IntStream.range(0, mempoiSheetList.size())
+                .mapToObj(i -> this.generateSheet(mempoiSheetList.get(i)).setSheetIndex(i))
+                .collect(Collectors.toMap(
+                        MempoiSheetMetadata::getSheetIndex,
+                        mempoiSheetMetadata -> mempoiSheetMetadata));
     }
 
 
@@ -126,11 +166,14 @@ public class Strategos {
      *
      * @param mempoiSheet
      */
-    private void generateSheet(MempoiSheet mempoiSheet) {
+    private MempoiSheetMetadata generateSheet(MempoiSheet mempoiSheet) {
 
         // create sheet
         Sheet sheet = this.createSheet(mempoiSheet.getSheetName());
         mempoiSheet.setSheet(sheet);
+
+        MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder = MempoiSheetMetadataBuilder.aMempoiSheetMetadata()
+                .withSheetName(mempoiSheet.getSheetName());
 
         // track columns for autosizing
         if (this.workbookConfig.isAdjustColSize() && sheet instanceof SXSSFSheet) {
@@ -141,13 +184,30 @@ public class Strategos {
         ResultSet rs = DBMempoiDAO.getInstance().executeExportQuery(mempoiSheet.getPrepStmt());
 
         // preapre MempoiColumn list
-        List<MempoiColumn> columnList = new MempoiColumnStrategos().prepareMempoiColumn(mempoiSheet, rs, this.workbookConfig.getWorkbook());
+        List<MempoiColumn> columnList = new MempoiColumnStrategos()
+                .prepareMempoiColumn(mempoiSheet, rs, this.workbookConfig.getWorkbook());
+
+        mempoiSheetMetadataBuilder.withFirstTableColumn(0);
+        mempoiSheetMetadataBuilder.withLastTableColumn(columnList.size());
+        mempoiSheetMetadataBuilder.withTotalColumns(columnList.size());
+
+        int firstRow = 0;
+        mempoiSheetMetadataBuilder.withFirstDataRow(firstRow);
+
+        int rowCounter = firstRow;
 
         try {
-            AreaReference sheetDataAreaReference = this.createSheetData(rs, columnList, mempoiSheet);
+            // creates header
+            rowCounter = this.dataStrategos
+                    .createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, mempoiSheet.getSheetStyler());
+            mempoiSheetMetadataBuilder.withLastDataRow(rowCounter);
+
+            AreaReference sheetDataAreaReference = this
+                    .createSheetData(rs, columnList, mempoiSheet, rowCounter, mempoiSheetMetadataBuilder);
 
             // adds optional excel table
-            this.tableStrategos.manageMempoiTable(mempoiSheet, sheetDataAreaReference);
+            this.tableStrategos.manageMempoiTable(mempoiSheet, sheetDataAreaReference)
+                    .ifPresent(areaReference -> mempoiSheetMetadataBuilder.with);
 
             // adds optional pivot table
             this.pivotTableStrategos.manageMempoiPivotTable(mempoiSheet);
@@ -166,31 +226,29 @@ public class Strategos {
     }
 
 
-
     /**
      * generates sheet data
      *
-     * @param rs the ResultSet from which read data
-     * @param columnList the list of MempoiColumn from which read data configuration
+     * @param rs          the ResultSet from which read data
+     * @param columnList  the list of MempoiColumn from which read data configuration
      * @param mempoiSheet the MempoiSheet from which read configuration
-     *
      * @return the AreaReference representing all created data area in the sheet
+     * @para mempoiSheetMetadataBuilder the mempoiSheetMetadataBuilder in which collect the metadata
      */
-    private AreaReference createSheetData(ResultSet rs, List<MempoiColumn> columnList, MempoiSheet mempoiSheet) {
-
-        int rowCounter = 0;
-
-        // creates header
-        rowCounter = this.dataStrategos.createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, mempoiSheet.getSheetStyler());
+    private AreaReference createSheetData(ResultSet rs, List<MempoiColumn> columnList, MempoiSheet mempoiSheet,
+            int rowCounter, MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
 
         // keeps track of the first data row index (no header and subheaders)
         int firstDataRowIndex = rowCounter + 1;
 
         // creates rows
         rowCounter = this.dataStrategos.createDataRows(mempoiSheet.getSheet(), rs, columnList, rowCounter);
+        mempoiSheetMetadataBuilder.withLastDataRow(rowCounter);
 
         // footer
-        this.footerStrategos.createFooterAndSubfooter(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler());
+        this.footerStrategos
+                .createFooterAndSubfooter(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex,
+                        rowCounter, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
 
         // returns the AreaReference representing all created data area in the sheet
         return new AreaReference(

@@ -242,7 +242,7 @@ public class StrategosTest {
 
         when(this.dataStrategos.createHeaderRow(any(), any(), anyInt(), any())).thenReturn(1);
         when(this.dataStrategos.createDataRows(any(), any(), any(), anyInt())).thenReturn(TestHelper.ROW_COUNT);
-        doNothing().when(this.footerStrategos).createFooterAndSubfooter(any(), any(), any(), anyInt(), anyInt(), any());
+        doNothing().when(this.footerStrategos).createFooterAndSubfooter(any(), any(), any(), anyInt(), anyInt(), any(), any());
         when(this.columnList.size()).thenReturn(TestHelper.MEMPOI_COLUMN_NAMES.length);
 
         Strategos strategos = new Strategos(wbConfig);
@@ -254,4 +254,25 @@ public class StrategosTest {
 
         assertEquals(TestHelper.AREA_REFERENCE, areaReference.formatAsString());
     }
+
+    /******************************************************************************************************************
+     *                          composeMempoiReport
+     *****************************************************************************************************************/
+
+    @Test
+    public void composeMempoiReportToFile() {
+        fail();
+    }
+
+    @Test
+    public void composeMempoiReportToByteArray() {
+        fail();
+    }
+
+    @Test
+    public void composeMempoiReportWithMultipleSheets() {
+        fail();
+    }
+
+
 }
