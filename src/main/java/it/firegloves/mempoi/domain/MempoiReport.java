@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.domain;
 
+import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.exception.MempoiException;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,10 @@ public class MempoiReport {
      * the map of sheets' metadata the key is the sheet index the value is the metadata object
      */
     private Map<Integer, MempoiSheetMetadata> mempoiSheetMetadataMap = new HashMap<>();
+    /**
+     * the WorkbookConfig used to generate the report
+     */
+    private WorkbookConfig usedWorkbookConfig;
 
     /**
      * set the file in which the report has been saved
@@ -71,7 +76,16 @@ public class MempoiReport {
             throw new MempoiException("The received MempoiSheetMetadata is null");
         }
 
-        mempoiSheetMetadataMap.put(sheetIndex, mempoiSheetMetadata);
+        this.mempoiSheetMetadataMap.put(sheetIndex, mempoiSheetMetadata);
         return this;
+    }
+
+    /**
+     * return the MempoiSheetMetadata corresponding to the sheet at index i
+     * @param i the index of the sheet of which return the MempoiSheetMetadata
+     * @return the MempoiSheetMetadata corresponding to the sheet at index i
+     */
+    public MempoiSheetMetadata getMempoiSheetMetadata(int i) {
+        return this.mempoiSheetMetadataMap.get(i);
     }
 }

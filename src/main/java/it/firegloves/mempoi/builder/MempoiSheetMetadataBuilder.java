@@ -2,29 +2,32 @@ package it.firegloves.mempoi.builder;
 
 import it.firegloves.mempoi.domain.MempoiSheetMetadata;
 import org.apache.poi.ss.SpreadsheetVersion;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.ss.util.CellReference;
 
 public final class MempoiSheetMetadataBuilder {
 
     private SpreadsheetVersion spreadsheetVersion;
     private String sheetName;
-    private int sheetIndex;
-    private int totalRows;
-    private int headerRowIndex;
-    private int totalDataRows;
-    private int firstDataRow;
-    private int lastDataRow;
-    private int subfooterRowIndex;
-    private int totalColumns;
-    private int firstDataColumn;
-    private int lastDataColumn;
-    private int firstTableRow;
-    private int lastTableRow;
-    private int firstTableColumn;
-    private int lastTableColumn;
-    private int firstPivotTableRow;
-    private int lastPivotTableRow;
-    private int firstPivotTableColumn;
-    private int lastPivotTableColumn;
+    private Integer sheetIndex;
+    private Integer headerRowIndex;
+    private Integer totalRows;
+    private Integer firstDataRow;
+    private Integer lastDataRow;
+    private Integer subfooterRowIndex;
+    private Integer totalColumns;
+    private Integer firstDataColumn;
+    private Integer lastDataColumn;
+    private Integer firstTableRow;
+    private Integer lastTableRow;
+    private Integer firstTableColumn;
+    private Integer lastTableColumn;
+    private Integer firstPivotTablePositionRow;
+    private Integer firstPivotTablePositionColumn;
+    private Integer firstPivotTableSourceRow;
+    private Integer lastPivotTableSourceRow;
+    private Integer firstPivotTableSourceColumn;
+    private Integer lastPivotTableSourceColumn;
 
     private MempoiSheetMetadataBuilder() {
     }
@@ -43,93 +46,82 @@ public final class MempoiSheetMetadataBuilder {
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withSheetIndex(int sheetIndex) {
+    public MempoiSheetMetadataBuilder withSheetIndex(Integer sheetIndex) {
         this.sheetIndex = sheetIndex;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withTotalRows(int totalRows) {
-        this.totalRows = totalRows;
-        return this;
-    }
-
-    public MempoiSheetMetadataBuilder withHeaderRowIndex(int headerRowIndex) {
+    public MempoiSheetMetadataBuilder withHeaderRowIndex(Integer headerRowIndex) {
         this.headerRowIndex = headerRowIndex;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withTotalDataRows(int totalDataRows) {
-        this.totalDataRows = totalDataRows;
+    public MempoiSheetMetadataBuilder withTotalRows(Integer totalRows) {
+        this.totalRows = totalRows;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withFirstDataRow(int firstDataRow) {
+    public MempoiSheetMetadataBuilder withFirstDataRow(Integer firstDataRow) {
         this.firstDataRow = firstDataRow;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withLastDataRow(int lastDataRow) {
+    public MempoiSheetMetadataBuilder withLastDataRow(Integer lastDataRow) {
         this.lastDataRow = lastDataRow;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withSubfooterRowIndex(int subfooterRowIndex) {
+    public MempoiSheetMetadataBuilder withSubfooterRowIndex(Integer subfooterRowIndex) {
         this.subfooterRowIndex = subfooterRowIndex;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withTotalColumns(int totalColumns) {
+    public MempoiSheetMetadataBuilder withTotalColumns(Integer totalColumns) {
         this.totalColumns = totalColumns;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withFirstDataColumn(int firstDataColumn) {
+    public MempoiSheetMetadataBuilder withFirstDataColumn(Integer firstDataColumn) {
         this.firstDataColumn = firstDataColumn;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withLastDataColumn(int lastDataColumn) {
+    public MempoiSheetMetadataBuilder withLastDataColumn(Integer lastDataColumn) {
         this.lastDataColumn = lastDataColumn;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withFirstTableRow(int firstTableRow) {
-        this.firstTableRow = firstTableRow;
+    public MempoiSheetMetadataBuilder withTableFromAreaReference(AreaReference areaReference) {
+        this.firstTableRow = areaReference.getFirstCell().getRow();
+        this.firstTableColumn = (int) areaReference.getFirstCell().getCol();
+        this.lastTableRow = areaReference.getLastCell().getRow();
+        this.lastTableColumn = (int) areaReference.getLastCell().getCol();
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withLastTableRow(int lastTableRow) {
-        this.lastTableRow = lastTableRow;
+
+    public MempoiSheetMetadataBuilder withPivotTableInfo(AreaReference source, CellReference position) {
+        return this.withPivotTableSourceFromAreaReference(source)
+            .withFirstPivotTablePositionRow(position.getRow())
+            .withFirstPivotTablePositionColumn((int) position.getCol());
+
+    }
+
+    public MempoiSheetMetadataBuilder withFirstPivotTablePositionRow(Integer firstPivotTablePositionRow) {
+        this.firstPivotTablePositionRow = firstPivotTablePositionRow;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withFirstTableColumn(int firstTableColumn) {
-        this.firstTableColumn = firstTableColumn;
+    public MempoiSheetMetadataBuilder withFirstPivotTablePositionColumn(Integer firstPivotTablePositionColumn) {
+        this.firstPivotTablePositionColumn = firstPivotTablePositionColumn;
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withLastTableColumn(int lastTableColumn) {
-        this.lastTableColumn = lastTableColumn;
-        return this;
-    }
-
-    public MempoiSheetMetadataBuilder withFirstPivotTableRow(int firstPivotTableRow) {
-        this.firstPivotTableRow = firstPivotTableRow;
-        return this;
-    }
-
-    public MempoiSheetMetadataBuilder withLastPivotTableRow(int lastPivotTableRow) {
-        this.lastPivotTableRow = lastPivotTableRow;
-        return this;
-    }
-
-    public MempoiSheetMetadataBuilder withFirstPivotTableColumn(int firstPivotTableColumn) {
-        this.firstPivotTableColumn = firstPivotTableColumn;
-        return this;
-    }
-
-    public MempoiSheetMetadataBuilder withLastPivotTableColumn(int lastPivotTableColumn) {
-        this.lastPivotTableColumn = lastPivotTableColumn;
+    public MempoiSheetMetadataBuilder withPivotTableSourceFromAreaReference(AreaReference areaReference) {
+        this.firstPivotTableSourceRow = areaReference.getFirstCell().getRow();
+        this.firstPivotTableSourceColumn = (int) areaReference.getFirstCell().getCol();
+        this.lastPivotTableSourceRow = areaReference.getLastCell().getRow();
+        this.lastPivotTableSourceColumn = (int) areaReference.getLastCell().getCol();
         return this;
     }
 
@@ -140,7 +132,7 @@ public final class MempoiSheetMetadataBuilder {
         mempoiSheetMetadata.setSheetIndex(sheetIndex);
         mempoiSheetMetadata.setTotalRows(totalRows);
         mempoiSheetMetadata.setHeaderRowIndex(headerRowIndex);
-        mempoiSheetMetadata.setTotalDataRows(totalDataRows);
+        mempoiSheetMetadata.setTotalDataRows(lastDataRow - headerRowIndex);
         mempoiSheetMetadata.setFirstDataRow(firstDataRow);
         mempoiSheetMetadata.setLastDataRow(lastDataRow);
         mempoiSheetMetadata.setSubfooterRowIndex(subfooterRowIndex);
@@ -151,10 +143,12 @@ public final class MempoiSheetMetadataBuilder {
         mempoiSheetMetadata.setLastTableRow(lastTableRow);
         mempoiSheetMetadata.setFirstTableColumn(firstTableColumn);
         mempoiSheetMetadata.setLastTableColumn(lastTableColumn);
-        mempoiSheetMetadata.setFirstPivotTableRow(firstPivotTableRow);
-        mempoiSheetMetadata.setLastPivotTableRow(lastPivotTableRow);
-        mempoiSheetMetadata.setFirstPivotTableColumn(firstPivotTableColumn);
-        mempoiSheetMetadata.setLastPivotTableColumn(lastPivotTableColumn);
+        mempoiSheetMetadata.setFirstPivotTableSourceRow(firstPivotTableSourceRow);
+        mempoiSheetMetadata.setLastPivotTableSourceRow(lastPivotTableSourceRow);
+        mempoiSheetMetadata.setFirstPivotTableSourceColumn(firstPivotTableSourceColumn);
+        mempoiSheetMetadata.setLastPivotTableSourceColumn(lastPivotTableSourceColumn);
+        mempoiSheetMetadata.setFirstPivotTablePositionRow(firstPivotTablePositionRow);
+        mempoiSheetMetadata.setFirstPivotTablePositionColumn(firstPivotTablePositionColumn);
         return mempoiSheetMetadata;
     }
 }

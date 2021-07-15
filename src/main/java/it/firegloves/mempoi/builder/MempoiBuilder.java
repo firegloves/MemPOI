@@ -323,8 +323,7 @@ public class MempoiBuilder {
      */
     public MemPOI build() {
 
-        MempoiConfig.getInstance()
-                .setForceGeneration(forceGeneration);
+        MempoiConfig.getInstance().setForceGeneration(forceGeneration);
 
         if (null == workbook) {
             this.workbook = new SXSSFWorkbook();

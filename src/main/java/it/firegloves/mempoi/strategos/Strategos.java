@@ -21,7 +21,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.commons.lang3.StringUtils;
@@ -77,6 +76,10 @@ public class Strategos {
         } else {
             mempoiReport.setFile(this.fileManager.createFinalFile(this.workbookConfig.getFile()));
         }
+
+        // remove encryption info dueto security reasons
+        this.workbookConfig.setMempoiEncryption(null);
+        mempoiReport.setUsedWorkbookConfig(this.workbookConfig);
 
         return mempoiReport;
     }
@@ -173,6 +176,7 @@ public class Strategos {
         mempoiSheet.setSheet(sheet);
 
         MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder = MempoiSheetMetadataBuilder.aMempoiSheetMetadata()
+                .withSpreadsheetVersion(this.workbookConfig.getWorkbook().getSpreadsheetVersion())
                 .withSheetName(mempoiSheet.getSheetName());
 
         // track columns for autosizing
@@ -187,9 +191,9 @@ public class Strategos {
         List<MempoiColumn> columnList = new MempoiColumnStrategos()
                 .prepareMempoiColumn(mempoiSheet, rs, this.workbookConfig.getWorkbook());
 
-        mempoiSheetMetadataBuilder.withFirstTableColumn(0);
-        mempoiSheetMetadataBuilder.withLastTableColumn(columnList.size());
-        mempoiSheetMetadataBuilder.withTotalColumns(columnList.size());
+        mempoiSheetMetadataBuilder.withFirstDataColumn(0)
+                .withLastDataColumn(columnList.size() - 1)
+                .withTotalColumns(columnList.size());
 
         int firstRow = 0;
         mempoiSheetMetadataBuilder.withFirstDataRow(firstRow);
@@ -198,25 +202,29 @@ public class Strategos {
 
         try {
             // creates header
+            mempoiSheetMetadataBuilder.withHeaderRowIndex(rowCounter);
             rowCounter = this.dataStrategos
                     .createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, mempoiSheet.getSheetStyler());
-            mempoiSheetMetadataBuilder.withLastDataRow(rowCounter);
 
             AreaReference sheetDataAreaReference = this
                     .createSheetData(rs, columnList, mempoiSheet, rowCounter, mempoiSheetMetadataBuilder);
 
             // adds optional excel table
             this.tableStrategos.manageMempoiTable(mempoiSheet, sheetDataAreaReference)
-                    .ifPresent(areaReference -> mempoiSheetMetadataBuilder.with);
+                    .ifPresent(mempoiSheetMetadataBuilder::withTableFromAreaReference);
 
             // adds optional pivot table
-            this.pivotTableStrategos.manageMempoiPivotTable(mempoiSheet);
+            this.pivotTableStrategos.manageMempoiPivotTable(mempoiSheet)
+                    .ifPresent(areaReference -> mempoiSheetMetadataBuilder
+                            .withPivotTableInfo(areaReference, mempoiSheet.getMempoiPivotTable().get().getPosition()));
 
             // apply mempoi column strategies
             this.applyMempoiColumnStrategies(mempoiSheet);
 
             // adjust col size
             this.adjustColSize(sheet, columnList.size());
+
+            return mempoiSheetMetadataBuilder.build();
 
         } catch (Exception e) {
             throw new MempoiException(e);
@@ -239,20 +247,23 @@ public class Strategos {
             int rowCounter, MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
 
         // keeps track of the first data row index (no header and subheaders)
+        mempoiSheetMetadataBuilder.withFirstDataRow(rowCounter);
         int firstDataRowIndex = rowCounter + 1;
 
         // creates rows
-        rowCounter = this.dataStrategos.createDataRows(mempoiSheet.getSheet(), rs, columnList, rowCounter);
-        mempoiSheetMetadataBuilder.withLastDataRow(rowCounter);
+        int localRowCounter = this.dataStrategos.createDataRows(mempoiSheet.getSheet(), rs, columnList, rowCounter);
+        mempoiSheetMetadataBuilder.withLastDataRow(localRowCounter - 1);
 
         // footer
-        this.footerStrategos
+        mempoiSheetMetadataBuilder = this.footerStrategos
                 .createFooterAndSubfooter(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex,
-                        rowCounter, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
+                        localRowCounter, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
+
+        mempoiSheetMetadataBuilder.withTotalRows(localRowCounter);
 
         // returns the AreaReference representing all created data area in the sheet
         return new AreaReference(
-                "A1:" + CellReference.convertNumToColString(columnList.size()-1) + rowCounter,
+                "A1:" + CellReference.convertNumToColString(columnList.size() - 1) + localRowCounter,
                 this.workbookConfig.getWorkbook().getSpreadsheetVersion());
     }
 

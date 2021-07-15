@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import it.firegloves.mempoi.builder.MempoiSheetMetadataBuilder;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
@@ -240,39 +240,24 @@ public class StrategosTest {
     @Test
     public void createSheetDataTest() throws Exception {
 
+         MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder = MempoiSheetMetadataBuilder.aMempoiSheetMetadata();
+
         when(this.dataStrategos.createHeaderRow(any(), any(), anyInt(), any())).thenReturn(1);
         when(this.dataStrategos.createDataRows(any(), any(), any(), anyInt())).thenReturn(TestHelper.ROW_COUNT);
-        doNothing().when(this.footerStrategos).createFooterAndSubfooter(any(), any(), any(), anyInt(), anyInt(), any(), any());
+        when(this.footerStrategos.createFooterAndSubfooter(any(), any(), any(), anyInt(), anyInt(), any(), any()))
+                .thenReturn(mempoiSheetMetadataBuilder);
         when(this.columnList.size()).thenReturn(TestHelper.MEMPOI_COLUMN_NAMES.length);
 
         Strategos strategos = new Strategos(wbConfig);
         PrivateAccessHelper.setPrivateField(strategos, "dataStrategos", dataStrategos);
         PrivateAccessHelper.setPrivateField(strategos, "footerStrategos", footerStrategos);
 
-        Method createSheetDataMethod = PrivateAccessHelper.getAccessibleMethod(strategos, "createSheetData", ResultSet.class, List.class, MempoiSheet.class);
-        AreaReference areaReference = (AreaReference) createSheetDataMethod.invoke(strategos, rs, columnList, mempoiSheet);
+        Method createSheetDataMethod = PrivateAccessHelper
+                .getAccessibleMethod(strategos, "createSheetData", ResultSet.class, List.class, MempoiSheet.class,
+                        int.class, MempoiSheetMetadataBuilder.class);
+        AreaReference areaReference = (AreaReference) createSheetDataMethod
+                .invoke(strategos, rs, columnList, mempoiSheet, 0, mempoiSheetMetadataBuilder);
 
         assertEquals(TestHelper.AREA_REFERENCE, areaReference.formatAsString());
     }
-
-    /******************************************************************************************************************
-     *                          composeMempoiReport
-     *****************************************************************************************************************/
-
-    @Test
-    public void composeMempoiReportToFile() {
-        fail();
-    }
-
-    @Test
-    public void composeMempoiReportToByteArray() {
-        fail();
-    }
-
-    @Test
-    public void composeMempoiReportWithMultipleSheets() {
-        fail();
-    }
-
-
 }

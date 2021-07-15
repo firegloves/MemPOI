@@ -52,7 +52,7 @@ class FooterStrategos {
             MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
 
         // add optional sub footer
-        mempoiSheetMetadataBuilder = this.createSubFooterRow(sheet, columnList,
+        MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder1 = this.createSubFooterRow(sheet, columnList,
                 mempoiSheet.getMempoiSubFooter().orElseGet(() -> this.workbookConfig.getMempoiSubFooter()),
                 firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
 
@@ -60,7 +60,7 @@ class FooterStrategos {
         this.createFooterRow(sheet,
                 mempoiSheet.getMempoiFooter().orElseGet(() -> this.workbookConfig.getMempoiFooter()));
 
-        return mempoiSheetMetadataBuilder;
+        return mempoiSheetMetadataBuilder1;
     }
 
 
