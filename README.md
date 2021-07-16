@@ -20,7 +20,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.6.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.0'
 ```
 
 #### With Maven
@@ -29,27 +29,15 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.6.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.6.0</version>
+    <version>1.7.0</version>
 </dependency>
-
 ```
 
 ---
 
-### What's new in 1.6.0
-- NEW FUNCTIONALITY - [Column Configuration](#column-configuration) updated with [Column Header customization](#column-header-customization) 
-- NEW FUNCTIONALITY - [Data transformation functions](#data-transformation-functions) improved with ResultSet
-
-### What's new in 1.5.0
-
-- Updated bundled Apache POI version to 5.0.0
-- NEW FUNCTIONALITY - [Column Configuration](#column-configuration)
-- NEW FUNCTIONALITY - [Per column cell style](#column-cell-style)
-- NEW FUNCTIONALITY - [Data transformation functions](#data-transformation-functions)
-- NEW FUNCTIONALITY - [Encryption](#encryption)
-- NEW FUNCTIONALITY - [Null values over primitives default ones](#null-values-over-primitives-default-ones)
-- Issue [12](https://github.com/firegloves/MemPOI/issues/12) fix related to the mapping of large numbers.
-- Special thanks to [mirkoPan](https://github.com/mirkoPan) who joined the MemPOI adventure as a permanent collaborator 
+### What's new in 1.7.0
+- NEW FUNCTIONALITY - [Metadata](#column-configuration) updated with [Column Header customization](#column-header-customization)
+- UPDATE - Basic usage updated. To consult the old version, please refer to the v1.6.0 tag.
 
 ---
 
@@ -66,6 +54,7 @@ Main features index:
 - [Cell formulas](#cell-formulas)
 - [Excel Table](#excel-table)
 - [Excel Pivot Table](#excel-pivot-table)
+- [Metadata](#metadata)
 - [Column Configuration](#column-configuration)
 - [Column cell style](#column-cell-style)
 - [Data transformation functions](#data-transformation-functions)
@@ -75,6 +64,8 @@ Main features index:
 - [Merged Regions](#merged-regions)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
+  
+- [Donate crypto](#donate-crypto)
    
 ---
 
@@ -94,8 +85,8 @@ You can use `MempoiBuilder` to correctly populate your MemPOI instance, like fol
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
-                        
-CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
+
+CompletableFuture<MempoiReport> future = memPOI.prepareMempoiReport();
 ```
 
 You can find more examples in the functional tests package.
@@ -115,6 +106,9 @@ You can choose to write directly to a file or to obtain the byte array of the ge
 
 #### File
 
+Simply pass a file to the `MempoiBuilder` and the report will be written on file.
+To get the absolute file path where the report has been saved you can access `MempoiReport`'s `file` property.
+
 ```Java
 File fileDest = new File("test_with_file.xlsx");
 
@@ -123,19 +117,24 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     .build();
 
-CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-String absoluteFileName = fut.get();
+CompletableFuture<MempoiReport> fut = memPOI.prepareMempoiReport();
+MempoiReport mempoiReport = fut.get();
+mempoiReport.getFile(); // will return the string absolute path of the generated report file
 ```
 
 #### Byte array
+
+If you omit to specify a file in the `MempoiBuilder`, MemPOI will write the report on a byte array.
+Then you can read the byte array by accessing the `MempoiReport`'s `bytes` property.
 
 ```Java
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .addMempoiSheet (new MempoiSheet(prepStmt))
                     .build();
-                        
-CompletableFuture<byte[]> fut = memPOI.prepareMempoiReportToByteArray();
-byte[] bytes = fut.get();
+
+CompletableFuture<MempoiReport> fut = memPOI.prepareMempoiReport();
+MempoiReport mempoiReport = fut.get();
+mempoiReport.getBytes(); // will return the byte[] containing the generated report
 ```
 
 ### Supported SQL data types
@@ -177,7 +176,7 @@ SELECT id, name AS first_name FROM Foo
 
 will result in a sheet with 2 columns: id and first_name (containing db's name column data)
 
-From version 1.6.0 it is possible to programmatically manage column headings through a specific [Column header customization](#column-header-customization)  
+Starting by version 1.6.0 it is possible to programmatically manage column headings through a specific [Column header customization](#column-header-customization)  
 
 ---
 
@@ -210,8 +209,8 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                             .addMempoiSheet(birdsSheet)
                             .build();
 
-CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
-String absoluteFileName = fut.get();
+CompletableFuture<MempoiReport> fut = memPOI.prepareMempoiReport();
+String absoluteFileName = fut.get().getFile();
 
 ```
 
@@ -528,6 +527,17 @@ MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempo
                  .withColumnLabelColumns(columnLabelColumnsMap)
                  .withReportFilterColumns(reportFilterColumnList);
 ```
+
+---
+
+### Metadata
+
+Starting by v1.7.0 MemPOI returns an object as the result of the generation: `MempoiReport`.
+It comes populated with the report data, as shown in the first steps of this readme, and with a lot of useful metadata about the generated document.
+In this way you can apply every desired transformation by being informed on where to place your new data.
+Metadata are packed in the `MempoiSheetMetadata`. The `MempoiReport` contains a map of these classes (one for each sheet), where the key is the sheet index inside the workbook and the value is the metadata class instance itself.
+
+For example you could add a custom footer and to decide on which line your footer should start you could leverage the `MempoiSheetMetadata.totalRows` property.
 
 ---
 
@@ -867,7 +877,7 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
     .addMempoiSheet(mempoiSheet)
     .build();
 
-memPOI.prepareMempoiReportToFile().get();
+memPOI.prepareMempoiReport().get();
 ```
 
 ---
@@ -929,7 +939,7 @@ MemPOI comes with Apache POI 5.0.0 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.5.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.7.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -942,7 +952,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.5.0</version>
+    <version>1.7.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>

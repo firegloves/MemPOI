@@ -8,6 +8,7 @@
 package it.firegloves.mempoi;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.domain.MempoiReport;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.strategos.Strategos;
 import java.util.concurrent.CompletableFuture;
@@ -29,12 +30,33 @@ public class MemPOI {
         return workbookConfig;
     }
 
+    /**
+     * exports data into a POI report.
+     * saves exported data into a File if a file path has been set using the MempoiBuilder, otherwise into a byte array
+     *
+     * @return a CompletableFuture containing the MempoiReport object (exported data info and metadata)
+     */
+    public CompletableFuture<MempoiReport> prepareMempoiReport() {
+
+        return CompletableFuture.supplyAsync(() -> {
+
+            try {
+                Strategos strategos = new Strategos(this.workbookConfig);
+                return strategos.composeMempoiReport(this.workbookConfig.getSheetList());
+            } catch (MempoiException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new MempoiException(e);
+            }
+        });
+    }
 
     /**
      * exports data into a POI report. saves exported data into the File identified by the file variable
      *
      * @return a CompletableFuture containing the string of the file name (absolute path) of the generated file
      */
+    @Deprecated
     public CompletableFuture<String> prepareMempoiReportToFile() {
 
         return CompletableFuture.supplyAsync(() -> {
@@ -58,6 +80,7 @@ public class MemPOI {
      *
      * @return a CompletableFuture containing the byte arrat of the exported data
      */
+    @Deprecated
     public CompletableFuture<byte[]> prepareMempoiReportToByteArray() {
 
         return CompletableFuture.supplyAsync(() -> {
