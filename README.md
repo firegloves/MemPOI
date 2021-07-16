@@ -36,7 +36,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.0'
 ---
 
 ### What's new in 1.7.0
-- NEW FUNCTIONALITY - [Metadata](#column-configuration) updated with [Column Header customization](#column-header-customization)
+- NEW FUNCTIONALITY - [Metadata](#metadata)
 - UPDATE - Basic usage updated. To consult the old version, please refer to the v1.6.0 tag.
 
 ---
