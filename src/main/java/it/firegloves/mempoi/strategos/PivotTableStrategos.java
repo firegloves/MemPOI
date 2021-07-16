@@ -22,15 +22,17 @@ public class PivotTableStrategos {
 
     /**
      * if needed, adds the Excel Table to the current sheet
+     *
+     * @return an Optional with the AreaReference of the pivottable, if a pivottable was created
      */
-    public void manageMempoiPivotTable(MempoiSheet mempoiSheet) {
+    public Optional<AreaReference> manageMempoiPivotTable(MempoiSheet mempoiSheet) {
 
         if (mempoiSheet.getMempoiPivotTable().isPresent() && !(mempoiSheet.getSheet() instanceof XSSFSheet)) {
             throw new MempoiException(Errors.ERR_PIVOT_TABLE_SUPPORTS_ONLY_XSSF);
         }
 
-        mempoiSheet.getMempoiPivotTable()
-                .ifPresent(mempoiPivotTable -> this.addPivotTable(mempoiSheet, mempoiPivotTable));
+        return mempoiSheet.getMempoiPivotTable()
+                .map(mempoiPivotTable -> this.addPivotTable(mempoiSheet, mempoiPivotTable));
     }
 
 
@@ -39,8 +41,9 @@ public class PivotTableStrategos {
      *
      * @param mempoiSheet      the MempoiSheet on which add the table
      * @param mempoiPivotTable the MempoiPivotTable containing table settings
+     * @return the AreaReference of the created pivot table
      */
-    private void addPivotTable(MempoiSheet mempoiSheet, MempoiPivotTable mempoiPivotTable) {
+    private AreaReference addPivotTable(MempoiSheet mempoiSheet, MempoiPivotTable mempoiPivotTable) {
 
         XSSFPivotTable pivotTable = this.createPivotTable(mempoiSheet, mempoiPivotTable);
         mempoiPivotTable.setPivotTable(pivotTable);
@@ -48,11 +51,14 @@ public class PivotTableStrategos {
         List<MempoiColumn> mempoiColumnList = mempoiSheet.getColumnList();
 
         this.addColumnsToPivotTable(mempoiPivotTable.getRowLabelColumns(), mempoiColumnList, pivotTable::addRowLabel);
-        this.addColumnsToPivotTable(mempoiPivotTable.getReportFilterColumns(), mempoiColumnList, pivotTable::addReportFilter);
+        this.addColumnsToPivotTable(mempoiPivotTable.getReportFilterColumns(), mempoiColumnList,
+                pivotTable::addReportFilter);
 
         Map<DataConsolidateFunction, List<String>> columnLabelColumns = mempoiPivotTable.getColumnLabelColumns();
         columnLabelColumns.keySet()
                 .forEach(dataConsolidateFunction -> addColumnsToPivotTable(columnLabelColumns.get(dataConsolidateFunction), mempoiColumnList, i -> pivotTable.addColumnLabel(dataConsolidateFunction, i)));
+
+        return pivotTable.getPivotCacheDefinition().getPivotArea(mempoiSheet.getWorkbook());
     }
 
 
