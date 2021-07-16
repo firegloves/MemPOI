@@ -64,7 +64,6 @@ Main features index:
 - [Merged Regions](#merged-regions)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
-  
 - [Donate crypto](#donate-crypto)
    
 ---
