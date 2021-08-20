@@ -1,5 +1,6 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Coverage)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Grade)
+[![Known Vulnerabilities](https://snyk.io/test/github/firegloves/mempoi/badge.svg)](https://snyk.io/test/github/firegloves/mempoi)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
@@ -20,7 +21,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.1'
 ```
 
 #### With Maven
@@ -29,15 +30,14 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
 </dependency>
 ```
 
 ---
 
-### What's new in 1.7.0
-- NEW FUNCTIONALITY - [Metadata](#column-configuration) updated with [Column Header customization](#column-header-customization)
-- UPDATE - Basic usage updated. To consult the old version, please refer to the v1.6.0 tag.
+### What's new in 1.7.1
+- [Vulnerable dependency management](#vulnerable-dependency-management)
 
 ---
 
@@ -64,6 +64,7 @@ Main features index:
 - [Merged Regions](#merged-regions)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
+- [Vulnerable dependency management](#vulnerable-dependency-management)
   
 - [Donate crypto](#donate-crypto)
    
@@ -932,6 +933,13 @@ Thanks to [zaplatynski](https://github.com/zaplatynski)
 
 ---
 
+### Vulnerable dependency management
+
+Starting from v1.7.1, MemPOI pays particular attention to the dependency vulnerabilities and comes bundled with an enhanced version of Apache POI, where transitive and vulnerable dependencies are updated to the safest available versions.
+By clicking on the Snyk badge you can inspect the relative security report.
+
+---
+
 ### Apache POI version
 
 MemPOI comes with Apache POI 5.0.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
@@ -939,7 +947,7 @@ MemPOI comes with Apache POI 5.0.0 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.7.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.7.1') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -952,7 +960,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>

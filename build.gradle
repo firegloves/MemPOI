@@ -23,10 +23,10 @@ version '1.7.0'
 sourceCompatibility = 1.8
 
 def poiVersion = '5.0.0'
-def comonsLang3Version = '3.10'
+def comonsLang3Version = '3.12.0'
 def comonsCollectionsVersion = '4.4'
 def comonsMath3Version = '3.6.1'
-def slf4jVersion = '1.7.30'
+def slf4jVersion = '1.7.32'
 
 repositories {
     mavenCentral()
@@ -36,6 +36,26 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poiVersion
+
+    // START - OVERRIDES poi-ooxml VULNERABLE DEPENDENCIES
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation (group: 'commons-io', name: 'commons-io') {
+        version {require '2.11.0' }
+    }
+    // https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+    implementation (group: 'org.apache.pdfbox', name: 'pdfbox') {
+        version { require '2.0.24' }
+    }
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
+    implementation (group: 'org.apache.commons', name: 'commons-compress') {
+        version { require '1.21' }
+    }
+    // https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svgbrowser
+    implementation (group: 'org.apache.xmlgraphics', name: 'batik-svgbrowser') {
+        version { require  '1.14' }
+    }
+    // END - OVERRIDES poi-ooxml VULNERABLE DEPENDENCIES
+
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: comonsLang3Version
@@ -49,7 +69,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 	compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    ////////// TEST DEPENDENCIES
+
+    // junit
+    testCompile group: 'junit', name: 'junit', version: '4.13.1'
 
     // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
     testCompile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.0'
