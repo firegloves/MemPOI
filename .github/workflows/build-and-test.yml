@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [8, 11, 15, 16]
+        java: [8, 11, 16]
     steps:
       # checkout
       - uses: actions/checkout@v2
@@ -45,13 +45,15 @@ jobs:
         run: chmod +x gradlew
       # build and test
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build --stacktrace
       # Publish test results
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
           files: build/test-results/**/*.xml
+          check_name: 'Unit Test Results - Java ${{ matrix.java }}'
+          comment_title: 'Unit Test Results - Java ${{ matrix.java }}'
 
   # codacy code analysis
   codacy-code-analysis:

@@ -227,7 +227,8 @@ public class AssertionHelper {
         Map<DataConsolidateFunction, List<Long>> columnLabelColumnsIndexes = columnLabelColumnsNames.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> getColumnIndexes(columnLabelColumnsNames.get(entry.getKey()), mempoiColumnList).stream().map(i -> new Long(i)).collect(Collectors.toList())));
+                        entry -> getColumnIndexes(columnLabelColumnsNames.get(entry.getKey()),
+                                mempoiColumnList).stream().map(Long::valueOf).collect(Collectors.toList())));
 
         List<CTDataField> dataFieldList = Optional.ofNullable(pivotTable.getCTPivotTableDefinition().getDataFields())
                 .map(CTDataFields::getDataFieldList)

@@ -30,9 +30,9 @@ public abstract class DataTransformationFunction<I, O> {
     protected final <T> T cast(Object obj, Class<T> toType) throws MempoiException {
         try {
             if (obj instanceof Integer && toType.equals(Double.class)) {
-                return (T) new Double(((Integer) obj).intValue());
+                return (T) Double.valueOf(((Integer) obj).intValue());
             } else if (obj instanceof Float && toType.equals(Double.class)) {
-                return (T) new Double(((Float) obj).floatValue());
+                return (T) Double.valueOf(((Float) obj).floatValue());
             } else {
                 return toType.cast(obj);
             }
