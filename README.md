@@ -1,5 +1,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Coverage)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Grade)
+[![Build and Test pipeline](https://github.com/firegloves/github-actions-test/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions)
+[![Code Coverage pipeline](https://github.com/firegloves/github-actions-test/actions/workflows/Code%20coverage.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
