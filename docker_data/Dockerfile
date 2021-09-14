@@ -1,4 +1,4 @@
-FROM mysql:latest
+FROM mysql:8.0
 
 ENV MYSQL_DATABASE=mempoi \
     MYSQL_ROOT_PASSWORD=mempassword
