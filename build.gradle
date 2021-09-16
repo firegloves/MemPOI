@@ -89,17 +89,19 @@ publishing {
     }
 }
 
-// PUBLISH-PLUGIN START
 nexusPublishing {
     repositories {
-        sonatype()
+        sonatype {
+            username = System.getenv("OSSRH_USERNAME")
+            password = System.getenv("OSSRH_TOKEN")
+        }
     }
 }
 
-//signing {
-//    sign publishing.publications.mavenJava
-//}
-// PUBLISH-PLUGIN END
+signing {
+    sign publishing.publications.mavenJava
+}
+
 
 javadoc {
     if(JavaVersion.current().isJava9Compatible()) {
