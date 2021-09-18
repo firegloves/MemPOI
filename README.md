@@ -1,6 +1,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Coverage)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Grade)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/firegloves/MemPOI)
 [![Build and Test](https://github.com/firegloves/MemPOI/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/build-and-test.yml)
 [![Code coverage](https://github.com/firegloves/MemPOI/actions/workflows/code-coverage.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/code-coverage.yml)
 
