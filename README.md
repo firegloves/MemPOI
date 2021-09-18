@@ -6,6 +6,9 @@
 [![Build and Test](https://github.com/firegloves/MemPOI/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/build-and-test.yml)
 [![Code coverage](https://github.com/firegloves/MemPOI/actions/workflows/code-coverage.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/code-coverage.yml)
 [![Staging repo Maven Central](https://github.com/firegloves/MemPOI/actions/workflows/publish-to-staging-repo-maven-central.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/publish-to-staging-repo-maven-central.yml)
+![Java 8](https://img.shields.io/badge/Java%208-Tested-blueviolet)
+![Java 11](https://img.shields.io/badge/Java%2011-Tested-blueviolet)
+![Java 16](https://img.shields.io/badge/Java%2016-Tested-blueviolet)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
