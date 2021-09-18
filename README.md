@@ -5,6 +5,7 @@
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/firegloves/MemPOI)
 [![Build and Test](https://github.com/firegloves/MemPOI/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/build-and-test.yml)
 [![Code coverage](https://github.com/firegloves/MemPOI/actions/workflows/code-coverage.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/code-coverage.yml)
+[![Staging repo Maven Central](https://github.com/firegloves/MemPOI/actions/workflows/publish-to-staging-repo-maven-central.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/publish-to-staging-repo-maven-central.yml)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
