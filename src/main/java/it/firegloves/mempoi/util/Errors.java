@@ -59,6 +59,11 @@ public class Errors {
 
     public static final String ERR_ENCRYPTION_WITH_NO_PWD = "MemPOI received a workbook encryption but no password has been set";
 
+    public static final String ERR_NEGATIVE_COL_OFFSET = "MemPOI did receive a negative column offset. Offset must be >= 0";
+    public static final String ERR_NEGATIVE_COL_OFFSET_FORCE_GENERATION = ERR_NEGATIVE_COL_OFFSET + FORCE_GENERATION_ENABLED + "Setting to 0";
+    public static final String ERR_NEGATIVE_ROW_OFFSET = "MemPOI did receive a negative row offset. Offset must be >= 0";
+    public static final String ERR_NEGATIVE_ROW_OFFSET_FORCE_GENERATION = ERR_NEGATIVE_ROW_OFFSET + FORCE_GENERATION_ENABLED + "Setting to 0";
+
 
 
     /*********************************************************************************************************************

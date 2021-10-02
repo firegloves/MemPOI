@@ -77,7 +77,8 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
     @Test
     public void shouldApplyCustomPerColumnCellStyleIfSuppliedAndCustomTypeStyleSupplied() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "with_per_column_cell_style_and_type_custom.xlsx");
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "with_per_column_cell_style_and_type_custom.xlsx");
 
         Workbook workbook = new SXSSFWorkbook();
 
@@ -116,7 +117,7 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
             assertOnGeneratedFileDataTransformationFunction(this.createStatement(), fut.get(), TestHelper.HEADERS,
-                            new StandardStyleTemplate());
+                    new StandardStyleTemplate());
 
         } catch (Exception e) {
             AssertionHelper.failAssertion(e);
