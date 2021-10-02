@@ -242,8 +242,8 @@ public class StrategosTest {
 
          MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder = MempoiSheetMetadataBuilder.aMempoiSheetMetadata();
 
-        when(this.dataStrategos.createHeaderRow(any(), any(), anyInt(), any())).thenReturn(1);
-        when(this.dataStrategos.createDataRows(any(), any(), any(), anyInt())).thenReturn(TestHelper.ROW_COUNT);
+        when(this.dataStrategos.createHeaderRow(any(), any(), anyInt(), anyInt(), any())).thenReturn(1);
+        when(this.dataStrategos.createDataRows(any(), any(), any(), anyInt(), anyInt())).thenReturn(TestHelper.ROW_COUNT);
         when(this.footerStrategos.createFooterAndSubfooter(any(), any(), any(), anyInt(), anyInt(), any(), any()))
                 .thenReturn(mempoiSheetMetadataBuilder);
         when(this.columnList.size()).thenReturn(TestHelper.MEMPOI_COLUMN_NAMES.length);
@@ -254,9 +254,9 @@ public class StrategosTest {
 
         Method createSheetDataMethod = PrivateAccessHelper
                 .getAccessibleMethod(strategos, "createSheetData", ResultSet.class, List.class, MempoiSheet.class,
-                        int.class, MempoiSheetMetadataBuilder.class);
+                        int.class, int.class, MempoiSheetMetadataBuilder.class);
         AreaReference areaReference = (AreaReference) createSheetDataMethod
-                .invoke(strategos, rs, columnList, mempoiSheet, 0, mempoiSheetMetadataBuilder);
+                .invoke(strategos, rs, columnList, mempoiSheet, 0, 0, mempoiSheetMetadataBuilder);
 
         assertEquals(TestHelper.AREA_REFERENCE, areaReference.formatAsString());
     }

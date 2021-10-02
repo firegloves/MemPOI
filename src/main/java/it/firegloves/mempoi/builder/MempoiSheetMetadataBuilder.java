@@ -130,7 +130,7 @@ public final class MempoiSheetMetadataBuilder {
         mempoiSheetMetadata.setSpreadsheetVersion(spreadsheetVersion);
         mempoiSheetMetadata.setSheetName(sheetName);
         mempoiSheetMetadata.setSheetIndex(sheetIndex);
-        mempoiSheetMetadata.setTotalRows(totalRows);
+        mempoiSheetMetadata.setTotalRows(totalRows - (firstDataRow - 1)); // -1 because of the header
         mempoiSheetMetadata.setHeaderRowIndex(headerRowIndex);
         mempoiSheetMetadata.setTotalDataRows(lastDataRow - headerRowIndex);
         mempoiSheetMetadata.setFirstDataRow(firstDataRow);

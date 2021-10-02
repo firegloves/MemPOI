@@ -1,6 +1,5 @@
 /**
- * Contains the main export logic
- * It acts as the coordinator between subcomponents
+ * Contains the main export logic It acts as the coordinator between subcomponents
  */
 package it.firegloves.mempoi.strategos;
 
@@ -191,12 +190,13 @@ public class Strategos {
         List<MempoiColumn> columnList = new MempoiColumnStrategos()
                 .prepareMempoiColumn(mempoiSheet, rs, this.workbookConfig.getWorkbook());
 
-        mempoiSheetMetadataBuilder.withFirstDataColumn(0)
-                .withLastDataColumn(columnList.size() - 1)
-                .withTotalColumns(columnList.size());
+        int firstRow = mempoiSheet.getRowsOffset();
+        int firstCol = mempoiSheet.getColumnsOffset();
 
-        int firstRow = 0;
-        mempoiSheetMetadataBuilder.withFirstDataRow(firstRow);
+        mempoiSheetMetadataBuilder.withFirstDataColumn(firstCol)
+                .withLastDataColumn(columnList.size() + firstCol - 1)
+                .withTotalColumns(columnList.size())
+                .withFirstDataRow(firstRow);
 
         int rowCounter = firstRow;
 
@@ -204,10 +204,11 @@ public class Strategos {
             // creates header
             mempoiSheetMetadataBuilder.withHeaderRowIndex(rowCounter);
             rowCounter = this.dataStrategos
-                    .createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, mempoiSheet.getSheetStyler());
+                    .createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, firstCol,
+                            mempoiSheet.getSheetStyler());
 
             AreaReference sheetDataAreaReference = this
-                    .createSheetData(rs, columnList, mempoiSheet, rowCounter, mempoiSheetMetadataBuilder);
+                    .createSheetData(rs, columnList, mempoiSheet, rowCounter, firstCol, mempoiSheetMetadataBuilder);
 
             // adds optional excel table
             this.tableStrategos.manageMempoiTable(mempoiSheet, sheetDataAreaReference)
@@ -244,14 +245,15 @@ public class Strategos {
      * @para mempoiSheetMetadataBuilder the mempoiSheetMetadataBuilder in which collect the metadata
      */
     private AreaReference createSheetData(ResultSet rs, List<MempoiColumn> columnList, MempoiSheet mempoiSheet,
-            int rowCounter, MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+            int rowCounter, int firstCol, MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
 
         // keeps track of the first data row index (no header and subheaders)
         mempoiSheetMetadataBuilder.withFirstDataRow(rowCounter);
         int firstDataRowIndex = rowCounter + 1;
 
         // creates rows
-        int localRowCounter = this.dataStrategos.createDataRows(mempoiSheet.getSheet(), rs, columnList, rowCounter);
+        int localRowCounter = this.dataStrategos.createDataRows(mempoiSheet.getSheet(), rs, columnList, rowCounter,
+                firstCol);
         mempoiSheetMetadataBuilder.withLastDataRow(localRowCounter - 1);
 
         // footer
@@ -275,14 +277,15 @@ public class Strategos {
      */
     private Sheet createSheet(String sheetName) {
 
-        return ! StringUtils.isEmpty(sheetName) ?
+        return !StringUtils.isEmpty(sheetName) ?
                 this.workbookConfig.getWorkbook().createSheet(WorkbookUtil.createSafeSheetName(sheetName)) :
                 this.workbookConfig.getWorkbook().createSheet();
     }
 
 
     /**
-     * opens the temp saved report file assigning it to the class workbook variable, then evaluate all available cell formulas
+     * opens the temp saved report file assigning it to the class workbook variable, then evaluate all available cell
+     * formulas
      *
      * @param tmpFile the temp file from which read the report
      */
@@ -339,7 +342,6 @@ public class Strategos {
             }
         }
     }
-
 
 
 }

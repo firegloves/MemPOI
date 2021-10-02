@@ -45,8 +45,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.0'
 ---
 
 ### What's new in 1.7.0
-- NEW FUNCTIONALITY - [Metadata](#column-configuration) updated with [Column Header customization](#column-header-customization)
-- UPDATE - Basic usage updated. To consult the old version, please refer to the v1.6.0 tag.
+- NEW FUNCTIONALITY - [Column and Row offsets](#column-and-row-offsets)
 
 ---
 
@@ -891,6 +890,34 @@ memPOI.prepareMempoiReport().get();
 
 ---
 
+### Column and Row offsets
+
+You could want to apply a vertical or horizontal offset to the generated data, for example, aiming to enrich your document after the generation.
+To let the user achieve this goal, MemPOI supports columns and rows offsets.
+The below code will add:
+- vertical offset of 6 rows: exported data (header included) will start at row 7
+- horizontal offset of 3 columns: exported data will start at column 4
+
+```Java
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+    .withPrepStmt(prepStmt)
+    .withRowsOffset(6)
+    .withColumnsOffset(3)
+    .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+    .withFile(fileDest)
+    .withAdjustColumnWidth(true)
+    .addMempoiSheet(mempoiSheet)
+    .build();
+```
+
+The execution of the code above will result in the following export:
+
+![](img/offsets.png)
+
+---
+
 ### Force Generation
 
 MemPOI 1.2 introduces the `forceGeneration` property that helps you to ignore some errors, if possible.
@@ -901,6 +928,7 @@ Force Generation is still experimental, here a temp list of the managed errors:
 - Specifying 2 sources for a PivotTable (one area reference and one table) the area reference takes precedence and the table is ignored
 - Specifying 2 sheet sources for a PivotTable (one sheet and one table) the table takes precedence and the sheet is ignored
 - If a post data elaboration step is added to a MempoiSheet after have set a null step map, the map is instantiated and the step added
+- Specifying a negative column or row offset will force it to 0
 
 ---
 
