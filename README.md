@@ -547,6 +547,35 @@ Metadata are packed in the `MempoiSheetMetadata`. `MempoiReport` contains a map 
 
 For example you could add a custom footer and, in order to decide on which line your footer should start on, you could leverage the `MempoiSheetMetadata.totalRows` property.
 
+Below a table describing supported metadata
+
+| Property name               |      Description            | Nullable |
+|-----------------------------|-----------------------------|----------|
+| spreadsheetVersion | the version of the spreadsheet | No
+| sheetName | name of the represented sheet | Yes
+| sheetIndex | index of the represented sheet | No
+| totalRows | total number of rows interested by the generated data<br />the count starts at row 0 and goes until the last row (included) with at least one populated cell | No
+| headerRowIndex | index of the row containing column headers | No
+| totalDataRows | total number of rows containing plain exported data (no pivot tables or other). it coincides with resultSet size | No
+| firstDataRow | index of the first row that contains plain exported data (no pivot tables or other) | No
+| lastDataRow | index of the last row that contains plain exported data (no pivot tables or other) | No
+| subfooterRowIndex | index of the row containing the subfooter | Yes
+| totalColumns | total number of columns interested by the generated data<br />the count starts at column 0 and goes until the last column (included) with at least one populated cell | No
+| colsOffset | the offset applied from the left before starting the export | No (Default 0)
+| rowsOffset | the offset applied from the top before starting the export | No (Default 0)
+| firstDataColumn | index of the first column that contains plain exported data | No
+| lastDataColumn | index of the last column that contains plain exported data | No
+| firstTableRow | index of the first row that contains a table | Yes
+| lastTableRow | index of the last row that contains a table | Yes
+| firstTableColumn | index of the first column that contains a table | Yes
+| lastTableColumn | index of the last column that contains a table | Yes
+| firstPivotTablePositionRow | index of the first row that contains a pivot table | Yes
+| firstPivotTablePositionColumn | index of the first column that contains a pivot table | Yes
+| firstPivotTableSourceRow | index of the first row that contains a pivot table | Yes
+| lastPivotTableSourceRow | index of the last row that contains a pivot table | Yes
+| firstPivotTableSourceColumn | index of the first column that contains a pivot table | Yes
+| lastPivotTableSourceColumn | index of the last column that contains a pivot table | Yes
+
 ---
 
 ### Column Configuration
