@@ -114,9 +114,9 @@ public class OffsetsIT extends IntegrationBaseIT {
             assertNull(mempoiSheetMetadata.getSheetName());
             assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
             assertOnHeaders(mempoiSheetMetadata, rowOffset, "D7:K7");
-            assertOnRows(mempoiSheetMetadata, 11, 10, 7, 16, "D8:K17");
+            assertOnRows(mempoiSheetMetadata, 11, 10, 7, 16, "D8:K17", rowOffset);
             assertOnSubfooter(mempoiSheetMetadata, 17, "D19:K19");
-            assertOnCols(mempoiSheetMetadata, 8, 3, 10);
+            assertOnCols(mempoiSheetMetadata, 8, 3, 10, colOffset);
 
             // no assert on table because its area is manually assigned by the user
             // no assert on pivot table because its area is manually assigned by the user
@@ -175,7 +175,7 @@ public class OffsetsIT extends IntegrationBaseIT {
         assertOnHeaders(mempoiSheetMetadata, 0, "D1:K1");
         assertOnRows(mempoiSheetMetadata, 11, 10, 1, 10, "D2:K11");
         assertOnSubfooter(mempoiSheetMetadata, 11, "D12:K12");
-        assertOnCols(mempoiSheetMetadata, 8, 3, 10);
+        assertOnCols(mempoiSheetMetadata, 8, 3, 10, colOffset);
 
         // no assert on table because its area is manually assigned by the user
         // no assert on pivot table because its area is manually assigned by the user
@@ -189,7 +189,7 @@ public class OffsetsIT extends IntegrationBaseIT {
         assertNull(mempoiSheetMetadata.getSheetName());
         assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
         assertOnHeaders(mempoiSheetMetadata, 6, "A7:H7");
-        assertOnRows(mempoiSheetMetadata, 11, 10, 7, 16, "A8:H17");
+        assertOnRows(mempoiSheetMetadata, 11, 10, 7, 16, "A8:H17", rowOffset);
         assertOnSubfooter(mempoiSheetMetadata, 17, "A19:H19");
         assertOnCols(mempoiSheetMetadata, 8, 3, 10);
 

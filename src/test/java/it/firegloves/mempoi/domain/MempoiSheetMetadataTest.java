@@ -20,6 +20,8 @@ public class MempoiSheetMetadataTest {
     public static final int FIRST_ROW = 2;
     public static final int LAST_ROW = 3;
     public static final int TOTAL_COLS = 23;
+    public static final int COLS_OFFSET = 5;
+    public static final int ROWS_OFFSET = 7;
     public static final int FIRST_COL = 5;
     public static final int LAST_COL = 7;
     public static final int TOTAL_DATA_ROWS = 4;
@@ -48,6 +50,8 @@ public class MempoiSheetMetadataTest {
                 .setFirstDataColumn(FIRST_COL)
                 .setLastDataColumn(LAST_COL)
                 .setTotalColumns(TOTAL_COLS)
+                .setColsOffset(COLS_OFFSET)
+                .setRowsOffset(ROWS_OFFSET)
                 .setFirstDataRow(FIRST_ROW)
                 .setLastDataRow(LAST_ROW)
                 .setTotalRows(TOTAL_ROWS)
@@ -68,9 +72,9 @@ public class MempoiSheetMetadataTest {
         assertEquals(SHEET_NAME, current.getSheetName());
         assertEquals(SpreadsheetVersion.EXCEL2007, current.getSpreadsheetVersion());
         assertOnHeaders(current, HEADER_ROW_INDEX, "F2:H2");
-        assertOnRows(current, TOTAL_ROWS, TOTAL_DATA_ROWS, FIRST_ROW, LAST_ROW, "F3:H4");
+        assertOnRows(current, TOTAL_ROWS, TOTAL_DATA_ROWS, FIRST_ROW, LAST_ROW, "F3:H4", ROWS_OFFSET);
         assertOnSubfooter(current, SUBFOOTER_ROW_INDEX, "F7:H7");
-        assertOnCols(current, TOTAL_COLS, FIRST_COL, LAST_COL);
+        assertOnCols(current, TOTAL_COLS, FIRST_COL, LAST_COL, COLS_OFFSET);
         assertOnTable(current, FIRST_TABLE_ROW, LAST_TABLE_ROW, FIRST_TABLE_COL, LAST_TABLE_COL, "K9:L10");
         assertOnPivotTable(current, FIRST_PIVOT_TABLE_POS_ROW, FIRST_PIVOT_TABLE_POS_COL, FIRST_PIVOT_TABLE_ROW,
                 FIRST_PIVOT_TABLE_COL, LAST_PIVOT_TABLE_ROW, LAST_PIVOT_TABLE_COL, "N13", "Q15:R16");
