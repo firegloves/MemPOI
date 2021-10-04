@@ -174,9 +174,7 @@ public class Strategos {
         Sheet sheet = this.createSheet(mempoiSheet.getSheetName());
         mempoiSheet.setSheet(sheet);
 
-        MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder = MempoiSheetMetadataBuilder.aMempoiSheetMetadata()
-                .withSpreadsheetVersion(this.workbookConfig.getWorkbook().getSpreadsheetVersion())
-                .withSheetName(mempoiSheet.getSheetName());
+        MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder = initMempoiSheetMetadataBuilder(mempoiSheet);
 
         // track columns for autosizing
         if (this.workbookConfig.isAdjustColSize() && sheet instanceof SXSSFSheet) {
@@ -232,6 +230,14 @@ public class Strategos {
         } finally {
             ConnectionManager.closeResultSetAndPrepStmt(rs, mempoiSheet.getPrepStmt());
         }
+    }
+
+    private MempoiSheetMetadataBuilder initMempoiSheetMetadataBuilder(MempoiSheet mempoiSheet) {
+        return MempoiSheetMetadataBuilder.aMempoiSheetMetadata()
+                .withSpreadsheetVersion(this.workbookConfig.getWorkbook().getSpreadsheetVersion())
+                .withSheetName(mempoiSheet.getSheetName())
+                .withColsOffset(mempoiSheet.getColumnsOffset())
+                .withRowsOffset(mempoiSheet.getRowsOffset());
     }
 
 

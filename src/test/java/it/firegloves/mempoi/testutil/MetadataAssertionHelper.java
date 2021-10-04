@@ -43,13 +43,25 @@ public class MetadataAssertionHelper {
 
     public static void assertOnCols(MempoiSheetMetadata mempoiSheetMetadata, int totalColumns, int firstDataColumns,
             int lastDataColumns) {
+        assertOnCols(mempoiSheetMetadata, totalColumns, firstDataColumns, lastDataColumns, 0);
+    }
+
+    public static void assertOnCols(MempoiSheetMetadata mempoiSheetMetadata, int totalColumns, int firstDataColumns,
+            int lastDataColumns, int colsOffset) {
         assertEquals("total cols", totalColumns, (int) mempoiSheetMetadata.getTotalColumns());
         assertEquals("first data col", firstDataColumns, (int) mempoiSheetMetadata.getFirstDataColumn());
         assertEquals("last data col", lastDataColumns, (int) mempoiSheetMetadata.getLastDataColumn());
+        assertEquals("cols offset", colsOffset, (int) mempoiSheetMetadata.getColsOffset());
     }
 
     public static void assertOnRows(MempoiSheetMetadata mempoiSheetMetadata, int totalRows, int totalDataRows,
             int firstDataRow, int lastDataRow, String plainDataAreaReference) {
+        assertOnRows(mempoiSheetMetadata, totalRows, totalDataRows, firstDataRow, lastDataRow, plainDataAreaReference,
+                0);
+    }
+
+    public static void assertOnRows(MempoiSheetMetadata mempoiSheetMetadata, int totalRows, int totalDataRows,
+            int firstDataRow, int lastDataRow, String plainDataAreaReference, int rowsOffset) {
 
         assertEquals("total rows", totalRows, (int) mempoiSheetMetadata.getTotalRows());
         assertEquals("total data rows", totalDataRows, (int) mempoiSheetMetadata.getTotalDataRows());
@@ -57,6 +69,7 @@ public class MetadataAssertionHelper {
         assertEquals("last data row", lastDataRow, (int) mempoiSheetMetadata.getLastDataRow());
         assertEquals("plain data area reference", plainDataAreaReference,
                 mempoiSheetMetadata.composePlainDataAreaReference().formatAsString());
+        assertEquals("rows offset", rowsOffset, (int) mempoiSheetMetadata.getRowsOffset());
     }
 
     public static void assertOnSubfooter(MempoiSheetMetadata mempoiSheetMetadata, Integer subfooterRowIndex,
