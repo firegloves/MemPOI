@@ -1,21 +1,12 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Coverage)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc1f609aa1284ce0b15d7deb6e451737)](https://www.codacy.com/gh/firegloves/MemPOI/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=firegloves/MemPOI&amp;utm_campaign=Badge_Grade)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Maven Central](https://img.shields.io/maven-central/v/it.firegloves/mempoi)
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/firegloves/MemPOI)
-[![Build and Test](https://github.com/firegloves/MemPOI/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/build-and-test.yml)
-[![Code coverage](https://github.com/firegloves/MemPOI/actions/workflows/code-coverage.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/code-coverage.yml)
-[![Staging repo Maven Central](https://github.com/firegloves/MemPOI/actions/workflows/publish-to-staging-repo-maven-central.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/publish-to-staging-repo-maven-central.yml)
-![Java 8](https://img.shields.io/badge/Java%208-Tested-blueviolet)
-![Java 11](https://img.shields.io/badge/Java%2011-Tested-blueviolet)
-![Java 16](https://img.shields.io/badge/Java%2016-Tested-blueviolet)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
 
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
 
-A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi-to-let-you-conquer-freedom-and-sip-a-good-mojito-on-the-930e1ca337d8">story about Mempoi's birth</a>
+A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi-to-let-you-conquer-freedom-and-sip-a-good-mojito-on-the-930e1ca337d8">story about Mempoi birth</a>
 
 ### Support
 
@@ -29,7 +20,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.0'
 ```
 
 #### With Maven
@@ -38,14 +29,15 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.8.0</version>
+    <version>1.7.0</version>
 </dependency>
 ```
 
 ---
 
-### What's new in 1.8.0
-- NEW FUNCTIONALITY - [Column and Row offsets](#column-and-row-offsets)
+### What's new in 1.7.0
+- NEW FUNCTIONALITY - [Metadata](#metadata)
+- UPDATE - Basic usage updated. To consult the old version, please refer to the v1.6.0 tag.
 
 ---
 
@@ -70,7 +62,6 @@ Main features index:
 - [Null values over primitives default ones](#null-values-over-primitives-default-ones)
 - [Data post elaboration pipeline](#data-post-elaboration-pipeline)
 - [Merged Regions](#merged-regions)
-- [Column and Row offsets](#column-and-row-offsets)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
 - [Donate crypto](#donate-crypto)
@@ -543,39 +534,9 @@ MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempo
 Starting by v1.7.0 MemPOI returns an object as the result of the generation: `MempoiReport`.
 It comes populated with the report data, as shown in the first steps of this readme, and with a lot of useful metadata about the generated document.
 In this way you can apply every desired transformation by being informed on where to place your new data.
+Metadata are packed in the `MempoiSheetMetadata`. The `MempoiReport` contains a map of these classes (one for each sheet), where the key is the sheet index inside the workbook and the value is the metadata class instance itself.
 
-Metadata are packed in the `MempoiSheetMetadata`. `MempoiReport` contains a map of these classes (one for each sheet), where the key is the sheet index inside the workbook and the value is the metadata class instance itself.
-
-For example you could add a custom footer and, in order to decide on which line your footer should start on, you could leverage the `MempoiSheetMetadata.totalRows` property.
-
-Below a table describing supported metadata
-
-| Property name               |      Description            | Nullable |
-|-----------------------------|-----------------------------|----------|
-| spreadsheetVersion | the version of the spreadsheet | No
-| sheetName | name of the represented sheet | Yes
-| sheetIndex | index of the represented sheet | No
-| totalRows | total number of rows interested by the generated data<br />the count starts at row 0 and goes until the last row (included) with at least one populated cell | No
-| headerRowIndex | index of the row containing column headers | No
-| totalDataRows | total number of rows containing plain exported data (no pivot tables or other). it coincides with resultSet size | No
-| firstDataRow | index of the first row that contains plain exported data (no pivot tables or other) | No
-| lastDataRow | index of the last row that contains plain exported data (no pivot tables or other) | No
-| subfooterRowIndex | index of the row containing the subfooter | Yes
-| totalColumns | total number of columns interested by the generated data<br />the count starts at column 0 and goes until the last column (included) with at least one populated cell | No
-| colsOffset | the offset applied from the left before starting the export | No (Default 0)
-| rowsOffset | the offset applied from the top before starting the export | No (Default 0)
-| firstDataColumn | index of the first column that contains plain exported data | No
-| lastDataColumn | index of the last column that contains plain exported data | No
-| firstTableRow | index of the first row that contains a table | Yes
-| lastTableRow | index of the last row that contains a table | Yes
-| firstTableColumn | index of the first column that contains a table | Yes
-| lastTableColumn | index of the last column that contains a table | Yes
-| firstPivotTablePositionRow | index of the first row that contains a pivot table | Yes
-| firstPivotTablePositionColumn | index of the first column that contains a pivot table | Yes
-| firstPivotTableSourceRow | index of the first row that contains a pivot table | Yes
-| lastPivotTableSourceRow | index of the last row that contains a pivot table | Yes
-| firstPivotTableSourceColumn | index of the first column that contains a pivot table | Yes
-| lastPivotTableSourceColumn | index of the last column that contains a pivot table | Yes
+For example you could add a custom footer and to decide on which line your footer should start you could leverage the `MempoiSheetMetadata.totalRows` property.
 
 ---
 
@@ -920,34 +881,6 @@ memPOI.prepareMempoiReport().get();
 
 ---
 
-### Column and Row offsets
-
-You could want to apply a vertical or horizontal offset to the generated data, for example, aiming to enrich your document after the generation.
-To let the user achieve this goal, MemPOI supports columns and rows offsets.
-The below code will add:
-- vertical offset of 6 rows: exported data (header included) will start at row 7
-- horizontal offset of 3 columns: exported data will start at column 4
-
-```Java
-MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-    .withPrepStmt(prepStmt)
-    .withRowsOffset(6)
-    .withColumnsOffset(3)
-    .build();
-
-MemPOI memPOI = MempoiBuilder.aMemPOI()
-    .withFile(fileDest)
-    .withAdjustColumnWidth(true)
-    .addMempoiSheet(mempoiSheet)
-    .build();
-```
-
-The execution of the code above will result in the following export:
-
-![](img/offsets.png)
-
----
-
 ### Force Generation
 
 MemPOI 1.2 introduces the `forceGeneration` property that helps you to ignore some errors, if possible.
@@ -958,7 +891,6 @@ Force Generation is still experimental, here a temp list of the managed errors:
 - Specifying 2 sources for a PivotTable (one area reference and one table) the area reference takes precedence and the table is ignored
 - Specifying 2 sheet sources for a PivotTable (one sheet and one table) the table takes precedence and the sheet is ignored
 - If a post data elaboration step is added to a MempoiSheet after have set a null step map, the map is instantiated and the step added
-- Specifying a negative column or row offset will force it to 0
 
 ---
 
@@ -1006,7 +938,7 @@ MemPOI comes with Apache POI 5.0.0 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.8.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.7.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -1019,7 +951,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.8.0</version>
+    <version>1.7.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>
