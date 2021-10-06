@@ -424,7 +424,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(),
                 "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size.xlsx");
-        int limit = 50_000;
+        int limit = 10_000;
 
         try {
             prepStmt = this
@@ -507,7 +507,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(),
                 "test_with_file_and_merged_regions_SXSSF_fixed_row_access_windows_size_multicolumn.xlsx");
-        int limit = 50_000;
+        int limit = 10_000;
 
         try {
             prepStmt = this
@@ -543,7 +543,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(),
                 "test_with_file_and_merged_regions_SXSSF_variable_row_access_windows_size.xlsx");
-        int limit = 50_000;
+        int limit = 10_000;
 
         try {
             prepStmt = this

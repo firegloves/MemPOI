@@ -1,5 +1,11 @@
 package it.firegloves.mempoi.builder;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.MempoiColumnElaborationStep;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumnConfig;
@@ -18,6 +24,8 @@ import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.ForceGenerationUtils;
 import it.firegloves.mempoi.testutil.MempoiColumnConfigTestHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,23 +34,18 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 public class MempoiSheetBuilderTest {
 
     @Mock
     private PreparedStatement prepStmt;
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Before
     public void prepare() {
@@ -56,6 +59,8 @@ public class MempoiSheetBuilderTest {
         String sheetName = "test name";
         String footerName = "test footer";
         String[] mergedCols = new String[]{"col1", "col2"};
+        int colOffset = 5;
+        int rowOffset = 8;
         StyleTemplate styleTemplate = new RoseStyleTemplate();
         Workbook wb = new XSSFWorkbook();
         NumberSumSubFooter numberSumSubFooter = new NumberSumSubFooter();
@@ -79,13 +84,16 @@ public class MempoiSheetBuilderTest {
                 .withMempoiTableBuilder(TestHelper.getTestMempoiTableBuilder(wb))
                 .withMempoiPivotTableBuilder(TestHelper.getTestMempoiPivotTableBuilder(wb))
                 .addMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig())
+                .withColumnsOffset(colOffset)
+                .withRowsOffset(rowOffset)
                 .build();
 
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
         assertEquals("Prepared Statement", prepStmt, mempoiSheet.getPrepStmt());
         assertEquals("Sheet name", sheetName, mempoiSheet.getSheetName());
         assertEquals("Subfooter", numberSumSubFooter, mempoiSheet.getMempoiSubFooter().get());
-        AssertionHelper.assertOnCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getCommonDataCellStyle(wb),
+                mempoiSheet.getCommonDataCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
@@ -103,6 +111,55 @@ public class MempoiSheetBuilderTest {
         assertEquals(1, mempoiSheet.getColumnConfigMap().size());
         AssertionHelper.assertOnMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
                 mempoiSheet.getColumnConfigMap().get(MempoiColumnConfigTestHelper.COLUMN_NAME));
+
+        assertEquals("Columns offset", colOffset, mempoiSheet.getColumnsOffset());
+        assertEquals("Rows offset", rowOffset, mempoiSheet.getRowsOffset());
+    }
+
+    @Test
+    public void mempoiSheetBuilderWithDefaultOffsets() {
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .build();
+
+        assertEquals("Prepared Statement", prepStmt, mempoiSheet.getPrepStmt());
+        assertEquals("Columns offset", 0, mempoiSheet.getColumnsOffset());
+        assertEquals("Rows offset", 0, mempoiSheet.getRowsOffset());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfNegariveOffsetSupplied() {
+
+        exceptionRule.expect(MempoiException.class);
+        exceptionRule.expectMessage("MemPOI did receive a negative column offset. Offset must be >= 0");
+        MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .withColumnsOffset(-1)
+                .build();
+
+        exceptionRule.expect(MempoiException.class);
+        exceptionRule.expectMessage("MemPOI did receive a negative row offset. Offset must be >= 0");
+        MempoiSheetBuilder.aMempoiSheet()
+                .withPrepStmt(prepStmt)
+                .withRowsOffset(-1)
+                .build();
+    }
+
+    @Test
+    public void shouldAutoSetOffsetsTo0IfNegativeAndForceGeneration() {
+
+        ForceGenerationUtils.executeTestWithForceGeneration(() -> {
+
+            MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                    .withPrepStmt(prepStmt)
+                    .withColumnsOffset(-1)
+                    .withRowsOffset(-1)
+                    .build();
+
+            assertEquals("Columns offset", 0, mempoiSheet.getColumnsOffset());
+            assertEquals("Rows offset", 0, mempoiSheet.getRowsOffset());
+        });
     }
 
 
@@ -148,7 +205,8 @@ public class MempoiSheetBuilderTest {
                 .build();
 
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
-        AssertionHelper.assertOnCellStyle(styleTemplate.getCommonDataCellStyle(wb), mempoiSheet.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getCommonDataCellStyle(wb),
+                mempoiSheet.getCommonDataCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
         // other cell styles must be null, they are taken by the styler that is built from MemPOI
         assertNull(mempoiSheet.getDatetimeCellStyle());
@@ -182,7 +240,8 @@ public class MempoiSheetBuilderTest {
                     .build();
 
             assertNotNull("Force generation empty array - mempoi sheet not null", mempoiSheet);
-            assertNull("Force generation empty array - merged regions array null", mempoiSheet.getMergedRegionColumns());
+            assertNull("Force generation empty array - merged regions array null",
+                    mempoiSheet.getMergedRegionColumns());
 
         });
     }

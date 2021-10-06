@@ -125,6 +125,15 @@ public class MempoiSheet {
      */
     private Map<String, MempoiColumnConfig> columnConfigMap = new HashMap<>();
 
+    /**
+     * the offset to apply to the sheet when calculating the first column (starting from left) of the export
+     */
+    private int columnsOffset;
+    /**
+     * the offset to apply to the sheet when calculating the first row (starting from top) of the export
+     */
+    private int rowsOffset;
+
 
     public MempoiSheet(PreparedStatement prepStmt) {
         this.prepStmt = prepStmt;

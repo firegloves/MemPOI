@@ -16,6 +16,8 @@ public final class MempoiSheetMetadataBuilder {
     private Integer lastDataRow;
     private Integer subfooterRowIndex;
     private Integer totalColumns;
+    private Integer colsOffset;
+    private Integer rowsOffset;
     private Integer firstDataColumn;
     private Integer lastDataColumn;
     private Integer firstTableRow;
@@ -81,6 +83,16 @@ public final class MempoiSheetMetadataBuilder {
         return this;
     }
 
+    public MempoiSheetMetadataBuilder withColsOffset(Integer colsOffset) {
+        this.colsOffset = colsOffset;
+        return this;
+    }
+
+    public MempoiSheetMetadataBuilder withRowsOffset(Integer rowsOffset) {
+        this.rowsOffset = rowsOffset;
+        return this;
+    }
+
     public MempoiSheetMetadataBuilder withFirstDataColumn(Integer firstDataColumn) {
         this.firstDataColumn = firstDataColumn;
         return this;
@@ -130,13 +142,15 @@ public final class MempoiSheetMetadataBuilder {
         mempoiSheetMetadata.setSpreadsheetVersion(spreadsheetVersion);
         mempoiSheetMetadata.setSheetName(sheetName);
         mempoiSheetMetadata.setSheetIndex(sheetIndex);
-        mempoiSheetMetadata.setTotalRows(totalRows);
+        mempoiSheetMetadata.setTotalRows(totalRows - (firstDataRow - 1)); // -1 because of the header
         mempoiSheetMetadata.setHeaderRowIndex(headerRowIndex);
         mempoiSheetMetadata.setTotalDataRows(lastDataRow - headerRowIndex);
         mempoiSheetMetadata.setFirstDataRow(firstDataRow);
         mempoiSheetMetadata.setLastDataRow(lastDataRow);
         mempoiSheetMetadata.setSubfooterRowIndex(subfooterRowIndex);
         mempoiSheetMetadata.setTotalColumns(totalColumns);
+        mempoiSheetMetadata.setColsOffset(colsOffset);
+        mempoiSheetMetadata.setRowsOffset(rowsOffset);
         mempoiSheetMetadata.setFirstDataColumn(firstDataColumn);
         mempoiSheetMetadata.setLastDataColumn(lastDataColumn);
         mempoiSheetMetadata.setFirstTableRow(firstTableRow);

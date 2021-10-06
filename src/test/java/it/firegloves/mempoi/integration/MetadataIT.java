@@ -91,7 +91,6 @@ public class MetadataIT extends IntegrationBaseIT {
     @Test
     public void shouldReturnCorrectMetadataWithMultipleSheets() throws Exception {
 
-
         // dogs sheet
         MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName(sheetName)

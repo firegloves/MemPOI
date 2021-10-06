@@ -49,6 +49,8 @@ public final class MempoiSheetBuilder {
     private String[] mergedRegionColumns;
     private Optional<MempoiTable> mempoiTable = Optional.empty();
     private Optional<MempoiPivotTable> mempoiPivotTable = Optional.empty();
+    private int columnsOffset = 0;
+    private int rowsOffset = 0;
 
     /**
      * maps a column name to a desired implementation of MempoiColumnElaborationStep interface it defines the post data
@@ -365,6 +367,46 @@ public final class MempoiSheetBuilder {
         return this;
     }
 
+    /**
+     * sets the column offset (starting from left) to apply to the sheet
+     *
+     * @param colOffset the offset to apply to the sheet
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withColumnsOffset(int colOffset) {
+
+        if (colOffset < 0) {
+            ForceGenerationHelper.manageForceGeneration(
+                    new MempoiException(Errors.ERR_NEGATIVE_COL_OFFSET),
+                    Errors.ERR_NEGATIVE_COL_OFFSET_FORCE_GENERATION,
+                    logger,
+                    () -> columnsOffset = 0);
+        } else {
+            columnsOffset = colOffset;
+        }
+
+        return this;
+    }
+
+    /**
+     * sets the row offset (starting from top) to apply to the sheet
+     *
+     * @param rowOff the offset to apply to the sheet
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withRowsOffset(int rowOff) {
+
+        if (rowOff < 0) {
+            ForceGenerationHelper.manageForceGeneration(
+                    new MempoiException(Errors.ERR_NEGATIVE_ROW_OFFSET),
+                    Errors.ERR_NEGATIVE_ROW_OFFSET_FORCE_GENERATION,
+                    logger,
+                    () -> rowsOffset = 0);
+        } else {
+            rowsOffset = rowOff;
+        }
+        return this;
+    }
 
     /**
      * builds the MempoiSheet and returns it
@@ -392,6 +434,8 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setMempoiSubFooter(mempoiSubFooter);
         mempoiSheet.setDataElaborationStepMap(dataElaborationStepMap);
         mempoiSheet.setMergedRegionColumns(mergedRegionColumns);
+        mempoiSheet.setColumnsOffset(columnsOffset);
+        mempoiSheet.setRowsOffset(rowsOffset);
 
         this.mempoiTable.ifPresent(mempoiSheet::setMempoiTable);
 

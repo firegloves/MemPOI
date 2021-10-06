@@ -228,14 +228,13 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
                     .withDataTransformationFunction(new StringDataTransformationFunction<String>() {
                         @Override
                         public String transform(final ResultSet rs, String value) throws MempoiException {
-                            try
-                            {
-                                if (rs.getBoolean("valid"))
-                                    return value +" validated";
+                            try {
+                                if (rs.getBoolean("valid")) {
+                                    return value + " validated";
+                                }
                                 return value;
-                            }catch (SQLException e)
-                            {
-                              throw new MempoiException(e);
+                            } catch (SQLException e) {
+                                throw new MempoiException(e);
                             }
                         }
                     })
@@ -251,16 +250,17 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
 
             try (InputStream inp = new FileInputStream(fileDest)) {
 
-                ResultSet rs =  createStatement().executeQuery();
+                ResultSet rs = createStatement().executeQuery();
                 Workbook wb = WorkbookFactory.create(inp);
                 Sheet sheet = wb.getSheetAt(0);
                 // validates data rows
                 for (int r = 1; rs.next(); r++) {
                     String cellText = sheet.getRow(r).getCell(4).getStringCellValue();
-                    if (rs.getBoolean("valid"))
+                    if (rs.getBoolean("valid")) {
                         assertEquals(rs.getString("name") + " validated", cellText);
-                    else
-                        assertEquals(rs.getString("name"),  cellText);
+                    } else {
+                        assertEquals(rs.getString("name"), cellText);
+                    }
                 }
 
             } catch (Exception e) {
@@ -272,7 +272,6 @@ public class DataTransformationFunctionsIT extends IntegrationBaseIT {
         }
 
     }
-
 
 
     /*****************************************************************************

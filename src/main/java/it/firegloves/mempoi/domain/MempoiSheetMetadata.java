@@ -19,7 +19,6 @@ public class MempoiSheetMetadata {
      * the version of the spreadsheet
      */
     private SpreadsheetVersion spreadsheetVersion;
-
     /**
      * name of the represented sheet
      */
@@ -28,24 +27,17 @@ public class MempoiSheetMetadata {
      * index of the represented sheet
      */
     private Integer sheetIndex;
-
+    /**
+     * index of the row containing column headers
+     */
+    private Integer headerRowIndex;
     /**
      * total number of rows interested by the generated data
      * the count starts at row 0 and goes until the last row (included) with at least one populated cell
      */
     private Integer totalRows;
-
-    // TODO reintroduce when we will have the offset
-//    private int totalFirstRow;
-//    private int totalLastRow;
-
     /**
-     * index of the row containing column headers
-     */
-    private Integer headerRowIndex;
-
-    /**
-     * total number of rows containing plain exported data (no pivot tables or other). coincides with resultSet size
+     * total number of rows containing plain exported data (no pivot tables or other). it coincides with resultSet size
      */
     private Integer totalDataRows;
     /**
@@ -56,22 +48,23 @@ public class MempoiSheetMetadata {
      * index of the last row that contains plain exported data (no pivot tables or other)
      */
     private Integer lastDataRow;
-
     /**
      * index of the row containing the subfooter
      */
     private Integer subfooterRowIndex;
-
     /**
      * total number of columns interested by the generated data
      * the count starts at column 0 and goes until the last column (included) with at least one populated cell
      */
     private Integer totalColumns;
-
-    // TODO reintroduce when we will have the offset
-//    private int totalFirstColumn;
-//    private int totalLastColumn;
-
+    /**
+     * the offset applied from the left before starting the export
+     */
+    private Integer colsOffset;
+    /**
+     * the offset applied from the top before starting the export
+     */
+    private Integer rowsOffset;
     /**
      * index of the first column that contains plain exported data
      */
@@ -80,8 +73,6 @@ public class MempoiSheetMetadata {
      * index of the last column that contains plain exported data
      */
     private Integer lastDataColumn;
-
-
     /**
      * index of the first row that contains a table
      */
@@ -98,8 +89,6 @@ public class MempoiSheetMetadata {
      * index of the last column that contains a table
      */
     private Integer lastTableColumn;
-
-
     /**
      * index of the first row that contains a pivot table
      */
