@@ -202,7 +202,7 @@ public class Strategos {
             // creates header
             mempoiSheetMetadataBuilder.withHeaderRowIndex(rowCounter);
             rowCounter = this.dataStrategos
-                    .createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, firstCol,
+                          .createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, firstCol,
                             mempoiSheet.getSheetStyler());
 
             AreaReference sheetDataAreaReference = this
@@ -240,7 +240,6 @@ public class Strategos {
                 .withRowsOffset(mempoiSheet.getRowsOffset());
     }
 
-
     /**
      * generates sheet data
      *
@@ -251,7 +250,7 @@ public class Strategos {
      * @para mempoiSheetMetadataBuilder the mempoiSheetMetadataBuilder in which collect the metadata
      */
     private AreaReference createSheetData(ResultSet rs, List<MempoiColumn> columnList, MempoiSheet mempoiSheet,
-            int rowCounter, int firstCol, MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+        int rowCounter, int firstCol, MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
 
         // keeps track of the first data row index (no header and subheaders)
         mempoiSheetMetadataBuilder.withFirstDataRow(rowCounter);
@@ -260,6 +259,7 @@ public class Strategos {
         // creates rows
         int localRowCounter = this.dataStrategos.createDataRows(mempoiSheet.getSheet(), rs, columnList, rowCounter,
                 firstCol);
+
         mempoiSheetMetadataBuilder.withLastDataRow(localRowCounter - 1);
 
         // footer

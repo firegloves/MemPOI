@@ -73,7 +73,6 @@ Main features index:
 - [Column and Row offsets](#column-and-row-offsets)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
-  
 - [Donate crypto](#donate-crypto)
    
 ---
@@ -544,6 +543,7 @@ MempoiPivotTableBuilder mempoiPivotTableBuilder = MempoiPivotTableBuilder.aMempo
 Starting by v1.7.0 MemPOI returns an object as the result of the generation: `MempoiReport`.
 It comes populated with the report data, as shown in the first steps of this readme, and with a lot of useful metadata about the generated document.
 In this way you can apply every desired transformation by being informed on where to place your new data.
+
 Metadata are packed in the `MempoiSheetMetadata`. `MempoiReport` contains a map of these classes (one for each sheet), where the key is the sheet index inside the workbook and the value is the metadata class instance itself.
 
 For example you could add a custom footer and, in order to decide on which line your footer should start on, you could leverage the `MempoiSheetMetadata.totalRows` property.
