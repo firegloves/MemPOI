@@ -29,7 +29,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
 ```
 
 #### With Maven
@@ -38,13 +38,13 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.7.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0</version>
 </dependency>
 ```
 
 ---
 
-### What's new in 1.7.0
+### What's new in 1.8.0
 - NEW FUNCTIONALITY - [Column and Row offsets](#column-and-row-offsets)
 
 ---
@@ -70,6 +70,7 @@ Main features index:
 - [Null values over primitives default ones](#null-values-over-primitives-default-ones)
 - [Data post elaboration pipeline](#data-post-elaboration-pipeline)
 - [Merged Regions](#merged-regions)
+- [Column and Row offsets](#column-and-row-offsets)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
   
@@ -1005,7 +1006,7 @@ MemPOI comes with Apache POI 5.0.0 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.7.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.8.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -1018,7 +1019,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>
