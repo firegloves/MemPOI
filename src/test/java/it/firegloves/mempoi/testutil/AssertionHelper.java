@@ -669,9 +669,9 @@ public class AssertionHelper {
      */
     public static void assertOnHeaderRow(Row headerRow, String[] headers, CellStyle expectedCellStyle, int colOffset) {
 
-        for (int i = 0; i < headers.length; i++, colOffset++) {
+        for (int i = 0, localColOffset = colOffset; i < headers.length; i++, localColOffset++) {
 
-            Cell cell = headerRow.getCell(colOffset);
+            Cell cell = headerRow.getCell(localColOffset);
             assertEquals(headers[i], cell.getStringCellValue());
 
             assertOnHeaderCellStyle(cell.getCellStyle(), expectedCellStyle);
