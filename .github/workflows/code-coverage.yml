@@ -23,6 +23,7 @@ jobs:
         run: |
           cd docker_data
           docker-compose up -d
+          cd ..
       # gradle cache
       - name: Cache Gradle packages
         uses: actions/cache@v2
