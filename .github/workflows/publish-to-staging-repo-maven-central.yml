@@ -2,8 +2,8 @@ name: Publish to staging repo Maven Central
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - publish-to-maven
 
 jobs:
   # Release to staging Maven Central
@@ -36,7 +36,7 @@ jobs:
         run: chmod +x gradlew
       # build
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build jar
       # Decode the private key from secret to file
       - name: Decode key
         run: |
