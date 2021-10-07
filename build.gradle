@@ -54,6 +54,10 @@ dependencies {
     testImplementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
 
 publishing {
     publications {
@@ -85,6 +89,7 @@ publishing {
                     }
                 }
             }
+            from(components.java)
         }
     }
 }
@@ -92,8 +97,8 @@ publishing {
 nexusPublishing {
     repositories {
         sonatype {
-            username = System.getenv("OSSRH_USERNAME")
-            password = System.getenv("OSSRH_TOKEN")
+//            username = System.getenv("OSSRH_USERNAME")
+//            password = System.getenv("OSSRH_TOKEN")
         }
     }
 }
