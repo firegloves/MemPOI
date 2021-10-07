@@ -74,7 +74,7 @@ Main features index:
 - [Force Generation](#force-generation)
 - [Logging](#logging)
 - [Donate crypto](#donate-crypto)
-   
+
 ---
 
 ### MemPOI survey
@@ -82,7 +82,7 @@ Main features index:
 In order to better trace MemPOI usages and decide the next features, I created a [survey](https://lucorset.typeform.com/to/bDIRbY). No subscription is required.
 
 ---
-    
+
 ### Basic usage
 
 All you need is to instantiate a MemPOI passing it the List of your exporting queries. MemPOI will do all the stuff for you generating a .xlsx file containing resulting data.
@@ -184,7 +184,7 @@ SELECT id, name AS first_name FROM Foo
 
 will result in a sheet with 2 columns: id and first_name (containing db's name column data)
 
-Starting by version 1.6.0 it is possible to programmatically manage column headings through a specific [Column header customization](#column-header-customization)  
+Starting by version 1.6.0 it is possible to programmatically manage column headings through a specific [Column header customization](#column-header-customization)
 
 ---
 
@@ -251,7 +251,7 @@ MemPOI comes with a preset of default data formatting styles for
 - date data types cells
 - datetime data types cells
 
-The default styles are automatically applied. You can inspect them looking at the end of `MempoiReportStyler` class 
+The default styles are automatically applied. You can inspect them looking at the end of `MempoiReportStyler` class
 If you want to reset the default styles you need to use an empty `CellStyle` when you use `MempoiBuilder`, for example:
 
 ```Java
@@ -460,7 +460,7 @@ You can specify one source for the pivot table choosing from:
 - a previously generated table (the table's sheet will be used as source sheet)
 
 Unfortunately Apache POI actually doesn't support table as source for a pivot table.
-MemPOI makes an abstraction that is only able to extract the table area reference and use it as source for the upcoming pivot table. 
+MemPOI makes an abstraction that is only able to extract the table area reference and use it as source for the upcoming pivot table.
 This means that if you open the generated excel file, you move the source table and update the pivot table, it will not be able to keep data consistency
 
 Here an example with area reference source on different sheet:
@@ -718,11 +718,11 @@ And expect this result
 |----------|------------|-----------|-------| 
 |demo | Demo | MEMPOI | Comment in column without title | 
 
-In this example : 
+In this example :
 - The selected column 'username' doesn't need a custom configuration
 - The selected column 'fname' needs a custom configuration to display "First name"
 - The selected column 'lname' needs a custom configuration to display "Last name"
-- The selected column 'comment' needs a custom configuration to display an empty text 
+- The selected column 'comment' needs a custom configuration to display an empty text
 
 ```Java
 
@@ -991,7 +991,7 @@ According to `CompletableFuture` you'll receive an `ExecutionException` if you c
 
 ---
 
-### Logging 
+### Logging
 
 Logging is served through [SLF4J](http://www.slf4j.org/), leaving the logging configuration to the user and ensuring maximum flexibility.
 
