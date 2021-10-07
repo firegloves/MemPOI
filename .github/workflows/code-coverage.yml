@@ -3,7 +3,7 @@ name: Code coverage
 on:
   push:
     branches:
-      - master
+      - code-coverage-test
 
 jobs:
   # Code coverage
