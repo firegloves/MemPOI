@@ -97,8 +97,8 @@ publishing {
 nexusPublishing {
     repositories {
         sonatype {
-//            username = System.getenv("OSSRH_USERNAME")
-//            password = System.getenv("OSSRH_TOKEN")
+            username = System.getenv("OSSRH_USERNAME")
+            password = System.getenv("OSSRH_TOKEN")
         }
     }
 }
