@@ -38,8 +38,10 @@ jobs:
         run: ./gradlew clean build
       # generate jacoco
       - name: Genereate jacoco test report
-        if: steps.set-is-master.outputs.IS_MASTER == 'true'
-        run: ./gradlew jacocoTestReport
+        run: |
+          ./gradlew jacocoTestReport
+          echo "######"
+          ls build/reports/jacoco/test/jacocoTestReport.xml
       # codacy coverage reporter
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@master

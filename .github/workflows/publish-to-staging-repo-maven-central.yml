@@ -48,4 +48,12 @@ jobs:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
         run: |
+          ls build
+          echo "#######"
+          ls build/libs
+          echo "#######"
+          ./gradlew jar
+          echo "#######"
+          ls build/libs
+          echo "#######"
           ./gradlew -Psigning.keyId=${{secrets.OSSRH_GPG_SECRET_KEY}} -Psigning.password=${{secrets.OSSRH_GPG_SECRET_KEY_PASSWORD}} -Psigning.secretKeyRingFile="sec-key.gpg" publishToSonatype closeSonatypeStagingRepository
