@@ -42,6 +42,8 @@ jobs:
           ./gradlew jacocoTestReport
           echo "######"
           ls build/reports/jacoco/test/jacocoTestReport.xml
+          echo "######"
+          pwd
       # codacy coverage reporter
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@master
