@@ -54,12 +54,19 @@ dependencies {
     testImplementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
 }
 
-modifyPom {
-    project {
-        name 'MemPOI'
-        description 'A library to simplify export from database to Excel files using Apache POI'
-        url 'https://github.com/firegloves/MemPOI'
-        inceptionYear '2019'
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = 'MemPOI'
+                description = 'A library to simplify export from database to Excel files using Apache POI'
+                url = 'https://github.com/firegloves/MemPOI'
+                inceptionYear = '2019'
 
                 scm {
                     url = 'https://github.com/firegloves/MemPOI.git'
