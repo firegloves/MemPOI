@@ -13,7 +13,8 @@ public class MempoiStylerBuilder {
     private Workbook workbook;
 
     private StyleTemplate styleTemplate = new StandardStyleTemplate();
-    private CellStyle headerCellStyle;
+    private CellStyle simpleTextHeaderCellStyle;
+    private CellStyle colsHeaderCellStyle;
     private CellStyle subFooterCellStyle;
     private CellStyle commonDataCellStyle;
     private CellStyle dateCellStyle;
@@ -52,13 +53,24 @@ public class MempoiStylerBuilder {
     }
 
     /**
-     * add the received CellStyle as HeaderCell styler to the builder instance
+     * add the received CellStyle as simple text HeaderCell styler to the builder instance
      *
-     * @param headerCellStyle the CellStyle to set as HeaderCell styler
+     * @param simpleTextHeaderCellStyle the CellStyle to set as simple text HeaderCell styler
      * @return the current MempoiStylerBuilder
      */
-    public MempoiStylerBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
-        this.headerCellStyle = null != headerCellStyle ? headerCellStyle : this.styleTemplate.getHeaderCellStyle(this.workbook);
+    public MempoiStylerBuilder withSimpleTextHeaderCellStyle(CellStyle simpleTextHeaderCellStyle) {
+        this.simpleTextHeaderCellStyle = null != simpleTextHeaderCellStyle ? simpleTextHeaderCellStyle : this.styleTemplate.getSimpleTextHeaderCellStyle(this.workbook);
+        return this;
+    }
+
+    /**
+     * add the received CellStyle as HeaderCell styler to the builder instance
+     *
+     * @param colsHeaderCellStyle the CellStyle to set as HeaderCell styler
+     * @return the current MempoiStylerBuilder
+     */
+    public MempoiStylerBuilder withColsHeaderCellStyle(CellStyle colsHeaderCellStyle) {
+        this.colsHeaderCellStyle = null != colsHeaderCellStyle ? colsHeaderCellStyle : this.styleTemplate.getColsHeaderCellStyle(this.workbook);
         return this;
     }
 
@@ -146,7 +158,8 @@ public class MempoiStylerBuilder {
             styler = new MempoiStyler();
 
             // customize styles
-            styler.setHeaderCellStyle(Optional.ofNullable(this.headerCellStyle).orElseGet(() -> this.styleTemplate.getHeaderCellStyle(this.workbook)));
+            styler.setSimpleTextHeaderCellStyle(Optional.ofNullable(this.simpleTextHeaderCellStyle).orElseGet(() -> this.styleTemplate.getSimpleTextHeaderCellStyle(this.workbook)));
+            styler.setColsHeaderCellStyle(Optional.ofNullable(this.colsHeaderCellStyle).orElseGet(() -> this.styleTemplate.getColsHeaderCellStyle(this.workbook)));
             styler.setDateCellStyle(Optional.ofNullable(this.dateCellStyle).orElseGet(() -> this.styleTemplate.getDateCellStyle(this.workbook)));
             styler.setDatetimeCellStyle(Optional.ofNullable(this.datetimeCellStyle).orElseGet(() -> this.styleTemplate.getDatetimeCellStyle(this.workbook)));
             styler.setIntegerCellStyle(Optional.ofNullable(this.integerCellStyle).orElseGet(() -> this.styleTemplate.getIntegerCellStyle(this.workbook)));
@@ -171,11 +184,11 @@ public class MempoiStylerBuilder {
     /**
      * @param headerCellStyle the CellStyle to set as HeaderCell styler
      * @return the current MempoiStylerBuilder
-     * @deprecated Replaced by {@link #withHeaderCellStyle(CellStyle)}
+     * @deprecated Replaced by {@link #withColsHeaderCellStyle(CellStyle)}
      */
     @Deprecated
     public MempoiStylerBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
-        return this.withHeaderCellStyle(headerCellStyle);
+        return this.withColsHeaderCellStyle(headerCellStyle);
     }
 
     /**

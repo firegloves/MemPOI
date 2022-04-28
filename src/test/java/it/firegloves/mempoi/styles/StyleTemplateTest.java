@@ -98,7 +98,8 @@ public class StyleTemplateTest {
 
         MempoiStyler styler = new DummyStyleTemplate().toMempoiStyler(new SXSSFWorkbook());
 
-        assertOnCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
+        assertOnCellStyle(styler.getSimpleTextHeaderCellStyle(), styler.getSimpleTextHeaderCellStyle());
+        assertOnCellStyle(styler.getColsHeaderCellStyle(), styler.getColsHeaderCellStyle());
         assertOnCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
         assertOnCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
         assertOnCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
@@ -115,7 +116,12 @@ public class StyleTemplateTest {
 
 
         @Override
-        public CellStyle getHeaderCellStyle(Workbook workbook) {
+        public CellStyle getSimpleTextHeaderCellStyle(Workbook workbook) {
+            return null;
+        }
+
+        @Override
+        public CellStyle getColsHeaderCellStyle(Workbook workbook) {
             return null;
         }
 
@@ -136,7 +142,8 @@ public class StyleTemplateTest {
         assertNotNull("template " + template.getClass().getName() + " common data cell style not null", template.getCommonDataCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " date cell style not null", template.getDateCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " datetime cell style not null", template.getDatetimeCellStyle(workbook));
-        assertNotNull("template " + template.getClass().getName() + " header cell style not null", template.getHeaderCellStyle(workbook));
+        assertNotNull("template " + template.getClass().getName() + " header cell style not null", template.getSimpleTextHeaderCellStyle(workbook));
+        assertNotNull("template " + template.getClass().getName() + " header cell style not null", template.getColsHeaderCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " integer cell style not null", template.getIntegerCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " floating cell style not null", template.getFloatingPointCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " footer cell style not null", template.getSubfooterCellStyle(workbook));

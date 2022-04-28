@@ -103,7 +103,7 @@ public class AssertionHelper {
                 mempoiStyler.getCommonDataCellStyle());
         AssertionHelper.assertOnCellStyle(template.getDateCellStyle(wb), mempoiStyler.getDateCellStyle());
         AssertionHelper.assertOnCellStyle(template.getDatetimeCellStyle(wb), mempoiStyler.getDatetimeCellStyle());
-        AssertionHelper.assertOnCellStyle(template.getHeaderCellStyle(wb), mempoiStyler.getHeaderCellStyle());
+        AssertionHelper.assertOnCellStyle(template.getColsHeaderCellStyle(wb), mempoiStyler.getColsHeaderCellStyle());
         AssertionHelper.assertOnCellStyle(template.getSubfooterCellStyle(wb), mempoiStyler.getSubFooterCellStyle());
     }
 
@@ -358,7 +358,7 @@ public class AssertionHelper {
 
             // validates header row
             assertOnHeaderRow(sheet.getRow(0), headers,
-                    null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null, 0);
+                    null != styleTemplate ? styleTemplate.getColsHeaderCellStyle(wb) : null, 0);
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
@@ -387,7 +387,7 @@ public class AssertionHelper {
             String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate, int sheetNum) {
 
         assertOnGeneratedFile(prepStmt, fileToValidate, columns, headers, subfooterCellFormula, styleTemplate, sheetNum,
-                0, 0);
+                0, 0, false);
     }
 
 
@@ -404,10 +404,11 @@ public class AssertionHelper {
      * @param sheetNum             the index of the sheet to validate
      * @param rowOffset            the offset applied to the rows
      * @param colOffset            the offset applied to the cols
+     * @param simpleTextHeaderPresent if true => skip the first row
      */
     public static void assertOnGeneratedFile(PreparedStatement prepStmt, String fileToValidate, String[] columns,
             String[] headers, String subfooterCellFormula, StyleTemplate styleTemplate, int sheetNum, int rowOffset,
-            int colOffset) {
+            int colOffset, boolean simpleTextHeaderPresent) {
 
         File file = new File(fileToValidate);
 
@@ -419,9 +420,13 @@ public class AssertionHelper {
 
             Sheet sheet = wb.getSheetAt(sheetNum);
 
+            if (simpleTextHeaderPresent) {
+                rowOffset++;
+            }
+
             // validates header row
             assertOnHeaderRow(sheet.getRow(rowOffset), headers,
-                    null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null, colOffset);
+                    null != styleTemplate ? styleTemplate.getColsHeaderCellStyle(wb) : null, colOffset);
 
             // validates data rows
             for (int r = rowOffset + 1; rs.next(); r++) {
@@ -430,9 +435,38 @@ public class AssertionHelper {
 
             // validate subfooter cell formula
             if (!StringUtils.isEmpty(subfooterCellFormula)) {
-                assertOnSubfooterFormula(sheet.getRow(TestHelper.MAX_ROWS + 1), TestHelper.COLUMNS.length - 1,
+                int rowNum = TestHelper.MAX_ROWS + 1 + (simpleTextHeaderPresent ? 1 : 0);
+                assertOnSubfooterFormula(sheet.getRow(rowNum), TestHelper.COLUMNS.length - 1,
                         subfooterCellFormula);
             }
+
+        } catch (Exception e) {
+            failAssertion(e);
+        }
+    }
+
+    /**
+     * check that the first sheet of the received file contains a simple text header corresponding to the received parameter
+     */
+    public static void assertOnSimpleTextHeaderGeneratedFile(String fileToValidate, String headerText, int rowNum, int firstCol, int lastCol, CellStyle simpleTextHeaderCellStyle) {
+        File file = new File(fileToValidate);
+
+        try (InputStream inp = new FileInputStream(file)) {
+            Workbook wb = WorkbookFactory.create(inp);
+
+            Sheet sheet = wb.getSheetAt(0);
+
+            final Cell headerCell = sheet.getRow(0).getCell(0);
+            assertEquals("Simple text header string", headerText, headerCell.getStringCellValue());
+            assertOnCellStyle(simpleTextHeaderCellStyle, headerCell.getCellStyle());
+//            assertEquals("Simple text header style", styleTemplate.getSimpleTextHeaderCellStyle(wb), headerCell.getCellStyle());
+
+            final CellRangeAddress cellAddresses = sheet.getMergedRegions().get(0);
+            assertEquals("Cats header first row", rowNum, cellAddresses.getFirstRow());
+            assertEquals("Cats header last row", rowNum, cellAddresses.getLastRow());
+            assertEquals("Cats header first col", firstCol, cellAddresses.getFirstColumn());
+            assertEquals("Cats header last col", lastCol, cellAddresses.getLastColumn());
+
 
         } catch (Exception e) {
             failAssertion(e);
@@ -464,7 +498,7 @@ public class AssertionHelper {
 
             // validates header row
             assertOnHeaderRow(sheet.getRow(0), headers,
-                    null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null, 0);
+                    null != styleTemplate ? styleTemplate.getColsHeaderCellStyle(wb) : null, 0);
 
             // validates data rows
             int subfooterInd = assertOnGeneratedFileDataRowSecondQuery(rs, sheet);
@@ -774,5 +808,26 @@ public class AssertionHelper {
         e.printStackTrace();
         fail();
         throw new MempoiException(e);
+    }
+
+    public static void assertOnSimpleTextHeader(String fileToValidate, int sheetIndex, int row, int firstCol, int lastCol
+            , String text) {
+        File file = new File(fileToValidate);
+
+        try (InputStream inp = new FileInputStream(file)) {
+
+            Workbook wb = WorkbookFactory.create(inp);
+            Sheet sheet = wb.getSheetAt(sheetIndex);
+
+            final CellRangeAddress mergedRegion = sheet.getMergedRegion(0);
+            assertEquals("simple text header first col", firstCol, mergedRegion.getFirstColumn());
+            assertEquals("simple text header last col", lastCol, mergedRegion.getLastColumn());
+            assertEquals("simple text header first row", row, mergedRegion.getFirstRow());
+            assertEquals("simple text header last row", row, mergedRegion.getLastRow());
+
+            assertEquals("simple text header value", text, sheet.getRow(row).getCell(firstCol).getStringCellValue());
+        } catch (Exception e) {
+            failAssertion(e);
+        }
     }
 }

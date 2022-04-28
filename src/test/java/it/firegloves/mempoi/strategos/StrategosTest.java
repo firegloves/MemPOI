@@ -244,7 +244,7 @@ public class StrategosTest {
 
         when(this.dataStrategos.createHeaderRow(any(), any(), anyInt(), anyInt(), any())).thenReturn(1);
         when(this.dataStrategos.createDataRows(any(), any(), any(), anyInt(), anyInt())).thenReturn(TestHelper.ROW_COUNT);
-        when(this.footerStrategos.createFooterAndSubfooter(any(), any(), any(), anyInt(), anyInt(), any(), any()))
+        when(this.footerStrategos.createFooterAndSubfooter(any(), any(), any(), anyInt(), anyInt(), any(), any(), anyInt()))
                 .thenReturn(mempoiSheetMetadataBuilder);
         when(this.columnList.size()).thenReturn(TestHelper.MEMPOI_COLUMN_NAMES.length);
 

@@ -48,7 +48,8 @@ public class MempoiBuilder {
 
     // style variables
     private StyleTemplate styleTemplate;
-    private CellStyle headerCellStyle;
+    private CellStyle simpleTextHeaderCellStyle;
+    private CellStyle colsHeaderCellStyle;
     private CellStyle subFooterCellStyle;
     private CellStyle commonDataCellStyle;
     private CellStyle dateCellStyle;
@@ -205,11 +206,20 @@ public class MempoiBuilder {
     }
 
     /**
-     * @param headerCellStyle the CellStyle to apply to header cells
+     * @param simpleTextHeaderCellStyle the CellStyle to apply to the simple text header cell
      * @return the current MempoiBuilder
      */
-    public MempoiBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
-        this.headerCellStyle = headerCellStyle;
+    public MempoiBuilder withSimpleTextHeaderCellStyle(CellStyle simpleTextHeaderCellStyle) {
+        this.simpleTextHeaderCellStyle = simpleTextHeaderCellStyle;
+        return this;
+    }
+
+    /**
+     * @param colsHeaderCellStyle the CellStyle to apply to cols header cells
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withColsHeaderCellStyle(CellStyle colsHeaderCellStyle) {
+        this.colsHeaderCellStyle = colsHeaderCellStyle;
         return this;
     }
 
@@ -369,7 +379,8 @@ public class MempoiBuilder {
                 .withCommonDataCellStyle(getFirstNotNullCellStyle(s.getCommonDataCellStyle(), this.commonDataCellStyle))
                 .withDateCellStyle(getFirstNotNullCellStyle(s.getDateCellStyle(), this.dateCellStyle))
                 .withDatetimeCellStyle(getFirstNotNullCellStyle(s.getDatetimeCellStyle(), this.datetimeCellStyle))
-                .withHeaderCellStyle(getFirstNotNullCellStyle(s.getHeaderCellStyle(), this.headerCellStyle))
+                .withSimpleTextHeaderCellStyle(getFirstNotNullCellStyle(s.getSimpleTextHeaderCellStyle(), this.simpleTextHeaderCellStyle))
+                .withColsHeaderCellStyle(getFirstNotNullCellStyle(s.getHeaderCellStyle(), this.colsHeaderCellStyle))
                 .withIntegerCellStyle(getFirstNotNullCellStyle(s.getIntegerCellStyle(), this.integerCellStyle))
                 .withFloatingPointCellStyle(getFirstNotNullCellStyle(s.getFloatingPointCellStyle(), this.floatingPointCellStyle))
                 .withSubFooterCellStyle(getFirstNotNullCellStyle(s.getSubFooterCellStyle(), this.subFooterCellStyle))
@@ -475,13 +486,13 @@ public class MempoiBuilder {
     }
 
     /**
-     * @param headerCellStyle the CellStyle to apply to header cells
+     * @param colsHeaderCellStyle the CellStyle to apply to header cells
      * @return the current MempoiBuilder
-     * @deprecated Replaced by {@link #withHeaderCellStyle(CellStyle)}
+     * @deprecated Replaced by {@link #withColsHeaderCellStyle(CellStyle)}
      */
     @Deprecated
-    public MempoiBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
-        return this.withHeaderCellStyle(headerCellStyle);
+    public MempoiBuilder setColsHeaderCellStyle(CellStyle colsHeaderCellStyle) {
+        return this.withColsHeaderCellStyle(colsHeaderCellStyle);
     }
 
     /**

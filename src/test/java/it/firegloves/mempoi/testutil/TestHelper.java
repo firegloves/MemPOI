@@ -84,6 +84,8 @@ public class TestHelper {
 
     public static final int ROW_COUNT = 6;
 
+    public static final String SIMPLE_TEXT_HEADER = "My header";
+
     /**********************************************************************************************************
      * MempoiTable
      *********************************************************************************************************/

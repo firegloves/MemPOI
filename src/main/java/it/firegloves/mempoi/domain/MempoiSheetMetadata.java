@@ -28,6 +28,10 @@ public class MempoiSheetMetadata {
      */
     private Integer sheetIndex;
     /**
+     * index of the row containing the simple text header
+     */
+    private Integer simpleTextHeaderRowIndex;
+    /**
      * index of the row containing column headers
      */
     private Integer headerRowIndex;

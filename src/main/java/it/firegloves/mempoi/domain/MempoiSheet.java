@@ -41,11 +41,19 @@ public class MempoiSheet {
      */
     private Workbook workbook;
     /**
+     * text to add to a simple header
+     */
+    private String simpleHeaderText;
+    /**
      * generic style template to apply to the sheet
      */
     private StyleTemplate styleTemplate;
     /**
-     * header cells style that, if present, overrides the general styleTemplate
+     * simple text header cells style that, if present, overrides the general styleTemplate
+     */
+    private CellStyle simpleTextHeaderCellStyle;
+    /**
+     * cols header cells style that, if present, overrides the general styleTemplate
      */
     private CellStyle headerCellStyle;
     /**

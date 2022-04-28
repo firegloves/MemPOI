@@ -149,7 +149,7 @@ public class WorkbookIT extends IntegrationBaseIT {
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     // custom header cell style
-                    .withHeaderCellStyle(headerCellStyle)
+                    .withColsHeaderCellStyle(headerCellStyle)
                     // no style for integer fields
                     .withIntegerCellStyle(workbook.createCellStyle())
                     // no style for integer fields
@@ -303,7 +303,7 @@ public class WorkbookIT extends IntegrationBaseIT {
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     // custom header cell style
-                    .withHeaderCellStyle(headerCellStyle)
+                    .withColsHeaderCellStyle(headerCellStyle)
                     // no style for integer fields
                     .withIntegerCellStyle(workbook.createCellStyle())
                     // floating point cell style
@@ -457,7 +457,7 @@ public class WorkbookIT extends IntegrationBaseIT {
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
                     // custom header cell style
-                    .withHeaderCellStyle(headerCellStyle)
+                    .withColsHeaderCellStyle(headerCellStyle)
                     // no style for number fields
                     .withIntegerCellStyle(workbook.createCellStyle())
                     // custom date cell style

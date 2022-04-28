@@ -58,6 +58,7 @@ Main features index:
 - [Multiple sheets](#multiple-sheets)
 - [Adjust columns width](#adjust-columns-width)
 - [Styles](#styles)
+- [Simple text header](#simple-text-header)
 - [Footers and subfooters](#footers-and-subfooters)
 - [Cell formulas](#cell-formulas)
 - [Excel Table](#excel-table)
@@ -324,14 +325,14 @@ List of available templates:
 
 | Name                      |      Image            |
 |---------------------------|-----------------------|
-| AquaStyleTemplate         |![](img/template/aqua.jpg)
-| ForestStyleTemplate       |![](img/template/forest.jpg)
-| PanegiriconStyleTemplate  |![](img/template/panegiricon.jpg)
-| PurpleStyleTemplate       |![](img/template/purple.jpg)
-| RoseStyleTemplate         |![](img/template/rose.jpg)
-| StandardStyleTemplate     |![](img/template/standard.jpg)
-| StoneStyleTemplate        |![](img/template/stone.jpg)
-| SummerStyleTemplate       |![](img/template/summer.jpg)
+| AquaStyleTemplate         |![](img/template/aqua.png)
+| ForestStyleTemplate       |![](img/template/forest.png)
+| PanegiriconStyleTemplate  |![](img/template/panegiricon.png)
+| PurpleStyleTemplate       |![](img/template/purple.png)
+| RoseStyleTemplate         |![](img/template/rose.png)
+| StandardStyleTemplate     |![](img/template/standard.png)
+| StoneStyleTemplate        |![](img/template/stone.png)
+| SummerStyleTemplate       |![](img/template/summer.png)
 
 #### Numeric cell styles
 
@@ -345,6 +346,27 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withIntegerCellStyle(new StandardStyleTemplate().getFloatingPointCellStyle())     // no default style for integer fields
                     .build();
 ```
+
+---
+
+### Simple text header
+
+Starting by v1.9 MemPOI supports the addition of a textual header before the exported data.
+To add the text header you can simply add a line in the desired MempoiSheetBuilder as follows:
+
+```Java
+MempoiSheetBuilder.aMempoiSheet()
+        .withSheetName(catsSheetName)
+        .withSimpleHeaderText("My simple header")
+        .withPrepStmt(conn.prepareStatement(catsQuery))
+        .build();
+```
+
+The result will be something like this:
+
+![](img/simple-text-header.png)
+
+The simple text header is compatible with the rows and columns offset.
 
 ---
 
@@ -556,6 +578,7 @@ Below a table describing supported metadata
 | sheetName | name of the represented sheet | Yes
 | sheetIndex | index of the represented sheet | No
 | totalRows | total number of rows interested by the generated data<br />the count starts at row 0 and goes until the last row (included) with at least one populated cell | No
+| simpleTextHeaderRowIndex | index of the row containing the simple text header | Yes
 | headerRowIndex | index of the row containing column headers | No
 | totalDataRows | total number of rows containing plain exported data (no pivot tables or other). it coincides with resultSet size | No
 | firstDataRow | index of the first row that contains plain exported data (no pivot tables or other) | No

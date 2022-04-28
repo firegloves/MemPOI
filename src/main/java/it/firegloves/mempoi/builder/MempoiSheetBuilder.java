@@ -33,9 +33,11 @@ public final class MempoiSheetBuilder {
 
     private String sheetName;
 
-    // style variables
     private Workbook workbook;
+    private String headerText;
+    // style variables
     private StyleTemplate styleTemplate;
+    private CellStyle simpleTextHeaderCellStyle;
     private CellStyle headerCellStyle;
     private CellStyle subFooterCellStyle;
     private CellStyle commonDataCellStyle;
@@ -102,6 +104,17 @@ public final class MempoiSheetBuilder {
     }
 
     /**
+     * add the received text as simplea sheet header
+     *
+     * @param headerText the text to add as simple header of the current sheet
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withSimpleHeaderText(String headerText) {
+        this.headerText = headerText;
+        return this;
+    }
+
+    /**
      * add the received StyleTemplate to the builder instance. you need to pass a Workbook to use this StyleTemplate
      *
      * @param styleTemplate the StyleTemplate to associate to the current sheet
@@ -113,11 +126,34 @@ public final class MempoiSheetBuilder {
     }
 
     /**
+     * add the received text as simplea sheet header
+     *
+     * @param simpleTextHeaderCellStyle the CellStyle to use as simple text header cell's styler
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withSimpleTextHeaderCellStyle(CellStyle simpleTextHeaderCellStyle) {
+        this.simpleTextHeaderCellStyle = simpleTextHeaderCellStyle;
+        return this;
+    }
+
+    /**
      * add the received CellStyle as header cell's styler to the builder instance
      *
+     * @param headerCellStyle the CellStyle to use as cols header cell's styler
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withColsHeaderCellStyle(CellStyle headerCellStyle) {
+        this.headerCellStyle = headerCellStyle;
+        return this;
+    }
+
+    /**
+     * add the received CellStyle as header cell's styler to the builder instance
+     * @deprecated please use withColsHeaderCellStyle()
      * @param headerCellStyle the CellStyle to use as header cell's styler
      * @return the current MempoiSheetBuilder
      */
+    @Deprecated
     public MempoiSheetBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
         this.headerCellStyle = headerCellStyle;
         return this;
@@ -422,7 +458,9 @@ public final class MempoiSheetBuilder {
         MempoiSheet mempoiSheet = new MempoiSheet(prepStmt);
         mempoiSheet.setSheetName(sheetName);
         mempoiSheet.setWorkbook(workbook);
+        mempoiSheet.setSimpleHeaderText(headerText);
         mempoiSheet.setStyleTemplate(styleTemplate);
+        mempoiSheet.setSimpleTextHeaderCellStyle(simpleTextHeaderCellStyle);
         mempoiSheet.setHeaderCellStyle(headerCellStyle);
         mempoiSheet.setSubFooterCellStyle(subFooterCellStyle);
         mempoiSheet.setCommonDataCellStyle(commonDataCellStyle);

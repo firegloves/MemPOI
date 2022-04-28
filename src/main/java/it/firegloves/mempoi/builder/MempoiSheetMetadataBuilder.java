@@ -10,7 +10,8 @@ public final class MempoiSheetMetadataBuilder {
     private SpreadsheetVersion spreadsheetVersion;
     private String sheetName;
     private Integer sheetIndex;
-    private Integer headerRowIndex;
+    private Integer simpleTextHeaderRowIndex;
+    private Integer colsHeaderRowIndex;
     private Integer totalRows;
     private Integer firstDataRow;
     private Integer lastDataRow;
@@ -53,8 +54,13 @@ public final class MempoiSheetMetadataBuilder {
         return this;
     }
 
-    public MempoiSheetMetadataBuilder withHeaderRowIndex(Integer headerRowIndex) {
-        this.headerRowIndex = headerRowIndex;
+    public MempoiSheetMetadataBuilder withSimpleTextHeaderRowIndex(Integer simpleTextHeaderRowIndex) {
+        this.simpleTextHeaderRowIndex = simpleTextHeaderRowIndex;
+        return this;
+    }
+
+    public MempoiSheetMetadataBuilder withColsHeaderRowIndex(Integer colsHeaderRowIndex) {
+        this.colsHeaderRowIndex = colsHeaderRowIndex;
         return this;
     }
 
@@ -142,9 +148,12 @@ public final class MempoiSheetMetadataBuilder {
         mempoiSheetMetadata.setSpreadsheetVersion(spreadsheetVersion);
         mempoiSheetMetadata.setSheetName(sheetName);
         mempoiSheetMetadata.setSheetIndex(sheetIndex);
-        mempoiSheetMetadata.setTotalRows(totalRows - (firstDataRow - 1)); // -1 because of the header
-        mempoiSheetMetadata.setHeaderRowIndex(headerRowIndex);
-        mempoiSheetMetadata.setTotalDataRows(lastDataRow - headerRowIndex);
+        mempoiSheetMetadata.setTotalRows(totalRows
+                - (simpleTextHeaderRowIndex != null ? simpleTextHeaderRowIndex : colsHeaderRowIndex)
+                + (subfooterRowIndex != null ? 1 : 0));
+        mempoiSheetMetadata.setSimpleTextHeaderRowIndex(simpleTextHeaderRowIndex);
+        mempoiSheetMetadata.setHeaderRowIndex(colsHeaderRowIndex);
+        mempoiSheetMetadata.setTotalDataRows(lastDataRow - colsHeaderRowIndex);
         mempoiSheetMetadata.setFirstDataRow(firstDataRow);
         mempoiSheetMetadata.setLastDataRow(lastDataRow);
         mempoiSheetMetadata.setSubfooterRowIndex(subfooterRowIndex);
