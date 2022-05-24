@@ -25,12 +25,15 @@ jobs:
           cd docker_data
           docker-compose up -d
       # gradle cache
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+      #- name: Cache Gradle packages
+      #  uses: actions/cache@v3
+      #  with:
+      #    path: |
+      #      ~/.gradle/caches
+      #      ~/.gradle/wrapper
+      #    key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-gradle-
       # set permission to gradlew
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
