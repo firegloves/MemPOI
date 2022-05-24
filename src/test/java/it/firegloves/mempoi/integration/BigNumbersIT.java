@@ -57,7 +57,7 @@ public class BigNumbersIT extends IntegrationBaseIT {
 
             // validates header row
             AssertionHelper.assertOnHeaderRow(sheet.getRow(0), TestHelper.COLUMNS_BIG_NUMBERS,
-                    styleTemplate.getHeaderCellStyle(wb));
+                    styleTemplate.getColsHeaderCellStyle(wb));
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {

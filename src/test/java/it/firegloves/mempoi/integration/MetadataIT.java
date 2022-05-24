@@ -91,6 +91,8 @@ public class MetadataIT extends IntegrationBaseIT {
     @Test
     public void shouldReturnCorrectMetadataWithMultipleSheets() throws Exception {
 
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + fileFolder, "metadata_multi_sheets.xls");
+
         // dogs sheet
         MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName(sheetName)
@@ -104,14 +106,12 @@ public class MetadataIT extends IntegrationBaseIT {
 
         final MempoiReport mempoiReport = MempoiBuilder.aMemPOI()
                 .withAdjustColumnWidth(true)
+                .withFile(fileDest)
                 .addMempoiSheet(dogsSheet)
                 .addMempoiSheet(anotherSheet)
                 .build()
                 .prepareMempoiReport()
                 .get();
-
-        assertNull(mempoiReport.getFile());
-        assertNotNull(mempoiReport.getBytes());
 
         MempoiSheetMetadata dogMempoiSheetMetadata = mempoiReport.getMempoiSheetMetadata(0);
         assertEquals(sheetName, dogMempoiSheetMetadata.getSheetName());
@@ -127,7 +127,7 @@ public class MetadataIT extends IntegrationBaseIT {
         assertNull(mempoiSheetMetadata.getSheetName());
         assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
         assertOnHeaders(mempoiSheetMetadata, 0, "A1:H1");
-        assertOnRows(mempoiSheetMetadata, 11, 10, 1, 10, "A2:H11");
+        assertOnRows(mempoiSheetMetadata, 12, 10, 1, 10, "A2:H11");
         assertOnSubfooter(mempoiSheetMetadata, 11, "A12:H12");
         assertOnCols(mempoiSheetMetadata, 8, 0, 7);
         assertNullTable(mempoiSheetMetadata);
@@ -159,7 +159,7 @@ public class MetadataIT extends IntegrationBaseIT {
         assertNull(mempoiSheetMetadata.getSheetName());
         assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
         assertOnHeaders(mempoiSheetMetadata, 0, "A1:H1");
-        assertOnRows(mempoiSheetMetadata, 11, 10, 1, 10, "A2:H11");
+        assertOnRows(mempoiSheetMetadata, 12, 10, 1, 10, "A2:H11");
         assertOnSubfooter(mempoiSheetMetadata, 11, "A12:H12");
         assertOnCols(mempoiSheetMetadata, 8, 0, 7);
         assertNullTable(mempoiSheetMetadata);
@@ -255,17 +255,19 @@ public class MetadataIT extends IntegrationBaseIT {
     public void shouldReturnCorrectMetadataFullFeatures() throws Exception {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + fileFolder, "metadata_full_features.xls");
 
         MempoiTableBuilder mempoiTableBuilder = TestHelper.getTestMempoiTableBuilder(workbook)
-                .withAreaReferenceSource("A1:H11");
+                .withAreaReferenceSource("A2:H12");
 
         final MempoiPivotTableBuilder mempoiPivotTableBuilder = TestHelper
                 .getTestMempoiPivotTableBuilder(workbook, null)
-                .withAreaReferenceSource("A1:H11")
+                .withAreaReferenceSource("A2:H12")
                 .withPosition(new CellReference("J3"));
 
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withPrepStmt(prepStmt)
+                .withSimpleHeaderText(TestHelper.SIMPLE_TEXT_HEADER)
                 .withMempoiSubFooter(new NumberSumSubFooter())
                 .withMempoiTableBuilder(mempoiTableBuilder)
                 .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
@@ -275,21 +277,20 @@ public class MetadataIT extends IntegrationBaseIT {
                 .withWorkbook(workbook)
                 .withAdjustColumnWidth(true)
                 .addMempoiSheet(mempoiSheet)
+                .withFile(fileDest)
                 .build()
                 .prepareMempoiReport()
                 .get();
 
-        assertNull(mempoiReport.getFile());
-
         MempoiSheetMetadata mempoiSheetMetadata = mempoiReport.getMempoiSheetMetadata(0);
         assertNull(mempoiSheetMetadata.getSheetName());
         assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
-        assertOnHeaders(mempoiSheetMetadata, 0, "A1:H1");
-        assertOnRows(mempoiSheetMetadata, 11, 10, 1, 10, "A2:H11");
+        assertOnHeaders(mempoiSheetMetadata, 1, "A2:H2");
+        assertOnRows(mempoiSheetMetadata, 13, 10, 2, 11, "A3:H12");
         assertOnCols(mempoiSheetMetadata, 8, 0, 7);
-        assertOnSubfooter(mempoiSheetMetadata, 11, "A12:H12");
-        assertOnTable(mempoiSheetMetadata, 0, 10, 0, 7, "A1:H11");
-        assertOnPivotTable(mempoiSheetMetadata, 2, 9, 0, 0, 10, 7, "J3", "A1:H11");
+        assertOnSubfooter(mempoiSheetMetadata, 12, "A13:H13");
+        assertOnTable(mempoiSheetMetadata, 1, 11, 0, 7, "A2:H12");
+        assertOnPivotTable(mempoiSheetMetadata, 2, 9, 1, 0, 11, 7, "J3", "A2:H12");
 
         assertOnUsedWorkbookConfig(mempoiReport.getUsedWorkbookConfig(),
                 mempoiReport.getUsedWorkbookConfig().getWorkbook(),

@@ -2,8 +2,8 @@ package it.firegloves.mempoi.domain;
 
 import static it.firegloves.mempoi.testutil.AssertionHelper.assertOnCellStyle;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doNothing;
 
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
@@ -53,7 +53,7 @@ public class MempoiColumnTest {
         MockitoAnnotations.initMocks(this);
 
         this.wb = new SXSSFWorkbook();
-        this.cellStyle = new StandardStyleTemplate().getHeaderCellStyle(this.wb);
+        this.cellStyle = new StandardStyleTemplate().getColsHeaderCellStyle(this.wb);
 
         this.mempoiSheet = MempoiSheetBuilder.aMempoiSheet().withPrepStmt(this.prepStmt).withSheetName("name").build();
         this.step = new StreamApiMergedRegionsStep(this.wb.createCellStyle(), 5, (SXSSFWorkbook) this.wb, mempoiSheet);

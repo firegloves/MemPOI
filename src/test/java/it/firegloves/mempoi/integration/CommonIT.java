@@ -172,7 +172,7 @@ public class CommonIT extends IntegrationBaseIT {
                     .withFile(fileDest)
                     .withAdjustColumnWidth(true)
                     .addMempoiSheet(new MempoiSheet(prepStmt))
-                    .withHeaderCellStyle(headerCellStyle)
+                    .withColsHeaderCellStyle(headerCellStyle)
                     .withIntegerCellStyle(workbook.createCellStyle())
                     .withFloatingPointCellStyle(floatingPointCellStyle)
                     .withDateCellStyle(dateCellStyle)

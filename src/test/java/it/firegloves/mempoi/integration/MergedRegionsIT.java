@@ -68,7 +68,7 @@ public class MergedRegionsIT extends IntegrationBaseMergedRegionsIT {
 
         File fileDest = new File(this.outReportFolder.getAbsolutePath(),
                 "test_with_file_and_merged_regions_HSSF_validate_data.xlsx");
-        int limit = 500;
+        int limit = 100;
 
         try {
             prepStmt = this.createStatement(null, limit);

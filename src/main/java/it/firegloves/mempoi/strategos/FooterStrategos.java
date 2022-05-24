@@ -42,19 +42,19 @@ class FooterStrategos {
      * @param mempoiSheet                the MempoiSheet containing footer and subfooter configuration
      * @param firstDataRowIndex          index of the first data row
      * @param rowCounter                 counter of the current row
+     * @param colOffset                 the column offset to prepend
      * @param reportStyler               MempoiStyler containing style configuration
      * @param mempoiSheetMetadataBuilder the mempoiSheetMetadataBuilder in which insert metadata
      * @return the populated mempoiSheetMetadataBuilder
      */
     protected MempoiSheetMetadataBuilder createFooterAndSubfooter(Sheet sheet, List<MempoiColumn> columnList,
-            MempoiSheet mempoiSheet,
-            int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler,
-            MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+            MempoiSheet mempoiSheet, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler,
+            MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder, int colOffset) {
 
         // add optional sub footer
         MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder1 = this.createSubFooterRow(sheet, columnList,
                 mempoiSheet.getMempoiSubFooter().orElseGet(() -> this.workbookConfig.getMempoiSubFooter()),
-                firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
+                firstDataRowIndex, rowCounter, colOffset, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
 
         // add optional footer
         this.createFooterRow(sheet,
@@ -72,13 +72,14 @@ class FooterStrategos {
      * @param mempoiSubFooter            MempoiSubFooter to which add data
      * @param firstDataRowIndex          index of the first data row
      * @param rowCounter                 counter of the current row
+     * @param colOffset                 the column offset to prepend
      * @param reportStyler               MempoiStyler containing style configuration
      * @param mempoiSheetMetadataBuilder the mempoiSheetMetadataBuilder in which set metadata
      * @return the populated mempoiSheetMetadataBuilder
      */
     private MempoiSheetMetadataBuilder createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList,
-            MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler,
-            MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+            MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, int colOffset,
+            MempoiStyler reportStyler, MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
 
         if (null != mempoiSubFooter) {
 
@@ -94,7 +95,7 @@ class FooterStrategos {
             for (int i = 0; i < colListLen; i++) {
 
                 MempoiSubFooterCell subFooterCell = columnList.get(i).getSubFooterCell();
-                Cell cell = row.createCell(i);
+                Cell cell = row.createCell(i + colOffset);
                 cell.setCellStyle(subFooterCell.getStyle());
 
                 logger.debug("SETTING SUB FOOTER CELL FOR COLUMN {}", columnList.get(i).getColumnName());

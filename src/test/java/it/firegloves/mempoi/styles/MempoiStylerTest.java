@@ -15,7 +15,8 @@ public class MempoiStylerTest {
       ForestStyleTemplate template = new ForestStyleTemplate();
 
       MempoiStyler styler = new MempoiStyler(
-              template.getHeaderCellStyle(wb),
+              template.getSimpleTextHeaderCellStyle(wb),
+              template.getColsHeaderCellStyle(wb),
               template.getCommonDataCellStyle(wb),
               template.getDateCellStyle(wb),
               template.getDatetimeCellStyle(wb),
@@ -24,7 +25,8 @@ public class MempoiStylerTest {
               template.getSubfooterCellStyle(wb)
       );
 
-      AssertionHelper.assertOnCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getSimpleTextHeaderCellStyle(), styler.getSimpleTextHeaderCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getColsHeaderCellStyle(), styler.getColsHeaderCellStyle());
       AssertionHelper.assertOnCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
       AssertionHelper.assertOnCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
       AssertionHelper.assertOnCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
