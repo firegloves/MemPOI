@@ -18,6 +18,9 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     private short simpleTextHeaderCellBgColorIndex = IndexedColors.ORCHID.getIndex();
     private short simpleTextHeaderFontColorIndex = IndexedColors.WHITE.getIndex();
     private short simpleTextHeaderFontSizeInPoint = 18;
+    private short simpleTextFooterCellBgColorIndex = IndexedColors.ORCHID.getIndex();
+    private short simpleTextFooterFontColorIndex = IndexedColors.WHITE.getIndex();
+    private short simpleTextFooterFontSizeInPoint = 14;
     private short colsHeaderCellBgColorIndex = IndexedColors.CORAL.getIndex();
     private short colsHeaderFontColorIndex = IndexedColors.WHITE.getIndex();
     private short colsHeaderFontSizeInPoint = 16;
@@ -31,20 +34,34 @@ public abstract class HueStyleTemplate implements StyleTemplate {
     @Override
     public CellStyle getSimpleTextHeaderCellStyle(Workbook workbook) {
 
-        CellStyle cellStyle = this.setGenericCellStyle(workbook, this.simpleTextHeaderCellBgColorIndex,
-                this.simpleTextHeaderFontColorIndex, true, this.borderColorIndex);
+        return setSimpleHeaderOrFooterCellStyle(workbook, simpleTextHeaderCellBgColorIndex,
+                simpleTextHeaderFontColorIndex, simpleTextHeaderFontSizeInPoint, borderColorIndex);
+    }
+
+    @Override
+    public CellStyle getSimpleTextFooterCellStyle(Workbook workbook) {
+
+        return setSimpleHeaderOrFooterCellStyle(workbook, simpleTextFooterCellBgColorIndex,
+                simpleTextFooterFontColorIndex, simpleTextFooterFontSizeInPoint, borderColorIndex);
+    }
+
+
+    private CellStyle setSimpleHeaderOrFooterCellStyle(Workbook workbook, short cellBgColorIndex, short fontColor, short fontSize, short borderColor) {
+
+        CellStyle cellStyle = this.setGenericCellStyle(workbook, cellBgColorIndex, fontColor, true, borderColor);
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
         if (cellStyle instanceof XSSFCellStyle) {
-            ((XSSFCellStyle) cellStyle).getFont().setFontHeightInPoints(simpleTextHeaderFontSizeInPoint);
+            ((XSSFCellStyle) cellStyle).getFont().setFontHeightInPoints(fontSize);
         } else {
-            ((HSSFCellStyle) cellStyle).getFont(workbook).setFontHeight((short) (simpleTextHeaderFontSizeInPoint * 20));
+            ((HSSFCellStyle) cellStyle).getFont(workbook).setFontHeight((short) (fontSize * 20));
         }
 
         cellStyle.setWrapText(true);
         return cellStyle;
     }
+
 
     @Override
     public CellStyle getColsHeaderCellStyle(Workbook workbook) {

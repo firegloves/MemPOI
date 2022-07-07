@@ -35,6 +35,7 @@ public final class MempoiSheetBuilder {
 
     private Workbook workbook;
     private String headerText;
+    private String footerText;
     // style variables
     private StyleTemplate styleTemplate;
     private CellStyle simpleTextHeaderCellStyle;
@@ -45,6 +46,7 @@ public final class MempoiSheetBuilder {
     private CellStyle datetimeCellStyle;
     private CellStyle integerCellStyle;
     private CellStyle floatingPointCellStyle;
+    private CellStyle simpleTextFooterCellStyle;
     private MempoiFooter mempoiFooter;
     private MempoiSubFooter mempoiSubFooter;
     private PreparedStatement prepStmt;
@@ -104,13 +106,24 @@ public final class MempoiSheetBuilder {
     }
 
     /**
-     * add the received text as simplea sheet header
+     * add the received text as simple sheet header
      *
      * @param headerText the text to add as simple header of the current sheet
      * @return the current MempoiSheetBuilder
      */
     public MempoiSheetBuilder withSimpleHeaderText(String headerText) {
         this.headerText = headerText;
+        return this;
+    }
+
+    /**
+     * add the received text as simple sheet footer
+     *
+     * @param footerText the text to add as simple footer of the current sheet
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withSimpleFooterText(String footerText) {
+        this.footerText = footerText;
         return this;
     }
 
@@ -126,7 +139,7 @@ public final class MempoiSheetBuilder {
     }
 
     /**
-     * add the received text as simplea sheet header
+     * add the received text as simple sheet header
      *
      * @param simpleTextHeaderCellStyle the CellStyle to use as simple text header cell's styler
      * @return the current MempoiSheetBuilder
@@ -224,6 +237,18 @@ public final class MempoiSheetBuilder {
         this.floatingPointCellStyle = floatingPointCellStyle;
         return this;
     }
+
+    /**
+     * add the received text as simple sheet header
+     *
+     * @param simpleTextFooterCellStyle the CellStyle to use as simple text footer cell's styler
+     * @return the current MempoiSheetBuilder
+     */
+    public MempoiSheetBuilder withSimpleTextFooterCellStyle(CellStyle simpleTextFooterCellStyle) {
+        this.simpleTextFooterCellStyle = simpleTextFooterCellStyle;
+        return this;
+    }
+
 
     /**
      * add the received MempoiFooter to the builder instance
@@ -459,6 +484,7 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setSheetName(sheetName);
         mempoiSheet.setWorkbook(workbook);
         mempoiSheet.setSimpleHeaderText(headerText);
+        mempoiSheet.setSimpleFooterText(footerText);
         mempoiSheet.setStyleTemplate(styleTemplate);
         mempoiSheet.setSimpleTextHeaderCellStyle(simpleTextHeaderCellStyle);
         mempoiSheet.setHeaderCellStyle(headerCellStyle);
@@ -468,6 +494,7 @@ public final class MempoiSheetBuilder {
         mempoiSheet.setDatetimeCellStyle(datetimeCellStyle);
         mempoiSheet.setIntegerCellStyle(integerCellStyle);
         mempoiSheet.setFloatingPointCellStyle(floatingPointCellStyle);
+        mempoiSheet.setSimpleTextFooterCellStyle(simpleTextFooterCellStyle);
         mempoiSheet.setMempoiFooter(mempoiFooter);
         mempoiSheet.setMempoiSubFooter(mempoiSubFooter);
         mempoiSheet.setDataElaborationStepMap(dataElaborationStepMap);

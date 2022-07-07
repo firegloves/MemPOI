@@ -5,6 +5,7 @@
 package it.firegloves.mempoi.testutil;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
 import it.firegloves.mempoi.config.WorkbookConfig;
@@ -33,12 +34,30 @@ public class MetadataAssertionHelper {
         }
     }
 
+    public static void assertOnSimpleTextHeader(MempoiSheetMetadata mempoiSheetMetadata, int headerIndexRow,
+            String areaReference) {
+
+        assertEquals("simple text header index row", headerIndexRow,
+                (int) mempoiSheetMetadata.getSimpleTextHeaderRowIndex());
+        assertEquals("simple text header area reference", areaReference,
+                mempoiSheetMetadata.composeSimpleTextHeaderAreaReference().get().formatAsString());
+    }
+
+    public static void assertOnSimpleTextFooter(MempoiSheetMetadata mempoiSheetMetadata, int footerIndexRow,
+            String areaReference) {
+
+        assertEquals("simple text footer index row", footerIndexRow,
+                (int) mempoiSheetMetadata.getSimpleTextFooterRowIndex());
+        assertEquals("simple text footer area reference", areaReference,
+                mempoiSheetMetadata.composeSimpleTextFooterAreaReference().get().formatAsString());
+    }
+
     public static void assertOnHeaders(MempoiSheetMetadata mempoiSheetMetadata, int headerIndexRow,
             String areaReference) {
 
         assertEquals("header index row", headerIndexRow, (int) mempoiSheetMetadata.getHeaderRowIndex());
         assertEquals("header area reference", areaReference,
-                mempoiSheetMetadata.composeHeadersAreaReference().formatAsString());
+                mempoiSheetMetadata.composeHeadersAreaReference().get().formatAsString());
     }
 
     public static void assertOnCols(MempoiSheetMetadata mempoiSheetMetadata, int totalColumns, int firstDataColumns,
@@ -68,19 +87,19 @@ public class MetadataAssertionHelper {
         assertEquals("first data row", firstDataRow, (int) mempoiSheetMetadata.getFirstDataRow());
         assertEquals("last data row", lastDataRow, (int) mempoiSheetMetadata.getLastDataRow());
         assertEquals("plain data area reference", plainDataAreaReference,
-                mempoiSheetMetadata.composePlainDataAreaReference().formatAsString());
+                mempoiSheetMetadata.composePlainDataAreaReference().get().formatAsString());
         assertEquals("rows offset", rowsOffset, (int) mempoiSheetMetadata.getRowsOffset());
     }
 
-    public static void assertOnSubfooter(MempoiSheetMetadata mempoiSheetMetadata, Integer subfooterRowIndex,
+    public static void assertOnSubfooterMetadata(MempoiSheetMetadata mempoiSheetMetadata, Integer subfooterRowIndex,
             String areaReference) {
 
         if (subfooterRowIndex == null) {
             assertNull("null subfooter index", subfooterRowIndex);
-            assertNull("null subfooter area reference", mempoiSheetMetadata.composeSubfooterAreaReference());
+            assertFalse("null subfooter area reference", mempoiSheetMetadata.composeSubfooterAreaReference().isPresent());
         } else {
             assertEquals("subfooter area reference", areaReference,
-                    mempoiSheetMetadata.composeSubfooterAreaReference().formatAsString());
+                    mempoiSheetMetadata.composeSubfooterAreaReference().get().formatAsString());
             assertEquals("subfooter index", subfooterRowIndex.intValue(),
                     (int) mempoiSheetMetadata.getSubfooterRowIndex());
         }
@@ -100,7 +119,7 @@ public class MetadataAssertionHelper {
         assertEquals("first table col", firstTableCol, (int) mempoiSheetMetadata.getFirstTableColumn());
         assertEquals("last table col", lastTableCol, (int) mempoiSheetMetadata.getLastTableColumn());
         assertEquals("table area reference", areaReference,
-                mempoiSheetMetadata.composeTableAreaReference().formatAsString());
+                mempoiSheetMetadata.composeTableAreaReference().get().formatAsString());
     }
 
     public static void assertNullPivotTable(MempoiSheetMetadata mempoiSheetMetadata) {
@@ -132,6 +151,6 @@ public class MetadataAssertionHelper {
         assertEquals("first pivot table position cell reference", positionCellReference,
                 mempoiSheetMetadata.composeFirstPivotTablePositionCellReference().formatAsString());
         assertEquals("pivot table source area reference", sourceAreaReference,
-                mempoiSheetMetadata.composePivotTableSourceAreaReference().formatAsString());
+                mempoiSheetMetadata.composePivotTableSourceAreaReference().get().formatAsString());
     }
 }

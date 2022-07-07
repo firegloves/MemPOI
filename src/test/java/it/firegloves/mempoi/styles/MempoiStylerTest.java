@@ -22,16 +22,18 @@ public class MempoiStylerTest {
               template.getDatetimeCellStyle(wb),
               template.getIntegerCellStyle(wb),
               template.getFloatingPointCellStyle(wb),
+              template.getSimpleTextFooterCellStyle(wb),
               template.getSubfooterCellStyle(wb)
       );
 
-      AssertionHelper.assertOnCellStyle(styler.getSimpleTextHeaderCellStyle(), styler.getSimpleTextHeaderCellStyle());
-      AssertionHelper.assertOnCellStyle(styler.getColsHeaderCellStyle(), styler.getColsHeaderCellStyle());
-      AssertionHelper.assertOnCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
-      AssertionHelper.assertOnCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
-      AssertionHelper.assertOnCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
-      AssertionHelper.assertOnCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
-      AssertionHelper.assertOnCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
-      AssertionHelper.assertOnCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
+      AssertionHelper.assertOnCellStyle(styler.getSimpleTextHeaderCellStyle(), template.getSimpleTextHeaderCellStyle(wb));
+      AssertionHelper.assertOnCellStyle(styler.getColsHeaderCellStyle(), template.getColsHeaderCellStyle(wb));
+      AssertionHelper.assertOnCellStyle(styler.getCommonDataCellStyle(), template.getCommonDataCellStyle(wb));
+      AssertionHelper.assertOnCellStyle(styler.getDateCellStyle(), template.getDateCellStyle(wb));
+      AssertionHelper.assertOnCellStyle(styler.getDatetimeCellStyle(), template.getDatetimeCellStyle(wb));
+      AssertionHelper.assertOnCellStyle(styler.getIntegerCellStyle(), template.getIntegerCellStyle(wb));
+      AssertionHelper.assertOnCellStyle(styler.getFloatingPointCellStyle(), template.getFloatingPointCellStyle(wb));
+      AssertionHelper.assertOnCellStyle(styler.getSimpleTextFooterCellStyle(), template.getSimpleTextFooterCellStyle(wb));
+      AssertionHelper.assertOnCellStyle(styler.getSubFooterCellStyle(), template.getSubfooterCellStyle(wb));
    }
 }

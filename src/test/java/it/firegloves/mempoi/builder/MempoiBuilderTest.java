@@ -202,6 +202,14 @@ public class MempoiBuilderTest {
     }
 
     @Test
+    public void withSimpleTextFooterCellStyle() {
+
+        assertOnCellStyle(
+                mempoiBuilder -> mempoiBuilder.withSimpleTextFooterCellStyle(this.cellStyle),
+                MempoiStyler::getSimpleTextFooterCellStyle);
+    }
+
+    @Test
     public void withColsHeaderCellStyle() {
 
         assertOnCellStyle(
@@ -533,6 +541,7 @@ public class MempoiBuilderTest {
         assertNotNull(stylerName + " DatetimeCellStyle not null", styler.getDatetimeCellStyle());
         assertNotNull(stylerName + " HeaderCellStyle not null", styler.getColsHeaderCellStyle());
         assertNotNull(stylerName + " SimpleTextHeaderCellStyle not null", styler.getSimpleTextHeaderCellStyle());
+        assertNotNull(stylerName + " SimpleTextFooterCellStyle not null", styler.getSimpleTextFooterCellStyle());
         assertNotNull(stylerName + " IntegerCellStyle not null", styler.getIntegerCellStyle());
         assertNotNull(stylerName + " FloatingPointCellStyle not null", styler.getFloatingPointCellStyle());
         assertNotNull(stylerName + " SubFooterCellStyle not null", styler.getSubFooterCellStyle());

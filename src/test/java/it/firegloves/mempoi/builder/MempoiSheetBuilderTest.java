@@ -72,8 +72,10 @@ public class MempoiSheetBuilderTest {
                 .withPrepStmt(prepStmt)
                 .withSheetName(sheetName)
                 .withSimpleHeaderText(headerText)
+                .withSimpleFooterText(TestHelper.SIMPLE_TEXT_FOOTER)
                 .withMempoiSubFooter(numberSumSubFooter)
                 .withSimpleTextHeaderCellStyle(styleTemplate.getSimpleTextHeaderCellStyle(wb))
+                .withSimpleTextFooterCellStyle(styleTemplate.getSimpleTextFooterCellStyle(wb))
                 .withCommonDataCellStyle(styleTemplate.getCommonDataCellStyle(wb))
                 .withDateCellStyle(styleTemplate.getDateCellStyle(wb))
                 .withDatetimeCellStyle(styleTemplate.getDatetimeCellStyle(wb))
@@ -95,10 +97,12 @@ public class MempoiSheetBuilderTest {
         assertEquals("Prepared Statement", prepStmt, mempoiSheet.getPrepStmt());
         assertEquals("Sheet name", sheetName, mempoiSheet.getSheetName());
         assertEquals("Sheet header text", headerText, mempoiSheet.getSimpleHeaderText());
+        assertEquals("Sheet footer text", TestHelper.SIMPLE_TEXT_FOOTER, mempoiSheet.getSimpleFooterText());
         assertEquals("Subfooter", numberSumSubFooter, mempoiSheet.getMempoiSubFooter().get());
         AssertionHelper.assertOnCellStyle(styleTemplate.getCommonDataCellStyle(wb),
                 mempoiSheet.getCommonDataCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getSimpleTextHeaderCellStyle(wb), mempoiSheet.getSimpleTextHeaderCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getSimpleTextFooterCellStyle(wb), mempoiSheet.getSimpleTextFooterCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getColsHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());

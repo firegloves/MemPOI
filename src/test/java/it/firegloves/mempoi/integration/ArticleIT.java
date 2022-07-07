@@ -33,6 +33,7 @@ public class ArticleIT extends IntegrationBaseIT {
         String birdsSheetName = "Birds sheet";
 
         String headerText = "My simple header";
+        String footerText = "My simple footer";
 
         // dogs sheet
         MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
@@ -50,6 +51,7 @@ public class ArticleIT extends IntegrationBaseIT {
         // birds sheet
         MempoiSheet birdsSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName(birdsSheetName)
+                .withSimpleFooterText(footerText)
                 .withPrepStmt(conn.prepareStatement(birdsQuery))
                 .build();
 
@@ -85,7 +87,7 @@ public class ArticleIT extends IntegrationBaseIT {
         assertEquals("Dogs header 2", "DOG_RACE", firstSheet.getRow(0).getCell(1).getStringCellValue());
 
         final Cell headerCell = secondSheet.getRow(0).getCell(0);
-        assertEquals("Cats header", headerText, headerCell.getStringCellValue());
+        assertEquals("Cats simple header", headerText, headerCell.getStringCellValue());
 
         final CellRangeAddress cellAddresses = secondSheet.getMergedRegions().get(0);
         assertEquals("Cats header first row", 0, cellAddresses.getFirstRow());
@@ -98,6 +100,9 @@ public class ArticleIT extends IntegrationBaseIT {
 
         assertEquals("Birds header 1", "BIRD_NAME", thirdSheet.getRow(0).getCell(0).getStringCellValue());
         assertEquals("Birds header 2", "BIRD_RACE", thirdSheet.getRow(0).getCell(1).getStringCellValue());
+
+        final Cell footerCell = thirdSheet.getRow(4).getCell(0);
+        assertEquals("Birds simple footer", footerText, footerCell.getStringCellValue());
     }
 
 }

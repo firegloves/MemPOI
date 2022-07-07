@@ -1,5 +1,6 @@
 package it.firegloves.mempoi.integration;
 
+import static it.firegloves.mempoi.testutil.AssertionHelper.assertOnSimpleTextHeaderOrFooterGeneratedFile;
 import static org.junit.Assert.assertEquals;
 
 import it.firegloves.mempoi.MemPOI;
@@ -125,8 +126,8 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get().getFile(), TestHelper.COLUMNS,
                 TestHelper.HEADERS, "SUM(H3:H12)", styleTemplate, 0, 0, 0, true);
 
-        AssertionHelper.assertOnSimpleTextHeaderGeneratedFile(fut.get().getFile(), headerText, 0, 0,
-                TestHelper.COLUMNS.length - 1, simpleTextHeaderCellStyle);
+        assertOnSimpleTextHeaderOrFooterGeneratedFile(fut.get().getFile(), headerText, 0, 0,
+                TestHelper.COLUMNS.length - 1, 0, simpleTextHeaderCellStyle);
     }
 
     @Test
@@ -166,8 +167,90 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get().getFile(), TestHelper.COLUMNS,
                 TestHelper.HEADERS, "SUM(H3:H12)", styleTemplate, 0, 0, 0, true);
 
-        AssertionHelper.assertOnSimpleTextHeaderGeneratedFile(fut.get().getFile(), headerText, 0, 0,
-                TestHelper.COLUMNS.length - 1, simpleTextHeaderCellStyle);
+        assertOnSimpleTextHeaderOrFooterGeneratedFile(fut.get().getFile(), headerText, 0, 0,
+                TestHelper.COLUMNS.length - 1, 0, simpleTextHeaderCellStyle);
+    }
+
+
+    @Test
+    public void testWithFileAndForestTemplateOverridenOnSimpleTextFooterOnMempoi() throws Exception {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_forest_template_overriden_simple_text_footer.xlsx");
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+        String footerText = "My simple footer";
+
+        HueStyleTemplate styleTemplate = new ForestStyleTemplate();
+
+        MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSimpleFooterText(footerText)
+                .withPrepStmt(prepStmt)
+                .build();
+
+        CellStyle simpleTextFooterCellStyle = workbook.createCellStyle();
+        simpleTextFooterCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
+        simpleTextFooterCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .withAdjustColumnWidth(true)
+                .addMempoiSheet(sheet)
+                .withStyleTemplate(styleTemplate)
+                .withSimpleTextFooterCellStyle(simpleTextFooterCellStyle)
+                .withMempoiSubFooter(new NumberSumSubFooter())
+                .withEvaluateCellFormulas(true)
+                .build();
+
+        CompletableFuture<MempoiReport> fut = memPOI.prepareMempoiReport();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get().getFile());
+
+        AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get().getFile(), TestHelper.COLUMNS,
+                TestHelper.HEADERS, null, styleTemplate, 0, 0, 0, false);
+
+        assertOnSimpleTextHeaderOrFooterGeneratedFile(fut.get().getFile(), footerText, 12, 0,
+                TestHelper.COLUMNS.length - 1, 0, simpleTextFooterCellStyle);
+    }
+
+    @Test
+    public void testWithFileAndForestTemplateOverridenOnSimpleTextFooterOnMempoiSheet() throws Exception {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_forest_template_overriden_simple_text_footer_on_sheet.xlsx");
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+        String footerText = "My simple footer";
+
+        HueStyleTemplate styleTemplate = new ForestStyleTemplate();
+
+        CellStyle simpleTextFooterCellStyle = workbook.createCellStyle();
+        simpleTextFooterCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
+        simpleTextFooterCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet()
+                .withSimpleFooterText(footerText)
+                .withSimpleTextFooterCellStyle(simpleTextFooterCellStyle)
+                .withPrepStmt(prepStmt)
+                .build();
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .withAdjustColumnWidth(true)
+                .addMempoiSheet(sheet)
+                .withStyleTemplate(styleTemplate)
+                .withSimpleTextFooterCellStyle(simpleTextFooterCellStyle)
+                .withMempoiSubFooter(new NumberSumSubFooter())
+                .withEvaluateCellFormulas(true)
+                .build();
+
+        CompletableFuture<MempoiReport> fut = memPOI.prepareMempoiReport();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get().getFile());
+
+        AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get().getFile(), TestHelper.COLUMNS,
+                TestHelper.HEADERS, null, styleTemplate, 0, 0, 0, false);
+
+        assertOnSimpleTextHeaderOrFooterGeneratedFile(fut.get().getFile(), footerText, 12, 0,
+                TestHelper.COLUMNS.length - 1, 0, simpleTextFooterCellStyle);
     }
 
 
@@ -240,6 +323,7 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
 
         MempoiSheet sheet = MempoiSheetBuilder.aMempoiSheet()
                 .withSimpleHeaderText(headerText)
+                .withSimpleFooterText(TestHelper.SIMPLE_TEXT_FOOTER)
                 .withPrepStmt(prepStmt)
                 .build();
 
@@ -260,8 +344,11 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
         AssertionHelper.assertOnGeneratedFile(this.createStatement(), mempoiReport.getFile(), TestHelper.COLUMNS,
                 TestHelper.HEADERS, "SUM(H3:H12)", styleTemplate, 0, 0, 0, true);
 
-        AssertionHelper.assertOnSimpleTextHeaderGeneratedFile(mempoiReport.getFile(), headerText, 0, 0,
-                TestHelper.COLUMNS.length - 1, styleTemplate.getSimpleTextHeaderCellStyle(workbook));
+        assertOnSimpleTextHeaderOrFooterGeneratedFile(mempoiReport.getFile(), headerText, 0, 0,
+                TestHelper.COLUMNS.length - 1, 0, styleTemplate.getSimpleTextHeaderCellStyle(workbook));
+
+        assertOnSimpleTextHeaderOrFooterGeneratedFile(mempoiReport.getFile(), TestHelper.SIMPLE_TEXT_FOOTER, 13, 0,
+                TestHelper.COLUMNS.length - 1, 1, styleTemplate.getSimpleTextFooterCellStyle(workbook));
     }
 
     @Test

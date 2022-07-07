@@ -14,6 +14,7 @@ public class MempoiStylerBuilder {
 
     private StyleTemplate styleTemplate = new StandardStyleTemplate();
     private CellStyle simpleTextHeaderCellStyle;
+    private CellStyle simpleTextFooterCellStyle;
     private CellStyle colsHeaderCellStyle;
     private CellStyle subFooterCellStyle;
     private CellStyle commonDataCellStyle;
@@ -60,6 +61,17 @@ public class MempoiStylerBuilder {
      */
     public MempoiStylerBuilder withSimpleTextHeaderCellStyle(CellStyle simpleTextHeaderCellStyle) {
         this.simpleTextHeaderCellStyle = null != simpleTextHeaderCellStyle ? simpleTextHeaderCellStyle : this.styleTemplate.getSimpleTextHeaderCellStyle(this.workbook);
+        return this;
+    }
+
+    /**
+     * add the received CellStyle as simple text FooterCell styler to the builder instance
+     *
+     * @param simpleTextFooterCellStyle the CellStyle to set as simple text FooterCell styler
+     * @return the current MempoiStylerBuilder
+     */
+    public MempoiStylerBuilder withSimpleTextFooterCellStyle(CellStyle simpleTextFooterCellStyle) {
+        this.simpleTextFooterCellStyle = null != simpleTextFooterCellStyle ? simpleTextFooterCellStyle : this.styleTemplate.getSimpleTextFooterCellStyle(this.workbook);
         return this;
     }
 
@@ -159,6 +171,7 @@ public class MempoiStylerBuilder {
 
             // customize styles
             styler.setSimpleTextHeaderCellStyle(Optional.ofNullable(this.simpleTextHeaderCellStyle).orElseGet(() -> this.styleTemplate.getSimpleTextHeaderCellStyle(this.workbook)));
+            styler.setSimpleTextFooterCellStyle(Optional.ofNullable(this.simpleTextFooterCellStyle).orElseGet(() -> this.styleTemplate.getSimpleTextFooterCellStyle(this.workbook)));
             styler.setColsHeaderCellStyle(Optional.ofNullable(this.colsHeaderCellStyle).orElseGet(() -> this.styleTemplate.getColsHeaderCellStyle(this.workbook)));
             styler.setDateCellStyle(Optional.ofNullable(this.dateCellStyle).orElseGet(() -> this.styleTemplate.getDateCellStyle(this.workbook)));
             styler.setDatetimeCellStyle(Optional.ofNullable(this.datetimeCellStyle).orElseGet(() -> this.styleTemplate.getDatetimeCellStyle(this.workbook)));

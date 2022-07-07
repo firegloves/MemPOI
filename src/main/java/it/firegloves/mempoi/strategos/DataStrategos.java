@@ -10,18 +10,16 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
+import it.firegloves.mempoi.util.RowsUtils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,8 +71,8 @@ public class DataStrategos {
 
         headerCell.setCellStyle(mempoiSheet.getSheetStyler().getSimpleTextHeaderCellStyle());
 
-        adjustRowHeight(mempoiSheet.getSheetStyler().getSimpleTextHeaderCellStyle(), headerRow,
-                SIMPLE_TEXT_HEADER_HEIGHT_PLUS);
+        RowsUtils.adjustRowHeight(this.workbookConfig.getWorkbook(),
+                mempoiSheet.getSheetStyler().getSimpleTextHeaderCellStyle(), headerRow, SIMPLE_TEXT_HEADER_HEIGHT_PLUS);
 
         return rowOffset + 1;
     }
@@ -111,19 +109,10 @@ public class DataStrategos {
                     cm.getColumnDisplayName());
         }
 
-        adjustRowHeight(sheetReportStyler.getColsHeaderCellStyle(), row, ROW_HEIGHT_PLUS);
+        RowsUtils.adjustRowHeight(this.workbookConfig.getWorkbook(),
+                sheetReportStyler.getColsHeaderCellStyle(), row, ROW_HEIGHT_PLUS);
 
         return rowCounter;
-    }
-
-    private void adjustRowHeight(CellStyle cellStyle, Row row, int increaseSize) {
-        if (cellStyle instanceof XSSFCellStyle) {
-            row.setHeightInPoints((float) ((XSSFCellStyle) cellStyle).getFont()
-                    .getFontHeightInPoints() + increaseSize);
-        } else {
-            row.setHeightInPoints((float) ((HSSFCellStyle) cellStyle)
-                    .getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + increaseSize);
-        }
     }
 
     /**

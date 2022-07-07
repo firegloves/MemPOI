@@ -19,6 +19,15 @@ public interface StyleTemplate {
     CellStyle getSimpleTextHeaderCellStyle(Workbook workbook);
 
     /**
+     * create and returns the default simple text footer's cell style
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the FooterCellStyle of the StyleTemplate
+     */
+    CellStyle getSimpleTextFooterCellStyle(Workbook workbook);
+
+
+    /**
      * create and returns the default cols header's cell style
      * @param workbook the workbook used to generate CellStyle
      *
@@ -106,6 +115,7 @@ public interface StyleTemplate {
                 this.getDatetimeCellStyle(workbook),
                 this.getIntegerCellStyle(workbook),
                 this.getFloatingPointCellStyle(workbook),
+                this.getSimpleTextFooterCellStyle(workbook),
                 this.getSubfooterCellStyle(workbook));
     }
 
