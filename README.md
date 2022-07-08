@@ -9,6 +9,7 @@
 ![Java 8](https://img.shields.io/badge/Java%208-Tested-blueviolet)
 ![Java 11](https://img.shields.io/badge/Java%2011-Tested-blueviolet)
 ![Java 16](https://img.shields.io/badge/Java%2016-Tested-blueviolet)
+[![Known Vulnerabilities](https://snyk.io/test/github/firegloves/mempoi/badge.svg)](https://snyk.io/test/github/firegloves/mempoi)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
@@ -47,7 +48,8 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
 ### What's new in 1.9.0
 - NEW FUNCTIONALITY - [Simple text header](#simple-text-header)
 - NEW FUNCTIONALITY - [Simple text footer](#simple-text-footer)
-- Fixed bug preventing sub footer from properly calculating cell formulas combined with column offset
+- SECURITY - [Vulnerable dependency management](#vulnerable-dependency-management)
+- BUG FIX - Fixed bug preventing sub footer from properly calculating cell formulas combined with column offset
 
 ---
 
@@ -76,6 +78,8 @@ Main features index:
 - [Column and Row offsets](#column-and-row-offsets)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
+- [Vulnerable dependency management](#vulnerable-dependency-management)
+  
 - [Donate crypto](#donate-crypto)
 
 ---
@@ -1042,6 +1046,13 @@ According to `CompletableFuture` you'll receive an `ExecutionException` if you c
 Logging is served through [SLF4J](http://www.slf4j.org/), leaving the logging configuration to the user and ensuring maximum flexibility.
 
 Thanks to [zaplatynski](https://github.com/zaplatynski)
+
+---
+
+### Vulnerable dependency management
+
+Starting from v1.9.0, MemPOI pays particular attention to the dependency vulnerabilities and comes bundled with an enhanced version of Apache POI, where transitive and vulnerable dependencies are updated to the safest available versions.
+By clicking on the Snyk badge you can inspect the relative security report.
 
 ---
 
