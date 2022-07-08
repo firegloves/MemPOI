@@ -45,6 +45,10 @@ public class MempoiSheet {
      */
     private String simpleHeaderText;
     /**
+     * text to add to a simple footer
+     */
+    private String simpleFooterText;
+    /**
      * generic style template to apply to the sheet
      */
     private StyleTemplate styleTemplate;
@@ -80,6 +84,10 @@ public class MempoiSheet {
      * floating point number cells style that, if present, overrides the general styleTemplate
      */
     private CellStyle floatingPointCellStyle;
+    /**
+     * simple text footer cells style that, if present, overrides the general styleTemplate
+     */
+    private CellStyle simpleTextFooterCellStyle;
 
     // TODO remove Optional from variable - they should only be returned
     /**

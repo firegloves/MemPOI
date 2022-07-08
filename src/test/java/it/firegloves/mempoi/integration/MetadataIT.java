@@ -6,7 +6,9 @@ import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnCols
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnHeaders;
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnPivotTable;
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnRows;
-import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnSubfooter;
+import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnSimpleTextFooter;
+import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnSimpleTextHeader;
+import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnSubfooterMetadata;
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnTable;
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnUsedWorkbookConfig;
 import static org.junit.Assert.assertEquals;
@@ -78,7 +80,7 @@ public class MetadataIT extends IntegrationBaseIT {
         assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
         assertOnHeaders(mempoiSheetMetadata, 0, "A1:B1");
         assertOnRows(mempoiSheetMetadata, 4, 3, 1, 3, "A2:B4");
-        assertOnSubfooter(mempoiSheetMetadata, null, null);
+        assertOnSubfooterMetadata(mempoiSheetMetadata, null, null);
         assertOnCols(mempoiSheetMetadata, 2, 0, 1);
         assertNullTable(mempoiSheetMetadata);
         assertNullPivotTable(mempoiSheetMetadata);
@@ -118,7 +120,7 @@ public class MetadataIT extends IntegrationBaseIT {
         assertEquals(SpreadsheetVersion.EXCEL2007, dogMempoiSheetMetadata.getSpreadsheetVersion());
         assertOnHeaders(dogMempoiSheetMetadata, 0, "A1:B1");
         assertOnRows(dogMempoiSheetMetadata, 4, 3, 1, 3, "A2:B4");
-        assertOnSubfooter(dogMempoiSheetMetadata, null, null);
+        assertOnSubfooterMetadata(dogMempoiSheetMetadata, null, null);
         assertOnCols(dogMempoiSheetMetadata, 2, 0, 1);
         assertNullTable(dogMempoiSheetMetadata);
         assertNullPivotTable(dogMempoiSheetMetadata);
@@ -128,7 +130,7 @@ public class MetadataIT extends IntegrationBaseIT {
         assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
         assertOnHeaders(mempoiSheetMetadata, 0, "A1:H1");
         assertOnRows(mempoiSheetMetadata, 12, 10, 1, 10, "A2:H11");
-        assertOnSubfooter(mempoiSheetMetadata, 11, "A12:H12");
+        assertOnSubfooterMetadata(mempoiSheetMetadata, 11, "A12:H12");
         assertOnCols(mempoiSheetMetadata, 8, 0, 7);
         assertNullTable(mempoiSheetMetadata);
         assertNullPivotTable(mempoiSheetMetadata);
@@ -160,7 +162,7 @@ public class MetadataIT extends IntegrationBaseIT {
         assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
         assertOnHeaders(mempoiSheetMetadata, 0, "A1:H1");
         assertOnRows(mempoiSheetMetadata, 12, 10, 1, 10, "A2:H11");
-        assertOnSubfooter(mempoiSheetMetadata, 11, "A12:H12");
+        assertOnSubfooterMetadata(mempoiSheetMetadata, 11, "A12:H12");
         assertOnCols(mempoiSheetMetadata, 8, 0, 7);
         assertNullTable(mempoiSheetMetadata);
         assertNullPivotTable(mempoiSheetMetadata);
@@ -200,7 +202,7 @@ public class MetadataIT extends IntegrationBaseIT {
         assertOnHeaders(mempoiSheetMetadata, 0, "A1:H1");
         assertOnRows(mempoiSheetMetadata, 11, 10, 1, 10, "A2:H11");
         assertOnCols(mempoiSheetMetadata, 8, 0, 7);
-        assertOnSubfooter(mempoiSheetMetadata, null, null);
+        assertOnSubfooterMetadata(mempoiSheetMetadata, null, null);
         assertOnTable(mempoiSheetMetadata, 0, 10, 0, 7, "A1:H11");
         assertNullPivotTable(mempoiSheetMetadata);
 
@@ -241,7 +243,7 @@ public class MetadataIT extends IntegrationBaseIT {
         assertOnHeaders(mempoiSheetMetadata, 0, "A1:H1");
         assertOnRows(mempoiSheetMetadata, 11, 10, 1, 10, "A2:H11");
         assertOnCols(mempoiSheetMetadata, 8, 0, 7);
-        assertOnSubfooter(mempoiSheetMetadata, null, null);
+        assertOnSubfooterMetadata(mempoiSheetMetadata, null, null);
         assertNullTable(mempoiSheetMetadata);
         assertOnPivotTable(mempoiSheetMetadata, 2, 9, 0, 0, 10, 7, "J3", "A1:H11");
 
@@ -268,6 +270,7 @@ public class MetadataIT extends IntegrationBaseIT {
         MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withPrepStmt(prepStmt)
                 .withSimpleHeaderText(TestHelper.SIMPLE_TEXT_HEADER)
+                .withSimpleFooterText(TestHelper.SIMPLE_TEXT_FOOTER)
                 .withMempoiSubFooter(new NumberSumSubFooter())
                 .withMempoiTableBuilder(mempoiTableBuilder)
                 .withMempoiPivotTableBuilder(mempoiPivotTableBuilder)
@@ -285,10 +288,12 @@ public class MetadataIT extends IntegrationBaseIT {
         MempoiSheetMetadata mempoiSheetMetadata = mempoiReport.getMempoiSheetMetadata(0);
         assertNull(mempoiSheetMetadata.getSheetName());
         assertEquals(SpreadsheetVersion.EXCEL2007, mempoiSheetMetadata.getSpreadsheetVersion());
+        assertOnSimpleTextHeader(mempoiSheetMetadata, 0, "A1:H1");
         assertOnHeaders(mempoiSheetMetadata, 1, "A2:H2");
         assertOnRows(mempoiSheetMetadata, 13, 10, 2, 11, "A3:H12");
         assertOnCols(mempoiSheetMetadata, 8, 0, 7);
-        assertOnSubfooter(mempoiSheetMetadata, 12, "A13:H13");
+        assertOnSubfooterMetadata(mempoiSheetMetadata, 12, "A13:H13");
+        assertOnSimpleTextFooter(mempoiSheetMetadata, 13, "A14:H14");
         assertOnTable(mempoiSheetMetadata, 1, 11, 0, 7, "A2:H12");
         assertOnPivotTable(mempoiSheetMetadata, 2, 9, 1, 0, 11, 7, "J3", "A2:H12");
 

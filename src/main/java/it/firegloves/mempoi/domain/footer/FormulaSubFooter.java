@@ -14,15 +14,8 @@ import org.apache.poi.ss.util.CellReference;
 
 public abstract class FormulaSubFooter implements MempoiSubFooter {
 
-
-
-    /**
-     * the formula to apply to the subfooter cell
-     */
-    protected String formula;
-
     @Override
-    public void setColumnSubFooter(Workbook workbook, List<MempoiColumn> mempoiColumnList, CellStyle subFooterCellStyle, int firstDataRowIndex, int lastDataRowIndex) {
+    public void setColumnSubFooter(Workbook workbook, List<MempoiColumn> mempoiColumnList, CellStyle subFooterCellStyle, int firstDataRowIndex, int lastDataRowIndex, int colOffset) {
 
         // customize subfooter cell style
         this.customizeSubFooterCellStyle(workbook, subFooterCellStyle);
@@ -35,7 +28,7 @@ public abstract class FormulaSubFooter implements MempoiSubFooter {
 
             if (! mc.getColumnName().equalsIgnoreCase("id") && MempoiColumnStyleManager.isNumericType(mc.getType())) {
 
-                String colLetter = CellReference.convertNumToColString(i);
+                String colLetter = CellReference.convertNumToColString(i + colOffset);
                 mempoiColumnList.get(i).setSubFooterCell(new MempoiSubFooterCell(this.getFormula(colLetter, firstDataRowIndex, lastDataRowIndex), true, subFooterCellStyle));
 
             } else {

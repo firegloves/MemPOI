@@ -4,6 +4,7 @@
 
 package it.firegloves.mempoi.domain;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -31,6 +32,10 @@ public class MempoiSheetMetadata {
      * index of the row containing the simple text header
      */
     private Integer simpleTextHeaderRowIndex;
+    /**
+     * index of the row containing the simple text footer
+     */
+    private Integer simpleTextFooterRowIndex;
     /**
      * index of the row containing column headers
      */
@@ -127,20 +132,44 @@ public class MempoiSheetMetadata {
         return new CellReference(row, col);
     }
 
-    private AreaReference composeAreaReference(Supplier<CellReference> firstCellRefSupplier, Supplier<CellReference> lastCellRefSupplier) {
+    private Optional<AreaReference> composeAreaReference(Supplier<CellReference> firstCellRefSupplier, Supplier<CellReference> lastCellRefSupplier) {
         final CellReference firstCellReference = firstCellRefSupplier.get();
         final CellReference lastCellReference = lastCellRefSupplier.get();
 
         if (firstCellReference == null || lastCellReference == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return new AreaReference(firstCellReference, lastCellReference, spreadsheetVersion);
+        return Optional.of(new AreaReference(firstCellReference, lastCellReference, spreadsheetVersion));
     }
 
     /****************************************************************************************************************
      * HEADERS
      ***************************************************************************************************************/
+
+    /**
+     * compose and return the area reference containing the simple text header
+     * @return the area reference corresponding to the simple text header, null if not available
+     */
+    public Optional<AreaReference> composeSimpleTextHeaderAreaReference() {
+        return composeAreaReference(this::composeFirstSimpleTextHeaderCellReference, this::composeLastSimpleTextHeaderCellReference);
+    }
+
+    /**
+     * compose and return the cell reference corresponding to the upper left corner of containing the simple text header
+     * @return the cell reference corresponding to the upper left corner of the column headers
+     */
+    public CellReference composeFirstSimpleTextHeaderCellReference() {
+        return composeCellReference(simpleTextHeaderRowIndex, firstDataColumn);
+    }
+
+    /**
+     * compose and return the cell reference containing the simple text header
+     * @return the cell reference corresponding to the bottom right corner of the simple text header
+     */
+    public CellReference composeLastSimpleTextHeaderCellReference() {
+        return composeCellReference(simpleTextHeaderRowIndex, lastDataColumn);
+    }
 
     /**
      * compose and return the cell reference corresponding to the upper left corner of the column headers
@@ -162,7 +191,7 @@ public class MempoiSheetMetadata {
      * compose and return the area reference containing the column headers
      * @return the area reference corresponding to the column headers
      */
-    public AreaReference composeHeadersAreaReference() {
+    public Optional<AreaReference> composeHeadersAreaReference() {
         return composeAreaReference(this::composeFirstHeadersCellReference, this::composeLastHeadersCellReference);
     }
 
@@ -190,7 +219,7 @@ public class MempoiSheetMetadata {
      * compose and return the area reference containing the plain exported data
      * @return the area reference corresponding to the plain exported data
      */
-    public AreaReference composePlainDataAreaReference() {
+    public Optional<AreaReference> composePlainDataAreaReference() {
         return composeAreaReference(this::composeFirstDataCellReference, this::composeLastDataCellReference);
     }
 
@@ -198,6 +227,30 @@ public class MempoiSheetMetadata {
     /****************************************************************************************************************
      * SUBFOOTER
      ***************************************************************************************************************/
+
+    /**
+     * compose and return the area reference containing the simple text Footer
+     * @return the area reference corresponding to the simple text Footer, null if not available
+     */
+    public Optional<AreaReference> composeSimpleTextFooterAreaReference() {
+        return composeAreaReference(this::composeFirstSimpleTextFooterCellReference, this::composeLastSimpleTextFooterCellReference);
+    }
+
+    /**
+     * compose and return the cell reference corresponding to the upper left corner of containing the simple text Footer
+     * @return the cell reference corresponding to the upper left corner of the column Footer
+     */
+    public CellReference composeFirstSimpleTextFooterCellReference() {
+        return composeCellReference(simpleTextFooterRowIndex, firstDataColumn);
+    }
+
+    /**
+     * compose and return the cell reference containing the simple text Footer
+     * @return the cell reference corresponding to the bottom right corner of the simple text Footer
+     */
+    public CellReference composeLastSimpleTextFooterCellReference() {
+        return composeCellReference(simpleTextFooterRowIndex, lastDataColumn);
+    }
 
     /**
      * compose and return the cell reference corresponding to the upper left corner of the footer
@@ -219,7 +272,7 @@ public class MempoiSheetMetadata {
      * compose and return the area reference containing the footer
      * @return the area reference corresponding to the footer
      */
-    public AreaReference composeSubfooterAreaReference() {
+    public Optional<AreaReference> composeSubfooterAreaReference() {
         return composeAreaReference(this::composeFirstSubfooterCellReference, this::composeLastSubfooterCellReference);
     }
 
@@ -248,7 +301,7 @@ public class MempoiSheetMetadata {
      * compose and return the area reference containing the table present in the generated report
      * @return the area reference corresponding to the table
      */
-    public AreaReference composeTableAreaReference() {
+    public Optional<AreaReference> composeTableAreaReference() {
         return composeAreaReference(this::composeFirstTableCellReference, this::composeLastTableCellReference);
     }
 
@@ -284,7 +337,7 @@ public class MempoiSheetMetadata {
      * compose and return the area reference containing the source of the pivot table present in the generated report
      * @return the area reference corresponding to the source of the pivot table
      */
-    public AreaReference composePivotTableSourceAreaReference() {
+    public Optional<AreaReference> composePivotTableSourceAreaReference() {
         return composeAreaReference(this::composeFirstPivotTableSourceCellReference, this::composeLastPivotTableSourceCellReference);
     }
 }

@@ -44,8 +44,10 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
 
 ---
 
-### What's new in 1.8.0
-- NEW FUNCTIONALITY - [Column and Row offsets](#column-and-row-offsets)
+### What's new in 1.9.0
+- NEW FUNCTIONALITY - [Simple text header](#simple-text-header)
+- NEW FUNCTIONALITY - [Simple text footer](#simple-text-footer)
+- Fixed bug preventing sub footer from properly calculating cell formulas combined with column offset
 
 ---
 
@@ -352,7 +354,7 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 ### Simple text header
 
 Starting by v1.9 MemPOI supports the addition of a textual header before the exported data.
-To add the text header you can simply add a line in the desired MempoiSheetBuilder as follows:
+To add the text header you can simply add a line in the desired `MempoiSheetBuilder` as follows:
 
 ```Java
 MempoiSheetBuilder.aMempoiSheet()
@@ -367,6 +369,27 @@ The result will be something like this:
 ![](img/simple-text-header.png)
 
 The simple text header is compatible with the rows and columns offset.
+
+---
+
+### Simple text footer
+
+Starting by v1.9 MemPOI supports the addition of a textual footer after the exported data.
+To add the text footer you can simply add a line in the desired `MempoiSheetBuilder` as follows:
+
+```Java
+MempoiSheetBuilder.aMempoiSheet()
+        .withSheetName(birdsSheetName)
+        .withSimpleFooterText("My simple footer")
+        .withPrepStmt(conn.prepareStatement(birdsQuery))
+        .build();
+```
+
+The result will be something like this:
+
+![](img/simple-text-footer.png)
+
+The simple text footer is compatible with the rows and columns offset.
 
 ---
 

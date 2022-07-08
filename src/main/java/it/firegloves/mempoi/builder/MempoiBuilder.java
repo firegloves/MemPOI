@@ -56,6 +56,7 @@ public class MempoiBuilder {
     private CellStyle datetimeCellStyle;
     private CellStyle integerCellStyle;
     private CellStyle floatingPointCellStyle;
+    private CellStyle simpleTextFooterCellStyle;
 
     /**
      * by default MemPOI forces Excel to evaluate cell formulas when it opens the report but if this var is true MemPOI
@@ -277,6 +278,14 @@ public class MempoiBuilder {
         return this;
     }
 
+    /**
+     * @param simpleTextFooterCellStyle the CellStyle to apply to the simple text footer cell
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withSimpleTextFooterCellStyle(CellStyle simpleTextFooterCellStyle) {
+        this.simpleTextFooterCellStyle = simpleTextFooterCellStyle;
+        return this;
+    }
 
     /**
      * add a MempoiSheet to the list of the sheet to add to the generating export
@@ -383,6 +392,7 @@ public class MempoiBuilder {
                 .withColsHeaderCellStyle(getFirstNotNullCellStyle(s.getHeaderCellStyle(), this.colsHeaderCellStyle))
                 .withIntegerCellStyle(getFirstNotNullCellStyle(s.getIntegerCellStyle(), this.integerCellStyle))
                 .withFloatingPointCellStyle(getFirstNotNullCellStyle(s.getFloatingPointCellStyle(), this.floatingPointCellStyle))
+                .withSimpleTextFooterCellStyle(getFirstNotNullCellStyle(s.getSimpleTextFooterCellStyle(), this.simpleTextFooterCellStyle))
                 .withSubFooterCellStyle(getFirstNotNullCellStyle(s.getSubFooterCellStyle(), this.subFooterCellStyle))
                 .build();
 

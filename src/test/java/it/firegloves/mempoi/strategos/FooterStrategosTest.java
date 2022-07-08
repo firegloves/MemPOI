@@ -1,16 +1,28 @@
 package it.firegloves.mempoi.strategos;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import it.firegloves.mempoi.builder.MempoiSheetMetadataBuilder;
 import it.firegloves.mempoi.config.WorkbookConfig;
+import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.footer.MempoiFooter;
+import it.firegloves.mempoi.testutil.TestHelper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -85,23 +97,34 @@ public class FooterStrategosTest {
         m.invoke(strategos, sheet, mempoiFooter);
     }
 
-//    /******************************************************************************************************************
-//     *                          createSubFooterRow
-//     *****************************************************************************************************************/
-////    createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList, MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler) {
-//
-//    @Test
-//    public void createSubFooterRow() throws Exception {
-//
-//        WorkbookConfig wbConfig = new WorkbookConfig()
-//                .setWorkbook(new SXSSFWorkbook());
-//
-//        Strategos strategos = new Strategos(wbConfig);
-//
-//        Method m = Strategos.class.getDeclaredMethod("createSubFooterRow", Sheet.class, List.class, MempoiSubFooter.class, int.class, int.class, MempoiStyler.class);
-//        m.setAccessible(true);
-//
-//        m.invoke(strategos);
-//    }
-//
+    @Test(expected = Test.None.class)
+    public void shouldAddSimpleTextFooter() throws Exception {
+
+        XSSFCellStyle cellStyle = mock(XSSFCellStyle.class, Answers.RETURNS_DEEP_STUBS);
+        when(cellStyle.getFont().getFontHeightInPoints()).thenReturn((short) 10);
+
+        Cell cell = mock(Cell.class, Answers.RETURNS_DEEP_STUBS);
+        doNothing().when(cell).setCellValue(anyString());
+        doNothing().when(cell).setCellStyle(any());
+
+        Row row = mock(Row.class, Answers.RETURNS_DEEP_STUBS);
+        when(row.createCell(anyInt())).thenReturn(cell);
+
+        Sheet sheet = mock(Sheet.class);
+        when(sheet.createRow(anyInt())).thenReturn(row);
+        when(sheet.addMergedRegion(any())).thenReturn(1);
+
+        MempoiSheet mempoiSheet = mock(MempoiSheet.class, Answers.RETURNS_DEEP_STUBS);
+        when(mempoiSheet.getSimpleFooterText()).thenReturn(TestHelper.SIMPLE_TEXT_FOOTER);
+        when(mempoiSheet.getSheet()).thenReturn(sheet);
+        when(mempoiSheet.getColumnList().size()).thenReturn(3);
+        when(mempoiSheet.getSheetStyler().getSimpleTextFooterCellStyle()).thenReturn(cellStyle);
+
+        FooterStrategos strategos = new FooterStrategos(new WorkbookConfig());
+
+        Method m = FooterStrategos.class.getDeclaredMethod("createSimpleTextFooter", MempoiSheet.class,
+                int.class, int.class, MempoiSheetMetadataBuilder.class);
+        m.setAccessible(true);
+        m.invoke(strategos, mempoiSheet, 0, 0, MempoiSheetMetadataBuilder.aMempoiSheetMetadata());
+    }
 }

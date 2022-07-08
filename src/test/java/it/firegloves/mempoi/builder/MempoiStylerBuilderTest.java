@@ -83,6 +83,48 @@ public class MempoiStylerBuilderTest {
     }
 
     /*************************************************************************************
+     * withSimpleTextFooterCellStyle
+     *************************************************************************************/
+
+    @Test
+    public void withSimpleTextFooterCellStyle() {
+
+        Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
+                .withSimpleTextFooterCellStyle(this.cellStyle)
+                .build();
+
+        assertOnCellStyle(optStyler.get().getSimpleTextFooterCellStyle(), this.cellStyle);
+    }
+
+    @Test
+    public void withNullSimpleTextFooterCellStyle() {
+
+        Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
+                .withSimpleTextFooterCellStyle(null)
+                .build();
+
+        assertOnCellStyle(optStyler.get().getSimpleTextFooterCellStyle(), this.standardTemplate.getSimpleTextFooterCellStyle(this.workbook));
+    }
+
+    @Test
+    public void withSimpleTextFooterCellStyleAndTemplate() {
+
+        Optional<MempoiStyler> optStyler = MempoiStylerBuilder.aMempoiStyler(this.workbook)
+                .withStyleTemplate(this.template)
+                .withSimpleTextFooterCellStyle(this.cellStyle)
+                .build();
+
+        assertOnCellStyle(optStyler.get().getSimpleTextFooterCellStyle(), this.cellStyle);
+        assertOnCellStyle(optStyler.get().getColsHeaderCellStyle(), this.template.getColsHeaderCellStyle(this.workbook));
+        assertOnCellStyle(optStyler.get().getSubFooterCellStyle(), this.template.getSubfooterCellStyle(this.workbook));
+        assertOnCellStyle(optStyler.get().getCommonDataCellStyle(), this.template.getCommonDataCellStyle(this.workbook));
+        assertOnCellStyle(optStyler.get().getDateCellStyle(), this.template.getDateCellStyle(this.workbook));
+        assertOnCellStyle(optStyler.get().getDatetimeCellStyle(), this.template.getDatetimeCellStyle(this.workbook));
+        assertOnCellStyle(optStyler.get().getIntegerCellStyle(), this.template.getIntegerCellStyle(this.workbook));
+        assertOnCellStyle(optStyler.get().getFloatingPointCellStyle(), this.template.getFloatingPointCellStyle(this.workbook));
+    }
+
+    /*************************************************************************************
      * withColsHeaderCellStyle
      *************************************************************************************/
 

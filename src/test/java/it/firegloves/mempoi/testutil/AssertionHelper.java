@@ -448,7 +448,9 @@ public class AssertionHelper {
     /**
      * check that the first sheet of the received file contains a simple text header corresponding to the received parameter
      */
-    public static void assertOnSimpleTextHeaderGeneratedFile(String fileToValidate, String headerText, int rowNum, int firstCol, int lastCol, CellStyle simpleTextHeaderCellStyle) {
+    public static void assertOnSimpleTextHeaderOrFooterGeneratedFile(String fileToValidate, String headerOrFooterText,
+            int rowNum, int firstCol, int lastCol, int mergedRegionNum, CellStyle simpleTextHeaderOrFooterCellStyle) {
+
         File file = new File(fileToValidate);
 
         try (InputStream inp = new FileInputStream(file)) {
@@ -456,23 +458,21 @@ public class AssertionHelper {
 
             Sheet sheet = wb.getSheetAt(0);
 
-            final Cell headerCell = sheet.getRow(0).getCell(0);
-            assertEquals("Simple text header string", headerText, headerCell.getStringCellValue());
-            assertOnCellStyle(simpleTextHeaderCellStyle, headerCell.getCellStyle());
-//            assertEquals("Simple text header style", styleTemplate.getSimpleTextHeaderCellStyle(wb), headerCell.getCellStyle());
+            final Cell headerCell = sheet.getRow(rowNum).getCell(firstCol);
+            assertEquals("Simple text header string", headerOrFooterText, headerCell.getStringCellValue());
+            assertOnCellStyle(simpleTextHeaderOrFooterCellStyle, headerCell.getCellStyle());
 
-            final CellRangeAddress cellAddresses = sheet.getMergedRegions().get(0);
-            assertEquals("Cats header first row", rowNum, cellAddresses.getFirstRow());
-            assertEquals("Cats header last row", rowNum, cellAddresses.getLastRow());
-            assertEquals("Cats header first col", firstCol, cellAddresses.getFirstColumn());
-            assertEquals("Cats header last col", lastCol, cellAddresses.getLastColumn());
+            final CellRangeAddress cellAddresses = sheet.getMergedRegions().get(mergedRegionNum);
+            assertEquals("Header or footer first row", rowNum, cellAddresses.getFirstRow());
+            assertEquals("Header or footer last row", rowNum, cellAddresses.getLastRow());
+            assertEquals("Header or footer first col", firstCol, cellAddresses.getFirstColumn());
+            assertEquals("Header or footer last col", lastCol, cellAddresses.getLastColumn());
 
 
         } catch (Exception e) {
             failAssertion(e);
         }
     }
-
 
     /**
      * opens the received generated xlsx file and applies generic asserts
@@ -826,6 +826,18 @@ public class AssertionHelper {
             assertEquals("simple text header last row", row, mergedRegion.getLastRow());
 
             assertEquals("simple text header value", text, sheet.getRow(row).getCell(firstCol).getStringCellValue());
+        } catch (Exception e) {
+            failAssertion(e);
+        }
+    }
+
+    public static void assertOnSubFooter(String file, int rowNum, int cellNum, String formula) {
+        Workbook wb;
+        try (InputStream inp = new FileInputStream(file)) {
+            wb = WorkbookFactory.create(inp);
+            Sheet sheet = wb.getSheetAt(0);
+            final String footerFormula = sheet.getRow(rowNum).getCell(cellNum).getCellFormula();
+            assertEquals("footer formula", footerFormula, formula);
         } catch (Exception e) {
             failAssertion(e);
         }

@@ -11,6 +11,7 @@ public final class MempoiSheetMetadataBuilder {
     private String sheetName;
     private Integer sheetIndex;
     private Integer simpleTextHeaderRowIndex;
+    private Integer simpleTextFooterRowIndex;
     private Integer colsHeaderRowIndex;
     private Integer totalRows;
     private Integer firstDataRow;
@@ -56,6 +57,11 @@ public final class MempoiSheetMetadataBuilder {
 
     public MempoiSheetMetadataBuilder withSimpleTextHeaderRowIndex(Integer simpleTextHeaderRowIndex) {
         this.simpleTextHeaderRowIndex = simpleTextHeaderRowIndex;
+        return this;
+    }
+
+    public MempoiSheetMetadataBuilder withSimpleTextFooterRowIndex(Integer simpleTextFooterRowIndex) {
+        this.simpleTextFooterRowIndex = simpleTextFooterRowIndex;
         return this;
     }
 
@@ -152,6 +158,7 @@ public final class MempoiSheetMetadataBuilder {
                 - (simpleTextHeaderRowIndex != null ? simpleTextHeaderRowIndex : colsHeaderRowIndex)
                 + (subfooterRowIndex != null ? 1 : 0));
         mempoiSheetMetadata.setSimpleTextHeaderRowIndex(simpleTextHeaderRowIndex);
+        mempoiSheetMetadata.setSimpleTextFooterRowIndex(simpleTextFooterRowIndex);
         mempoiSheetMetadata.setHeaderRowIndex(colsHeaderRowIndex);
         mempoiSheetMetadata.setTotalDataRows(lastDataRow - colsHeaderRowIndex);
         mempoiSheetMetadata.setFirstDataRow(firstDataRow);

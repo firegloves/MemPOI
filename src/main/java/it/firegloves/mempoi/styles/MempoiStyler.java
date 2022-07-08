@@ -33,6 +33,9 @@ public class MempoiStyler {
     // floating point number
     private CellStyle floatingPointCellStyle;
 
+    // simple text footer
+    private CellStyle simpleTextFooterCellStyle;
+
     // sub footer
     private CellStyle subFooterCellStyle;
 }

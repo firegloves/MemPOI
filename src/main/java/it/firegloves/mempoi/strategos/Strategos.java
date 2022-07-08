@@ -267,8 +267,8 @@ public class Strategos {
 
         // footer
         mempoiSheetMetadataBuilder = this.footerStrategos
-                .createFooterAndSubfooter(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex,
-                        localRowCounter, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder, firstCol);
+                .createFooters(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex,
+                        localRowCounter, mempoiSheetMetadataBuilder, firstCol);
 
         mempoiSheetMetadataBuilder.withTotalRows(localRowCounter);
 
