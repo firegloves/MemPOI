@@ -79,7 +79,6 @@ Main features index:
 - [Force Generation](#force-generation)
 - [Logging](#logging)
 - [Vulnerable dependency management](#vulnerable-dependency-management)
-  
 - [Donate crypto](#donate-crypto)
 
 ---

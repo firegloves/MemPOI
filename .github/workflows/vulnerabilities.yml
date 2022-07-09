@@ -1,0 +1,17 @@
+name: Snyk vulnerabilities
+
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/gradle-jdk11@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

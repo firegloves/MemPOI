@@ -27,26 +27,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poiVersion
 
-//    // START - OVERRIDES poi-ooxml VULNERABLE DEPENDENCIES
-//    // https://mvnrepository.com/artifact/commons-io/commons-io
-//    implementation (group: 'commons-io', name: 'commons-io') {
-//        version {require '2.11.0' }
-//    }
-//    // https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
-//    implementation (group: 'org.apache.pdfbox', name: 'pdfbox') {
-//        version { require '2.0.24' }
-//    }
-//    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-//    implementation (group: 'org.apache.commons', name: 'commons-compress') {
-//        version { require '1.21' }
-//    }
-//    // https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svgbrowser
-//    implementation (group: 'org.apache.xmlgraphics', name: 'batik-svgbrowser') {
-//        version { require  '1.14' }
-//    }
-//    // END - OVERRIDES poi-ooxml VULNERABLE DEPENDENCIES
-
-
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: comonsLang3Version
 
