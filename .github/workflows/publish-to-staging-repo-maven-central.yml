@@ -39,7 +39,7 @@ jobs:
         run: chmod +x gradlew
       # build
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build jar
       # Decode the private key from secret to file
       - name: Decode key
         run: |
