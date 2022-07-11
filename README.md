@@ -30,7 +30,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.0'
 ```
 
 #### With Maven
@@ -39,7 +39,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.8.0</version>
+    <version>1.9.0</version>
 </dependency>
 ```
 
@@ -63,6 +63,7 @@ Main features index:
 - [Adjust columns width](#adjust-columns-width)
 - [Styles](#styles)
 - [Simple text header](#simple-text-header)
+- [Simple text footer](#simple-text-footer)
 - [Footers and subfooters](#footers-and-subfooters)
 - [Cell formulas](#cell-formulas)
 - [Excel Table](#excel-table)
@@ -605,6 +606,7 @@ Below a table describing supported metadata
 | sheetIndex | index of the represented sheet | No
 | totalRows | total number of rows interested by the generated data<br />the count starts at row 0 and goes until the last row (included) with at least one populated cell | No
 | simpleTextHeaderRowIndex | index of the row containing the simple text header | Yes
+| simpleTextFooterRowIndex | index of the row containing the simple text footer | Yes
 | headerRowIndex | index of the row containing column headers | No
 | totalDataRows | total number of rows containing plain exported data (no pivot tables or other). it coincides with resultSet size | No
 | firstDataRow | index of the first row that contains plain exported data (no pivot tables or other) | No
@@ -1057,12 +1059,12 @@ By clicking on the Snyk badge you can inspect the relative security report.
 
 ### Apache POI version
 
-MemPOI comes with Apache POI 5.0.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+MemPOI comes with Apache POI 5.2.2 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.8.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.9.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -1075,7 +1077,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.8.0</version>
+    <version>1.9.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>

@@ -9,7 +9,6 @@ import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnRows
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnSubfooterMetadata;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;

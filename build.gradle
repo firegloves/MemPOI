@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'it.firegloves'
-version '1.8.0'
+version '1.9.0'
 
 sourceCompatibility = 1.8
 
