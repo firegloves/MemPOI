@@ -9,6 +9,7 @@
 ![Java 8](https://img.shields.io/badge/Java%208-Tested-blueviolet)
 ![Java 11](https://img.shields.io/badge/Java%2011-Tested-blueviolet)
 ![Java 16](https://img.shields.io/badge/Java%2016-Tested-blueviolet)
+[![Known Vulnerabilities](https://snyk.io/test/github/firegloves/mempoi/badge.svg)](https://snyk.io/test/github/firegloves/mempoi)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
@@ -29,7 +30,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.0'
 ```
 
 #### With Maven
@@ -38,14 +39,17 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.8.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.8.0</version>
+    <version>1.9.0</version>
 </dependency>
 ```
 
 ---
 
-### What's new in 1.8.0
-- NEW FUNCTIONALITY - [Column and Row offsets](#column-and-row-offsets)
+### What's new in 1.9.0
+- NEW FUNCTIONALITY - [Simple text header](#simple-text-header)
+- NEW FUNCTIONALITY - [Simple text footer](#simple-text-footer)
+- SECURITY - [Vulnerable dependency management](#vulnerable-dependency-management)
+- BUG FIX - Fixed bug preventing sub footer from properly calculating cell formulas combined with column offset
 
 ---
 
@@ -58,6 +62,8 @@ Main features index:
 - [Multiple sheets](#multiple-sheets)
 - [Adjust columns width](#adjust-columns-width)
 - [Styles](#styles)
+- [Simple text header](#simple-text-header)
+- [Simple text footer](#simple-text-footer)
 - [Footers and subfooters](#footers-and-subfooters)
 - [Cell formulas](#cell-formulas)
 - [Excel Table](#excel-table)
@@ -73,6 +79,7 @@ Main features index:
 - [Column and Row offsets](#column-and-row-offsets)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
+- [Vulnerable dependency management](#vulnerable-dependency-management)
 - [Donate crypto](#donate-crypto)
 
 ---
@@ -324,14 +331,14 @@ List of available templates:
 
 | Name                      |      Image            |
 |---------------------------|-----------------------|
-| AquaStyleTemplate         |![](img/template/aqua.jpg)
-| ForestStyleTemplate       |![](img/template/forest.jpg)
-| PanegiriconStyleTemplate  |![](img/template/panegiricon.jpg)
-| PurpleStyleTemplate       |![](img/template/purple.jpg)
-| RoseStyleTemplate         |![](img/template/rose.jpg)
-| StandardStyleTemplate     |![](img/template/standard.jpg)
-| StoneStyleTemplate        |![](img/template/stone.jpg)
-| SummerStyleTemplate       |![](img/template/summer.jpg)
+| AquaStyleTemplate         |![](img/template/aqua.png)
+| ForestStyleTemplate       |![](img/template/forest.png)
+| PanegiriconStyleTemplate  |![](img/template/panegiricon.png)
+| PurpleStyleTemplate       |![](img/template/purple.png)
+| RoseStyleTemplate         |![](img/template/rose.png)
+| StandardStyleTemplate     |![](img/template/standard.png)
+| StoneStyleTemplate        |![](img/template/stone.png)
+| SummerStyleTemplate       |![](img/template/summer.png)
 
 #### Numeric cell styles
 
@@ -345,6 +352,48 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
                     .withIntegerCellStyle(new StandardStyleTemplate().getFloatingPointCellStyle())     // no default style for integer fields
                     .build();
 ```
+
+---
+
+### Simple text header
+
+Starting by v1.9 MemPOI supports the addition of a textual header before the exported data.
+To add the text header you can simply add a line in the desired `MempoiSheetBuilder` as follows:
+
+```Java
+MempoiSheetBuilder.aMempoiSheet()
+        .withSheetName(catsSheetName)
+        .withSimpleHeaderText("My simple header")
+        .withPrepStmt(conn.prepareStatement(catsQuery))
+        .build();
+```
+
+The result will be something like this:
+
+![](img/simple-text-header.png)
+
+The simple text header is compatible with the rows and columns offset.
+
+---
+
+### Simple text footer
+
+Starting by v1.9 MemPOI supports the addition of a textual footer after the exported data.
+To add the text footer you can simply add a line in the desired `MempoiSheetBuilder` as follows:
+
+```Java
+MempoiSheetBuilder.aMempoiSheet()
+        .withSheetName(birdsSheetName)
+        .withSimpleFooterText("My simple footer")
+        .withPrepStmt(conn.prepareStatement(birdsQuery))
+        .build();
+```
+
+The result will be something like this:
+
+![](img/simple-text-footer.png)
+
+The simple text footer is compatible with the rows and columns offset.
 
 ---
 
@@ -556,6 +605,8 @@ Below a table describing supported metadata
 | sheetName | name of the represented sheet | Yes
 | sheetIndex | index of the represented sheet | No
 | totalRows | total number of rows interested by the generated data<br />the count starts at row 0 and goes until the last row (included) with at least one populated cell | No
+| simpleTextHeaderRowIndex | index of the row containing the simple text header | Yes
+| simpleTextFooterRowIndex | index of the row containing the simple text footer | Yes
 | headerRowIndex | index of the row containing column headers | No
 | totalDataRows | total number of rows containing plain exported data (no pivot tables or other). it coincides with resultSet size | No
 | firstDataRow | index of the first row that contains plain exported data (no pivot tables or other) | No
@@ -999,14 +1050,21 @@ Thanks to [zaplatynski](https://github.com/zaplatynski)
 
 ---
 
+### Vulnerable dependency management
+
+Starting from v1.9.0, MemPOI pays particular attention to the dependency vulnerabilities and comes bundled with an enhanced version of Apache POI, where transitive and vulnerable dependencies are updated to the safest available versions.
+By clicking on the Snyk badge you can inspect the relative security report.
+
+---
+
 ### Apache POI version
 
-MemPOI comes with Apache POI 5.0.0 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
+MemPOI comes with Apache POI 5.2.2 bundled. If you need to use a different version you can exclude the transitive dependency specifying your desired version.
 
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.8.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.9.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -1019,7 +1077,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.8.0</version>
+    <version>1.9.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>

@@ -4,7 +4,7 @@ import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnCols
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnHeaders;
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnPivotTable;
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnRows;
-import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnSubfooter;
+import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnSubfooterMetadata;
 import static it.firegloves.mempoi.testutil.MetadataAssertionHelper.assertOnTable;
 import static org.junit.Assert.assertEquals;
 
@@ -73,7 +73,7 @@ public class MempoiSheetMetadataTest {
         assertEquals(SpreadsheetVersion.EXCEL2007, current.getSpreadsheetVersion());
         assertOnHeaders(current, HEADER_ROW_INDEX, "F2:H2");
         assertOnRows(current, TOTAL_ROWS, TOTAL_DATA_ROWS, FIRST_ROW, LAST_ROW, "F3:H4", ROWS_OFFSET);
-        assertOnSubfooter(current, SUBFOOTER_ROW_INDEX, "F7:H7");
+        assertOnSubfooterMetadata(current, SUBFOOTER_ROW_INDEX, "F7:H7");
         assertOnCols(current, TOTAL_COLS, FIRST_COL, LAST_COL, COLS_OFFSET);
         assertOnTable(current, FIRST_TABLE_ROW, LAST_TABLE_ROW, FIRST_TABLE_COL, LAST_TABLE_COL, "K9:L10");
         assertOnPivotTable(current, FIRST_PIVOT_TABLE_POS_ROW, FIRST_PIVOT_TABLE_POS_COL, FIRST_PIVOT_TABLE_ROW,

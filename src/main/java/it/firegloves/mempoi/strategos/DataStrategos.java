@@ -3,20 +3,23 @@
  */
 package it.firegloves.mempoi.strategos;
 
+import it.firegloves.mempoi.builder.MempoiSheetMetadataBuilder;
 import it.firegloves.mempoi.config.WorkbookConfig;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.datatransformation.DataTransformationFunction;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
+import it.firegloves.mempoi.util.RowsUtils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ public class DataStrategos {
 
     private static final Logger logger = LoggerFactory.getLogger(DataStrategos.class);
 
+    private static final int SIMPLE_TEXT_HEADER_HEIGHT_PLUS = 15;
     private static final int ROW_HEIGHT_PLUS = 5;
 
     /**
@@ -34,6 +38,43 @@ public class DataStrategos {
 
     public DataStrategos(WorkbookConfig workbookConfig) {
         this.workbookConfig = workbookConfig;
+    }
+
+    /**
+     * add the simple text header if specified by the user
+     *
+     * @param mempoiSheet the mempoi sheet
+     * @param rowOffset   the row offset identifying the current row to use
+     * @param colOffset   the column offset
+     * @param mempoiSheetMetadataBuilder
+     * @return the new row offset
+     */
+    protected int addSimpleTextHeader(MempoiSheet mempoiSheet, int rowOffset, int colOffset,
+            MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+
+        if (ObjectUtils.isEmpty(mempoiSheet.getSimpleHeaderText())) {
+            return rowOffset;
+        }
+
+        mempoiSheetMetadataBuilder.withSimpleTextHeaderRowIndex(rowOffset);
+
+        final Row headerRow = mempoiSheet.getSheet().createRow(rowOffset);
+        final Cell headerCell = headerRow.createCell(colOffset);
+        headerCell.setCellValue(mempoiSheet.getSimpleHeaderText());
+
+        // create the merged region for the header
+        mempoiSheet.getSheet().addMergedRegion(new CellRangeAddress(
+                rowOffset,
+                rowOffset,
+                colOffset,
+                colOffset + mempoiSheet.getColumnList().size() - 1));
+
+        headerCell.setCellStyle(mempoiSheet.getSheetStyler().getSimpleTextHeaderCellStyle());
+
+        RowsUtils.adjustRowHeight(this.workbookConfig.getWorkbook(),
+                mempoiSheet.getSheetStyler().getSimpleTextHeaderCellStyle(), headerRow, SIMPLE_TEXT_HEADER_HEIGHT_PLUS);
+
+        return rowOffset + 1;
     }
 
     /**
@@ -61,21 +102,15 @@ public class DataStrategos {
                 ((XSSFSheet) sheet).getColumnHelper().setColDefaultStyle(colNum, cm.getCellStyle());
             }
 
-            cell.setCellStyle(sheetReportStyler.getHeaderCellStyle());
+            cell.setCellStyle(sheetReportStyler.getColsHeaderCellStyle());
             cell.setCellValue(cm.getColumnDisplayName());
 
             logger.debug("SETTING HEADER FOR COLUMN {} (DISPLAY NAME {})", cm.getColumnName(),
                     cm.getColumnDisplayName());
         }
 
-        // adjust row height
-        if (sheetReportStyler.getHeaderCellStyle() instanceof XSSFCellStyle) {
-            row.setHeightInPoints((float) ((XSSFCellStyle) sheetReportStyler.getHeaderCellStyle()).getFont()
-                    .getFontHeightInPoints() + ROW_HEIGHT_PLUS);
-        } else {
-            row.setHeightInPoints((float) ((HSSFCellStyle) sheetReportStyler.getHeaderCellStyle())
-                    .getFont(this.workbookConfig.getWorkbook()).getFontHeightInPoints() + ROW_HEIGHT_PLUS);
-        }
+        RowsUtils.adjustRowHeight(this.workbookConfig.getWorkbook(),
+                sheetReportStyler.getColsHeaderCellStyle(), row, ROW_HEIGHT_PLUS);
 
         return rowCounter;
     }

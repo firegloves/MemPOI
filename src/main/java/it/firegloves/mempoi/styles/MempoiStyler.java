@@ -12,8 +12,11 @@ import org.apache.poi.ss.usermodel.CellStyle;
 @NoArgsConstructor
 public class MempoiStyler {
 
-    // header
-    private CellStyle headerCellStyle;
+    // simple text header
+    private CellStyle simpleTextHeaderCellStyle;
+
+    // cols header
+    private CellStyle colsHeaderCellStyle;
 
     // common data
     private CellStyle commonDataCellStyle;
@@ -29,6 +32,9 @@ public class MempoiStyler {
 
     // floating point number
     private CellStyle floatingPointCellStyle;
+
+    // simple text footer
+    private CellStyle simpleTextFooterCellStyle;
 
     // sub footer
     private CellStyle subFooterCellStyle;

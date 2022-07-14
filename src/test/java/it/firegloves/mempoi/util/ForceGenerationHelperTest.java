@@ -2,7 +2,7 @@ package it.firegloves.mempoi.util;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import it.firegloves.mempoi.exception.MempoiException;
@@ -45,7 +45,7 @@ public class ForceGenerationHelperTest {
                 logError,
                 logger);
 
-        verifyZeroInteractions(logger);
+        verifyNoInteractions(logger);
     }
 
     @Test

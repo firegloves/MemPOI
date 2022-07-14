@@ -11,12 +11,29 @@ import org.apache.poi.ss.usermodel.Workbook;
 public interface StyleTemplate {
 
     /**
-     * create and returns the default header's cell style
+     * create and returns the default simple text header's cell style
      * @param workbook the workbook used to generate CellStyle
      *
      * @return the HeaderCellStyle of the StyleTemplate
      */
-    CellStyle getHeaderCellStyle(Workbook workbook);
+    CellStyle getSimpleTextHeaderCellStyle(Workbook workbook);
+
+    /**
+     * create and returns the default simple text footer's cell style
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the FooterCellStyle of the StyleTemplate
+     */
+    CellStyle getSimpleTextFooterCellStyle(Workbook workbook);
+
+
+    /**
+     * create and returns the default cols header's cell style
+     * @param workbook the workbook used to generate CellStyle
+     *
+     * @return the HeaderCellStyle of the StyleTemplate
+     */
+    CellStyle getColsHeaderCellStyle(Workbook workbook);
 
 
     /**
@@ -91,12 +108,14 @@ public interface StyleTemplate {
     default MempoiStyler toMempoiStyler(Workbook workbook) {
 
         return new MempoiStyler(
-                this.getHeaderCellStyle(workbook),
+                this.getSimpleTextHeaderCellStyle(workbook),
+                this.getColsHeaderCellStyle(workbook),
                 this.getCommonDataCellStyle(workbook),
                 this.getDateCellStyle(workbook),
                 this.getDatetimeCellStyle(workbook),
                 this.getIntegerCellStyle(workbook),
                 this.getFloatingPointCellStyle(workbook),
+                this.getSimpleTextFooterCellStyle(workbook),
                 this.getSubfooterCellStyle(workbook));
     }
 

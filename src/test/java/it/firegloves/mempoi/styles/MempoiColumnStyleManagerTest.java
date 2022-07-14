@@ -63,7 +63,7 @@ public class MempoiColumnStyleManagerTest {
       when(reportStyler.getCommonDataCellStyle()).thenReturn(commonDataCellStyle);
       when(reportStyler.getDateCellStyle()).thenReturn(dateCellStyle);
       when(reportStyler.getDatetimeCellStyle()).thenReturn(datetimeCellStyle);
-      when(reportStyler.getHeaderCellStyle()).thenReturn(headerCellStyle);
+      when(reportStyler.getColsHeaderCellStyle()).thenReturn(headerCellStyle);
       when(reportStyler.getIntegerCellStyle()).thenReturn(integerCellStyle);
       when(reportStyler.getFloatingPointCellStyle()).thenReturn(floatingPointCellStyle);
       when(reportStyler.getSubFooterCellStyle()).thenReturn(subFooterCellStyle);

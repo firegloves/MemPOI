@@ -7,6 +7,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
@@ -14,9 +15,15 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 @Accessors(chain = true)
 public abstract class HueStyleTemplate implements StyleTemplate {
 
-    private short headerCellBgColorIndex = IndexedColors.CORAL.getIndex();
-    private short headerFontColorIndex = IndexedColors.WHITE.getIndex();
-    private short headerFontSizeInPoint = 16;
+    private short simpleTextHeaderCellBgColorIndex = IndexedColors.ORCHID.getIndex();
+    private short simpleTextHeaderFontColorIndex = IndexedColors.WHITE.getIndex();
+    private short simpleTextHeaderFontSizeInPoint = 18;
+    private short simpleTextFooterCellBgColorIndex = IndexedColors.ORCHID.getIndex();
+    private short simpleTextFooterFontColorIndex = IndexedColors.WHITE.getIndex();
+    private short simpleTextFooterFontSizeInPoint = 14;
+    private short colsHeaderCellBgColorIndex = IndexedColors.CORAL.getIndex();
+    private short colsHeaderFontColorIndex = IndexedColors.WHITE.getIndex();
+    private short colsHeaderFontSizeInPoint = 16;
     private short commonCellBgColorIndex = IndexedColors.WHITE.getIndex();
     private short commonFontColorIndex = IndexedColors.BLACK.getIndex();
     private short borderColorIndex = IndexedColors.BLACK.getIndex();
@@ -25,15 +32,48 @@ public abstract class HueStyleTemplate implements StyleTemplate {
 
 
     @Override
-    public CellStyle getHeaderCellStyle(Workbook workbook) {
+    public CellStyle getSimpleTextHeaderCellStyle(Workbook workbook) {
 
-        CellStyle cellStyle = this.setGenericCellStyle(workbook, this.headerCellBgColorIndex, this.headerFontColorIndex, true, this.borderColorIndex);
+        return setSimpleHeaderOrFooterCellStyle(workbook, simpleTextHeaderCellBgColorIndex,
+                simpleTextHeaderFontColorIndex, simpleTextHeaderFontSizeInPoint, borderColorIndex);
+    }
+
+    @Override
+    public CellStyle getSimpleTextFooterCellStyle(Workbook workbook) {
+
+        return setSimpleHeaderOrFooterCellStyle(workbook, simpleTextFooterCellBgColorIndex,
+                simpleTextFooterFontColorIndex, simpleTextFooterFontSizeInPoint, borderColorIndex);
+    }
+
+
+    private CellStyle setSimpleHeaderOrFooterCellStyle(Workbook workbook, short cellBgColorIndex, short fontColor, short fontSize, short borderColor) {
+
+        CellStyle cellStyle = this.setGenericCellStyle(workbook, cellBgColorIndex, fontColor, true, borderColor);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        if (cellStyle instanceof XSSFCellStyle) {
+            ((XSSFCellStyle) cellStyle).getFont().setFontHeightInPoints(fontSize);
+        } else {
+            ((HSSFCellStyle) cellStyle).getFont(workbook).setFontHeight((short) (fontSize * 20));
+        }
+
+        cellStyle.setWrapText(true);
+        return cellStyle;
+    }
+
+
+    @Override
+    public CellStyle getColsHeaderCellStyle(Workbook workbook) {
+
+        CellStyle cellStyle = this.setGenericCellStyle(workbook, this.colsHeaderCellBgColorIndex,
+                this.colsHeaderFontColorIndex, true, this.borderColorIndex);
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
         if (cellStyle instanceof XSSFCellStyle) {
-            ((XSSFCellStyle)cellStyle).getFont().setFontHeightInPoints(headerFontSizeInPoint);
+            ((XSSFCellStyle) cellStyle).getFont().setFontHeightInPoints(colsHeaderFontSizeInPoint);
         } else {
-            ((HSSFCellStyle)cellStyle).getFont(workbook).setFontHeight((short)(headerFontSizeInPoint*20));
+            ((HSSFCellStyle) cellStyle).getFont(workbook).setFontHeight((short) (colsHeaderFontSizeInPoint * 20));
         }
 
         cellStyle.setWrapText(true);

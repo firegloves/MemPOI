@@ -199,8 +199,11 @@ public class Strategos {
         int rowCounter = firstRow;
 
         try {
+            // creates an optional simple text header
+            rowCounter = this.dataStrategos.addSimpleTextHeader(mempoiSheet, rowCounter, firstCol, mempoiSheetMetadataBuilder);
+
             // creates header
-            mempoiSheetMetadataBuilder.withHeaderRowIndex(rowCounter);
+            mempoiSheetMetadataBuilder.withColsHeaderRowIndex(rowCounter);
             rowCounter = this.dataStrategos
                           .createHeaderRow(mempoiSheet.getSheet(), columnList, rowCounter, firstCol,
                             mempoiSheet.getSheetStyler());
@@ -264,8 +267,8 @@ public class Strategos {
 
         // footer
         mempoiSheetMetadataBuilder = this.footerStrategos
-                .createFooterAndSubfooter(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex,
-                        localRowCounter, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
+                .createFooters(mempoiSheet.getSheet(), columnList, mempoiSheet, firstDataRowIndex,
+                        localRowCounter, mempoiSheetMetadataBuilder, firstCol);
 
         mempoiSheetMetadataBuilder.withTotalRows(localRowCounter);
 

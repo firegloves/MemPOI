@@ -13,17 +13,22 @@ import it.firegloves.mempoi.domain.footer.MempoiSubFooterCell;
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.MempoiStyler;
 import it.firegloves.mempoi.util.Errors;
+import it.firegloves.mempoi.util.RowsUtils;
 import java.util.List;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Footer;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class FooterStrategos {
 
     private static final Logger logger = LoggerFactory.getLogger(FooterStrategos.class);
+
+    private static final int SIMPLE_TEXT_FOOTER_HEIGHT_PLUS = 5;
 
     /**
      * contains the workbook configurations
@@ -42,25 +47,27 @@ class FooterStrategos {
      * @param mempoiSheet                the MempoiSheet containing footer and subfooter configuration
      * @param firstDataRowIndex          index of the first data row
      * @param rowCounter                 counter of the current row
-     * @param reportStyler               MempoiStyler containing style configuration
+     * @param colOffset                 the column offset to prepend
      * @param mempoiSheetMetadataBuilder the mempoiSheetMetadataBuilder in which insert metadata
      * @return the populated mempoiSheetMetadataBuilder
      */
-    protected MempoiSheetMetadataBuilder createFooterAndSubfooter(Sheet sheet, List<MempoiColumn> columnList,
-            MempoiSheet mempoiSheet,
-            int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler,
-            MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+    protected MempoiSheetMetadataBuilder createFooters(Sheet sheet, List<MempoiColumn> columnList,
+            MempoiSheet mempoiSheet, int firstDataRowIndex, int rowCounter,
+            MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder, int colOffset) {
 
         // add optional sub footer
-        MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder1 = this.createSubFooterRow(sheet, columnList,
+        int nextRowIndex = this.createSubFooterRow(sheet, columnList,
                 mempoiSheet.getMempoiSubFooter().orElseGet(() -> this.workbookConfig.getMempoiSubFooter()),
-                firstDataRowIndex, rowCounter, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
+                firstDataRowIndex, rowCounter, colOffset, mempoiSheet.getSheetStyler(), mempoiSheetMetadataBuilder);
+
+        // add optional simple text footer
+        this.createSimpleTextFooter(mempoiSheet, nextRowIndex, colOffset, mempoiSheetMetadataBuilder);
 
         // add optional footer
         this.createFooterRow(sheet,
                 mempoiSheet.getMempoiFooter().orElseGet(() -> this.workbookConfig.getMempoiFooter()));
 
-        return mempoiSheetMetadataBuilder1;
+        return mempoiSheetMetadataBuilder;
     }
 
 
@@ -72,13 +79,16 @@ class FooterStrategos {
      * @param mempoiSubFooter            MempoiSubFooter to which add data
      * @param firstDataRowIndex          index of the first data row
      * @param rowCounter                 counter of the current row
+     * @param colOffset                 the column offset to prepend
      * @param reportStyler               MempoiStyler containing style configuration
      * @param mempoiSheetMetadataBuilder the mempoiSheetMetadataBuilder in which set metadata
-     * @return the populated mempoiSheetMetadataBuilder
+     * @return the next free row
      */
-    private MempoiSheetMetadataBuilder createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList,
-            MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, MempoiStyler reportStyler,
-            MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+    private int createSubFooterRow(Sheet sheet, List<MempoiColumn> columnList,
+            MempoiSubFooter mempoiSubFooter, int firstDataRowIndex, int rowCounter, int colOffset,
+            MempoiStyler reportStyler, MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+
+        int nextRowIndex = rowCounter;
 
         if (null != mempoiSubFooter) {
 
@@ -86,15 +96,16 @@ class FooterStrategos {
 
             // create the sub footer cells
             mempoiSubFooter.setColumnSubFooter(this.workbookConfig.getWorkbook(), columnList,
-                    reportStyler.getSubFooterCellStyle(), firstDataRowIndex, rowCounter);
+                    reportStyler.getSubFooterCellStyle(), firstDataRowIndex, rowCounter, colOffset);
 
             Row row = sheet.createRow(rowCounter);
             mempoiSheetMetadataBuilder.withSubfooterRowIndex(rowCounter);
+            nextRowIndex++;
 
             for (int i = 0; i < colListLen; i++) {
 
                 MempoiSubFooterCell subFooterCell = columnList.get(i).getSubFooterCell();
-                Cell cell = row.createCell(i);
+                Cell cell = row.createCell(i + colOffset);
                 cell.setCellStyle(subFooterCell.getStyle());
 
                 logger.debug("SETTING SUB FOOTER CELL FOR COLUMN {}", columnList.get(i).getColumnName());
@@ -115,9 +126,34 @@ class FooterStrategos {
             }
         }
 
-        return mempoiSheetMetadataBuilder;
+        return nextRowIndex;
     }
 
+    private void createSimpleTextFooter(MempoiSheet mempoiSheet, int rowCounter, int colOffset,
+            MempoiSheetMetadataBuilder mempoiSheetMetadataBuilder) {
+
+        if (ObjectUtils.isEmpty(mempoiSheet.getSimpleFooterText())) {
+            return;
+        }
+
+        mempoiSheetMetadataBuilder.withSimpleTextFooterRowIndex(rowCounter);
+
+        final Row footerRow = mempoiSheet.getSheet().createRow(rowCounter);
+        final Cell footerCell = footerRow.createCell(colOffset);
+        footerCell.setCellValue(mempoiSheet.getSimpleFooterText());
+
+        // create the merged region for the header
+        mempoiSheet.getSheet().addMergedRegion(new CellRangeAddress(
+                rowCounter,
+                rowCounter,
+                colOffset,
+                colOffset + mempoiSheet.getColumnList().size() - 1));
+
+        footerCell.setCellStyle(mempoiSheet.getSheetStyler().getSimpleTextFooterCellStyle());
+
+        RowsUtils.adjustRowHeight(this.workbookConfig.getWorkbook(),
+                mempoiSheet.getSheetStyler().getSimpleTextFooterCellStyle(), footerRow, SIMPLE_TEXT_FOOTER_HEIGHT_PLUS);
+    }
 
     /**
      * creates and appends the footer row to the current report

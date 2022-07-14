@@ -3,10 +3,10 @@ package it.firegloves.mempoi.styles;
 import static it.firegloves.mempoi.testutil.AssertionHelper.assertOnCellStyle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import it.firegloves.mempoi.styles.template.AquaStyleTemplate;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
+import it.firegloves.mempoi.styles.template.HueStyleTemplate;
 import it.firegloves.mempoi.styles.template.PanegiriconStyleTemplate;
 import it.firegloves.mempoi.styles.template.PurpleStyleTemplate;
 import it.firegloves.mempoi.styles.template.RoseStyleTemplate;
@@ -78,33 +78,39 @@ public class StyleTemplateTest {
     @Test
     public void getIntegerCellStyleTest() {
 
-        assertNull(new DummyStyleTemplate().getIntegerCellStyle(new SXSSFWorkbook()));
+        assertEquals(new DummyStyleTemplate().getIntegerCellStyle(new SXSSFWorkbook()),
+                new PanegiriconStyleTemplate().getIntegerCellStyle(new SXSSFWorkbook()));
     }
 
     @Test
     public void getFloatingPointCellStyleTest() {
 
-        assertNull(new DummyStyleTemplate().getFloatingPointCellStyle(new SXSSFWorkbook()));
+        assertEquals(new DummyStyleTemplate().getFloatingPointCellStyle(new SXSSFWorkbook()),
+                new PanegiriconStyleTemplate().getFloatingPointCellStyle(new SXSSFWorkbook()));
     }
 
     @Test
     public void getCommonDataCellStyleTest() {
 
-        assertNull(new DummyStyleTemplate().getCommonDataCellStyle(new SXSSFWorkbook()));
+        assertEquals(new DummyStyleTemplate().getCommonDataCellStyle(new SXSSFWorkbook()),
+                new PanegiriconStyleTemplate().getCommonDataCellStyle(new SXSSFWorkbook()));
     }
 
     @Test
     public void toMempoiStyler() {
 
+        Workbook wb = new SXSSFWorkbook();
+        PanegiriconStyleTemplate template = new PanegiriconStyleTemplate();
         MempoiStyler styler = new DummyStyleTemplate().toMempoiStyler(new SXSSFWorkbook());
 
-        assertOnCellStyle(styler.getHeaderCellStyle(), styler.getHeaderCellStyle());
-        assertOnCellStyle(styler.getCommonDataCellStyle(), styler.getCommonDataCellStyle());
-        assertOnCellStyle(styler.getDateCellStyle(), styler.getDateCellStyle());
-        assertOnCellStyle(styler.getDatetimeCellStyle(), styler.getDatetimeCellStyle());
-        assertOnCellStyle(styler.getIntegerCellStyle(), styler.getIntegerCellStyle());
-        assertOnCellStyle(styler.getFloatingPointCellStyle(), styler.getFloatingPointCellStyle());
-        assertOnCellStyle(styler.getSubFooterCellStyle(), styler.getSubFooterCellStyle());
+        assertOnCellStyle(styler.getSimpleTextHeaderCellStyle(), template.getSimpleTextHeaderCellStyle(wb));
+        assertOnCellStyle(styler.getColsHeaderCellStyle(), template.getColsHeaderCellStyle(wb));
+        assertOnCellStyle(styler.getCommonDataCellStyle(), template.getCommonDataCellStyle(wb));
+        assertOnCellStyle(styler.getDateCellStyle(), template.getDateCellStyle(wb));
+        assertOnCellStyle(styler.getDatetimeCellStyle(), template.getDatetimeCellStyle(wb));
+        assertOnCellStyle(styler.getIntegerCellStyle(), template.getIntegerCellStyle(wb));
+        assertOnCellStyle(styler.getFloatingPointCellStyle(), template.getFloatingPointCellStyle(wb));
+        assertOnCellStyle(styler.getSimpleTextFooterCellStyle(), template.getSimpleTextFooterCellStyle(wb));
     }
 
 
@@ -113,15 +119,51 @@ public class StyleTemplateTest {
      */
     private class DummyStyleTemplate implements StyleTemplate {
 
+        private HueStyleTemplate template = new PanegiriconStyleTemplate();
 
         @Override
-        public CellStyle getHeaderCellStyle(Workbook workbook) {
-            return null;
+        public CellStyle getSimpleTextHeaderCellStyle(Workbook workbook) {
+            return template.getSimpleTextHeaderCellStyle(workbook);
+        }
+
+        @Override
+        public CellStyle getDateCellStyle(Workbook workbook) {
+            return template.getDateCellStyle(workbook);
+        }
+
+        @Override
+        public CellStyle getDatetimeCellStyle(Workbook workbook) {
+            return template.getDatetimeCellStyle(workbook);
+        }
+
+        @Override
+        public CellStyle getIntegerCellStyle(Workbook workbook) {
+            return template.getIntegerCellStyle(workbook);
+        }
+
+        @Override
+        public CellStyle getFloatingPointCellStyle(Workbook workbook) {
+            return template.getFloatingPointCellStyle(workbook);
+        }
+
+        @Override
+        public CellStyle getCommonDataCellStyle(Workbook workbook) {
+            return template.getCommonDataCellStyle(workbook);
+        }
+
+        @Override
+        public CellStyle getSimpleTextFooterCellStyle(Workbook workbook) {
+            return template.getSimpleTextFooterCellStyle(workbook);
+        }
+
+        @Override
+        public CellStyle getColsHeaderCellStyle(Workbook workbook) {
+            return template.getColsHeaderCellStyle(workbook);
         }
 
         @Override
         public CellStyle getSubfooterCellStyle(Workbook workbook) {
-            return null;
+            return template.getSubfooterCellStyle(workbook);
         }
     }
 
@@ -136,7 +178,8 @@ public class StyleTemplateTest {
         assertNotNull("template " + template.getClass().getName() + " common data cell style not null", template.getCommonDataCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " date cell style not null", template.getDateCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " datetime cell style not null", template.getDatetimeCellStyle(workbook));
-        assertNotNull("template " + template.getClass().getName() + " header cell style not null", template.getHeaderCellStyle(workbook));
+        assertNotNull("template " + template.getClass().getName() + " header cell style not null", template.getSimpleTextHeaderCellStyle(workbook));
+        assertNotNull("template " + template.getClass().getName() + " header cell style not null", template.getColsHeaderCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " integer cell style not null", template.getIntegerCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " floating cell style not null", template.getFloatingPointCellStyle(workbook));
         assertNotNull("template " + template.getClass().getName() + " footer cell style not null", template.getSubfooterCellStyle(workbook));

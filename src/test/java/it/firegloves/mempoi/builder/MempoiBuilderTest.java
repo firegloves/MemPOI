@@ -80,7 +80,7 @@ public class MempoiBuilderTest {
                 .withAdjustColumnWidth(true)
                 .addMempoiSheet(new MempoiSheet(prepStmt, sheetName))
                 .withStyleTemplate(new ForestStyleTemplate())
-                .withHeaderCellStyle(headerCellStyle)
+                .withColsHeaderCellStyle(headerCellStyle)
                 .withMempoiSubFooter(new NumberSumSubFooter())
                 .withEvaluateCellFormulas(true)
                 .withMempoiFooter(new StandardMempoiFooter(workbook, footerText))
@@ -104,7 +104,7 @@ public class MempoiBuilderTest {
         assertNotNull("MemPOI mempoiReportStyler CommonDataCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getCommonDataCellStyle());
         assertNotNull("MemPOI mempoiReportStyler DateCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getDateCellStyle());
         assertNotNull("MemPOI mempoiReportStyler DatetimeCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getDatetimeCellStyle());
-        assertNotNull("MemPOI mempoiReportStyler HeaderCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getHeaderCellStyle());
+        assertNotNull("MemPOI mempoiReportStyler HeaderCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getColsHeaderCellStyle());
         assertNotNull("MemPOI mempoiReportStyler IntegerCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getIntegerCellStyle());
         assertNotNull("MemPOI mempoiReportStyler FloatingPointCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getFloatingPointCellStyle());
         assertNotNull("MemPOI mempoiReportStyler SubFooterCellStyle not null", memPOI.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getSubFooterCellStyle());
@@ -194,11 +194,27 @@ public class MempoiBuilderTest {
      *****************************************************************************************************************/
 
     @Test
-    public void withHeaderCellStyle() {
+    public void withSimpleTextHeaderCellStyle() {
 
         assertOnCellStyle(
-                mempoiBuilder -> mempoiBuilder.withHeaderCellStyle(this.cellStyle),
-                MempoiStyler::getHeaderCellStyle);
+                mempoiBuilder -> mempoiBuilder.withSimpleTextHeaderCellStyle(this.cellStyle),
+                MempoiStyler::getSimpleTextHeaderCellStyle);
+    }
+
+    @Test
+    public void withSimpleTextFooterCellStyle() {
+
+        assertOnCellStyle(
+                mempoiBuilder -> mempoiBuilder.withSimpleTextFooterCellStyle(this.cellStyle),
+                MempoiStyler::getSimpleTextFooterCellStyle);
+    }
+
+    @Test
+    public void withColsHeaderCellStyle() {
+
+        assertOnCellStyle(
+                mempoiBuilder -> mempoiBuilder.withColsHeaderCellStyle(this.cellStyle),
+                MempoiStyler::getColsHeaderCellStyle);
     }
 
     @Test
@@ -523,7 +539,9 @@ public class MempoiBuilderTest {
         assertNotNull(stylerName + " CommonDataCellStyle not null", styler.getCommonDataCellStyle());
         assertNotNull(stylerName + " DateCellStyle not null", styler.getDateCellStyle());
         assertNotNull(stylerName + " DatetimeCellStyle not null", styler.getDatetimeCellStyle());
-        assertNotNull(stylerName + " HeaderCellStyle not null", styler.getHeaderCellStyle());
+        assertNotNull(stylerName + " HeaderCellStyle not null", styler.getColsHeaderCellStyle());
+        assertNotNull(stylerName + " SimpleTextHeaderCellStyle not null", styler.getSimpleTextHeaderCellStyle());
+        assertNotNull(stylerName + " SimpleTextFooterCellStyle not null", styler.getSimpleTextFooterCellStyle());
         assertNotNull(stylerName + " IntegerCellStyle not null", styler.getIntegerCellStyle());
         assertNotNull(stylerName + " FloatingPointCellStyle not null", styler.getFloatingPointCellStyle());
         assertNotNull(stylerName + " SubFooterCellStyle not null", styler.getSubFooterCellStyle());
@@ -638,10 +656,10 @@ public class MempoiBuilderTest {
 
         MemPOI mempoi = MempoiBuilder.aMemPOI()
                 .addMempoiSheet(new MempoiSheet(prepStmt))
-                .setHeaderCellStyle(this.cellStyle)
+                .setColsHeaderCellStyle(this.cellStyle)
                 .build();
 
-        assertEquals(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getHeaderCellStyle());
+        assertEquals(this.cellStyle, mempoi.getWorkbookConfig().getSheetList().get(0).getSheetStyler().getColsHeaderCellStyle());
     }
 
     @Test

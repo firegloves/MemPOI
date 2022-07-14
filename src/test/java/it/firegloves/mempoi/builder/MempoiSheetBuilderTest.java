@@ -57,6 +57,7 @@ public class MempoiSheetBuilderTest {
     public void mempoiSheetBuilderFullPopulated() {
 
         String sheetName = "test name";
+        String headerText = "test header";
         String footerName = "test footer";
         String[] mergedCols = new String[]{"col1", "col2"};
         int colOffset = 5;
@@ -70,11 +71,15 @@ public class MempoiSheetBuilderTest {
                 .withStyleTemplate(forestStyleTemplate)
                 .withPrepStmt(prepStmt)
                 .withSheetName(sheetName)
+                .withSimpleHeaderText(headerText)
+                .withSimpleFooterText(TestHelper.SIMPLE_TEXT_FOOTER)
                 .withMempoiSubFooter(numberSumSubFooter)
+                .withSimpleTextHeaderCellStyle(styleTemplate.getSimpleTextHeaderCellStyle(wb))
+                .withSimpleTextFooterCellStyle(styleTemplate.getSimpleTextFooterCellStyle(wb))
                 .withCommonDataCellStyle(styleTemplate.getCommonDataCellStyle(wb))
                 .withDateCellStyle(styleTemplate.getDateCellStyle(wb))
                 .withDatetimeCellStyle(styleTemplate.getDatetimeCellStyle(wb))
-                .withHeaderCellStyle(styleTemplate.getHeaderCellStyle(wb))
+                .withColsHeaderCellStyle(styleTemplate.getColsHeaderCellStyle(wb))
                 .withIntegerCellStyle(styleTemplate.getIntegerCellStyle(wb))
                 .withFloatingPointCellStyle(styleTemplate.getFloatingPointCellStyle(wb))
                 .withSubFooterCellStyle(styleTemplate.getSubfooterCellStyle(wb))
@@ -91,12 +96,16 @@ public class MempoiSheetBuilderTest {
         assertEquals("Style template ForestTemplate", forestStyleTemplate, mempoiSheet.getStyleTemplate());
         assertEquals("Prepared Statement", prepStmt, mempoiSheet.getPrepStmt());
         assertEquals("Sheet name", sheetName, mempoiSheet.getSheetName());
+        assertEquals("Sheet header text", headerText, mempoiSheet.getSimpleHeaderText());
+        assertEquals("Sheet footer text", TestHelper.SIMPLE_TEXT_FOOTER, mempoiSheet.getSimpleFooterText());
         assertEquals("Subfooter", numberSumSubFooter, mempoiSheet.getMempoiSubFooter().get());
         AssertionHelper.assertOnCellStyle(styleTemplate.getCommonDataCellStyle(wb),
                 mempoiSheet.getCommonDataCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getSimpleTextHeaderCellStyle(wb), mempoiSheet.getSimpleTextHeaderCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getSimpleTextFooterCellStyle(wb), mempoiSheet.getSimpleTextFooterCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getDateCellStyle(wb), mempoiSheet.getDateCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getDatetimeCellStyle(wb), mempoiSheet.getDatetimeCellStyle());
-        AssertionHelper.assertOnCellStyle(styleTemplate.getHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
+        AssertionHelper.assertOnCellStyle(styleTemplate.getColsHeaderCellStyle(wb), mempoiSheet.getHeaderCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getIntegerCellStyle(wb), mempoiSheet.getIntegerCellStyle());
         AssertionHelper.assertOnCellStyle(styleTemplate.getFloatingPointCellStyle(wb),
                 mempoiSheet.getFloatingPointCellStyle());

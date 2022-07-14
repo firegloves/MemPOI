@@ -48,13 +48,15 @@ public class MempoiBuilder {
 
     // style variables
     private StyleTemplate styleTemplate;
-    private CellStyle headerCellStyle;
+    private CellStyle simpleTextHeaderCellStyle;
+    private CellStyle colsHeaderCellStyle;
     private CellStyle subFooterCellStyle;
     private CellStyle commonDataCellStyle;
     private CellStyle dateCellStyle;
     private CellStyle datetimeCellStyle;
     private CellStyle integerCellStyle;
     private CellStyle floatingPointCellStyle;
+    private CellStyle simpleTextFooterCellStyle;
 
     /**
      * by default MemPOI forces Excel to evaluate cell formulas when it opens the report but if this var is true MemPOI
@@ -205,11 +207,20 @@ public class MempoiBuilder {
     }
 
     /**
-     * @param headerCellStyle the CellStyle to apply to header cells
+     * @param simpleTextHeaderCellStyle the CellStyle to apply to the simple text header cell
      * @return the current MempoiBuilder
      */
-    public MempoiBuilder withHeaderCellStyle(CellStyle headerCellStyle) {
-        this.headerCellStyle = headerCellStyle;
+    public MempoiBuilder withSimpleTextHeaderCellStyle(CellStyle simpleTextHeaderCellStyle) {
+        this.simpleTextHeaderCellStyle = simpleTextHeaderCellStyle;
+        return this;
+    }
+
+    /**
+     * @param colsHeaderCellStyle the CellStyle to apply to cols header cells
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withColsHeaderCellStyle(CellStyle colsHeaderCellStyle) {
+        this.colsHeaderCellStyle = colsHeaderCellStyle;
         return this;
     }
 
@@ -267,6 +278,14 @@ public class MempoiBuilder {
         return this;
     }
 
+    /**
+     * @param simpleTextFooterCellStyle the CellStyle to apply to the simple text footer cell
+     * @return the current MempoiBuilder
+     */
+    public MempoiBuilder withSimpleTextFooterCellStyle(CellStyle simpleTextFooterCellStyle) {
+        this.simpleTextFooterCellStyle = simpleTextFooterCellStyle;
+        return this;
+    }
 
     /**
      * add a MempoiSheet to the list of the sheet to add to the generating export
@@ -369,9 +388,11 @@ public class MempoiBuilder {
                 .withCommonDataCellStyle(getFirstNotNullCellStyle(s.getCommonDataCellStyle(), this.commonDataCellStyle))
                 .withDateCellStyle(getFirstNotNullCellStyle(s.getDateCellStyle(), this.dateCellStyle))
                 .withDatetimeCellStyle(getFirstNotNullCellStyle(s.getDatetimeCellStyle(), this.datetimeCellStyle))
-                .withHeaderCellStyle(getFirstNotNullCellStyle(s.getHeaderCellStyle(), this.headerCellStyle))
+                .withSimpleTextHeaderCellStyle(getFirstNotNullCellStyle(s.getSimpleTextHeaderCellStyle(), this.simpleTextHeaderCellStyle))
+                .withColsHeaderCellStyle(getFirstNotNullCellStyle(s.getHeaderCellStyle(), this.colsHeaderCellStyle))
                 .withIntegerCellStyle(getFirstNotNullCellStyle(s.getIntegerCellStyle(), this.integerCellStyle))
                 .withFloatingPointCellStyle(getFirstNotNullCellStyle(s.getFloatingPointCellStyle(), this.floatingPointCellStyle))
+                .withSimpleTextFooterCellStyle(getFirstNotNullCellStyle(s.getSimpleTextFooterCellStyle(), this.simpleTextFooterCellStyle))
                 .withSubFooterCellStyle(getFirstNotNullCellStyle(s.getSubFooterCellStyle(), this.subFooterCellStyle))
                 .build();
 
@@ -475,13 +496,13 @@ public class MempoiBuilder {
     }
 
     /**
-     * @param headerCellStyle the CellStyle to apply to header cells
+     * @param colsHeaderCellStyle the CellStyle to apply to header cells
      * @return the current MempoiBuilder
-     * @deprecated Replaced by {@link #withHeaderCellStyle(CellStyle)}
+     * @deprecated Replaced by {@link #withColsHeaderCellStyle(CellStyle)}
      */
     @Deprecated
-    public MempoiBuilder setHeaderCellStyle(CellStyle headerCellStyle) {
-        return this.withHeaderCellStyle(headerCellStyle);
+    public MempoiBuilder setColsHeaderCellStyle(CellStyle colsHeaderCellStyle) {
+        return this.withColsHeaderCellStyle(colsHeaderCellStyle);
     }
 
     /**

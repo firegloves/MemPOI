@@ -10,9 +10,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.Test;
 
 public class ArticleIT extends IntegrationBaseIT {
@@ -30,6 +32,9 @@ public class ArticleIT extends IntegrationBaseIT {
         String catsSheetName = "Cats sheet";
         String birdsSheetName = "Birds sheet";
 
+        String headerText = "My simple header";
+        String footerText = "My simple footer";
+
         // dogs sheet
         MempoiSheet dogsSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName(dogsSheetName)
@@ -39,12 +44,14 @@ public class ArticleIT extends IntegrationBaseIT {
         // cats sheet
         MempoiSheet catsSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName(catsSheetName)
+                .withSimpleHeaderText(headerText)
                 .withPrepStmt(conn.prepareStatement(catsQuery))
                 .build();
 
         // birds sheet
         MempoiSheet birdsSheet = MempoiSheetBuilder.aMempoiSheet()
                 .withSheetName(birdsSheetName)
+                .withSimpleFooterText(footerText)
                 .withPrepStmt(conn.prepareStatement(birdsQuery))
                 .build();
 
@@ -79,14 +86,23 @@ public class ArticleIT extends IntegrationBaseIT {
         assertEquals("Dogs header 1", "DOG_NAME", firstSheet.getRow(0).getCell(0).getStringCellValue());
         assertEquals("Dogs header 2", "DOG_RACE", firstSheet.getRow(0).getCell(1).getStringCellValue());
 
-        assertEquals("Dogs header 1", "CAT_NAME", secondSheet.getRow(0).getCell(0).getStringCellValue());
-        assertEquals("Dogs header 2", "CAT_RACE", secondSheet.getRow(0).getCell(1).getStringCellValue());
+        final Cell headerCell = secondSheet.getRow(0).getCell(0);
+        assertEquals("Cats simple header", headerText, headerCell.getStringCellValue());
 
-        assertEquals("Cats header 1", "CAT_NAME", secondSheet.getRow(0).getCell(0).getStringCellValue());
-        assertEquals("Cats header 2", "CAT_RACE", secondSheet.getRow(0).getCell(1).getStringCellValue());
+        final CellRangeAddress cellAddresses = secondSheet.getMergedRegions().get(0);
+        assertEquals("Cats header first row", 0, cellAddresses.getFirstRow());
+        assertEquals("Cats header last row", 0, cellAddresses.getLastRow());
+        assertEquals("Cats header first col", 0, cellAddresses.getFirstColumn());
+        assertEquals("Cats header last col", 1, cellAddresses.getLastColumn());
+        assertEquals("Cats header 1", "CAT_NAME", secondSheet.getRow(1).getCell(0).getStringCellValue());
+        assertEquals("Cats header 2", "CAT_RACE", secondSheet.getRow(1).getCell(1).getStringCellValue());
+
 
         assertEquals("Birds header 1", "BIRD_NAME", thirdSheet.getRow(0).getCell(0).getStringCellValue());
         assertEquals("Birds header 2", "BIRD_RACE", thirdSheet.getRow(0).getCell(1).getStringCellValue());
+
+        final Cell footerCell = thirdSheet.getRow(4).getCell(0);
+        assertEquals("Birds simple footer", footerText, footerCell.getStringCellValue());
     }
 
 }

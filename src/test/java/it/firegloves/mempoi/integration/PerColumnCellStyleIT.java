@@ -147,7 +147,7 @@ public class PerColumnCellStyleIT extends IntegrationBaseIT {
 
             // validates header row
             AssertionHelper.assertOnHeaderRow(sheet.getRow(0), headers,
-                    null != styleTemplate ? styleTemplate.getHeaderCellStyle(wb) : null);
+                    null != styleTemplate ? styleTemplate.getColsHeaderCellStyle(wb) : null);
 
             // validates data rows
             for (int r = 1; rs.next(); r++) {
