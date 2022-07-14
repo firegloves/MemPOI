@@ -8,7 +8,7 @@
 [![Staging repo Maven Central](https://github.com/firegloves/MemPOI/actions/workflows/publish-to-staging-repo-maven-central.yml/badge.svg)](https://github.com/firegloves/MemPOI/actions/workflows/publish-to-staging-repo-maven-central.yml)
 ![Java 8](https://img.shields.io/badge/Java%208-Tested-blueviolet)
 ![Java 11](https://img.shields.io/badge/Java%2011-Tested-blueviolet)
-![Java 16](https://img.shields.io/badge/Java%2016-Tested-blueviolet)
+![Java 17](https://img.shields.io/badge/Java%2017-Tested-blueviolet)
 [![Known Vulnerabilities](https://snyk.io/test/github/firegloves/mempoi/badge.svg)](https://snyk.io/test/github/firegloves/mempoi)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
