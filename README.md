@@ -53,6 +53,8 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.0'
 
 ---
 
+Here you can find documentation organized on a single page, if you prefer a more structured version please consult the [wiki](https://github.com/firegloves/MemPOI/wiki)
+
 Main features index:
 
 - [Basic usage](#basic-usage)
