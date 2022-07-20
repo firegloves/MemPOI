@@ -10,13 +10,31 @@
 ![Java 11](https://img.shields.io/badge/Java%2011-Tested-blueviolet)
 ![Java 17](https://img.shields.io/badge/Java%2017-Tested-blueviolet)
 [![Known Vulnerabilities](https://snyk.io/test/github/firegloves/mempoi/badge.svg)](https://snyk.io/test/github/firegloves/mempoi)
+![No ORM - Super Fast](https://img.shields.io/badge/No%20ORM-SuperFast-orange)
 
 # MemPOI :green_book: &nbsp; :arrow_right: &nbsp; :japanese_goblin: &nbsp; :arrow_right: &nbsp; :tropical_drink:
 A library to simplify export from database to Excel files using Apache POI
 
+---
+
+## <p align=center>Without MemPOI</p>
+
+![](img/with-and-without-mempoi/without-mempoi.jpg)
+
+## <p align=center>With MemPOI</p>
+
+![](img/with-and-without-mempoi/with-mempoi.jpg)
+
+---
+
+### No ORM = Super Fast
+
 MemPOI is not designed to be used with an ORM due to performance needs on massive exports.
+By directly leveraging JDBC classes to access DB data, MemPOI ensures super-fast execution on hundreds of thousands of records.
 
 A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi-to-let-you-conquer-freedom-and-sip-a-good-mojito-on-the-930e1ca337d8">story about Mempoi's birth</a>
+
+---
 
 ### Support
 
