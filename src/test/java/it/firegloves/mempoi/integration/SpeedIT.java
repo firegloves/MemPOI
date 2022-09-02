@@ -15,6 +15,7 @@ import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.styles.template.ForestStyleTemplate;
 import it.firegloves.mempoi.styles.template.StoneStyleTemplate;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.ConnectionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import java.io.File;
@@ -45,7 +46,7 @@ public class SpeedIT extends IntegrationBaseIT {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -66,7 +67,7 @@ public class SpeedIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -88,7 +89,7 @@ public class SpeedIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -111,7 +112,7 @@ public class SpeedIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -136,7 +137,7 @@ public class SpeedIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -162,7 +163,7 @@ public class SpeedIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -177,7 +178,7 @@ public class SpeedIT extends IntegrationBaseIT {
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
                     "FROM "+ TestHelper.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
 
         try {
@@ -192,7 +193,7 @@ public class SpeedIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -206,7 +207,7 @@ public class SpeedIT extends IntegrationBaseIT {
             this.prepStmt = this.conn.prepareStatement("SELECT id, creation_date AS DATA_BELLISSIMA, dateTime, timeStamp, name, valid, usefulChar, decimalOne, bitTwo, doublone, floattone, interao, mediano, attempato, interuccio " +
                     "FROM " + TestHelper.TABLE_SPEED_TEST + " LIMIT 0, 65500");
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
 
         try {
@@ -221,7 +222,7 @@ public class SpeedIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 

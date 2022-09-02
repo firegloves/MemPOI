@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -46,18 +47,22 @@ public class MempoiColumnStrategos {
         MempoiColumnStyleManager columnStyleManager = new MempoiColumnStyleManager(mempoiSheet.getSheetStyler())
                 .setMempoiColumnListStyler(columnList);
 
+        // populate mempoi columns with their configuration object
         this.loadMempoiColumnConfig(mempoiSheet, columnList, columnStyleManager);
 
+        // TODO manage columns to ignore and to rearrange
+        List<MempoiColumn> finalColumnList = this.manageIgnore(columnList);
+
         // merged regions
-        this.prepareMergedRegions(mempoiSheet, columnList, workbook);
+        this.prepareMergedRegions(mempoiSheet, finalColumnList, workbook);
 
         // sets post data elaboration steps
-        this.prepareDataPostElaborationSteps(mempoiSheet, columnList);
+        this.prepareDataPostElaborationSteps(mempoiSheet, finalColumnList);
 
         // adds mempoi column list to the current MempoiSheet
-        mempoiSheet.setColumnList(columnList);
+        mempoiSheet.setColumnList(finalColumnList);
 
-        return columnList;
+        return finalColumnList;
     }
 
 
@@ -147,4 +152,15 @@ public class MempoiColumnStrategos {
         return columnList;
     }
 
+    /**
+     * calculate which columns are to be ignored and excluded by the export
+     *
+     * @return the new MempoiColumn list
+     */
+    private List<MempoiColumn> manageIgnore(List<MempoiColumn> mempoiColumnList) {
+
+        return mempoiColumnList.stream()
+                .filter(mc -> ! mc.getMempoiColumnConfig().isIgnoreColumn())
+                .collect(Collectors.toList());
+    }
 }
