@@ -23,16 +23,20 @@ import it.firegloves.mempoi.testutil.TestHelper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
 public class HueStyleTemplateIT extends IntegrationBaseIT {
@@ -87,6 +91,48 @@ public class HueStyleTemplateIT extends IntegrationBaseIT {
                 TestHelper.SUM_CELL_FORMULA, null);
         // TODO add header overriden style check
 
+    }
+
+    @Test
+    public void testWithFileAndForestTemplateOverridenWithXSSF() throws Exception {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(),
+                "test_with_file_and_forest_template_overriden_xssf.xlsx");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        CellStyle commonDataCellStyle = workbook.createCellStyle();
+        commonDataCellStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
+        commonDataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        commonDataCellStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .withAdjustColumnWidth(true)
+                .addMempoiSheet(new MempoiSheet(prepStmt))
+                .withStyleTemplate(new ForestStyleTemplate())
+                .withCommonDataCellStyle(commonDataCellStyle)
+                .withMempoiSubFooter(new NumberSumSubFooter())
+                .withEvaluateCellFormulas(true)
+                .build();
+
+        MempoiReport mempoiReport = memPOI.prepareMempoiReport().get();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), mempoiReport.getFile());
+
+        AssertionHelper.assertOnGeneratedFile(this.createStatement(), mempoiReport.getFile(), TestHelper.COLUMNS, TestHelper.HEADERS,
+                TestHelper.SUM_CELL_FORMULA, null);
+
+        File file = new File(mempoiReport.getFile());
+        try (InputStream inp = new FileInputStream(file)) {
+            Workbook wb = WorkbookFactory.create(inp);
+            Sheet sheet = wb.getSheetAt(0);
+            for (int i = 1; i < 11; i++) {
+                Row row = sheet.getRow(i);
+                AssertionHelper.assertOnCellStyle(row.getCell(4).getCellStyle(), commonDataCellStyle);
+                AssertionHelper.assertOnCellStyle(row.getCell(5).getCellStyle(), commonDataCellStyle);
+                AssertionHelper.assertOnCellStyle(row.getCell(6).getCellStyle(), commonDataCellStyle);
+            }
+        }
     }
 
 

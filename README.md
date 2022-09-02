@@ -48,7 +48,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.1'
 ```
 
 #### With Maven
@@ -57,19 +57,22 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
 </dependency>
 ```
 
 ---
 
-### What's new in 1.9.0
+### What's new in 1.9.1
 - NEW FUNCTIONALITY - [Simple text header](#simple-text-header)
 - NEW FUNCTIONALITY - [Simple text footer](#simple-text-footer)
 - SECURITY - [Vulnerable dependency management](#vulnerable-dependency-management)
 - BUG FIX - Fixed bug preventing sub footer from properly calculating cell formulas combined with column offset
+- BUG FIX - Fixed bug preventing custom styles to be applied while using XSSF
 
 ---
+
+Here you can find documentation organized on a single page, if you prefer a more structured version please consult the [wiki](https://github.com/firegloves/MemPOI/wiki)
 
 Main features index:
 
@@ -1082,7 +1085,7 @@ MemPOI comes with Apache POI 5.2.2 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.9.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.9.1') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -1095,7 +1098,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>
