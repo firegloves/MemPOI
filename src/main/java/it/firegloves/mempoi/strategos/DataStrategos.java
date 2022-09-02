@@ -142,10 +142,7 @@ public class DataStrategos {
                     MempoiColumn mempoiColumn = columnList.get(mcIndex);
 
                     Cell cell = row.createCell(colNum);
-
-                    if (!(sheet instanceof XSSFSheet)) {
-                        cell.setCellStyle(mempoiColumn.getCellStyle());
-                    }
+                    cell.setCellStyle(mempoiColumn.getCellStyle());
 
                     logger.debug("SETTING CELL FOR COLUMN {}", mempoiColumn.getColumnName());
 
