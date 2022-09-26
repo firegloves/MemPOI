@@ -124,6 +124,122 @@ public class ExcelTableIT extends IntegrationBaseIT {
                 });
     }
 
+    @Test
+    public void addingExcelTableAndSimpleTextHeader() throws Exception {
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_table_and_text_header.xlsx");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        MempoiTableBuilder mempoiTableBuilder = TestHelper.getTestMempoiTableBuilder(workbook)
+                .withAreaReferenceSource(null)
+                .withAllSheetData(true);
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withWorkbook(workbook)
+                .withPrepStmt(prepStmt)
+                .withMempoiTableBuilder(mempoiTableBuilder)
+                .withSimpleHeaderText(TestHelper.SIMPLE_TEXT_HEADER)
+                .build();
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .addMempoiSheet(mempoiSheet)
+                .build();
+
+        CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        // validates first sheet
+        AssertionHelper
+                .assertOnGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES,
+                        TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0, TestHelper.SIMPLE_TEXT_HEADER);
+
+        XSSFSheet sheet = ((XSSFWorkbook) (TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
+        AssertionHelper.assertOnTable(sheet, "A2:F102", 1, 101, 0);
+    }
+
+
+    @Test
+    public void addingExcelTableAndOffsets() throws Exception {
+
+        final int colOffset = 3;
+        final int rowOffset = 6;
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_table_and_offsets.xlsx");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        MempoiTableBuilder mempoiTableBuilder = TestHelper.getTestMempoiTableBuilder(workbook)
+                .withAreaReferenceSource(null)
+                .withAllSheetData(true);
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withWorkbook(workbook)
+                .withPrepStmt(prepStmt)
+                .withRowsOffset(rowOffset)
+                .withColumnsOffset(colOffset)
+                .withMempoiTableBuilder(mempoiTableBuilder)
+                .build();
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .addMempoiSheet(mempoiSheet)
+                .build();
+
+        CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        // validates first sheet
+        AssertionHelper
+                .assertOnGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES,
+                        TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0, null, rowOffset, colOffset);
+
+        XSSFSheet sheet = ((XSSFWorkbook) (TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
+        AssertionHelper.assertOnTable(sheet, "D7:I107", 6, 106, colOffset);
+    }
+
+
+    @Test
+    public void addingExcelTableAndTextHeaderAndOffsets() throws Exception {
+
+        final int colOffset = 3;
+        final int rowOffset = 6;
+
+        File fileDest = new File(this.outReportFolder.getAbsolutePath(), "test_table_and_header_and_offsets.xlsx");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        MempoiTableBuilder mempoiTableBuilder = TestHelper.getTestMempoiTableBuilder(workbook)
+                .withAreaReferenceSource(null)
+                .withAllSheetData(true);
+
+        MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+                .withWorkbook(workbook)
+                .withPrepStmt(prepStmt)
+                .withRowsOffset(rowOffset)
+                .withColumnsOffset(colOffset)
+                .withSimpleHeaderText(TestHelper.SIMPLE_TEXT_HEADER)
+                .withMempoiTableBuilder(mempoiTableBuilder)
+                .build();
+
+        MemPOI memPOI = MempoiBuilder.aMemPOI()
+                .withWorkbook(workbook)
+                .withFile(fileDest)
+                .addMempoiSheet(mempoiSheet)
+                .build();
+
+        CompletableFuture<String> fut = memPOI.prepareMempoiReportToFile();
+        assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
+
+        // validates first sheet
+        AssertionHelper
+                .assertOnGeneratedFilePivotTable(this.createStatement(), fut.get(), TestHelper.MEMPOI_COLUMN_NAMES,
+                        TestHelper.MEMPOI_COLUMN_NAMES, new StandardStyleTemplate(), 0, TestHelper.SIMPLE_TEXT_HEADER,
+                        rowOffset, colOffset);
+
+        XSSFSheet sheet = ((XSSFWorkbook) (TestHelper.loadWorkbookFromDisk(fileDest.getAbsolutePath()))).getSheetAt(0);
+        AssertionHelper.assertOnTable(sheet, "D8:I108", 7, 107, colOffset);
+    }
 
     @Override
     public PreparedStatement createStatement() throws SQLException {
