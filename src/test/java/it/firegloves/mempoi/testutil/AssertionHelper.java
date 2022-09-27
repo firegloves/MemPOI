@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -107,24 +108,34 @@ public class AssertionHelper {
         AssertionHelper.assertOnCellStyle(template.getSubfooterCellStyle(wb), mempoiStyler.getSubFooterCellStyle());
     }
 
+
+    public static void assertOnTable(XSSFSheet sheet) {
+        assertOnTable(sheet, TestHelper.AREA_REFERENCE_TABLE_DB_DATA, 0, 100, 0);
+    }
+
     /**
      * validates the XSSFTable contained in the received XSSFSheet (assuming that the table reflects TestHelper data)
      *
-     * @param sheet the XSSFSheet containing the table to validate
+     * @param sheet         the XSSFSheet containing the table to validate
+     * @param areaReference the string representing the expected area reference
+     * @param firstRowIndex the first row index of the table
+     * @param lastRowIndex  the last row index of the table
+     * @param colOffset     the offset to apply to the columns
      */
-    public static void assertOnTable(XSSFSheet sheet) {
+    public static void assertOnTable(XSSFSheet sheet, String areaReference, int firstRowIndex, int lastRowIndex,
+            int colOffset) {
 
         XSSFTable table = sheet.getTables().get(0);
 
-        assertEquals(TestHelper.AREA_REFERENCE_TABLE_DB_DATA, table.getArea().formatAsString());
+        assertEquals(areaReference, table.getArea().formatAsString());
         assertEquals(TestHelper.TABLE_NAME, table.getName());
         assertEquals(TestHelper.DISPLAY_TABLE_NAME, table.getDisplayName());
         assertEquals(TestHelper.MEMPOI_COLUMN_NAMES.length, table.getColumnCount());
         assertTrue(table.getCTTable().isSetAutoFilter());
-        assertEquals(0, table.getStartColIndex());
-        assertEquals(5, table.getEndColIndex());
-        assertEquals(0, table.getStartRowIndex());
-        assertEquals(100, table.getEndRowIndex());
+        assertEquals(colOffset, table.getStartColIndex());
+        assertEquals(colOffset + 5, table.getEndColIndex());
+        assertEquals(firstRowIndex, table.getStartRowIndex());
+        assertEquals(lastRowIndex, table.getEndRowIndex());
     }
 
 
@@ -335,6 +346,20 @@ public class AssertionHelper {
     }
 
 
+    public static void assertOnGeneratedFilePivotTable(PreparedStatement prepStmt, String fileToValidate,
+            String[] columns, String[] headers, StyleTemplate styleTemplate, int sheetNum) {
+
+        assertOnGeneratedFilePivotTable(prepStmt, fileToValidate, columns, headers, styleTemplate, sheetNum, null);
+    }
+
+
+    public static void assertOnGeneratedFilePivotTable(PreparedStatement prepStmt, String fileToValidate,
+            String[] columns, String[] headers, StyleTemplate styleTemplate, int sheetNum, String simpleTextHeader) {
+
+        assertOnGeneratedFilePivotTable(prepStmt, fileToValidate, columns, headers, styleTemplate, sheetNum,
+                simpleTextHeader, 0, 0);
+    }
+
     /**
      * opens the received generated xlsx file and applies generic asserts
      *
@@ -344,7 +369,8 @@ public class AssertionHelper {
      * @param headers        the array of headers name
      */
     public static void assertOnGeneratedFilePivotTable(PreparedStatement prepStmt, String fileToValidate,
-            String[] columns, String[] headers, StyleTemplate styleTemplate, int sheetNum) {
+            String[] columns, String[] headers, StyleTemplate styleTemplate, int sheetNum, String simpleTextHeader,
+            int rowOffset, int colOffset) {
 
         File file = new File(fileToValidate);
 
@@ -356,13 +382,20 @@ public class AssertionHelper {
 
             Sheet sheet = wb.getSheetAt(sheetNum);
 
+            if (ObjectUtils.isNotEmpty(simpleTextHeader)) {
+                assertOnSimpleTextHeader(fileToValidate, sheetNum, rowOffset, colOffset,
+                        headers.length - 1 + colOffset, simpleTextHeader);
+            }
+
+            int headerRow = ObjectUtils.isEmpty(simpleTextHeader) ? rowOffset : rowOffset + 1;
+
             // validates header row
-            assertOnHeaderRow(sheet.getRow(0), headers,
-                    null != styleTemplate ? styleTemplate.getColsHeaderCellStyle(wb) : null, 0);
+            assertOnHeaderRow(sheet.getRow(headerRow), headers,
+                    null != styleTemplate ? styleTemplate.getColsHeaderCellStyle(wb) : null, colOffset);
 
             // validates data rows
-            for (int r = 1; rs.next(); r++) {
-                assertOnGeneratedFileDataRowPivotTable(rs, sheet.getRow(r), headers, styleTemplate, wb);
+            for (int r = headerRow + 1; rs.next(); r++) {
+                assertOnGeneratedFileDataRowPivotTable(rs, sheet.getRow(r), headers, styleTemplate, wb, colOffset);
             }
 
         } catch (Exception e) {
@@ -575,6 +608,12 @@ public class AssertionHelper {
     }
 
 
+    public static void assertOnGeneratedFileDataRowPivotTable(ResultSet rs, Row row, String[] headers,
+            StyleTemplate styleTemplate, Workbook wb) {
+
+        assertOnGeneratedFileDataRowPivotTable(rs, row, headers, styleTemplate, wb, 0);
+    }
+
     /**
      * validate one Row of the generic export (created with createStatement()) against the resulting ResultSet generated
      * by the execution of the same method
@@ -584,30 +623,31 @@ public class AssertionHelper {
      * @param headers       the array of columns name, useful to retrieve data from the ResultSet
      * @param styleTemplate StyleTemplate to get styles to validate
      * @param wb            the curret Workbook
+     * @param colOffset     the offset to apply to the columns
      */
     public static void assertOnGeneratedFileDataRowPivotTable(ResultSet rs, Row row, String[] headers,
-            StyleTemplate styleTemplate, Workbook wb) {
+            StyleTemplate styleTemplate, Workbook wb, int colOffset) {
 
         try {
-            assertEquals(rs.getString(headers[0]), row.getCell(0).getStringCellValue());
-            assertEquals(rs.getString(headers[1]), row.getCell(1).getStringCellValue());
-            assertEquals(rs.getInt(headers[2]), row.getCell(2).getNumericCellValue(), 0.1);
-            assertEquals(rs.getString(headers[3]), row.getCell(3).getStringCellValue());
-            assertEquals(rs.getFloat(headers[4]), row.getCell(4).getNumericCellValue(), 0.1);
-            assertEquals(rs.getString(headers[5]), row.getCell(5).getStringCellValue());
+            assertEquals(rs.getString(headers[0]), row.getCell(colOffset).getStringCellValue());
+            assertEquals(rs.getString(headers[1]), row.getCell(colOffset + 1).getStringCellValue());
+            assertEquals(rs.getInt(headers[2]), row.getCell(colOffset + 2).getNumericCellValue(), 0.1);
+            assertEquals(rs.getString(headers[3]), row.getCell(colOffset + 3).getStringCellValue());
+            assertEquals(rs.getFloat(headers[4]), row.getCell(colOffset + 4).getNumericCellValue(), 0.1);
+            assertEquals(rs.getString(headers[5]), row.getCell(colOffset + 5).getStringCellValue());
 
             if (null != styleTemplate
                     && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
-                AssertionHelper.assertOnCellStyle(row.getCell(0).getCellStyle(),
+                AssertionHelper.assertOnCellStyle(row.getCell(colOffset).getCellStyle(),
                         styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.assertOnCellStyle(row.getCell(1).getCellStyle(),
+                AssertionHelper.assertOnCellStyle(row.getCell(colOffset + 1).getCellStyle(),
                         styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.assertOnCellStyle(row.getCell(2).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
-                AssertionHelper.assertOnCellStyle(row.getCell(3).getCellStyle(),
+                AssertionHelper.assertOnCellStyle(row.getCell(colOffset + 2).getCellStyle(), styleTemplate.getIntegerCellStyle(wb));
+                AssertionHelper.assertOnCellStyle(row.getCell(colOffset + 3).getCellStyle(),
                         styleTemplate.getCommonDataCellStyle(wb));
-                AssertionHelper.assertOnCellStyle(row.getCell(4).getCellStyle(),
+                AssertionHelper.assertOnCellStyle(row.getCell(colOffset + 4).getCellStyle(),
                         styleTemplate.getFloatingPointCellStyle(wb));
-                AssertionHelper.assertOnCellStyle(row.getCell(5).getCellStyle(),
+                AssertionHelper.assertOnCellStyle(row.getCell(colOffset + 5).getCellStyle(),
                         styleTemplate.getCommonDataCellStyle(wb));
             }
         } catch (Exception e) {
@@ -810,8 +850,9 @@ public class AssertionHelper {
         throw new MempoiException(e);
     }
 
-    public static void assertOnSimpleTextHeader(String fileToValidate, int sheetIndex, int row, int firstCol, int lastCol
-            , String text) {
+    public static void assertOnSimpleTextHeader(String fileToValidate, int sheetIndex, int row, int firstCol, int lastCol,
+            String text) {
+
         File file = new File(fileToValidate);
 
         try (InputStream inp = new FileInputStream(file)) {
