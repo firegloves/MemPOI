@@ -48,7 +48,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.1'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.2'
 ```
 
 #### With Maven
@@ -57,18 +57,19 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.9.1</version>
+    <version>1.9.2</version>
 </dependency>
 ```
 
 ---
 
-### What's new in 1.9.1
+### What's new in 1.9.2
 - NEW FUNCTIONALITY - [Simple text header](#simple-text-header)
 - NEW FUNCTIONALITY - [Simple text footer](#simple-text-footer)
 - SECURITY - [Vulnerable dependency management](#vulnerable-dependency-management)
 - BUG FIX - Fixed bug preventing sub footer from properly calculating cell formulas combined with column offset
 - BUG FIX - Fixed bug preventing custom styles to be applied while using XSSF
+- BUG FIX - Fixed bug that occurred when combining tables with plain text header or offset
 
 ---
 
@@ -480,9 +481,10 @@ MempoiTableBuilder mempoiTableBuilder = MempoiTableBuilder.aMempoiTable()
                 .withAreaReferenceSource("A1:F100");
 
 MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
-                 .withPrepStmt(prepStmt)
-                 .withMempoiTableBuilder(mempoiTableBuilder)
-                 .build();
+                .withWorkbook(workbook)
+                .withPrepStmt(prepStmt)
+                .withMempoiTableBuilder(mempoiTableBuilder)
+                .build();
 
 MemPOI memPOI = MempoiBuilder.aMemPOI()
                 .withWorkbook(workbook)
@@ -1085,7 +1087,7 @@ MemPOI comes with Apache POI 5.2.2 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.9.1') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.9.2') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -1098,7 +1100,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.9.1</version>
+    <version>1.9.2</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>
