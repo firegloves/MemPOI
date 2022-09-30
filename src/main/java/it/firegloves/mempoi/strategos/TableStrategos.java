@@ -8,10 +8,12 @@ import it.firegloves.mempoi.domain.MempoiColumn;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.util.AreaReferenceUtils;
 import it.firegloves.mempoi.util.Errors;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
@@ -45,7 +47,12 @@ public class TableStrategos {
 
                     // if isAllSheetData updates the area reference with the one received
                     if (mempoiTable.isAllSheetData()) {
-                        mempoiTable.setAreaReferenceSource(sheetDataAreaReference.formatAsString());
+
+                        AreaReference areaReference = areaReferenceAfterSimpleTextHeader(mempoiSheet,
+                                sheetDataAreaReference);
+                        areaReference = areaReferenceAfterOffsets(mempoiSheet, areaReference);
+
+                        mempoiTable.setAreaReferenceSource(areaReference.formatAsString());
                     }
 
                     return this.addTable(mempoiSheet, mempoiTable);
@@ -53,8 +60,28 @@ public class TableStrategos {
     }
 
 
+    private AreaReference areaReferenceAfterSimpleTextHeader(MempoiSheet mempoiSheet, AreaReference areaReference) {
+        // if simple text header present => skip the first row that is only text
+        if (ObjectUtils.isEmpty(mempoiSheet.getSimpleHeaderText())) {
+            return areaReference;
+        } else {
+            return AreaReferenceUtils.skipFirstRow(areaReference, mempoiSheet.getWorkbook());
+        }
+    }
+
+    private AreaReference areaReferenceAfterOffsets(MempoiSheet mempoiSheet, AreaReference areaReference) {
+        if (mempoiSheet.getRowsOffset() <= 0 && mempoiSheet.getColumnsOffset() <= 0) {
+            return areaReference;
+        } else {
+            return  AreaReferenceUtils.skipRowsAndCols(mempoiSheet.getRowsOffset(), mempoiSheet.getColumnsOffset(),
+                    areaReference, mempoiSheet.getWorkbook());
+        }
+    }
+
+
     /**
      * adds the desired table to the received sheet
+     *
      * @param mempoiSheet the MempoiSheet on which add the table
      * @param mempoiTable the MempoiTable containing table settings
      * @return the AreaReference of the created table
