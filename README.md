@@ -66,6 +66,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.10.0'
 ### What's new in 1.10.0
 - NEW FUNCTIONALITY - [Ignore columns](#ignore-columns)
 - NEW FUNCTIONALITY - [Rearrange columns](#rearrange-columns)
+- Spring Framework example - [Spring Framework example](#spring-framework-example)
 
 ---
 
@@ -98,6 +99,7 @@ Main features index:
 - [Data post elaboration pipeline](#data-post-elaboration-pipeline)
 - [Merged Regions](#merged-regions)
 - [Column and Row offsets](#column-and-row-offsets)
+- [Spring Framework example](#spring-framework-example)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
 - [Vulnerable dependency management](#vulnerable-dependency-management)
@@ -1104,6 +1106,12 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 The execution of the code above will result in the following export:
 
 ![](img/offsets.png)
+
+---
+
+### Spring Framework example
+
+Here you can find a simple example project explaining how you can easily integrate MemPOI within Spring Framework: [MemPOI-Spring-Example](https://github.com/firegloves/MemPOI-Spring-Example)
 
 ---
 
