@@ -64,6 +64,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.2'
 ---
 
 ### What's new in 1.9.2
+- Spring Framework example - [Spring Framework example](#spring-framework-example)
 - NEW FUNCTIONALITY - [Simple text header](#simple-text-header)
 - NEW FUNCTIONALITY - [Simple text footer](#simple-text-footer)
 - SECURITY - [Vulnerable dependency management](#vulnerable-dependency-management)
@@ -99,6 +100,7 @@ Main features index:
 - [Data post elaboration pipeline](#data-post-elaboration-pipeline)
 - [Merged Regions](#merged-regions)
 - [Column and Row offsets](#column-and-row-offsets)
+- [Spring Framework example](#spring-framework-example)
 - [Force Generation](#force-generation)
 - [Logging](#logging)
 - [Vulnerable dependency management](#vulnerable-dependency-management)
@@ -1019,6 +1021,12 @@ MemPOI memPOI = MempoiBuilder.aMemPOI()
 The execution of the code above will result in the following export:
 
 ![](img/offsets.png)
+
+---
+
+### Spring Framework example
+
+Here you can find a simple example project explaining how you can easily integrate MemPOI within Spring Framework: [MemPOI-Spring-Example](https://github.com/firegloves/MemPOI-Spring-Example)
 
 ---
 
