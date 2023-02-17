@@ -6,10 +6,9 @@
 
 package it.firegloves.mempoi.domain.datatransformation;
 
-import lombok.Setter;
-
 import java.sql.ResultSet;
 import java.util.Date;
+import lombok.Setter;
 
 @Setter
 public abstract class DateDataTransformationFunction<O> extends DataTransformationFunction<Date, O> {

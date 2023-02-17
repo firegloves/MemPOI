@@ -50,7 +50,7 @@ public class MempoiColumnStrategos {
         // populate mempoi columns with their configuration object
         this.loadMempoiColumnConfig(mempoiSheet, columnList, columnStyleManager);
 
-        // TODO manage columns to ignore and to rearrange
+        // remove columns to ignore
         List<MempoiColumn> finalColumnList = this.manageIgnore(columnList);
 
         // merged regions
@@ -160,7 +160,8 @@ public class MempoiColumnStrategos {
     private List<MempoiColumn> manageIgnore(List<MempoiColumn> mempoiColumnList) {
 
         return mempoiColumnList.stream()
-                .filter(mc -> ! mc.getMempoiColumnConfig().isIgnoreColumn())
+                .filter(mc -> mc.getMempoiColumnConfig() != null
+                    && ! mc.getMempoiColumnConfig().isIgnoreColumn())
                 .collect(Collectors.toList());
     }
 }

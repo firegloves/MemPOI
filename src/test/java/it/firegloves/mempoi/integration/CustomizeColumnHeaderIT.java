@@ -1,5 +1,7 @@
 package it.firegloves.mempoi.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import it.firegloves.mempoi.MemPOI;
 import it.firegloves.mempoi.builder.MempoiBuilder;
 import it.firegloves.mempoi.builder.MempoiSheetBuilder;
@@ -7,13 +9,6 @@ import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -21,8 +16,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
-
-import static org.junit.Assert.assertEquals;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class CustomizeColumnHeaderIT extends IntegrationBaseIT {
 
