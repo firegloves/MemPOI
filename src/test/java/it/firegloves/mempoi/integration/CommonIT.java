@@ -40,7 +40,7 @@ public class CommonIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -75,7 +75,7 @@ public class CommonIT extends IntegrationBaseIT {
             // TODO add header overriden style check
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -102,7 +102,7 @@ public class CommonIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), destFile.getAbsolutePath(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -131,7 +131,7 @@ public class CommonIT extends IntegrationBaseIT {
             AssertionHelper.assertOnSecondPrepStmtSheet(conn.prepareStatement(super.createQuery(TestHelper.COLUMNS_2, TestHelper.HEADERS_2, TestHelper.NO_LIMITS)), fut.get(), 1, TestHelper.HEADERS_2, false, new StandardStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -186,7 +186,7 @@ public class CommonIT extends IntegrationBaseIT {
             // TODO validates overriden styles
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 

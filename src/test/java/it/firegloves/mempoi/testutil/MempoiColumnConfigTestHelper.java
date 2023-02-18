@@ -4,7 +4,6 @@ import it.firegloves.mempoi.domain.MempoiColumnConfig;
 import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.datatransformation.StringDataTransformationFunction;
 import it.firegloves.mempoi.exception.MempoiException;
-
 import java.sql.ResultSet;
 
 public class MempoiColumnConfigTestHelper {

@@ -47,7 +47,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -77,7 +77,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -107,7 +107,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -171,7 +171,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             // TODO validate overriden styles
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -201,7 +201,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -231,7 +231,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -261,7 +261,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -325,7 +325,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             // TODO validate overriden styles
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -355,7 +355,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, null, new StandardStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -385,7 +385,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -415,7 +415,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             AssertionHelper.assertOnGeneratedFile(this.createStatement(), fut.get(), TestHelper.COLUMNS, TestHelper.HEADERS, TestHelper.SUM_CELL_FORMULA, new ForestStyleTemplate());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -479,7 +479,7 @@ public class WorkbookIT extends IntegrationBaseIT {
             // TODO validate overriden styles
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 }
