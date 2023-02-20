@@ -4,9 +4,8 @@
  */
 package it.firegloves.mempoi.domain.datatransformation;
 
-import lombok.Setter;
-
 import java.sql.ResultSet;
+import lombok.Setter;
 
 @Setter
 public abstract class DoubleDataTransformationFunction<O> extends DataTransformationFunction<Double, O> {

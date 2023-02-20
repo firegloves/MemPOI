@@ -1,6 +1,7 @@
 package it.firegloves.mempoi.integration;
 
 import it.firegloves.mempoi.exception.MempoiException;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.ConnectionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import java.io.File;
@@ -32,7 +33,7 @@ public abstract class IntegrationBaseIT {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 

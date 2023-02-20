@@ -13,6 +13,7 @@ import it.firegloves.mempoi.domain.footer.NumberMinSubFooter;
 import it.firegloves.mempoi.domain.footer.NumberSumSubFooter;
 import it.firegloves.mempoi.domain.footer.StandardMempoiFooter;
 import it.firegloves.mempoi.styles.template.SummerStyleTemplate;
+import it.firegloves.mempoi.testutil.AssertionHelper;
 import it.firegloves.mempoi.testutil.TestHelper;
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
@@ -42,7 +43,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -68,7 +69,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -94,7 +95,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -121,7 +122,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -147,7 +148,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -179,7 +180,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -206,7 +207,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -232,7 +233,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -260,7 +261,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 
@@ -300,7 +301,7 @@ public class FooterIT extends IntegrationBaseIT {
             assertEquals("file name len === starting fileDest", fileDest.getAbsolutePath(), fut.get());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionHelper.failAssertion(e);
         }
     }
 }

@@ -6,9 +6,8 @@ package it.firegloves.mempoi.domain.datatransformation;
 
 import it.firegloves.mempoi.exception.MempoiException;
 import it.firegloves.mempoi.util.Errors;
-import lombok.Setter;
-
 import java.sql.ResultSet;
+import lombok.Setter;
 
 @Setter
 public abstract class DataTransformationFunction<I, O> {

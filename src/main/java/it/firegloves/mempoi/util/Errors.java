@@ -56,7 +56,7 @@ public class Errors {
     public static final String ERR_DATA_TRANSFORMATION_FUNCTION_CAST_EXCEPTION = "The supplied data transformation function for column \"%s\" tried to cast the value read by the db to a %s but was %s";
 
     public static final String ERR_MEMPOI_COL_CONFIG_COLNAME_NOT_VALID = "An invalid column name has been set for a MempoiColumnConfig";
-
+    public static final String ERR_MEMPOI_COL_CONFIG_POSITION_ORDER_NOT_VALID = "MempoiColumnConfig support only positive value as positionOrder. MempoiColumnConfig received value: %d";
     public static final String ERR_ENCRYPTION_WITH_NO_PWD = "MemPOI received a workbook encryption but no password has been set";
 
     public static final String ERR_NEGATIVE_COL_OFFSET = "MemPOI did receive a negative column offset. Offset must be >= 0";

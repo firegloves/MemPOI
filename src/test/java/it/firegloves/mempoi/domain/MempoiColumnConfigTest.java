@@ -2,6 +2,7 @@ package it.firegloves.mempoi.domain;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.exception.MempoiException;
@@ -22,11 +23,15 @@ public class MempoiColumnConfigTest {
                 .withColumnName(MempoiColumnConfigTestHelper.COLUMN_NAME)
                 .withDataTransformationFunction(MempoiColumnConfigTestHelper.STRING_DATA_TRANFORMATION_FUNCTION)
                 .withCellStyle(cellStyle)
+                .withIgnoreColumn(true)
+                .withPositionOrder(MempoiColumnConfigTestHelper.POSITION_ORDER)
                 .build();
 
         AssertionHelper.assertOnMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
                 mempoiColumnConfig);
         assertEquals(cellStyle, mempoiColumnConfig.getCellStyle());
+        assertTrue(mempoiColumnConfig.isIgnoreColumn());
+        assertEquals(MempoiColumnConfigTestHelper.POSITION_ORDER, mempoiColumnConfig.getPositionOrder());
     }
 
     @Test

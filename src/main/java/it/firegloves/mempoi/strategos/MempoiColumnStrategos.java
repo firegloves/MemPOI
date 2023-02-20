@@ -17,8 +17,10 @@ import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.styles.MempoiColumnStyleManager;
 import java.sql.ResultSet;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -46,18 +48,22 @@ public class MempoiColumnStrategos {
         MempoiColumnStyleManager columnStyleManager = new MempoiColumnStyleManager(mempoiSheet.getSheetStyler())
                 .setMempoiColumnListStyler(columnList);
 
+        // populate mempoi columns with their configuration object
         this.loadMempoiColumnConfig(mempoiSheet, columnList, columnStyleManager);
 
+        // remove columns to ignore
+        List<MempoiColumn> finalColumnList = this.setIgnoreAndPositionOrder(columnList);
+
         // merged regions
-        this.prepareMergedRegions(mempoiSheet, columnList, workbook);
+        this.prepareMergedRegions(mempoiSheet, finalColumnList, workbook);
 
         // sets post data elaboration steps
-        this.prepareDataPostElaborationSteps(mempoiSheet, columnList);
+        this.prepareDataPostElaborationSteps(mempoiSheet, finalColumnList);
 
         // adds mempoi column list to the current MempoiSheet
-        mempoiSheet.setColumnList(columnList);
+        mempoiSheet.setColumnList(finalColumnList);
 
-        return columnList;
+        return finalColumnList;
     }
 
 
@@ -147,4 +153,40 @@ public class MempoiColumnStrategos {
         return columnList;
     }
 
+    /**
+     * calculate which columns are to be ignored and excluded by the export
+     *
+     * @return the new MempoiColumn list
+     */
+    protected List<MempoiColumn> setIgnoreAndPositionOrder(List<MempoiColumn> mempoiColumnList) {
+
+//        final List<MempoiColumn> columnsToNotIgnore = mempoiColumnList.stream()
+//                // filter columns to ignore
+//                .filter(mc -> mc.getMempoiColumnConfig() == null
+//                        || ! mc.getMempoiColumnConfig().isIgnoreColumn())
+//                .collect(Collectors.toList());
+
+        final Map<Boolean, List<MempoiColumn>> split = mempoiColumnList.stream()
+                // filter columns to ignore
+                .filter(mc -> mc.getMempoiColumnConfig() == null
+                        || ! mc.getMempoiColumnConfig().isIgnoreColumn())
+                // split between columns having and not having a positionOrder
+                .collect(Collectors.partitioningBy(c -> c.getMempoiColumnConfig() != null
+                        && c.getMempoiColumnConfig().getPositionOrder() != null));
+
+        final List<MempoiColumn> sorted = split.get(true).stream()
+                .sorted(Comparator.comparingInt((MempoiColumn c) -> {
+                    // if a position order is set, return it
+                    if (c.getMempoiColumnConfig() != null && c.getMempoiColumnConfig().getPositionOrder() != null) {
+                        return c.getMempoiColumnConfig().getPositionOrder();
+                    }
+                    // otherwise return max allowed int to place them at the end
+                    return Integer.MAX_VALUE;
+                }))
+                .collect(Collectors.toList());
+
+        sorted.addAll(split.get(false));
+
+        return sorted;
+    }
 }
