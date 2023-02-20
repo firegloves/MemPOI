@@ -61,7 +61,7 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.10.0'
 </dependency>
 ```
 
----
+--
 
 ### What's new in 1.10.0
 - NEW FUNCTIONALITY - [Ignore columns](#ignore-columns)
