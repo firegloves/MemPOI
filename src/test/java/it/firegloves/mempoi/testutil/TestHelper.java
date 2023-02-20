@@ -5,6 +5,8 @@ import it.firegloves.mempoi.builder.MempoiSheetBuilder;
 import it.firegloves.mempoi.builder.MempoiTableBuilder;
 import it.firegloves.mempoi.datapostelaboration.mempoicolumn.mergedregions.NotStreamApiMergedRegionsStep;
 import it.firegloves.mempoi.domain.MempoiColumn;
+import it.firegloves.mempoi.domain.MempoiColumnConfig;
+import it.firegloves.mempoi.domain.MempoiColumnConfig.MempoiColumnConfigBuilder;
 import it.firegloves.mempoi.domain.MempoiSheet;
 import it.firegloves.mempoi.domain.MempoiTable;
 import it.firegloves.mempoi.domain.pivottable.MempoiPivotTable;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -314,5 +317,12 @@ public class TestHelper {
     public static AreaReference getAreaReference(XSSFWorkbook wb) {
 
         return new AreaReference(TestHelper.AREA_REFERENCE, wb.getSpreadsheetVersion());
+    }
+
+    public static List<MempoiColumnConfig> createMempoiColConfig(boolean ignore, String... colNames) {
+        return Arrays.stream(colNames)
+                .map(c -> MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName(c).withIgnoreColumn(ignore)
+                        .build())
+                .collect(Collectors.toList());
     }
 }

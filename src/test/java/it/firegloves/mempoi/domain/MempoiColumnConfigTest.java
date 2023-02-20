@@ -24,12 +24,14 @@ public class MempoiColumnConfigTest {
                 .withDataTransformationFunction(MempoiColumnConfigTestHelper.STRING_DATA_TRANFORMATION_FUNCTION)
                 .withCellStyle(cellStyle)
                 .withIgnoreColumn(true)
+                .withPositionOrder(MempoiColumnConfigTestHelper.POSITION_ORDER)
                 .build();
 
         AssertionHelper.assertOnMempoiColumnConfig(MempoiColumnConfigTestHelper.getTestMempoiColumnConfig(),
                 mempoiColumnConfig);
         assertEquals(cellStyle, mempoiColumnConfig.getCellStyle());
         assertTrue(mempoiColumnConfig.isIgnoreColumn());
+        assertEquals(MempoiColumnConfigTestHelper.POSITION_ORDER, mempoiColumnConfig.getPositionOrder());
     }
 
     @Test

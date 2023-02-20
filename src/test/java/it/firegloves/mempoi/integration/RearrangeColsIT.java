@@ -17,9 +17,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.ResultSet;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -28,17 +27,22 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.junit.Test;
 
-public class IgnoreAndRearrangeColsIT extends IntegrationBaseIT {
+public class RearrangeColsIT extends IntegrationBaseIT {
 
-    private final String fileFolder = "/ignore-rearrange";
-    private final String[] colsHeaders = {"id", "WONDERFUL DATE", "name", "valid", "usefulChar", "decimalOne"};
+    private final String[] colsHeaders = {"decimalOne", "dateTime", "valid", "id", "WONDERFUL DATE", "timeStamp", "name"};
 
     @Test
-    public void shouldIgnoreTheSelectedColumns() {
+    public void shouldRearrangeTheSelectedColumns() {
 
-        File fileDest = new File(this.outReportFolder.getAbsolutePath() + fileFolder, "ignore.xlsx");
+        String fileFolder = "/ignore-rearrange";
+        File fileDest = new File(this.outReportFolder.getAbsolutePath() + fileFolder, "rearrange.xlsx");
 
-        final List<MempoiColumnConfig> mempoiColConfig = createMempoiColConfig(true, "dateTime", "timeStamp");
+        List<MempoiColumnConfig> mempoiColConfig = new ArrayList<>();
+        mempoiColConfig.add(MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName("decimalOne").withPositionOrder(0).build());
+        mempoiColConfig.add(MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName("dateTime").withPositionOrder(1).build());
+        mempoiColConfig.add(MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName("valid").withPositionOrder(2).build());
+        mempoiColConfig.add(MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName("usefulChar").withIgnoreColumn(true).build());
+
         final StyleTemplate styleTemplate = new PanegiriconStyleTemplate();
 
         try {
@@ -67,13 +71,6 @@ public class IgnoreAndRearrangeColsIT extends IntegrationBaseIT {
         } catch (Exception e) {
             AssertionHelper.failAssertion(e);
         }
-    }
-
-    private List<MempoiColumnConfig> createMempoiColConfig(boolean ignore, String... colNames) {
-        return Arrays.stream(colNames)
-                .map(c -> MempoiColumnConfigBuilder.aMempoiColumnConfig().withColumnName(c).withIgnoreColumn(ignore)
-                        .build())
-                .collect(Collectors.toList());
     }
 
     private void assertOnFile(String file, StyleTemplate styleTemplate, int rowOffset, int colOffset,
@@ -111,12 +108,13 @@ public class IgnoreAndRearrangeColsIT extends IntegrationBaseIT {
             StyleTemplate styleTemplate, Workbook wb, int colOffset) {
 
         try {
-            assertEquals(rs.getInt(headers[0]), (int) row.getCell(colOffset).getNumericCellValue());
-            assertEquals(rs.getDate(headers[1]).getTime(), row.getCell(colOffset + 1).getDateCellValue().getTime());
-            assertEquals(rs.getString(headers[2]), row.getCell(colOffset + 2).getStringCellValue());
-            assertEquals(rs.getBoolean(headers[3]), row.getCell(colOffset + 3).getBooleanCellValue());
-            assertEquals(rs.getString(headers[4]), row.getCell(colOffset + 4).getStringCellValue());
-            assertEquals(rs.getDouble(headers[5]), row.getCell(colOffset + 5).getNumericCellValue(), 0);
+            assertEquals(rs.getDouble(headers[0]), (int) row.getCell(colOffset).getNumericCellValue(), 0);
+            assertEquals(rs.getTimestamp(headers[1]).getTime(), row.getCell(colOffset + 1).getDateCellValue().getTime());
+            assertEquals(rs.getBoolean(headers[2]), row.getCell(colOffset + 2).getBooleanCellValue());
+            assertEquals(rs.getInt(headers[3]), row.getCell(colOffset + 3).getNumericCellValue(), 0);
+            assertEquals(rs.getDate(headers[4]), row.getCell(colOffset + 4).getDateCellValue());
+            assertEquals(rs.getTimestamp(headers[5]).getTime(), row.getCell(colOffset + 5).getDateCellValue().getTime());
+            assertEquals(rs.getString(headers[6]), row.getCell(colOffset + 6).getStringCellValue());
 
             if (null != styleTemplate
                     && !(row instanceof XSSFRow)) {      // XSSFRow does not support cell style -> skip these tests
