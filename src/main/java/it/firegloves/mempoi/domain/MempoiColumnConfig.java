@@ -45,16 +45,23 @@ public class MempoiColumnConfig {
      */
     boolean ignoreColumn;
 
+    /**
+     * specifies the order in which the column appear in the export
+     */
+    Integer positionOrder;
+
     private MempoiColumnConfig(String columnName,
             DataTransformationFunction<?, ?> dataTransformationFunction,
             CellStyle cellStyle, String columnDisplayName,
-            boolean ignoreColumn) {
+            boolean ignoreColumn,
+            Integer positionOrder) {
 
         this.columnName = columnName;
         this.dataTransformationFunction = dataTransformationFunction;
         this.cellStyle = cellStyle;
         this.columnDisplayName = columnDisplayName;
         this.ignoreColumn = ignoreColumn;
+        this.positionOrder = positionOrder;
     }
 
 
@@ -78,6 +85,7 @@ public class MempoiColumnConfig {
         private CellStyle cellStyle;
         private String columnDisplayName;
         private boolean ignoreColumn;
+        private Integer positionOrder;
 
         /**
          * private constructor to lower constructor visibility from outside forcing the use of the static Builder pattern
@@ -135,6 +143,21 @@ public class MempoiColumnConfig {
             return this;
         }
 
+        /**
+         * set the order in which the column will appear in the resulting export
+         *
+         * @param positionOrder the order in which the column will appear in the resulting export
+         * @return the current MempoiColumnConfigBuilder
+         */
+        public MempoiColumnConfigBuilder withPositionOrder(int positionOrder) {
+            if (positionOrder < 0) {
+                throw new MempoiException(
+                        String.format(Errors.ERR_MEMPOI_COL_CONFIG_POSITION_ORDER_NOT_VALID, positionOrder));
+            }
+            this.positionOrder = positionOrder;
+            return this;
+        }
+
         public MempoiColumnConfig build() {
 
             if (StringUtils.isEmpty(columnName)) {
@@ -142,7 +165,7 @@ public class MempoiColumnConfig {
             }
 
             return new MempoiColumnConfig(columnName, dataTransformationFunction, cellStyle, columnDisplayName,
-                    ignoreColumn);
+                    ignoreColumn, positionOrder);
         }
     }
 }

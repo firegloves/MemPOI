@@ -41,9 +41,9 @@ public class MempoiColumn {
      */
     private String columnName;
     /**
-     * the column index in the report
+     * the column index in the result set
      */
-    private int colIndex;
+    private int colIndexInTheResultSet;
     /**
      * the method to call on the ResultSet to extract the desired data
      */
@@ -75,7 +75,7 @@ public class MempoiColumn {
     public MempoiColumn(int sqlObjType, String columnName, int colIndex) {
         this.columnName = columnName;
         this.setType(sqlObjType);
-        this.colIndex = colIndex;
+        this.colIndexInTheResultSet = colIndex;
     }
 
     public void setType(int sqlObjType) {
@@ -186,25 +186,25 @@ public class MempoiColumn {
             case "Double":
             case "Long":
             case "BigInteger":
-                return Optional.ofNullable(EExportDataType.DOUBLE);
+                return Optional.of(EExportDataType.DOUBLE);
             case "Float":
-                return Optional.ofNullable(EExportDataType.FLOAT);
+                return Optional.of(EExportDataType.FLOAT);
             case "Integer":
             case "Short":
-                return Optional.ofNullable(EExportDataType.INT);
+                return Optional.of(EExportDataType.INT);
             case "String":
             case "Character":
-                return Optional.ofNullable(EExportDataType.TEXT);
+                return Optional.of(EExportDataType.TEXT);
             case "Time":
             case "LocalDateTime":
-                return Optional.ofNullable(EExportDataType.TIME);
+                return Optional.of(EExportDataType.TIME);
             case "Timestamp":
-                return Optional.ofNullable(EExportDataType.TIMESTAMP);
+                return Optional.of(EExportDataType.TIMESTAMP);
             case "Date":
             case "LocalDate":
-                return Optional.ofNullable(EExportDataType.DATE);
+                return Optional.of(EExportDataType.DATE);
             case "Boolean":
-                return Optional.ofNullable(EExportDataType.BOOLEAN);
+                return Optional.of(EExportDataType.BOOLEAN);
             default:
                 throw new MempoiException("JAVA TYPE CLASS NOT RECOGNIZED: " + simpleName);
         }

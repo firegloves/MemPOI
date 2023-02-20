@@ -74,9 +74,9 @@ public class DBMempoiDAOTest {
         assertNotNull("DBMempoiDAO executing readMetadata list not null", columnList);
         assertEquals("DBMempoiDAO executing readMetadata list size == 2", 2, columnList.size() );
         assertEquals("DBMempoiDAO executing readMetadata column 1", id, columnList.get(0));
-        assertEquals("DBMempoiDAO index column 1", 0, columnList.get(0).getColIndex());
+        assertEquals("DBMempoiDAO index column 1", 0, columnList.get(0).getColIndexInTheResultSet());
         assertEquals("DBMempoiDAO executing readMetadata column 2", name, columnList.get(1));
-        assertEquals("DBMempoiDAO index column 2", 1, columnList.get(1).getColIndex());
+        assertEquals("DBMempoiDAO index column 2", 1, columnList.get(1).getColIndexInTheResultSet());
     }
 
     @Test(expected = MempoiException.class)
