@@ -48,7 +48,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.2'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.10.0'
 ```
 
 #### With Maven
@@ -57,19 +57,15 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.9.2'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.9.2</version>
+    <version>1.10.0</version>
 </dependency>
 ```
 
 ---
 
-### What's new in 1.9.2
-- NEW FUNCTIONALITY - [Simple text header](#simple-text-header)
-- NEW FUNCTIONALITY - [Simple text footer](#simple-text-footer)
-- SECURITY - [Vulnerable dependency management](#vulnerable-dependency-management)
-- BUG FIX - Fixed bug preventing sub footer from properly calculating cell formulas combined with column offset
-- BUG FIX - Fixed bug preventing custom styles to be applied while using XSSF
-- BUG FIX - Fixed bug that occurred when combining tables with plain text header or offset
+### What's new in 1.10.0
+- NEW FUNCTIONALITY - [Ignore columns](#ignore-columns)
+- NEW FUNCTIONALITY - [Rearrange columns](#rearrange-columns)
 
 ---
 
@@ -94,6 +90,9 @@ Main features index:
 - [Column Configuration](#column-configuration)
 - [Column cell style](#column-cell-style)
 - [Data transformation functions](#data-transformation-functions)
+- [Column header customization](#column-header-customization)
+- [Ignore Columns](#ignore-columns)
+- [Rearrange Columns](#rearrange-columns)
 - [Encryption](#encryption)
 - [Null values over primitives default ones](#null-values-over-primitives-default-ones)
 - [Data post elaboration pipeline](#data-post-elaboration-pipeline)
@@ -826,6 +825,92 @@ Thanks to [bdzzaid](https://github.com/bdzzaid)
 
 ---
 
+### Ignore Columns
+
+If your query includes more fields than what you need, you can configure MemPOI to skip them.
+The configuration takes place within the `MempoiColumnConfig`, here is an example:
+
+```Java
+PreparedStatement prepStmt = conn.prepareStatement("SELECT id, creation_date AS WONDERFUL DATE, " 
+        + "dateTime, timeStamp, name, valid, usefulChar, decimalOne FROM test_table");
+
+MempoiColumnConfig dateTimeColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("dateTime")
+        .withIgnoreColumn(true)
+        .build();
+
+MempoiColumnConfig timeStampColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("timeStamp")
+        .withIgnoreColumn(true)
+        .build();
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+        .withPrepStmt(prepStmt)
+        .withMempoiColumnConfigList(Arrays.asList(dateTimeColumnConfig, timeStampColumnConfig))
+        .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+    .addMempoiSheet(mempoiSheet)
+    .build();
+```
+
+The generated file will not contain the `dateTime` and the `timeStamp` columns, as you can see in the image below.
+
+![](img/ignore-columns.png)
+
+---
+
+### Rearrange Columns
+
+If your query specify a field order not respecting your requirements, you can configure MemPOI to rearrange them.
+Columns with an explicit order are placed at the beginning, ordered by their `positionOrder` value.
+Then the remaining columns are added in the same order in which they are met
+
+Look at the example below:
+
+```Java
+PreparedStatement prepStmt = conn.prepareStatement("SELECT id, creation_date AS WONDERFUL DATE, " 
+        + "dateTime, timeStamp, name, valid, usefulChar, decimalOne FROM test_table");
+
+MempoiColumnConfig decimalOneColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("decimalOne")
+        .withPositionOrder(0)
+        .build();
+
+MempoiColumnConfig dateTimeColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("dateTime")
+        .withPositionOrder(1)
+        .build();
+
+MempoiColumnConfig validColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("valid")
+        .withPositionOrder(2)
+        .build();
+
+MempoiColumnConfig usefulCharColumnConfig = MempoiColumnConfigBuilder.aMempoiColumnConfig()
+        .withColumnName("usefulChar")
+        .withIgnoreColumn(true)
+        .build();
+
+List<MempoiColumnConfig> mempoiColConfig = Arrays.asList(decimalOneColumnConfig, dateTimeColumnConfig,
+        validColumnConfig, usefulCharColumnConfig);
+
+MempoiSheet mempoiSheet = MempoiSheetBuilder.aMempoiSheet()
+        .withPrepStmt(prepStmt)
+        .withMempoiColumnConfigList(mempoiColConfig)
+        .build();
+
+MemPOI memPOI = MempoiBuilder.aMemPOI()
+    .addMempoiSheet(mempoiSheet)
+    .build();
+```
+
+The generated file will contain the all the columns but `usefulChar`, and the order is the one reported in the image below.
+
+![](img/rearrange-columns.png)
+
+---
+
 ### Encryption
 
 Since v1.5 MemPOI supports encryption of workbooks, both for binary and xml-based files.
@@ -1087,7 +1172,7 @@ MemPOI comes with Apache POI 5.2.2 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.9.2') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.10.0') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -1100,7 +1185,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.9.2</version>
+    <version>1.10.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>
