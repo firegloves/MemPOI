@@ -9,6 +9,7 @@
 ![Java 8](https://img.shields.io/badge/Java%208-Tested-blueviolet)
 ![Java 11](https://img.shields.io/badge/Java%2011-Tested-blueviolet)
 ![Java 17](https://img.shields.io/badge/Java%2017-Tested-blueviolet)
+![Java 21](https://img.shields.io/badge/Java%2021-Tested-blueviolet)
 [![Known Vulnerabilities](https://snyk.io/test/github/firegloves/mempoi/badge.svg)](https://snyk.io/test/github/firegloves/mempoi)
 ![No ORM - Super Fast](https://img.shields.io/badge/No%20ORM-SuperFast-orange)
 
