@@ -2,21 +2,26 @@ plugins {
     id 'java-library'
     id 'signing'
     id 'maven-publish'
-    id "io.freefair.lombok" version "6.1.0"
+    id 'io.freefair.lombok' version "8.6"
     id 'jacoco'
     id 'io.github.gradle-nexus.publish-plugin' version "1.1.0"
 }
 
 group 'it.firegloves'
-version '1.10.0'
+version '1.10.1'
 
-sourceCompatibility = 1.8
 
-def poiVersion = '5.2.2'
-def comonsLang3Version = '3.12.0'
-def comonsCollectionsVersion = '4.4'
+java {
+    withJavadocJar()
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+def poiVersion = '5.2.5'
+def comonsLang3Version = '3.14.0'
 def comonsMath3Version = '3.6.1'
-def slf4jVersion = '1.7.36'
+def comonsCollectionsVersion = '4.4'
+def slf4jVersion = '2.0.13'
 
 repositories {
     mavenCentral()
@@ -25,7 +30,11 @@ repositories {
 dependencies {
 
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poiVersion
+    implementation (group: 'org.apache.poi', name: 'poi-ooxml', version: poiVersion) {
+        exclude group: 'org.apache.commons', module: 'commons-compress'
+    }
+    // TODO remove when poi-ooxml will update its dependency
+    implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.26.2'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: comonsLang3Version
@@ -46,21 +55,16 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 
     // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
-    testImplementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.0.6'
+    testImplementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.4.0'
 
     // https://mvnrepository.com/artifact/org.mockito/mockito-core
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.6.1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.11.0'
 
     // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-all
     testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
 
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    testImplementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
+    testImplementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.4.0'
 }
 
 publishing {
@@ -124,12 +128,17 @@ test {
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
+jacoco {
+    toolVersion = "0.8.11"
+    reportsDirectory = layout.buildDirectory.dir("reports/jacoco")
+}
+
 jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
     reports {
-        xml.enabled true
-        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
-        csv.enabled false
-        html.enabled false
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(false)
     }
 }
 
@@ -140,7 +149,6 @@ jacocoTestCoverageVerification {
                 includes = [ 'it.firegloves.mempoi.*' ]
                 minimum = 0.7
             }
-            failOnViolation true
         }
     }
 

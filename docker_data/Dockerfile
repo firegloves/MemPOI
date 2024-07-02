@@ -1,4 +1,4 @@
-FROM mysql:8-debian
+FROM mysql:8.0.37-debian
 
 ENV MYSQL_DATABASE=mempoi \
     MYSQL_ROOT_PASSWORD=mempassword

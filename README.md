@@ -9,6 +9,7 @@
 ![Java 8](https://img.shields.io/badge/Java%208-Tested-blueviolet)
 ![Java 11](https://img.shields.io/badge/Java%2011-Tested-blueviolet)
 ![Java 17](https://img.shields.io/badge/Java%2017-Tested-blueviolet)
+![Java 21](https://img.shields.io/badge/Java%2021-Tested-blueviolet)
 [![Known Vulnerabilities](https://snyk.io/test/github/firegloves/mempoi/badge.svg)](https://snyk.io/test/github/firegloves/mempoi)
 ![No ORM - Super Fast](https://img.shields.io/badge/No%20ORM-SuperFast-orange)
 
@@ -48,7 +49,7 @@ A short <a href="https://medium.com/@lucorset/mempoi-a-mempo-mask-for-apache-poi
 #### With Gradle
 
 ```Groovy
-implementation group: 'it.firegloves', name: 'mempoi', version: '1.10.0'
+implementation group: 'it.firegloves', name: 'mempoi', version: '1.10.1'
 ```
 
 #### With Maven
@@ -57,11 +58,14 @@ implementation group: 'it.firegloves', name: 'mempoi', version: '1.10.0'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.10.0</version>
+    <version>1.10.1</version>
 </dependency>
 ```
 
 --
+
+### What's new in 1.10.1
+- Vulnerable dependencies fix
 
 ### What's new in 1.10.0
 - NEW FUNCTIONALITY - [Ignore columns](#ignore-columns)
@@ -1180,7 +1184,7 @@ MemPOI comes with Apache POI 5.2.2 bundled. If you need to use a different versi
 #### This is an example using Gradle:
 
 ```Groovy
-implementation (group: 'it.firegloves', name: 'mempoi', version: '1.10.0') {
+implementation (group: 'it.firegloves', name: 'mempoi', version: '1.10.1') {
    exclude group: 'org.apache.poi', module: 'poi-ooxml'
 }
 
@@ -1193,7 +1197,7 @@ implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
 <dependency>
     <groupId>it.firegloves</groupId>
     <artifactId>mempoi</artifactId>
-    <version>1.10.0</version>
+    <version>1.10.1</version>
     <exclusions>
         <exclusion>
             <groupId>org.apache.poi</groupId>

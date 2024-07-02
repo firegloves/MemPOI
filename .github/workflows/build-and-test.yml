@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [8, 11, 17]
+        java: [8, 11, 17, 21]
     steps:
       # checkout
       - uses: actions/checkout@v2
@@ -50,10 +50,9 @@ jobs:
       - name: Build with Gradle
         run: |
           ./gradlew clean build
-#          gradle --stop
       # Publish test results
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
+        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: build/test-results/**/*.xml
